@@ -1,0 +1,5 @@
+D:\Vlad\PDM-WebService\TestTaskSystem\bin\Release\TestTaskSystem.exe.config
+D:\Vlad\PDM-WebService\TestTaskSystem\bin\Release\TestTaskSystem.exe
+D:\Vlad\PDM-WebService\TestTaskSystem\bin\Release\TestTaskSystem.pdb
+D:\Vlad\PDM-WebService\TestTaskSystem\obj\Release\TestTaskSystem.exe
+D:\Vlad\PDM-WebService\TestTaskSystem\obj\Release\TestTaskSystem.pdb

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/PDM_WebService.WcfServiceLibrary.DataContracts" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/PDM_WebService.WcfServiceLibrary.DataContracts" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="ArrayOfDataModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DataModel" nillable="true" type="tns:DataModel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDataModel" nillable="true" type="tns:ArrayOfDataModel" />
+  <xs:complexType name="DataModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="FileName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FolderId" type="xs:int" />
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="Path" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DataModel" nillable="true" type="tns:DataModel" />
+  <xs:complexType name="TransmittableFile">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="FileName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Length" type="xs:long" />
+      <xs:element minOccurs="0" name="SerealizeObject" nillable="true" type="xs:base64Binary" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TransmittableFile" nillable="true" type="tns:TransmittableFile" />
+  <xs:complexType name="ArrayOfSpecification">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Specification" nillable="true" type="tns:Specification" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfSpecification" nillable="true" type="tns:ArrayOfSpecification" />
+  <xs:complexType name="Specification">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Bend" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CodeMaterial" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Configuration" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Count" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Designation" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ERPCode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IDPDM" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PaintX" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PaintY" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PaintZ" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Partition" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SummMaterial" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SurfaceArea" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Thickness" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Version" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Weight" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="WorkpieceX" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="WorkpieceY" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="isDxf" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Specification" nillable="true" type="tns:Specification" />
+</xs:schema>

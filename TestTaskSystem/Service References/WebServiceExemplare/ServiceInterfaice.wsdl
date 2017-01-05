@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://www.w3.org/ns/ws-policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ServiceInterfaice" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://192.168.14.86:8080/?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://192.168.14.86:8080/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://192.168.14.86:8080/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/PDM_WebService.WcfServiceLibrary.DataContracts" />
+      <xsd:import schemaLocation="http://192.168.14.86:8080/?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://192.168.14.86:8080/?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/ServiceLibrary.TaskSystem.Constants" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ISolidWebService_Search_InputMessage">
+    <wsdl:part name="parameters" element="tns:Search" />
+  </wsdl:message>
+  <wsdl:message name="ISolidWebService_Search_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SearchResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISolidWebService_SelectFile_InputMessage">
+    <wsdl:part name="parameters" element="tns:SelectFile" />
+  </wsdl:message>
+  <wsdl:message name="ISolidWebService_SelectFile_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SelectFileResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISolidWebService_GetPathSelectFile_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPathSelectFile" />
+  </wsdl:message>
+  <wsdl:message name="ISolidWebService_GetPathSelectFile_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPathSelectFileResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISolidWebService_GetConfigiguration_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetConfigiguration" />
+  </wsdl:message>
+  <wsdl:message name="ISolidWebService_GetConfigiguration_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetConfigigurationResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISolidWebService_GetSpecifications_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSpecifications" />
+  </wsdl:message>
+  <wsdl:message name="ISolidWebService_GetSpecifications_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSpecificationsResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISolidWebService_uploadDXF_InputMessage">
+    <wsdl:part name="parameters" element="tns:uploadDXF" />
+  </wsdl:message>
+  <wsdl:message name="ISolidWebService_uploadDXF_OutputMessage">
+    <wsdl:part name="parameters" element="tns:uploadDXFResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISolidWebService_CreateRoof_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateRoof" />
+  </wsdl:message>
+  <wsdl:message name="ISolidWebService_CreateRoof_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateRoofResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISolidWebService_CreateVibroInsertion_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateVibroInsertion" />
+  </wsdl:message>
+  <wsdl:message name="ISolidWebService_CreateVibroInsertion_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateVibroInsertionResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISolidWebService_testYesNotS_InputMessage">
+    <wsdl:part name="parameters" element="tns:testYesNotS" />
+  </wsdl:message>
+  <wsdl:message name="ISolidWebService_testYesNotS_OutputMessage">
+    <wsdl:part name="parameters" element="tns:testYesNotSResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ISolidWebService">
+    <wsdl:operation name="Search">
+      <wsdl:input wsam:Action="http://tempuri.org/ISolidWebService/Search" message="tns:ISolidWebService_Search_InputMessage" />
+      <wsdl:output wsam:Action="http://tempuri.org/ISolidWebService/SearchResponse" message="tns:ISolidWebService_Search_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SelectFile">
+      <wsdl:input wsam:Action="http://tempuri.org/ISolidWebService/SelectFile" message="tns:ISolidWebService_SelectFile_InputMessage" />
+      <wsdl:output wsam:Action="http://tempuri.org/ISolidWebService/SelectFileResponse" message="tns:ISolidWebService_SelectFile_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPathSelectFile">
+      <wsdl:input wsam:Action="http://tempuri.org/ISolidWebService/GetPathSelectFile" message="tns:ISolidWebService_GetPathSelectFile_InputMessage" />
+      <wsdl:output wsam:Action="http://tempuri.org/ISolidWebService/GetPathSelectFileResponse" message="tns:ISolidWebService_GetPathSelectFile_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetConfigiguration">
+      <wsdl:input wsam:Action="http://tempuri.org/ISolidWebService/GetConfigiguration" message="tns:ISolidWebService_GetConfigiguration_InputMessage" />
+      <wsdl:output wsam:Action="http://tempuri.org/ISolidWebService/GetConfigigurationResponse" message="tns:ISolidWebService_GetConfigiguration_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSpecifications">
+      <wsdl:input wsam:Action="http://tempuri.org/ISolidWebService/GetSpecifications" message="tns:ISolidWebService_GetSpecifications_InputMessage" />
+      <wsdl:output wsam:Action="http://tempuri.org/ISolidWebService/GetSpecificationsResponse" message="tns:ISolidWebService_GetSpecifications_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="uploadDXF">
+      <wsdl:input wsam:Action="http://tempuri.org/ISolidWebService/uploadDXF" message="tns:ISolidWebService_uploadDXF_InputMessage" />
+      <wsdl:output wsam:Action="http://tempuri.org/ISolidWebService/uploadDXFResponse" message="tns:ISolidWebService_uploadDXF_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateRoof">
+      <wsdl:input wsam:Action="http://tempuri.org/ISolidWebService/CreateRoof" message="tns:ISolidWebService_CreateRoof_InputMessage" />
+      <wsdl:output wsam:Action="http://tempuri.org/ISolidWebService/CreateRoofResponse" message="tns:ISolidWebService_CreateRoof_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateVibroInsertion">
+      <wsdl:input wsam:Action="http://tempuri.org/ISolidWebService/CreateVibroInsertion" message="tns:ISolidWebService_CreateVibroInsertion_InputMessage" />
+      <wsdl:output wsam:Action="http://tempuri.org/ISolidWebService/CreateVibroInsertionResponse" message="tns:ISolidWebService_CreateVibroInsertion_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="testYesNotS">
+      <wsdl:input wsam:Action="http://tempuri.org/ISolidWebService/testYesNotS" message="tns:ISolidWebService_testYesNotS_InputMessage" />
+      <wsdl:output wsam:Action="http://tempuri.org/ISolidWebService/testYesNotSResponse" message="tns:ISolidWebService_testYesNotS_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_ISolidWebService" type="tns:ISolidWebService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Search">
+      <soap:operation soapAction="http://tempuri.org/ISolidWebService/Search" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SelectFile">
+      <soap:operation soapAction="http://tempuri.org/ISolidWebService/SelectFile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPathSelectFile">
+      <soap:operation soapAction="http://tempuri.org/ISolidWebService/GetPathSelectFile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetConfigiguration">
+      <soap:operation soapAction="http://tempuri.org/ISolidWebService/GetConfigiguration" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSpecifications">
+      <soap:operation soapAction="http://tempuri.org/ISolidWebService/GetSpecifications" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="uploadDXF">
+      <soap:operation soapAction="http://tempuri.org/ISolidWebService/uploadDXF" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateRoof">
+      <soap:operation soapAction="http://tempuri.org/ISolidWebService/CreateRoof" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateVibroInsertion">
+      <soap:operation soapAction="http://tempuri.org/ISolidWebService/CreateVibroInsertion" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="testYesNotS">
+      <soap:operation soapAction="http://tempuri.org/ISolidWebService/testYesNotS" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ServiceInterfaice">
+    <wsdl:port name="BasicHttpBinding_ISolidWebService" binding="tns:BasicHttpBinding_ISolidWebService">
+      <soap:address location="http://192.168.14.86:8080/" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

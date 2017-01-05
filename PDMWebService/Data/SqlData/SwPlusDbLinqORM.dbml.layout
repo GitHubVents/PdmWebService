@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="SwPlusDbLinqORM">
+  <DataContextMoniker Name="/SwPlusDbLinqORMDataContext" />
+  <nestedChildShapes>
+    <classShape Id="6af3ab61-80ac-45c9-aea8-27e34833d46f" absoluteBounds="1.875, 1.875, 2, 2.5752791341145831">
+      <DataClassMoniker Name="/SwPlusDbLinqORMDataContext/View_Part" />
+      <nestedChildShapes>
+        <elementListCompartment Id="15bff7c5-104f-4074-96f9-945e73f82b64" absoluteBounds="1.8900000000000001, 2.335, 1.9700000000000002, 2.015279134114583" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

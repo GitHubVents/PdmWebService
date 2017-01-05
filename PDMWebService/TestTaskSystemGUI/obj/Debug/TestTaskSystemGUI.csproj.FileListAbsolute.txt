@@ -1,0 +1,8 @@
+D:\Vlad\PDM-WebService\PDMWebService\TestTaskSystemGUI\bin\Debug\TestTaskSystemGUI.exe.config
+D:\Vlad\PDM-WebService\PDMWebService\TestTaskSystemGUI\bin\Debug\TestTaskSystemGUI.exe
+D:\Vlad\PDM-WebService\PDMWebService\TestTaskSystemGUI\bin\Debug\TestTaskSystemGUI.pdb
+D:\Vlad\PDM-WebService\PDMWebService\TestTaskSystemGUI\obj\Debug\TestTaskSystemGUI.Form1.resources
+D:\Vlad\PDM-WebService\PDMWebService\TestTaskSystemGUI\obj\Debug\TestTaskSystemGUI.Properties.Resources.resources
+D:\Vlad\PDM-WebService\PDMWebService\TestTaskSystemGUI\obj\Debug\TestTaskSystemGUI.csproj.GenerateResource.Cache
+D:\Vlad\PDM-WebService\PDMWebService\TestTaskSystemGUI\obj\Debug\TestTaskSystemGUI.exe
+D:\Vlad\PDM-WebService\PDMWebService\TestTaskSystemGUI\obj\Debug\TestTaskSystemGUI.pdb

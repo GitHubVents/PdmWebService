@@ -1,0 +1,5 @@
+D:\Vlad\PDM-WebService\ServiceLibrary\bin\Debug\ServiceLibrary.dll.config
+D:\Vlad\PDM-WebService\ServiceLibrary\bin\Debug\ServiceLibrary.dll
+D:\Vlad\PDM-WebService\ServiceLibrary\bin\Debug\ServiceLibrary.pdb
+D:\Vlad\PDM-WebService\ServiceLibrary\obj\Debug\ServiceLibrary.dll
+D:\Vlad\PDM-WebService\ServiceLibrary\obj\Debug\ServiceLibrary.pdb

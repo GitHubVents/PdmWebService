@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="TaskDataBase" Class="DbModelDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=pdmsrv;Initial Catalog=TaskDataBase;Persist Security Info=True;User ID=AirVentsCad" SettingsObjectName="PDMWebService.Properties.Settings" SettingsPropertyName="TaskDataBaseConnectionString1" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.VibroInsertions" Member="VibroInsertions">
+    <Type Name="VibroInsertion">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Height" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Width" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TypeVibroInsert" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Flaps" Member="Flaps">
+    <Type Name="Flap">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Height" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Width" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FlapType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="MaterialId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="isOuter" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Thickness" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Panels" Member="Panels">
+    <Type Name="Panel">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PanelProfil" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PanelType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Height" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Width" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="OuterMaterial" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="InnerMaterial" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ThicknessOuterMaterial" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="ThicknessInnerMaterial" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Roofs" Member="Roofs">
+    <Type Name="Roof">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Height" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Width" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="RoofType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TaskInstance" Member="TaskInstances">
+    <Type Name="TaskInstance">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TypeTask" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TimeStart" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="UserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DataTaskId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TaskSystemLog" Member="TaskSystemLogs">
+    <Type Name="TaskSystemLog">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TaskId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Coments" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TaskType" Member="TaskTypes">
+    <Type Name="TaskType">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Title" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+    </Type>
+  </Table>
+  <Function Name="dbo.CreateFlap" Method="CreateFlap" IsComposable="true">
+    <Parameter Name="type" Type="System.Int32" DbType="Int" />
+    <Parameter Name="wight" Type="System.Int32" DbType="Int" />
+    <Parameter Name="height" Type="System.Int32" DbType="Int" />
+    <Parameter Name="userId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="status" Type="System.Int32" DbType="Int" />
+    <Parameter Name="timeStart" Type="System.DateTime" DbType="DateTime" />
+    <Parameter Name="typeTask" Type="System.Int32" DbType="Int" />
+    <Parameter Name="materialId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="isOuter" Type="System.Int32" DbType="Int" />
+    <Parameter Name="thickness" Type="System.Double" DbType="Float" />
+    <Return Type="object" />
+  </Function>
+  <Function Name="dbo.ExistWaitingTasks" Method="ExistWaitingTasks">
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.CreatePanel" Method="CreatePanel">
+    <Parameter Name="status" Type="System.Int32" DbType="Int" />
+    <Parameter Name="typeTask" Type="System.Int32" DbType="Int" />
+    <Parameter Name="userId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="timeStart" Type="System.DateTime" DbType="DateTime" />
+    <Parameter Name="panelProfil" Type="System.Int32" DbType="Int" />
+    <Parameter Name="panelType" Type="System.Int32" DbType="Int" />
+    <Parameter Name="wight" Type="System.Int32" DbType="Int" />
+    <Parameter Name="height" Type="System.Int32" DbType="Int" />
+    <Parameter Name="outerMaterial" Type="System.Int32" DbType="Int" />
+    <Parameter Name="innerMaterial" Type="System.Int32" DbType="Int" />
+    <Parameter Name="thicknessOuterMaterial" Type="System.Double" DbType="Float" />
+    <Parameter Name="thicknessInnerMaterial" Type="System.Double" DbType="Float" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.CreateTaskRoof" Method="CreateTaskRoof">
+    <Parameter Name="type" Type="System.Int32" DbType="Int" />
+    <Parameter Name="wight" Type="System.Int32" DbType="Int" />
+    <Parameter Name="height" Type="System.Int32" DbType="Int" />
+    <Parameter Name="userId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="status" Type="System.Int32" DbType="Int" />
+    <Parameter Name="timeStart" Type="System.DateTime" DbType="DateTime" />
+    <Parameter Name="typeTask" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.CreateTaskVibroInserion" Method="CreateTaskVibroInserion">
+    <Parameter Name="type" Type="System.Int32" DbType="Int" />
+    <Parameter Name="wight" Type="System.Int32" DbType="Int" />
+    <Parameter Name="height" Type="System.Int32" DbType="Int" />
+    <Parameter Name="userId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="status" Type="System.Int32" DbType="Int" />
+    <Parameter Name="timeStart" Type="System.DateTime" DbType="DateTime" />
+    <Parameter Name="taskType" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.ExistTaskToExecute" Method="ExistTaskToExecute">
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.LastTaskId" Method="LastTaskId">
+    <Return Type="System.Int32" />
+  </Function>
+</Database>
