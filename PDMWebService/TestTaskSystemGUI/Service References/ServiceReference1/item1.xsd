@@ -119,6 +119,24 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
+  <xs:element name="CreateFlap">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/ServiceLibrary.TaskSystem.Constants" minOccurs="0" name="type" type="q11:FlapTypes" />
+        <xs:element minOccurs="0" name="height" type="xs:int" />
+        <xs:element minOccurs="0" name="wight" type="xs:int" />
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/ServiceLibrary.TaskSystem.Constants" minOccurs="0" name="material" type="q12:Meterials" />
+        <xs:element minOccurs="0" name="isOuter" type="xs:boolean" />
+        <xs:element minOccurs="0" name="thickness" type="xs:float" />
+        <xs:element minOccurs="0" name="userId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CreateFlapResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
   <xs:element name="OpenSolidWorks">
     <xs:complexType>
       <xs:sequence />

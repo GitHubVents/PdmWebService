@@ -63,15 +63,36 @@ namespace PDM_WebService.WcfServiceLibrary
         [OperationContract]
         void uploadDXF(string name, int idpdm, string configuration, int version);
 
-
         [OperationContract]
         void CreateRoof(int height, int wight,  RoofTypes type, int userId);
         [OperationContract]
         void CreateVibroInsertion(int height, int wight, VibroInsertionTypes type, int userId);
-
-
-
-
+        ///// <summary>
+        ///// Create a flap with the material aluminium & zinc.
+        ///// </summary>
+        ///// <param name="type"></param>
+        ///// <param name="height"></param>
+        ///// <param name="wight"></param>
+        ///// <param name="material"></param>
+        ///// <param name="isOuter"></param>
+        ///// <param name="userId"></param>
+        //[OperationContract]
+        //void CreateFlap(FlapTypes type, int height, int wight, bool isOuter, int userId);
+        /// <summary>
+        /// Create a flap with the custom material and thickness.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="height"></param>
+        /// <param name="wight"></param>
+        /// <param name="material"></param>
+        /// <param name="isOuter"></param>
+        /// <param name="thickness"></param>
+        /// <param name="userId"></param>
+        [OperationContract]
+        void CreateFlap(FlapTypes type, int height, int wight, Meterials material, bool isOuter, float thickness, int userId = 0);
+        /// <summary>
+        /// test method...
+        /// </summary>
         [OperationContract]
         void OpenSolidWorks();
         

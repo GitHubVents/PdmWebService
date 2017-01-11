@@ -2750,10 +2750,10 @@ namespace PDMWebService.TaskSystem.AirCad
         /// <param name="height"></param>
         /// <param name="materialP1"></param>
         /// <param name="materialP2"></param>
-        /// <param name="покрытие"></param>
+        /// <param name="coating"></param>
         /// <param name="path"></param>
         public void Panels30Build(string[] typeOfPanel, string width, string height, string[] materialP1,
-            string[] materialP2, string[] покрытие, out string path)
+            string[] materialP2, string[] coating, out string path)
         {
             path = null;
 
@@ -2916,7 +2916,7 @@ namespace PDMWebService.TaskSystem.AirCad
                             null);
                         try
                         {
-                            VentsMatdll(materialP1, new[] {покрытие[6], покрытие[1], покрытие[2]}, newName);
+                            VentsMatdll(materialP1, new[] {coating[6], coating[1], coating[2]}, newName);
                         }
                         catch (Exception e)
                         {
@@ -2958,7 +2958,7 @@ namespace PDMWebService.TaskSystem.AirCad
                             null);
                         try
                         {
-                            VentsMatdll(materialP2, new[] {покрытие[7], покрытие[4], покрытие[5]}, newName);
+                            VentsMatdll(materialP2, new[] {coating[7], coating[4], coating[5]}, newName);
                         }
                         catch (Exception e)
                         {
@@ -3064,7 +3064,7 @@ namespace PDMWebService.TaskSystem.AirCad
                             null);
                         try
                         {
-                            VentsMatdll(materialP1, new[] {покрытие[6], покрытие[1], покрытие[2]}, newName);
+                            VentsMatdll(materialP1, new[] {coating[6], coating[1], coating[2]}, newName);
                         }
                         catch (Exception e)
                         {
@@ -3106,7 +3106,7 @@ namespace PDMWebService.TaskSystem.AirCad
                             null);
                         try
                         {
-                            VentsMatdll(materialP2, new[] {покрытие[7], покрытие[4], покрытие[5]}, newName);
+                            VentsMatdll(materialP2, new[] {coating[7], coating[4], coating[5]}, newName);
                         }
                         catch (Exception e)
                         {
@@ -3211,7 +3211,7 @@ namespace PDMWebService.TaskSystem.AirCad
                             null);
                         try
                         {
-                            VentsMatdll(materialP1, new[] {покрытие[6], покрытие[1], покрытие[2]}, newName);
+                            VentsMatdll(materialP1, new[] {coating[6], coating[1], coating[2]}, newName);
                         }
                         catch (Exception e)
                         {
@@ -3253,7 +3253,7 @@ namespace PDMWebService.TaskSystem.AirCad
                             null);
                         try
                         {
-                            VentsMatdll(materialP2, new[] {покрытие[7], покрытие[4], покрытие[5]}, newName);
+                            VentsMatdll(materialP2, new[] {coating[7], coating[4], coating[5]}, newName);
                         }
                         catch (Exception e)
                         {
@@ -3360,7 +3360,7 @@ namespace PDMWebService.TaskSystem.AirCad
                             null);
                         try
                         {
-                            VentsMatdll(materialP1, new[] {покрытие[6], покрытие[1], покрытие[2]}, newName);
+                            VentsMatdll(materialP1, new[] {coating[6], coating[1], coating[2]}, newName);
                         }
                         catch (Exception e)
                         {
@@ -3404,7 +3404,7 @@ namespace PDMWebService.TaskSystem.AirCad
                             null);
                         try
                         {
-                            VentsMatdll(materialP2, new[] {покрытие[7], покрытие[4], покрытие[5]}, newName);
+                            VentsMatdll(materialP2, new[] {coating[7], coating[4], coating[5]}, newName);
                         }
                         catch (Exception e)
                         {
@@ -3550,7 +3550,7 @@ namespace PDMWebService.TaskSystem.AirCad
                             null);
                         try
                         {
-                            VentsMatdll(materialP1, new[] {покрытие[6], покрытие[1], покрытие[2]}, newName);
+                            VentsMatdll(materialP1, new[] {coating[6], coating[1], coating[2]}, newName);
                         }
                         catch (Exception e)
                         {
@@ -3594,7 +3594,7 @@ namespace PDMWebService.TaskSystem.AirCad
                             null);
                         try
                         {
-                            VentsMatdll(materialP2, new[] {покрытие[7], покрытие[4], покрытие[5]}, newName);
+                            VentsMatdll(materialP2, new[] {coating[7], coating[4], coating[5]}, newName);
                         }
                         catch (Exception e)
                         {
@@ -3775,7 +3775,7 @@ namespace PDMWebService.TaskSystem.AirCad
                         null);
                     try
                     {
-                        VentsMatdll(materialP1, new[] {покрытие[6], покрытие[1], покрытие[2]}, newName);
+                        VentsMatdll(materialP1, new[] {coating[6], coating[1], coating[2]}, newName);
                     }
                     catch (Exception e)
                     {
@@ -3815,7 +3815,7 @@ namespace PDMWebService.TaskSystem.AirCad
 
                     try
                     {
-                        VentsMatdll(materialP1, new[] {покрытие[7], покрытие[4], покрытие[5]}, newName);
+                        VentsMatdll(materialP1, new[] {coating[7], coating[4], coating[5]}, newName);
                     }
                     catch (Exception e)
                     {

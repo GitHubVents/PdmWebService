@@ -1,5 +1,4 @@
-﻿using AirVentsCadWpf.AirVentsClasses.UnitsBuilding;
-using System;
+﻿using System;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -9,10 +8,10 @@ namespace PDMWebService
     class Program
     {
         static void Main(string[] args)
-        { 
-            
-            Console.WriteLine("http://" + LocalIPAddress().ToString() + ":8080");
-                Service service = Service.CreateService(new Uri("http://" + LocalIPAddress().ToString() + ":8080"));
+        {
+            int port = 8080;
+            Console.WriteLine("http://" + LocalIPAddress().ToString() + ":"+port);
+                Service service = Service.CreateService(new Uri("http://" + LocalIPAddress().ToString() + ":"+port));
                 service.Start();
 
           

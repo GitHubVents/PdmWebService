@@ -569,6 +569,49 @@ namespace TestTaskSystemGUI.ServiceReference1 {
         Thirty_mm = 30,
     }
     
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="FlapTypes", Namespace="http://schemas.datacontract.org/2004/07/ServiceLibrary.TaskSystem.Constants")]
+    public enum FlapTypes : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Twenty_mm = 20,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Thirty_mm = 30,
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="Meterials", Namespace="http://schemas.datacontract.org/2004/07/ServiceLibrary.TaskSystem.Constants")]
+    public enum Meterials : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Aluzinc_Az_150_07 = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Sheet_Galvanized_Zinc = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Sheet_Cold_Hardened = 3,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Sheet_A_304_2B = 4,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Sheet_A_304_BA = 5,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Sheet_A_304_CAT = 6,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Sheet_Hot_Hardened = 7,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Steel_09G2S_GOST_4543_71 = 8,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Sheet_A_3095_2B = 9,
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ServiceReference1.ISolidWebService")]
     public interface ISolidWebService {
@@ -620,6 +663,12 @@ namespace TestTaskSystemGUI.ServiceReference1 {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISolidWebService/CreateVibroInsertion", ReplyAction="http://tempuri.org/ISolidWebService/CreateVibroInsertionResponse")]
         System.Threading.Tasks.Task CreateVibroInsertionAsync(int height, int wight, TestTaskSystemGUI.ServiceReference1.VibroInsertionTypes type, int userId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISolidWebService/CreateFlap", ReplyAction="http://tempuri.org/ISolidWebService/CreateFlapResponse")]
+        void CreateFlap(TestTaskSystemGUI.ServiceReference1.FlapTypes type, int height, int wight, TestTaskSystemGUI.ServiceReference1.Meterials material, bool isOuter, float thickness, int userId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISolidWebService/CreateFlap", ReplyAction="http://tempuri.org/ISolidWebService/CreateFlapResponse")]
+        System.Threading.Tasks.Task CreateFlapAsync(TestTaskSystemGUI.ServiceReference1.FlapTypes type, int height, int wight, TestTaskSystemGUI.ServiceReference1.Meterials material, bool isOuter, float thickness, int userId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISolidWebService/OpenSolidWorks", ReplyAction="http://tempuri.org/ISolidWebService/OpenSolidWorksResponse")]
         void OpenSolidWorks();
@@ -717,6 +766,14 @@ namespace TestTaskSystemGUI.ServiceReference1 {
         
         public System.Threading.Tasks.Task CreateVibroInsertionAsync(int height, int wight, TestTaskSystemGUI.ServiceReference1.VibroInsertionTypes type, int userId) {
             return base.Channel.CreateVibroInsertionAsync(height, wight, type, userId);
+        }
+        
+        public void CreateFlap(TestTaskSystemGUI.ServiceReference1.FlapTypes type, int height, int wight, TestTaskSystemGUI.ServiceReference1.Meterials material, bool isOuter, float thickness, int userId) {
+            base.Channel.CreateFlap(type, height, wight, material, isOuter, thickness, userId);
+        }
+        
+        public System.Threading.Tasks.Task CreateFlapAsync(TestTaskSystemGUI.ServiceReference1.FlapTypes type, int height, int wight, TestTaskSystemGUI.ServiceReference1.Meterials material, bool isOuter, float thickness, int userId) {
+            return base.Channel.CreateFlapAsync(type, height, wight, material, isOuter, thickness, userId);
         }
         
         public void OpenSolidWorks() {

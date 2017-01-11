@@ -12,16 +12,23 @@ namespace TestTaskSystemGUI
 {
     public partial class Form1 : Form
     {
+      private  ServiceReference1.ISolidWebService service = null;
+        private Random random = null;
         public Form1()
         {
             InitializeComponent();
 
             comboBox1.Items.Add((int)ServiceReference1.VibroInsertionTypes.Twenty_mm);
-
             comboBox1.Items.Add((int)ServiceReference1.VibroInsertionTypes.Thirty_mm);
+
+            this.random =  new Random();
             service = new ServiceReference1.SolidWebServiceClient();
+            (service as ServiceReference1.SolidWebServiceClient).Endpoint.Binding.ReceiveTimeout = new TimeSpan(0, 10, 0);
+            (service as ServiceReference1.SolidWebServiceClient).Endpoint.Binding.OpenTimeout = new TimeSpan(0, 10, 0);
+            (service as ServiceReference1.SolidWebServiceClient).Endpoint.Binding.CloseTimeout = new TimeSpan(0, 10, 0);
+            (service as ServiceReference1.SolidWebServiceClient).Endpoint.Binding.SendTimeout = new TimeSpan(0, 10, 0);
         }
-        ServiceReference1.ISolidWebService service;
+       
         private void button1_Click(object sender, EventArgs e)
         {
             try
@@ -46,15 +53,23 @@ namespace TestTaskSystemGUI
         {
             try
             {
-                Random rnd = new Random();
 
-                service = new ServiceReference1.SolidWebServiceClient();
-                service.CreateVibroInsertion(rnd.Next(200, 2000), rnd.Next(200, 2000), (ServiceReference1.VibroInsertionTypes) (rnd.Next(2,3)*10), 0);
+                this.service.CreateVibroInsertion(random.Next(213, 3000), random.Next(213, 3000), (ServiceReference1.VibroInsertionTypes) (random.Next(2,3)*10), 0);
             }
             catch(Exception ex)
             {
                 MessageBox.Show(ex.ToString());
             }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            this.service.CreateRoof(random.Next(213, 3000), random.Next(213, 3000), (ServiceReference1.RoofTypes) (random.Next(1, 6)), 0);
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+         //   this.service.(random.Next(213, 3000), random.Next(213, 3000), (ServiceReference1.RoofTypes)(random.Next(1, 6)), 0);
         }
     }
 }

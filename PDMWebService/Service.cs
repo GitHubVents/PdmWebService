@@ -17,7 +17,7 @@ namespace PDMWebService
         private Service(Uri serviceAddress)
         {             
             this.serviceAddress = serviceAddress;
-         
+            
          
         }
         
@@ -45,11 +45,13 @@ namespace PDMWebService
             {
                 Build();
                 host.Open();
+      
                 Logger.ToLog("Служба запущена" );
-                host.Description.Behaviors.Add(new ServiceDebugBehavior());
+                
             }
             catch(Exception ex)
             {
+                Console.WriteLine("Неудалось запустить веб службу" + ex);
                Logger.ToLog( "Неудалось запустить веб службу" + ex);
             }
         }
@@ -72,14 +74,32 @@ namespace PDMWebService
             {
                 try
                 {
+
                     host = new ServiceHost(typeof(ServiceInterfaice), serviceAddress);
                     ServiceMetadataBehavior smb = new ServiceMetadataBehavior();
                     smb.HttpGetEnabled = true;
                     smb.MetadataExporter.PolicyVersion = PolicyVersion.Policy15;
-                    host.Description.Behaviors.Add(smb);                   
+                    host.Description.Behaviors.Add(smb);
+
+                    //host = new ServiceHost(typeof(ServiceInterfaice), serviceAddress);
+                    //ServiceMetadataBehavior smb = new ServiceMetadataBehavior();
+
+                    //smb.HttpGetBinding = new NetHttpBinding();
+                    //smb.HttpsGetBinding.ReceiveTimeout = new TimeSpan(0, 10, 0);
+                    //smb.HttpsGetBinding.OpenTimeout = new TimeSpan(0, 10, 0);
+                    //smb.HttpsGetBinding.SendTimeout = new TimeSpan(0, 10, 0);
+                    //smb.HttpsGetBinding.CloseTimeout = new TimeSpan(0, 10, 0);
+
+                    //smb.HttpGetEnabled = true;
+                    //smb.HttpsGetEnabled = true;
+                    //smb.MetadataExporter.PolicyVersion = PolicyVersion.Policy15;
+                    //host.Description.Behaviors.Add(smb);    
+
+
                 }
                 catch (Exception ex)
                 {
+                    Console.WriteLine("Неудалось инициализировать веб службу\n\n" + ex);
                     throw new Exception("Неудалось инициализировать веб службу\n\n" + ex);
                 }
             }        

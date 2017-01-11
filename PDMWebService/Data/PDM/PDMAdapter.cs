@@ -185,7 +185,7 @@ namespace PDMWebService.Data.PDM
         }
 
 
-
+        #region
         ///// <summary>
         ///// Download file in to local directory.
         ///// </summary>
@@ -211,57 +211,59 @@ namespace PDMWebService.Data.PDM
         //    // }
         //    return null;
         //}
+        #endregion
+        #region references
+        ///// <summary>
+        ///// Reference in to the components of assembly.  
+        ///// </summary>
+        ///// <param name="file"></param>
+        ///// <param name="indent"></param>
+        ///// <param name="projName"></param>
+        ///// <returns></returns>
+        //private string AddReferences(IEdmReference5 file, long indent, ref string projName)
+        //{
+        //    string filename = null;
 
-        /// <summary>
-        /// Reference in to the components of assembly.  
-        /// </summary>
-        /// <param name="file"></param>
-        /// <param name="indent"></param>
-        /// <param name="projName"></param>
-        /// <returns></returns>
-        private string AddReferences(IEdmReference5 file, long indent, ref string projName)
-        {
-            string filename = null;
+        //    filename = filename + file.Name;
 
-            filename = filename + file.Name;
+        //    const bool isTop = false;
 
-            const bool isTop = false;
+        //    IEdmVault7 vault2 = null;
 
-            IEdmVault7 vault2 = null;
+        //    vault2 = (IEdmVault7)edmVault5;
 
-            vault2 = (IEdmVault7)edmVault5;
+        //    IEdmPos5 pos = file.GetFirstChildPosition(projName, isTop, true, 0);
 
-            IEdmPos5 pos = file.GetFirstChildPosition(projName, isTop, true, 0);
-
-            IEdmFolder5 oFolder = null;
+        //    IEdmFolder5 oFolder = null;
 
 
-            while (!(pos.IsNull))
-            {
-                IEdmReference5 @ref = file.GetNextChild(pos);
-                var oFile = (IEdmFile5)edmVault5.GetFileFromPath(@ref.FoundPath, out oFolder);
+        //    while (!(pos.IsNull))
+        //    {
+        //        IEdmReference5 @ref = file.GetNextChild(pos);
+        //        var oFile = (IEdmFile5)edmVault5.GetFileFromPath(@ref.FoundPath, out oFolder);
 
-                filename = filename + AddReferences(@ref, indent, ref projName);
+        //        filename = filename + AddReferences(@ref, indent, ref projName);
 
-                // //MessageBox.Show(filename);
-                // Последняя копия перечня в сборке
-                oFile.GetFileCopy(0, "", @ref.FoundPath);
-            }
-            return filename;
-        }
-        public void ShowReferences(string filePath)
-        {
-            // ERROR: Not supported in C#: OnErrorStatement
-            string projName = null;
-            IEdmFile5 file = default(IEdmFile5);
-            IEdmFolder5 folder = default(IEdmFolder5);
-            file = this.edmVault5.GetFileFromPath(filePath, out folder);
+        //        // //MessageBox.Show(filename);
+        //        // Последняя копия перечня в сборке
+        //        oFile.GetFileCopy(0, "", @ref.FoundPath);
+        //    }
+        //    return filename;
+        //}
+        //public void ShowReferences(string filePath)
+        //{
+        //    // ERROR: Not supported in C#: OnErrorStatement
+        //    string projName = null;
+        //    IEdmFile5 file = default(IEdmFile5);
+        //    IEdmFolder5 folder = default(IEdmFolder5);
+        //    file = this.edmVault5.GetFileFromPath(filePath, out folder);
 
-            IEdmReference5 @ref = default(IEdmReference5);
-            @ref = file.GetReferenceTree(folder.ID, 0);
-            AddReferences(@ref, 0, ref projName);
+        //    IEdmReference5 @ref = default(IEdmReference5);
+        //    @ref = file.GetReferenceTree(folder.ID, 0);
+        //    AddReferences(@ref, 0, ref projName);
 
-        }
+        //}
+        #endregion
 
         /// <summary>
         /// Pdm initializes an instance of this object by creating and producing auto-login.
@@ -291,7 +293,6 @@ namespace PDMWebService.Data.PDM
             {
                 Logger.ToLog("\n");
             }
-
         }
 
 
@@ -365,9 +366,7 @@ namespace PDMWebService.Data.PDM
                 exception = ex;
                 throw ex;
             }            
-        }
-
-       
+        }       
 
         private  List<BomShell> BomTableToBomList(DataTable table)
         {

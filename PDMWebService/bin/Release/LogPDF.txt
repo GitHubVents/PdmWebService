@@ -227,3 +227,251 @@
 Автологин в системе Vents-PDM системного пользователя Vents-PDM
 
 
+Служба запущена
+Неудалось запустить веб службуSystem.ArgumentException: Не удалось добавить значение в коллекцию, так как в этой коллекции уже существует объект того же типа: "System.ServiceModel.Description.ServiceDebugBehavior". Эта коллекция поддерживает только по одному экземпляру каждого типа.
+Имя параметра: item
+   в System.Collections.Generic.KeyedByTypeCollection`1.InsertItem(Int32 index, TItem item)
+   в System.Collections.ObjectModel.Collection`1.Add(T item)
+   в PDMWebService.Service.Start() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 49
+Создан экземпляр Vents-PDM
+Автологин в системе Vents-PDM системного пользователя Vents-PDM
+
+
+Служба запущена
+Неудалось запустить веб службуSystem.ArgumentException: Не удалось добавить значение в коллекцию, так как в этой коллекции уже существует объект того же типа: "System.ServiceModel.Description.ServiceDebugBehavior". Эта коллекция поддерживает только по одному экземпляру каждого типа.
+Имя параметра: item
+   в System.Collections.Generic.KeyedByTypeCollection`1.InsertItem(Int32 index, TItem item)
+   в System.Collections.ObjectModel.Collection`1.Add(T item)
+   в PDMWebService.Service.Start() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 49
+Неудалось запустить веб службуSystem.Exception: Неудалось инициализировать веб службу
+
+System.NullReferenceException: Ссылка на объект не указывает на экземпляр объекта.
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 77
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 89
+   в PDMWebService.Service.Start() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 46
+Неудалось запустить веб службуSystem.Exception: Неудалось инициализировать веб службу
+
+System.NullReferenceException: Ссылка на объект не указывает на экземпляр объекта.
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 77
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 89
+   в PDMWebService.Service.Start() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 46
+Служба запущена
+Неудалось запустить веб службуSystem.ArgumentException: Не удалось добавить значение в коллекцию, так как в этой коллекции уже существует объект того же типа: "System.ServiceModel.Description.ServiceDebugBehavior". Эта коллекция поддерживает только по одному экземпляру каждого типа.
+Имя параметра: item
+   в System.Collections.Generic.KeyedByTypeCollection`1.InsertItem(Int32 index, TItem item)
+   в System.Collections.ObjectModel.Collection`1.Add(T item)
+   в PDMWebService.Service.Start() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 49
+Создан экземпляр Vents-PDM
+Автологин в системе Vents-PDM системного пользователя Vents-PDM
+
+
+Служба запущена
+Неудалось запустить веб службуSystem.ArgumentException: Не удалось добавить значение в коллекцию, так как в этой коллекции уже существует объект того же типа: "System.ServiceModel.Description.ServiceDebugBehavior". Эта коллекция поддерживает только по одному экземпляру каждого типа.
+Имя параметра: item
+   в System.Collections.Generic.KeyedByTypeCollection`1.InsertItem(Int32 index, TItem item)
+   в System.Collections.ObjectModel.Collection`1.Add(T item)
+   в PDMWebService.Service.Start() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 49
+Создан экземпляр Vents-PDM
+Автологин в системе Vents-PDM системного пользователя Vents-PDM
+
+
+Служба запущена
+Неудалось запустить веб службуSystem.ArgumentException: Не удалось добавить значение в коллекцию, так как в этой коллекции уже существует объект того же типа: "System.ServiceModel.Description.ServiceDebugBehavior". Эта коллекция поддерживает только по одному экземпляру каждого типа.
+Имя параметра: item
+   в System.Collections.Generic.KeyedByTypeCollection`1.InsertItem(Int32 index, TItem item)
+   в System.Collections.ObjectModel.Collection`1.Add(T item)
+   в PDMWebService.Service.Start() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 49
+Создан экземпляр Vents-PDM
+Автологин в системе Vents-PDM системного пользователя Vents-PDM
+
+
+Неудалось запустить веб службуSystem.Exception: Неудалось инициализировать веб службу
+
+System.InvalidOperationException: Нельзя иметь две операции с одинаковым именем в одном контракте. Методы CreateFlap и CreateFlap в типе PDM_WebService.WcfServiceLibrary.ISolidWebService нарушают это правило. Можно изменить имя одной из операций путем изменения имени метода или с помощью свойства Name атрибута OperationContractAttribute.
+   в System.ServiceModel.Description.TypeLoader.CreateOperationDescription(ContractDescription contractDescription, MethodInfo methodInfo, MessageDirection direction, ContractReflectionInfo reflectionInfo, ContractDescription declaringContract)
+   в System.ServiceModel.Description.TypeLoader.CreateOperationDescriptions(ContractDescription contractDescription, ContractReflectionInfo reflectionInfo, Type contractToGetMethodsFrom, ContractDescription declaringContract, MessageDirection direction)
+   в System.ServiceModel.Description.TypeLoader.CreateContractDescription(ServiceContractAttribute contractAttr, Type contractType, Type serviceType, ContractReflectionInfo& reflectionInfo, Object serviceImplementation)
+   в System.ServiceModel.Description.TypeLoader.LoadContractDescriptionHelper(Type contractType, Type serviceType, Object serviceImplementation)
+   в System.ServiceModel.Description.ContractDescription.GetContract(Type contractType, Type serviceType)
+   в System.ServiceModel.ServiceHost.CreateDescription(IDictionary`2& implementedContracts)
+   в System.ServiceModel.ServiceHostBase.InitializeDescription(UriSchemeKeyedCollection baseAddresses)
+   в System.ServiceModel.ServiceHost.InitializeDescription(Type serviceType, UriSchemeKeyedCollection baseAddresses)
+   в System.ServiceModel.ServiceHost..ctor(Type serviceType, Uri[] baseAddresses)
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 75
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 89
+   в PDMWebService.Service.Start() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 46
+Неудалось запустить веб службуSystem.Exception: Неудалось инициализировать веб службу
+
+System.InvalidOperationException: Нельзя иметь две операции с одинаковым именем в одном контракте. Методы CreateFlap и CreateFlap в типе PDM_WebService.WcfServiceLibrary.ISolidWebService нарушают это правило. Можно изменить имя одной из операций путем изменения имени метода или с помощью свойства Name атрибута OperationContractAttribute.
+   в System.ServiceModel.Description.TypeLoader.CreateOperationDescription(ContractDescription contractDescription, MethodInfo methodInfo, MessageDirection direction, ContractReflectionInfo reflectionInfo, ContractDescription declaringContract)
+   в System.ServiceModel.Description.TypeLoader.CreateOperationDescriptions(ContractDescription contractDescription, ContractReflectionInfo reflectionInfo, Type contractToGetMethodsFrom, ContractDescription declaringContract, MessageDirection direction)
+   в System.ServiceModel.Description.TypeLoader.CreateContractDescription(ServiceContractAttribute contractAttr, Type contractType, Type serviceType, ContractReflectionInfo& reflectionInfo, Object serviceImplementation)
+   в System.ServiceModel.Description.TypeLoader.LoadContractDescriptionHelper(Type contractType, Type serviceType, Object serviceImplementation)
+   в System.ServiceModel.Description.ContractDescription.GetContract(Type contractType, Type serviceType)
+   в System.ServiceModel.ServiceHost.CreateDescription(IDictionary`2& implementedContracts)
+   в System.ServiceModel.ServiceHostBase.InitializeDescription(UriSchemeKeyedCollection baseAddresses)
+   в System.ServiceModel.ServiceHost.InitializeDescription(Type serviceType, UriSchemeKeyedCollection baseAddresses)
+   в System.ServiceModel.ServiceHost..ctor(Type serviceType, Uri[] baseAddresses)
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 75
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 89
+   в PDMWebService.Service.Start() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 46
+Неудалось запустить веб службуSystem.Exception: Неудалось инициализировать веб службу
+
+System.InvalidOperationException: Нельзя иметь две операции с одинаковым именем в одном контракте. Методы CreateFlap и CreateFlap в типе PDM_WebService.WcfServiceLibrary.ISolidWebService нарушают это правило. Можно изменить имя одной из операций путем изменения имени метода или с помощью свойства Name атрибута OperationContractAttribute.
+   в System.ServiceModel.Description.TypeLoader.CreateOperationDescription(ContractDescription contractDescription, MethodInfo methodInfo, MessageDirection direction, ContractReflectionInfo reflectionInfo, ContractDescription declaringContract)
+   в System.ServiceModel.Description.TypeLoader.CreateOperationDescriptions(ContractDescription contractDescription, ContractReflectionInfo reflectionInfo, Type contractToGetMethodsFrom, ContractDescription declaringContract, MessageDirection direction)
+   в System.ServiceModel.Description.TypeLoader.CreateContractDescription(ServiceContractAttribute contractAttr, Type contractType, Type serviceType, ContractReflectionInfo& reflectionInfo, Object serviceImplementation)
+   в System.ServiceModel.Description.TypeLoader.LoadContractDescriptionHelper(Type contractType, Type serviceType, Object serviceImplementation)
+   в System.ServiceModel.Description.ContractDescription.GetContract(Type contractType, Type serviceType)
+   в System.ServiceModel.ServiceHost.CreateDescription(IDictionary`2& implementedContracts)
+   в System.ServiceModel.ServiceHostBase.InitializeDescription(UriSchemeKeyedCollection baseAddresses)
+   в System.ServiceModel.ServiceHost.InitializeDescription(Type serviceType, UriSchemeKeyedCollection baseAddresses)
+   в System.ServiceModel.ServiceHost..ctor(Type serviceType, Uri[] baseAddresses)
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 75
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 89
+   в PDMWebService.Service.Start() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 46
+Неудалось запустить веб службуSystem.Exception: Неудалось инициализировать веб службу
+
+System.InvalidOperationException: Нельзя иметь две операции с одинаковым именем в одном контракте. Методы CreateFlap и CreateFlap в типе PDM_WebService.WcfServiceLibrary.ISolidWebService нарушают это правило. Можно изменить имя одной из операций путем изменения имени метода или с помощью свойства Name атрибута OperationContractAttribute.
+   в System.ServiceModel.Description.TypeLoader.CreateOperationDescription(ContractDescription contractDescription, MethodInfo methodInfo, MessageDirection direction, ContractReflectionInfo reflectionInfo, ContractDescription declaringContract)
+   в System.ServiceModel.Description.TypeLoader.CreateOperationDescriptions(ContractDescription contractDescription, ContractReflectionInfo reflectionInfo, Type contractToGetMethodsFrom, ContractDescription declaringContract, MessageDirection direction)
+   в System.ServiceModel.Description.TypeLoader.CreateContractDescription(ServiceContractAttribute contractAttr, Type contractType, Type serviceType, ContractReflectionInfo& reflectionInfo, Object serviceImplementation)
+   в System.ServiceModel.Description.TypeLoader.LoadContractDescriptionHelper(Type contractType, Type serviceType, Object serviceImplementation)
+   в System.ServiceModel.Description.ContractDescription.GetContract(Type contractType, Type serviceType)
+   в System.ServiceModel.ServiceHost.CreateDescription(IDictionary`2& implementedContracts)
+   в System.ServiceModel.ServiceHostBase.InitializeDescription(UriSchemeKeyedCollection baseAddresses)
+   в System.ServiceModel.ServiceHost.InitializeDescription(Type serviceType, UriSchemeKeyedCollection baseAddresses)
+   в System.ServiceModel.ServiceHost..ctor(Type serviceType, Uri[] baseAddresses)
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 75
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 89
+   в PDMWebService.Service.Start() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 46
+Неудалось запустить веб службуSystem.Exception: Неудалось инициализировать веб службу
+
+System.InvalidOperationException: Нельзя иметь две операции с одинаковым именем в одном контракте. Методы CreateFlap и CreateFlap в типе PDM_WebService.WcfServiceLibrary.ISolidWebService нарушают это правило. Можно изменить имя одной из операций путем изменения имени метода или с помощью свойства Name атрибута OperationContractAttribute.
+   в System.ServiceModel.Description.TypeLoader.CreateOperationDescription(ContractDescription contractDescription, MethodInfo methodInfo, MessageDirection direction, ContractReflectionInfo reflectionInfo, ContractDescription declaringContract)
+   в System.ServiceModel.Description.TypeLoader.CreateOperationDescriptions(ContractDescription contractDescription, ContractReflectionInfo reflectionInfo, Type contractToGetMethodsFrom, ContractDescription declaringContract, MessageDirection direction)
+   в System.ServiceModel.Description.TypeLoader.CreateContractDescription(ServiceContractAttribute contractAttr, Type contractType, Type serviceType, ContractReflectionInfo& reflectionInfo, Object serviceImplementation)
+   в System.ServiceModel.Description.TypeLoader.LoadContractDescriptionHelper(Type contractType, Type serviceType, Object serviceImplementation)
+   в System.ServiceModel.Description.ContractDescription.GetContract(Type contractType, Type serviceType)
+   в System.ServiceModel.ServiceHost.CreateDescription(IDictionary`2& implementedContracts)
+   в System.ServiceModel.ServiceHostBase.InitializeDescription(UriSchemeKeyedCollection baseAddresses)
+   в System.ServiceModel.ServiceHost.InitializeDescription(Type serviceType, UriSchemeKeyedCollection baseAddresses)
+   в System.ServiceModel.ServiceHost..ctor(Type serviceType, Uri[] baseAddresses)
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 75
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 89
+   в PDMWebService.Service.Start() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 46
+Неудалось запустить веб службуSystem.Exception: Неудалось инициализировать веб службу
+
+System.InvalidOperationException: Нельзя иметь две операции с одинаковым именем в одном контракте. Методы CreateFlap и CreateFlap в типе PDM_WebService.WcfServiceLibrary.ISolidWebService нарушают это правило. Можно изменить имя одной из операций путем изменения имени метода или с помощью свойства Name атрибута OperationContractAttribute.
+   в System.ServiceModel.Description.TypeLoader.CreateOperationDescription(ContractDescription contractDescription, MethodInfo methodInfo, MessageDirection direction, ContractReflectionInfo reflectionInfo, ContractDescription declaringContract)
+   в System.ServiceModel.Description.TypeLoader.CreateOperationDescriptions(ContractDescription contractDescription, ContractReflectionInfo reflectionInfo, Type contractToGetMethodsFrom, ContractDescription declaringContract, MessageDirection direction)
+   в System.ServiceModel.Description.TypeLoader.CreateContractDescription(ServiceContractAttribute contractAttr, Type contractType, Type serviceType, ContractReflectionInfo& reflectionInfo, Object serviceImplementation)
+   в System.ServiceModel.Description.TypeLoader.LoadContractDescriptionHelper(Type contractType, Type serviceType, Object serviceImplementation)
+   в System.ServiceModel.Description.ContractDescription.GetContract(Type contractType, Type serviceType)
+   в System.ServiceModel.ServiceHost.CreateDescription(IDictionary`2& implementedContracts)
+   в System.ServiceModel.ServiceHostBase.InitializeDescription(UriSchemeKeyedCollection baseAddresses)
+   в System.ServiceModel.ServiceHost.InitializeDescription(Type serviceType, UriSchemeKeyedCollection baseAddresses)
+   в System.ServiceModel.ServiceHost..ctor(Type serviceType, Uri[] baseAddresses)
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 75
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 89
+   в PDMWebService.Service.Start() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 46
+Неудалось запустить веб службуSystem.Exception: Неудалось инициализировать веб службу
+
+System.InvalidOperationException: Нельзя иметь две операции с одинаковым именем в одном контракте. Методы CreateFlap и CreateFlap в типе PDM_WebService.WcfServiceLibrary.ISolidWebService нарушают это правило. Можно изменить имя одной из операций путем изменения имени метода или с помощью свойства Name атрибута OperationContractAttribute.
+   в System.ServiceModel.Description.TypeLoader.CreateOperationDescription(ContractDescription contractDescription, MethodInfo methodInfo, MessageDirection direction, ContractReflectionInfo reflectionInfo, ContractDescription declaringContract)
+   в System.ServiceModel.Description.TypeLoader.CreateOperationDescriptions(ContractDescription contractDescription, ContractReflectionInfo reflectionInfo, Type contractToGetMethodsFrom, ContractDescription declaringContract, MessageDirection direction)
+   в System.ServiceModel.Description.TypeLoader.CreateContractDescription(ServiceContractAttribute contractAttr, Type contractType, Type serviceType, ContractReflectionInfo& reflectionInfo, Object serviceImplementation)
+   в System.ServiceModel.Description.TypeLoader.LoadContractDescriptionHelper(Type contractType, Type serviceType, Object serviceImplementation)
+   в System.ServiceModel.Description.ContractDescription.GetContract(Type contractType, Type serviceType)
+   в System.ServiceModel.ServiceHost.CreateDescription(IDictionary`2& implementedContracts)
+   в System.ServiceModel.ServiceHostBase.InitializeDescription(UriSchemeKeyedCollection baseAddresses)
+   в System.ServiceModel.ServiceHost.InitializeDescription(Type serviceType, UriSchemeKeyedCollection baseAddresses)
+   в System.ServiceModel.ServiceHost..ctor(Type serviceType, Uri[] baseAddresses)
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 75
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 92
+   в PDMWebService.Service.Start() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 46
+Неудалось запустить веб службуSystem.Exception: Неудалось инициализировать веб службу
+
+System.InvalidOperationException: Нельзя иметь две операции с одинаковым именем в одном контракте. Методы CreateFlap и CreateFlap в типе PDM_WebService.WcfServiceLibrary.ISolidWebService нарушают это правило. Можно изменить имя одной из операций путем изменения имени метода или с помощью свойства Name атрибута OperationContractAttribute.
+   в System.ServiceModel.Description.TypeLoader.CreateOperationDescription(ContractDescription contractDescription, MethodInfo methodInfo, MessageDirection direction, ContractReflectionInfo reflectionInfo, ContractDescription declaringContract)
+   в System.ServiceModel.Description.TypeLoader.CreateOperationDescriptions(ContractDescription contractDescription, ContractReflectionInfo reflectionInfo, Type contractToGetMethodsFrom, ContractDescription declaringContract, MessageDirection direction)
+   в System.ServiceModel.Description.TypeLoader.CreateContractDescription(ServiceContractAttribute contractAttr, Type contractType, Type serviceType, ContractReflectionInfo& reflectionInfo, Object serviceImplementation)
+   в System.ServiceModel.Description.TypeLoader.LoadContractDescriptionHelper(Type contractType, Type serviceType, Object serviceImplementation)
+   в System.ServiceModel.Description.ContractDescription.GetContract(Type contractType, Type serviceType)
+   в System.ServiceModel.ServiceHost.CreateDescription(IDictionary`2& implementedContracts)
+   в System.ServiceModel.ServiceHostBase.InitializeDescription(UriSchemeKeyedCollection baseAddresses)
+   в System.ServiceModel.ServiceHost.InitializeDescription(Type serviceType, UriSchemeKeyedCollection baseAddresses)
+   в System.ServiceModel.ServiceHost..ctor(Type serviceType, Uri[] baseAddresses)
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 75
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 92
+   в PDMWebService.Service.Start() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 46
+Неудалось запустить веб службуSystem.Exception: Неудалось инициализировать веб службу
+
+System.InvalidOperationException: Нельзя иметь две операции с одинаковым именем в одном контракте. Методы CreateFlap и CreateFlap в типе PDM_WebService.WcfServiceLibrary.ISolidWebService нарушают это правило. Можно изменить имя одной из операций путем изменения имени метода или с помощью свойства Name атрибута OperationContractAttribute.
+   в System.ServiceModel.Description.TypeLoader.CreateOperationDescription(ContractDescription contractDescription, MethodInfo methodInfo, MessageDirection direction, ContractReflectionInfo reflectionInfo, ContractDescription declaringContract)
+   в System.ServiceModel.Description.TypeLoader.CreateOperationDescriptions(ContractDescription contractDescription, ContractReflectionInfo reflectionInfo, Type contractToGetMethodsFrom, ContractDescription declaringContract, MessageDirection direction)
+   в System.ServiceModel.Description.TypeLoader.CreateContractDescription(ServiceContractAttribute contractAttr, Type contractType, Type serviceType, ContractReflectionInfo& reflectionInfo, Object serviceImplementation)
+   в System.ServiceModel.Description.TypeLoader.LoadContractDescriptionHelper(Type contractType, Type serviceType, Object serviceImplementation)
+   в System.ServiceModel.Description.ContractDescription.GetContract(Type contractType, Type serviceType)
+   в System.ServiceModel.ServiceHost.CreateDescription(IDictionary`2& implementedContracts)
+   в System.ServiceModel.ServiceHostBase.InitializeDescription(UriSchemeKeyedCollection baseAddresses)
+   в System.ServiceModel.ServiceHost.InitializeDescription(Type serviceType, UriSchemeKeyedCollection baseAddresses)
+   в System.ServiceModel.ServiceHost..ctor(Type serviceType, Uri[] baseAddresses)
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 76
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 93
+   в PDMWebService.Service.Start() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 46
+Неудалось запустить веб службуSystem.Exception: Неудалось инициализировать веб службу
+
+System.InvalidOperationException: Нельзя иметь две операции с одинаковым именем в одном контракте. Методы CreateFlap и CreateFlap в типе PDM_WebService.WcfServiceLibrary.ISolidWebService нарушают это правило. Можно изменить имя одной из операций путем изменения имени метода или с помощью свойства Name атрибута OperationContractAttribute.
+   в System.ServiceModel.Description.TypeLoader.CreateOperationDescription(ContractDescription contractDescription, MethodInfo methodInfo, MessageDirection direction, ContractReflectionInfo reflectionInfo, ContractDescription declaringContract)
+   в System.ServiceModel.Description.TypeLoader.CreateOperationDescriptions(ContractDescription contractDescription, ContractReflectionInfo reflectionInfo, Type contractToGetMethodsFrom, ContractDescription declaringContract, MessageDirection direction)
+   в System.ServiceModel.Description.TypeLoader.CreateContractDescription(ServiceContractAttribute contractAttr, Type contractType, Type serviceType, ContractReflectionInfo& reflectionInfo, Object serviceImplementation)
+   в System.ServiceModel.Description.TypeLoader.LoadContractDescriptionHelper(Type contractType, Type serviceType, Object serviceImplementation)
+   в System.ServiceModel.Description.ContractDescription.GetContract(Type contractType, Type serviceType)
+   в System.ServiceModel.ServiceHost.CreateDescription(IDictionary`2& implementedContracts)
+   в System.ServiceModel.ServiceHostBase.InitializeDescription(UriSchemeKeyedCollection baseAddresses)
+   в System.ServiceModel.ServiceHost.InitializeDescription(Type serviceType, UriSchemeKeyedCollection baseAddresses)
+   в System.ServiceModel.ServiceHost..ctor(Type serviceType, Uri[] baseAddresses)
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 76
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 93
+   в PDMWebService.Service.Start() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 46
+Неудалось запустить веб службуSystem.Exception: Неудалось инициализировать веб службу
+
+System.InvalidOperationException: Нельзя иметь две операции с одинаковым именем в одном контракте. Методы CreateFlap и CreateFlap в типе PDM_WebService.WcfServiceLibrary.ISolidWebService нарушают это правило. Можно изменить имя одной из операций путем изменения имени метода или с помощью свойства Name атрибута OperationContractAttribute.
+   в System.ServiceModel.Description.TypeLoader.CreateOperationDescription(ContractDescription contractDescription, MethodInfo methodInfo, MessageDirection direction, ContractReflectionInfo reflectionInfo, ContractDescription declaringContract)
+   в System.ServiceModel.Description.TypeLoader.CreateOperationDescriptions(ContractDescription contractDescription, ContractReflectionInfo reflectionInfo, Type contractToGetMethodsFrom, ContractDescription declaringContract, MessageDirection direction)
+   в System.ServiceModel.Description.TypeLoader.CreateContractDescription(ServiceContractAttribute contractAttr, Type contractType, Type serviceType, ContractReflectionInfo& reflectionInfo, Object serviceImplementation)
+   в System.ServiceModel.Description.TypeLoader.LoadContractDescriptionHelper(Type contractType, Type serviceType, Object serviceImplementation)
+   в System.ServiceModel.Description.ContractDescription.GetContract(Type contractType, Type serviceType)
+   в System.ServiceModel.ServiceHost.CreateDescription(IDictionary`2& implementedContracts)
+   в System.ServiceModel.ServiceHostBase.InitializeDescription(UriSchemeKeyedCollection baseAddresses)
+   в System.ServiceModel.ServiceHost.InitializeDescription(Type serviceType, UriSchemeKeyedCollection baseAddresses)
+   в System.ServiceModel.ServiceHost..ctor(Type serviceType, Uri[] baseAddresses)
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 76
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 93
+   в PDMWebService.Service.Start() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 46
+Служба запущена
+Неудалось запустить веб службуSystem.Exception: Неудалось инициализировать веб службу
+
+System.ArgumentException: Не удалось добавить значение в коллекцию, так как в этой коллекции уже существует объект того же типа: "System.ServiceModel.Description.ServiceDebugBehavior". Эта коллекция поддерживает только по одному экземпляру каждого типа.
+Имя параметра: item
+   в System.Collections.Generic.KeyedByTypeCollection`1.InsertItem(Int32 index, TItem item)
+   в System.Collections.ObjectModel.Collection`1.Add(T item)
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 89
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 96
+   в PDMWebService.Service.Start() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 46
+Неудалось запустить веб службуSystem.Exception: Неудалось инициализировать веб службу
+
+System.ArgumentException: Не удалось добавить значение в коллекцию, так как в этой коллекции уже существует объект того же типа: "System.ServiceModel.Description.ServiceDebugBehavior". Эта коллекция поддерживает только по одному экземпляру каждого типа.
+Имя параметра: item
+   в System.Collections.Generic.KeyedByTypeCollection`1.InsertItem(Int32 index, TItem item)
+   в System.Collections.ObjectModel.Collection`1.Add(T item)
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 89
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 96
+   в PDMWebService.Service.Start() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 46
+Служба запущена
+Служба запущена
+Создан экземпляр Vents-PDM
+Автологин в системе Vents-PDM системного пользователя Vents-PDM
+
+

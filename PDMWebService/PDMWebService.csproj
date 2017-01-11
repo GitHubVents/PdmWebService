@@ -70,9 +70,6 @@
     <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AirVentsCad">
-      <HintPath>..\..\AirVentsCad\AirVentsCadWpf\bin\Release\AirVentsCad.exe</HintPath>
-    </Reference>
     <Reference Include="EPDM.Interop.epdm">
       <HintPath>C:\Program Files\SOLIDWORKS PDM\EPDM.Interop.epdm.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -117,6 +114,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\DataConverter.cs" />
+    <Compile Include="Data\Solid\PartBuilders\IPartBuilder.cs" />
+    <Compile Include="Data\Solid\PartBuilders\VibroInsertionBuilder.cs" />
     <Compile Include="Data\SqlData\SqlDataAdapder.cs" />
     <Compile Include="Data\SqlData\SwPlusDbLinqORM.designer.cs">
       <AutoGen>True</AutoGen>

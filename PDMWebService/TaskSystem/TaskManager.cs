@@ -46,59 +46,48 @@ class TaskManager : AbstractSingeton<TaskManager>
     {
         this.context = new DbModelDataContext();
     }
-
-    /// <summary>
-    /// Generate Vibro panel without registering.
-    /// </summary>
-    /// <param name="height"></param>
-    /// <param name="wight"></param>
-    /// <param name="typeVibroInsert"></param>
-    /// <param name="userId"></param>
+  
     public void CreateVibroInsertion(int height, int wight, VibroInsertionTypes type, int userId = 0)
     {
-        int status = (int)TaskStatuses.Waiting;// (int)DetermineStatusOfTask();
-        Console.WriteLine("Пришел новый таск и стутс ему леги... " + DetermineStatusOfTask().ToString());
-     int createdTaskId = context.CreateTaskVibroInserion((int)type, wight, height, userId, status, DateTime.Today, (int)TasksTypes.VibroInsertion);
- 
-        Console.WriteLine("Id last adding task " + createdTaskId);
-        context.SubmitChanges();
-    
-        if (!ExistTaskToExecute())
-            Execute() ;
-        
+        int status = (int)TaskStatuses.Waiting;
+        Console.WriteLine("Пришел новый таск и стутс ему леги... " +  TaskStatuses.Waiting);
+        context.CreateTaskVibroInserion((int)type, wight, height, userId, status, DateTime.Today, (int)TasksTypes.VibroInsertion);
+        context.SubmitChanges();    
+         if (!ExistTaskToExecute())
+            Execute() ;        
     }
 
     public void CreateRoof(int height, int wight, RoofTypes type, int userId = 0)
     {
-        int status = (int)DetermineStatusOfTask();
+        int status = (int)TaskStatuses.Waiting;
+        Console.WriteLine("Пришел новый таск и стутс ему леги... " + TaskStatuses.Waiting);
         context.CreateTaskRoof((int)type, wight, height, userId, status, DateTime.Today, (int)TasksTypes.Roof);
         context.SubmitChanges();
-
-      //  if (ExistTaskToExecute())
-          //  Execute(0);
+       if (!ExistTaskToExecute())
+            Execute();
     }
 
-    public void CreateFlap(FlapTypes type, int height, int wight, Meterials material, bool isOuter, int userId = 0)
-    {
-        int status = (int)DetermineStatusOfTask();
-        context.CreateFlap((int)type, wight, height, userId, 0, DateTime.Today, (int)TasksTypes.Flap, (int)material, Convert.ToByte(isOuter), null);
-        context.SubmitChanges();
+    //public void CreateFlap(FlapTypes type, int height, int wight, Meterials material, bool isOuter, int userId = 0)
+    //{
+    //    int status = (int)TaskStatuses.Waiting;
+    //    context.CreateFlap((int)type, wight, height, userId, status, DateTime.Today, (int)TasksTypes.Flap, (int)material, Convert.ToByte(isOuter), null);
+    //    context.SubmitChanges();
 
-     //   if (ExistTaskToExecute()) ;
-        //    Execute();
+    //   // if (!ExistTaskToExecute())
+    //        Execute();
 
-    }
+    //}
 
     public void CreateFlap(FlapTypes type, int height, int wight, Meterials material, bool isOuter, float thickness, int userId = 0)
     {
-        int status = (int)DetermineStatusOfTask();
-        context.CreateFlap((int)type, wight, height, userId, 0, DateTime.Today, (int)TasksTypes.Flap, (int)material, Convert.ToByte(isOuter), thickness);
+        int status = (int)TaskStatuses.Waiting;
+        context.CreateFlap((int)type, wight, height, userId, status, DateTime.Today, (int)TasksTypes.Flap, (int)material, Convert.ToByte(isOuter), thickness);
         context.SubmitChanges();
 
-      //  if (ExistTaskToExecute()) ;
-          //  Execute();
+        if (!ExistTaskToExecute())
+            Execute();
     }
-
+    #region not ported panel builder..
     public void CreatePanel(
         PanelProfiles profil,
         PanelTypes type,
@@ -107,15 +96,16 @@ class TaskManager : AbstractSingeton<TaskManager>
         Meterials outerMaterial,
         Meterials innerMaterial,
         double thicknessInnerMaterial = 0.7f,
-        double thicknessOterMaterial = 0.7f
+        double thicknessOterMaterial = 0.7f,
+        int userId = 0
         )
     {
-        int status = (int)DetermineStatusOfTask();
+        int status = (int)TaskStatuses.Waiting;
         context.CreatePanel
             (
                 status,
                 (int)TasksTypes.Panel,
-                0,
+                userId,
                 DateTime.Today,
                 (int)profil,
                 (int)type, wight,
@@ -128,10 +118,10 @@ class TaskManager : AbstractSingeton<TaskManager>
 
         context.SubmitChanges();
 
-        if (ExistTaskToExecute()) ; 
-           // Execute();
+     //   if (!ExistTaskToExecute())
+            Execute();
     }
-
+    #endregion
     public void CreateMountingFrame()
     {
         //  AirCadExecutor.Instance.mou
@@ -144,12 +134,7 @@ class TaskManager : AbstractSingeton<TaskManager>
         {
             taskInstance = context.TaskInstances.First(  tskInst =>  tskInst.Status == (int)TaskStatuses.Waiting );
             ApplyExecution(taskInstance.Id);
-        }
-        //else if (ExistWaitingTasks() == true)
-        //{
-        //    taskInstance = context.TaskInstances.First(tskInst => tskInst.Status == (int)TaskStatuses.Waiting);
-        //    this.ApplyExecution(taskInstance.Id);
-        //}
+        } 
         else
         {
             throw new Exception("In queue is not  tasks to perform and waiting. Possibly incorrect saving a task");
@@ -161,26 +146,27 @@ class TaskManager : AbstractSingeton<TaskManager>
             {
                 case (int)TasksTypes.VibroInsertion:
                     VibroInsertion vibroInsert = context.VibroInsertions.First(eachVbrInsert => eachVbrInsert.Id == taskInstance.DataTaskId);
+                    Console.WriteLine("Выполнение таска: " + (TasksTypes)taskInstance.TypeTask);
                     try
-                    {
-                        //using (var ventsCad = new VentsCadLibrary.VentsCad())
-                        //{
-                        //    VentsCadLibrary.VentsCad.Spigot newSpigot = new VentsCadLibrary.VentsCad.Spigot(vibroInsert.TypeVibroInsert.ToString(), vibroInsert.Width.ToString(), vibroInsert.Height.ToString());
-                        //    if (!newSpigot.Exist)
-                        //    {
-                        //        newSpigot.Build();
-                        //    }
-                        //    VentsCadLibrary.VentsCad.ProductPlace place2 = newSpigot.GetPlace();
-                        //}
+                    { 
+                         
+                          //  AirCadExecutor.Instance.Spigot(vibroInsert.TypeVibroInsert.ToString(), vibroInsert.Width.ToString(), vibroInsert.Height.ToString());
+                         string str =   AirCadExecutor.Instance.SpigotStr(vibroInsert.TypeVibroInsert.ToString(), vibroInsert.Width.ToString(), vibroInsert.Height.ToString());
 
-                        Console.WriteLine("Выполнение таска: " + (TasksTypes)taskInstance.TypeTask);
-                        System.Threading.Thread.Sleep(5000);
+
+                        try
+                        {
+                            //   path = newSpigot.GetPlace().Path.Clone() as string;                         
+                            // newSpigot = null;
+                            Console.WriteLine("Генерация " + (TasksTypes)taskInstance.TypeTask + " завершена...\nпуть к файлу: " + str + "\n");
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("Неудалось скопировать путь к сгенерированому файлу ");// + ex.ToString() + "\n");
+                        }
 
                         ApplyCompleted(taskInstance.Id);
-                        Console.WriteLine(taskInstance.Id + " " + taskInstance.TypeTask + " " + vibroInsert.Height + " " + vibroInsert.Width);
-
-                        //System.IO.File.Create(@"C:\"+taskInstance.Id + " " + taskInstance.TypeTask + " " + vibroInsert.Height + " " + vibroInsert.Width + ".txt" );
-
+                        Console.WriteLine("task id: "+ taskInstance.Id + " type task: " + (TasksTypes)taskInstance.TypeTask + " data: [" + vibroInsert.Height + "," + vibroInsert.Width+"]"); 
 
                     }
                     catch (Exception ex)
@@ -195,43 +181,44 @@ class TaskManager : AbstractSingeton<TaskManager>
                     Roof roof = context.Roofs.First(eachRoof => eachRoof.Id == taskInstance.DataTaskId);
 
                     Console.WriteLine("Выполнение таска: " + (TasksTypes)taskInstance.TypeTask);
-                    System.Threading.Thread.Sleep(5000);
-
-                    //AirVentsCadWpf.AirVentsClasses.UnitsBuilding.ModelSw modelSw = new AirVentsCadWpf.AirVentsClasses.UnitsBuilding.ModelSw();
-                    //try
-                    //{
-                    //    AirCadExecutor.Instance.Roof(roof.RoofType.ToString(), roof.Width.ToString(), roof.Height.ToString());
-                    //    System.Threading.Thread.Sleep(5000);
-                    //    ApplyCompleted(taskInstance.Id);
-
-                    //    Console.WriteLine(taskInstance.Id + " " + taskInstance.TypeTask + " " + roof.Height + " " + roof.Width);
-                    //    //System.IO.File.Create(@"C:\" + taskInstance.Id + " " + taskInstance.TypeTask + " " + roof.Height + " " + roof.Width + ".txt");
-                    //}
-                    //catch (Exception ex)
-                    //{
-                    //    ApplyError(taskInstance.Id);
-                    //    // save the cause of the error in log & simplified in data base
-                    //    Console.WriteLine("Error:\n" + ex.ToString());
-                    //}
+            
+                    try
+                    {
+                        AirCadExecutor.Instance.Roof(roof.RoofType.ToString(), roof.Width.ToString(), roof.Height.ToString());
+                        ApplyCompleted(taskInstance.Id);
+                        Console.WriteLine(taskInstance.Id + " " + taskInstance.TypeTask + " " + roof.Height + " " + roof.Width);
+                        Console.WriteLine("Генерация " + (TasksTypes)taskInstance.TypeTask + " завершена");
+                    }
+                    catch (Exception ex)
+                    {
+                        ApplyError(taskInstance.Id);
+                        // save the cause of the error in log & simplified in data base
+                        Console.WriteLine("Error:\n" + ex.ToString());
+                    }
                     break;
 
                 case (int)TasksTypes.Flap:
 
                     Flap flap = context.Flaps.First(each => each.Id == taskInstance.DataTaskId);
                     Console.WriteLine("Выполнение таска: " + (TasksTypes)taskInstance.TypeTask);
-                    System.Threading.Thread.Sleep(5000);
-                    //AirCadExecutor.Instance.Dumper(
-                    //    flap.FlapType.ToString(),
-                    //    flap.Width.ToString(),
-                    //    flap.Height.ToString(),
-                    //     flap.isOuter == 1 ? true : false,
-                    //     new string[] { flap.MaterialId.ToString(), flap.Thickness.ToString() }
-                    //     );
+                 //   System.Threading.Thread.Sleep(5000);
+                    AirCadExecutor.Instance.Dumper(
+                        flap.FlapType.ToString(),
+                        flap.Width.ToString(),
+                        flap.Height.ToString(),
+                         flap.isOuter == 1 ? true : false,
+                         new string[] { flap.MaterialId.ToString(), flap.Thickness.ToString() }
+                         );
+                    Console.WriteLine("Генерация " + (TasksTypes)taskInstance.TypeTask + " завершена");
+                    ApplyCompleted(taskInstance.Id);
                     break;
 
-                    //case (int)TasksTypes.Panel:
-                    //    AirCadExecutor.Instance.Panels30Build
-                    //break;
+                case (int)TasksTypes.Panel:
+                    //    AirCadExecutor.Instance.Panels30Build();
+                    Console.WriteLine("Эмуляция генерирования панели. Time out: 5 seconds");
+                    System.Threading.Thread.Sleep(5000);
+                    break;
+                    
             }
 
         }
@@ -245,39 +232,27 @@ class TaskManager : AbstractSingeton<TaskManager>
         }
 
     #region Apply statuses of the tasks
-
-    /// <summary>
-    ///  Apply status error for task by id  
-    /// </summary>
-    /// <param name="id"></param>
+ 
     private void ApplyError(int id)
     {
         context.TaskInstances.First(eachTask => eachTask.Id == id).Status = (int)TaskStatuses.Error;
         context.SubmitChanges();
     }
 
-    /// <summary>
-    ///  Apply status completed for task by id  
-    /// </summary>
+ 
     private void ApplyCompleted(int id)
     {
         context.TaskInstances.First(eachTask => eachTask.Id == id).Status = (int)TaskStatuses.Completed;
         context.SubmitChanges();
     }
-
-    /// <summary>
-    ///  Apply status waiting for task by id  
-    /// </summary>
+ 
     private void ApplyWaiting(int id)
     {
         context.TaskInstances.First(eachTask => eachTask.Id == id).Status = (int)TaskStatuses.Waiting;
        context.SubmitChanges();
     }
 
-    /// <summary>
-    /// Apply status execution for task by id  
-    /// </summary>
-    /// <param name="id"></param>
+    
     private void ApplyExecution(int id)
     {
         context.TaskInstances.First(eachTask => eachTask.Id == id).Status = (int)TaskStatuses.Execution;
@@ -286,10 +261,7 @@ class TaskManager : AbstractSingeton<TaskManager>
     }
     #endregion
 
-    /// <summary>
-    /// Check whether there are tasks to execute and returns true or false
-    /// </summary>
-    /// <returns></returns>
+ 
     private bool ExistTaskToExecute()
     {
         return this.context.ExistTaskToExecute() == 1 ? true : false;
@@ -298,20 +270,5 @@ class TaskManager : AbstractSingeton<TaskManager>
     private bool ExistWaitingTasks()
     {
         return this.context.ExistWaitingTasks() == 1 ? true : false;
-    }
-
-    private TaskStatuses DetermineStatusOfTask()
-    {
-         if (this.ExistTaskToExecute() == false)
-        {
-           return TaskStatuses.Execution;
-        } 
-        else  
-        {
-            return TaskStatuses.Waiting;
-        }      
-
-       
-    }
-
+    } 
 }

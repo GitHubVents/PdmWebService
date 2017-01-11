@@ -57,6 +57,12 @@
   <wsdl:message name="ISolidWebService_CreateVibroInsertion_OutputMessage">
     <wsdl:part name="parameters" element="tns:CreateVibroInsertionResponse" />
   </wsdl:message>
+  <wsdl:message name="ISolidWebService_CreateFlap_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateFlap" />
+  </wsdl:message>
+  <wsdl:message name="ISolidWebService_CreateFlap_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateFlapResponse" />
+  </wsdl:message>
   <wsdl:message name="ISolidWebService_OpenSolidWorks_InputMessage">
     <wsdl:part name="parameters" element="tns:OpenSolidWorks" />
   </wsdl:message>
@@ -95,6 +101,10 @@
     <wsdl:operation name="CreateVibroInsertion">
       <wsdl:input wsam:Action="http://tempuri.org/ISolidWebService/CreateVibroInsertion" message="tns:ISolidWebService_CreateVibroInsertion_InputMessage" />
       <wsdl:output wsam:Action="http://tempuri.org/ISolidWebService/CreateVibroInsertionResponse" message="tns:ISolidWebService_CreateVibroInsertion_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateFlap">
+      <wsdl:input wsam:Action="http://tempuri.org/ISolidWebService/CreateFlap" message="tns:ISolidWebService_CreateFlap_InputMessage" />
+      <wsdl:output wsam:Action="http://tempuri.org/ISolidWebService/CreateFlapResponse" message="tns:ISolidWebService_CreateFlap_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="OpenSolidWorks">
       <wsdl:input wsam:Action="http://tempuri.org/ISolidWebService/OpenSolidWorks" message="tns:ISolidWebService_OpenSolidWorks_InputMessage" />
@@ -168,6 +178,15 @@
     </wsdl:operation>
     <wsdl:operation name="CreateVibroInsertion">
       <soap:operation soapAction="http://tempuri.org/ISolidWebService/CreateVibroInsertion" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateFlap">
+      <soap:operation soapAction="http://tempuri.org/ISolidWebService/CreateFlap" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

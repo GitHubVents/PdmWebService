@@ -151,5 +151,15 @@ namespace PDMWebService
                 Visible = true
             };
         }
+
+        //public void CreateFlap(FlapTypes type, int height, int wight, bool isOuter, int userId)
+        //{
+        //    taskManager.CreateFlap(type, height, wight, ServiceLibrary.TaskSystem.Constants.Meterials.Aluzinc_Az_150_07, isOuter, 0.7f, userId);
+        //}
+
+        public void CreateFlap(FlapTypes type, int height, int wight, Meterials material, bool isOuter, float thickness, int userId = 0)
+        {
+            taskManager.CreateFlap(type, height, wight, material, isOuter, thickness, userId);
+        }
     }
 }
