@@ -1,4 +1,6 @@
 ﻿using SolidWorks.Interop.sldworks;
+using SolidWorks.Interop.swconst;
+using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
@@ -54,12 +56,15 @@ namespace PDMWebService.Data.Solid
             sldWoksApp.ExitApp();
         }
 
-        //public string ConvertToDXF (string path,string configuration)
-        //{
-        //    Exception ex;
-        //    Console.WriteLine("Convert dile " + path);
-        //    ExportPartData.Dxf.Save(path, configuration, out ex, true, true, @"D:\TEMP\dxf\", true);
-        //    return null;
-        //}
+
+
+
+        public static string ConvertToDXF(string path, string configuration)
+        {
+            Exception ex;
+            Console.WriteLine("Convert dile " + path);
+            ExportPartData.Dxf.Save(path, configuration, out ex, true, true, @"D:\TEMP\dxf\", true);
+            return null;
+        }
     }
 }

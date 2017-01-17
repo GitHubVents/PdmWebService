@@ -74,17 +74,14 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="uploadDXF">
+  <xs:element name="UploadDXF">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="idpdm" type="xs:int" />
-        <xs:element minOccurs="0" name="configuration" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="version" type="xs:int" />
+        <xs:element minOccurs="0" name="FileId" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="uploadDXFResponse">
+  <xs:element name="UploadDXFResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>

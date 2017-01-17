@@ -50,7 +50,7 @@
       <Value Profile="(Default)">D:\Vents-PDM</Value>
     </Setting>
     <Setting Name="DestinationFolder" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">D:\Vents-PDM</Value>
     </Setting>
     <Setting Name="Setting" Type="System.String" Scope="User">
       <Value Profile="(Default)">D:\Vents-PDM</Value>
@@ -70,9 +70,9 @@
     <Setting Name="TestSqlConnection" Type="(Connection string)" Scope="Application">
       <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;ConnectionString&gt;DB-Tes&lt;/ConnectionString&gt;
+  &lt;ConnectionString&gt;DB-Test&lt;/ConnectionString&gt;
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
-      <Value Profile="(Default)">DB-Tes</Value>
+      <Value Profile="(Default)">DB-Test</Value>
     </Setting>
     <Setting Name="VaultSystemType" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>

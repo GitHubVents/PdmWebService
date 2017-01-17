@@ -9,6 +9,7 @@ using System.Linq;
 using PDMWebService.Singleton;
 using PDMWebService.Data.SqlData;
 using EPDM.Interop.epdm;
+using System.Threading;
 
 namespace PDMWebService.Data.PDM
 {
@@ -18,12 +19,19 @@ namespace PDMWebService.Data.PDM
         private PDMAdapter():base()
         {
             PDMInitialize();
-            this.sqlAdapter = SqlDataAdapder.Instance;
+            try
+            {
+                this.sqlAdapter = SqlDataAdapder.Instance;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
         }
         /// <summary>
         /// PDM exemplar.
         /// </summary>
-        private IEdmVault5 edmVault5 = null;
+        private IEdmVault5 edmVault5 = null; // if   use insnace - apdater creater edmVault5
 
         /// <summary>
         /// Vents pdm name.
@@ -109,7 +117,7 @@ namespace PDMWebService.Data.PDM
         /// </summary>
         /// <param name="dataModel"></param>
         /// <returns></returns>
-        public string[] GetConfigiguration(DataModel dataModel)
+        public string[] GetConfigigurations(DataModel dataModel)
         {
             IEdmFile9 fileModelInf;
             IEdmFolder5 ppoRetParentFolder;
@@ -135,6 +143,39 @@ namespace PDMWebService.Data.PDM
 
             return cfgStringList.ToArray();
         }
+
+
+        public   void GetLastVersionAsmPdm(string path)
+        {
+            try
+            {
+                IEdmFolder5 oFolder;
+                GetEdmFile5(path, out oFolder).GetFileCopy(0, 0, oFolder.ID, (int)EdmGetFlag.EdmGet_RefsVerLatest);
+            }
+            catch (Exception exception)
+            {
+               // Logger.ToLog($"Message - {exception.ToString()}\nPath - {path}\nStackTrace - {exception.StackTrace}", null, "GetLastVersionOfFile", "SwEpdm");
+            }
+        }
+
+        internal   IEdmFile5 GetEdmFile5(string path, out IEdmFolder5 folder)
+        {
+            folder = null;
+            try
+            {
+                IEdmFolder5 oFolder;
+                var edmFile5 =  edmVault5.GetFileFromPath(path, out oFolder);
+                edmFile5.GetFileCopy(0, 0, oFolder.ID, (int)EdmGetFlag.EdmGet_RefsVerLatest);
+                folder = oFolder;
+                return edmFile5;
+            }
+            catch (Exception exception)
+            {
+                //Логгер.Ошибка($"Message - {exception.ToString()}\nPath - {path}\nStackTrace - {exception.StackTrace}", null, "GetEdmFile5", "SwEpdm");
+                return null;
+            }
+        }
+
 
         /// <summary>
         /// Копирует файл в указаную директорию (не скачивает).
@@ -284,10 +325,10 @@ namespace PDMWebService.Data.PDM
                     Logger.ToLog("Автологин в системе Vents-PDM системного пользователя " + vaultname);
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                Logger.ToLog("Невозможно создать экземпляр Vents-PDM - " + this.vaultname);
-                throw new Exception("Невозможно создать экземпляр " + this.vaultname);
+                Logger.ToLog("Невозможно создать экземпляр Vents-PDM - " + this.vaultname + "\n" + ex);
+                throw new Exception("Невозможно создать экземпляр " + this.vaultname + "\n"+ex);
             }
             finally
             {
@@ -413,6 +454,184 @@ namespace PDMWebService.Data.PDM
             return this.sqlAdapter.GetSpecifications(from.ToArray());
         }
       private  const int BOM_ID = 8;
+
+
+
+        /// <summary>
+        /// Registration or unregistation files by their paths and registration status.
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="isRegistration"></param>
+        public   void CheckInOutPdm(List<FileInfo> filesList, bool registration)
+        {
+            #region not working code
+            //foreach (var file in filesList)
+            //{
+            //    try
+            //    {
+            //        IEdmFolder5 oFolder;
+            //        IEdmFile5 edmFile5 = edmVault5.GetFileFromPath(file.FullName, out oFolder);
+
+            //        var batchGetter = (IEdmBatchGet)(edmVault5 as IEdmVault7).CreateUtility(EdmUtility.EdmUtil_BatchGet);
+            //        batchGetter.AddSelectionEx(edmVault5, edmFile5.ID, oFolder.ID, 0);
+            //        if ((batchGetter != null))
+            //        {
+            //            batchGetter.CreateTree(0, (int)EdmGetCmdFlags.Egcf_SkipUnlockedWritable);
+            //            batchGetter.GetFiles(0, null);
+            //        }
+
+            //        // Разрегистрировать
+            //        if (!registration)
+            //        {                    
+
+            //            if (!edmFile5.IsLocked)
+            //            {
+
+
+            //                edmFile5.LockFile(oFolder.ID, 0);
+            //                Thread.Sleep(50);
+            //            }
+            //        }
+            //        else if (registration)
+            //            if (edmFile5.IsLocked)
+            //            {
+            //                edmFile5.UnlockFile(oFolder.ID, "");
+            //                Thread.Sleep(50);
+            //            }
+            //    }
+
+            //    catch (Exception ex)
+            //    {
+            //        MessageBox.Show(ex.ToString() + "\n" + ex.StackTrace + "\n" + ex.Source);
+            //    }
+            //}
+
+
+
+            //foreach (var eachFile in files)
+            //{
+            //    try
+            //    {
+            //        IEdmFolder5 folderPdm;
+            //        IEdmFile5 filePdm = edmVault5.GetFileFromPath(eachFile.FullName, out folderPdm);
+
+            //        if (filePdm == null)
+            //        {
+            //            filePdm.GetFileCopy(0, 0, folderPdm.ID, (int)EdmGetFlag.EdmGet_Simple);
+            //        }
+
+            //        // Разрегистрировать
+            //        if (registration == false)
+            //        {
+            //            if (!filePdm.IsLocked)
+            //            {
+            //                filePdm.LockFile(folderPdm.ID, 0);
+            //                Thread.Sleep(50);
+            //            }
+            //        }
+            //        else
+            //        {
+            //            if (filePdm.IsLocked)
+            //            {
+            //                filePdm.UnlockFile(folderPdm.ID, "");
+            //                Thread.Sleep(50);
+            //            }
+            //        }
+            //    }
+
+            //    catch (Exception ex)
+            //    {
+            //        MessageBox.Show(ex.ToString() + "\n" + ex.StackTrace + "\n" + ex.Source);
+            //    }
+            //}
+
+            #endregion
+            foreach (var file in filesList)
+            {
+                var retryCount = 2;
+                var success = false;
+                while (!success && retryCount > 0)
+                {
+                    try
+                    {
+                        IEdmFolder5 oFolder;
+                        IEdmFile5 edmFile5 = edmVault5.GetFileFromPath(file.FullName, out oFolder);
+                        edmFile5.GetFileCopy(0, 0, oFolder.ID, (int)EdmGetFlag.EdmGet_Simple);
+                        // Разрегистрировать
+                        if (registration == false)
+                        {
+
+                            m1:
+                            edmFile5.LockFile(oFolder.ID, 0);
+                            //MessageBox.Show(edmFile5.Name);
+                            Thread.Sleep(50);
+                            var j = 0;
+                            if (!edmFile5.IsLocked)
+                            {
+                                j++;
+                                if (j > 5)
+                                {
+                                    goto m3;
+                                }
+                                goto m1;
+                            }
+                        }
+                        // Зарегистрировать
+                        if (registration)
+                        {
+                            try
+                            {
+                                m2:
+                                edmFile5.UnlockFile(oFolder.ID, "");
+                                Thread.Sleep(50);
+                                var i = 0;
+                                if (edmFile5.IsLocked)
+                                {
+                                    i++;
+                                    if (i > 5)
+                                    {
+                                        goto m4;
+                                    }
+                                    goto m2;
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                               // MessageBox.Show(ex.ToString());
+                            }
+                        }
+                        m3:
+                        m4:
+                        //LoggerInfo(string.Format("В базе PDM - {1}, зарегестрирован документ по пути {0}", file.FullName, vaultName), "", "CheckInOutPdm");
+                        success = true;
+                    }
+
+
+                    catch (Exception exception)
+                    {
+                      //  Логгер.Ошибка($"Message - {exception.ToString()}\nfile.FullName - {file.FullName}\nStackTrace - {exception.StackTrace}", null, "CheckInOutPdm", "SwEpdm");
+                        retryCount--;
+                        Thread.Sleep(200);
+                        if (retryCount == 0)
+                        {
+                            //
+                        }
+                    }
+                }
+                if (!success)
+                {
+                    //LoggerError($"Во время регистрации документа по пути {file.FullName} возникла ошибка\nБаза - {vaultName}. {ex.ToString()}", "", "CheckInOutPdm");
+                }
+            }
+        }
+
+
+        public IEdmFile5 GetFileById (int fileId)
+        {
+            return (IEdmFile5)edmVault5.GetObject(EdmObjectType.EdmObject_File, fileId);
+        }
+
+       
 
     }
 

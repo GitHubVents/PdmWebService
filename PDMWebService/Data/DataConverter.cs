@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace PDMWebService.Data
 {
- public abstract    class DataConverter
+    public abstract class DataConverter
     {
-        public static int GetInt(string param)
+        public static int ToInt(string param)
         {
             return Convert.ToInt32(param);
         }

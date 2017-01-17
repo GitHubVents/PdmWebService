@@ -55,13 +55,10 @@ namespace PDM_WebService.WcfServiceLibrary
         /// <returns></returns>
         //[OperationContract]
         //bool CheckDEF(int idPDM, string configuration, int version);
-        ///// <summary>
-        ///// test method 
-        ///// </summary>
-        // [OperationContract]
-        //void OpenSolidWorks();
+        
+
         [OperationContract]
-        void uploadDXF(string name, int idpdm, string configuration, int version);
+        void UploadDXF(int FileId);
 
         [OperationContract]
         void CreateRoof(int height, int wight,  RoofTypes type, int userId);
@@ -95,6 +92,6 @@ namespace PDM_WebService.WcfServiceLibrary
         /// </summary>
         [OperationContract]
         void OpenSolidWorks();
-        
+         
     }
 }

@@ -646,11 +646,11 @@ namespace TestTaskSystemGUI.ServiceReference1 {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISolidWebService/GetSpecifications", ReplyAction="http://tempuri.org/ISolidWebService/GetSpecificationsResponse")]
         System.Threading.Tasks.Task<TestTaskSystemGUI.ServiceReference1.Specification[]> GetSpecificationsAsync(TestTaskSystemGUI.ServiceReference1.DataModel dataSolidModel, string configuration);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISolidWebService/uploadDXF", ReplyAction="http://tempuri.org/ISolidWebService/uploadDXFResponse")]
-        void uploadDXF(string name, int idpdm, string configuration, int version);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISolidWebService/UploadDXF", ReplyAction="http://tempuri.org/ISolidWebService/UploadDXFResponse")]
+        void UploadDXF(int FileId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISolidWebService/uploadDXF", ReplyAction="http://tempuri.org/ISolidWebService/uploadDXFResponse")]
-        System.Threading.Tasks.Task uploadDXFAsync(string name, int idpdm, string configuration, int version);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISolidWebService/UploadDXF", ReplyAction="http://tempuri.org/ISolidWebService/UploadDXFResponse")]
+        System.Threading.Tasks.Task UploadDXFAsync(int FileId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISolidWebService/CreateRoof", ReplyAction="http://tempuri.org/ISolidWebService/CreateRoofResponse")]
         void CreateRoof(int height, int wight, TestTaskSystemGUI.ServiceReference1.RoofTypes type, int userId);
@@ -744,12 +744,12 @@ namespace TestTaskSystemGUI.ServiceReference1 {
             return base.Channel.GetSpecificationsAsync(dataSolidModel, configuration);
         }
         
-        public void uploadDXF(string name, int idpdm, string configuration, int version) {
-            base.Channel.uploadDXF(name, idpdm, configuration, version);
+        public void UploadDXF(int FileId) {
+            base.Channel.UploadDXF(FileId);
         }
         
-        public System.Threading.Tasks.Task uploadDXFAsync(string name, int idpdm, string configuration, int version) {
-            return base.Channel.uploadDXFAsync(name, idpdm, configuration, version);
+        public System.Threading.Tasks.Task UploadDXFAsync(int FileId) {
+            return base.Channel.UploadDXFAsync(FileId);
         }
         
         public void CreateRoof(int height, int wight, TestTaskSystemGUI.ServiceReference1.RoofTypes type, int userId) {

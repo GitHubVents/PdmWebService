@@ -67,17 +67,7 @@ class TaskManager : AbstractSingeton<TaskManager>
             Execute();
     }
 
-    //public void CreateFlap(FlapTypes type, int height, int wight, Meterials material, bool isOuter, int userId = 0)
-    //{
-    //    int status = (int)TaskStatuses.Waiting;
-    //    context.CreateFlap((int)type, wight, height, userId, status, DateTime.Today, (int)TasksTypes.Flap, (int)material, Convert.ToByte(isOuter), null);
-    //    context.SubmitChanges();
-
-    //   // if (!ExistTaskToExecute())
-    //        Execute();
-
-    //}
-
+ 
     public void CreateFlap(FlapTypes type, int height, int wight, Meterials material, bool isOuter, float thickness, int userId = 0)
     {
         int status = (int)TaskStatuses.Waiting;
@@ -148,24 +138,26 @@ class TaskManager : AbstractSingeton<TaskManager>
                     VibroInsertion vibroInsert = context.VibroInsertions.First(eachVbrInsert => eachVbrInsert.Id == taskInstance.DataTaskId);
                     Console.WriteLine("Выполнение таска: " + (TasksTypes)taskInstance.TypeTask);
                     try
-                    { 
-                         
-                          //  AirCadExecutor.Instance.Spigot(vibroInsert.TypeVibroInsert.ToString(), vibroInsert.Width.ToString(), vibroInsert.Height.ToString());
-                         string str =   AirCadExecutor.Instance.SpigotStr(vibroInsert.TypeVibroInsert.ToString(), vibroInsert.Width.ToString(), vibroInsert.Height.ToString());
+                    {
 
+                        //  AirCadExecutor.Instance.Spigot(vibroInsert.TypeVibroInsert.ToString(), vibroInsert.Width.ToString(), vibroInsert.Height.ToString());
+                     //   string str =   AirCadExecutor.Instance.SpigotStr(vibroInsert.TypeVibroInsert.ToString(), vibroInsert.Width.ToString(), vibroInsert.Height.ToString());
+                       PDMWebService.Data.Solid.PartBuilders.VibroInsertionBuilder builder = new PDMWebService.Data.Solid.PartBuilders.VibroInsertionBuilder();
+                        string str = builder.Build(vibroInsert.TypeVibroInsert.ToString(), vibroInsert.Width.ToString(), vibroInsert.Height.ToString());
 
                         try
                         {
                             //   path = newSpigot.GetPlace().Path.Clone() as string;                         
                             // newSpigot = null;
                             Console.WriteLine("Генерация " + (TasksTypes)taskInstance.TypeTask + " завершена...\nпуть к файлу: " + str + "\n");
+                            ApplyCompleted(taskInstance.Id);
                         }
                         catch (Exception ex)
                         {
                             Console.WriteLine("Неудалось скопировать путь к сгенерированому файлу ");// + ex.ToString() + "\n");
                         }
 
-                        ApplyCompleted(taskInstance.Id);
+                     
                         Console.WriteLine("task id: "+ taskInstance.Id + " type task: " + (TasksTypes)taskInstance.TypeTask + " data: [" + vibroInsert.Height + "," + vibroInsert.Width+"]"); 
 
                     }

@@ -64,6 +64,18 @@
       <Column Name="Title" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
     </Type>
   </Table>
+  <Table Name="dbo.DxfTargets" Member="DxfTargets">
+    <Type Name="DxfTarget">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="IpPdm" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PdfTargets" Member="PdfTargets">
+    <Type Name="PdfTarget">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="IpPdm" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
   <Function Name="dbo.CreateFlap" Method="CreateFlap" IsComposable="true">
     <Parameter Name="type" Type="System.Int32" DbType="Int" />
     <Parameter Name="wight" Type="System.Int32" DbType="Int" />
@@ -119,6 +131,22 @@
     <Return Type="System.Int32" />
   </Function>
   <Function Name="dbo.LastTaskId" Method="LastTaskId">
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.CreatePdf" Method="CreatePdf">
+    <Parameter Name="ipPdm" Type="System.Int32" DbType="Int" />
+    <Parameter Name="userId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="status" Type="System.Int32" DbType="Int" />
+    <Parameter Name="timeStart" Type="System.DateTime" DbType="DateTime" />
+    <Parameter Name="taskType" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.CreateDxf" Method="CreateDxf">
+    <Parameter Name="ipPdm" Type="System.Int32" DbType="Int" />
+    <Parameter Name="userId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="status" Type="System.Int32" DbType="Int" />
+    <Parameter Name="timeStart" Type="System.DateTime" DbType="DateTime" />
+    <Parameter Name="taskType" Type="System.Int32" DbType="Int" />
     <Return Type="System.Int32" />
   </Function>
 </Database>

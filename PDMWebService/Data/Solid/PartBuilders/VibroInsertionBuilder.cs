@@ -10,8 +10,9 @@ using System.Threading.Tasks;
 
 namespace PDMWebService.Data.Solid.PartBuilders
 {
-    public class VibroInsertionBuilder : Singleton.AbstractSingeton<VibroInsertionBuilder>, IPartBuilder
+    public class VibroInsertionBuilder : AbstractBuilder 
     {
+        private List<FileInfo> NewComponents;
         /// <summary>
         ///  Папка для сохранения компонентов "Вибровставки". 
         /// </summary>
@@ -21,7 +22,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
         /// </summary>
         public string SpigotFolder { get; set; } = @"\Библиотека проектирования\DriveWorks\12 - Spigot";
 
-        private VibroInsertionBuilder() : base()
+        public VibroInsertionBuilder() :base()
         {
 
         }
@@ -32,7 +33,6 @@ namespace PDMWebService.Data.Solid.PartBuilders
             {
                 return "";
             }
-
             string modelName;
 
             switch (type)
@@ -65,7 +65,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
             Dimension myDimension;
             var modelSpigotDrw = $@"{Settings.Default.SourceFolder}{SpigotFolder}\{drawing}.SLDDRW";
 
-            GetLastVersionAsmPdm(modelSpigotDrw, Settings.Default.PdmBaseName);
+          PDM.PDMAdapter.Instance.GetLastVersionAsmPdm(modelSpigotDrw );
 
             //if (!Warning()) return "";
             var swDrwSpigot = SolidWorksInstance.SldWoksApp.OpenDoc6(modelSpigotDrw, (int)swDocumentTypes_e.swDocDRAWING,
@@ -79,13 +79,13 @@ namespace PDMWebService.Data.Solid.PartBuilders
             switch (modelName)
             {
                 case "12-20":
-                    DelEquations(5, swDoc);
+                     DelEquations(5, swDoc);
                     DelEquations(4, swDoc);
-                    DelEquations(3, swDoc);
+                     DelEquations(3, swDoc);
                     break;
                 case "12-30":
-                    DelEquations(0, swDoc);
-                    DelEquations(0, swDoc);
+                     DelEquations(0, swDoc);
+                     DelEquations(0, swDoc);
                     DelEquations(0, swDoc);
                     break;
             }
@@ -355,13 +355,14 @@ namespace PDMWebService.Data.Solid.PartBuilders
             NewComponents.Add(new FileInfo(newSpigotPath + ".SLDDRW"));
             // //MessageBox.Show(new FileInfo(newSpigotPath + ".SLDDRW").Name);
             SolidWorksInstance.CloseAllDocumentsAndExit();
-          
- 
-
             //MessageBox.Show(newSpigotPath, "Модель построена");
+
+             //  PDMWebService.Data.PDM.PDMAdapter.Instance.CheckInOutPdm(NewComponents, true);
 
             return newSpigotPath;
         }
+
+
 
     }
 }

@@ -90,14 +90,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PDMWebService.exe" size="427480">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PDMWebService.exe" size="475096">
       <assemblyIdentity name="PDMWebService" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>6n8JvYYx+5MiweLWBe4za50rfVuUfW+n6t52O0YoLKA=</dsig:DigestValue>
+        <dsig:DigestValue>wmUAOyvZvKK4YQy0wgXbTnO9bX8v2IGS910NDe1k6oc=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -109,7 +109,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>tLZewv3cIJmlNqWeOrvnDksv6dzSUD7R+GSByf++vE4=</dsig:DigestValue>
+        <dsig:DigestValue>wPiiyEdeL7eIKu6GODE7sV2cPk3ij0o1dYhJGFKqcEY=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -137,13 +137,13 @@
       </hash>
     </dependentAssembly>
   </dependency>
-  <file name="PDMWebService.exe.config" size="4942">
+  <file name="PDMWebService.exe.config" size="4957">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>uVde4KOTz4TYhbONI0SeHlZny0F4Wq80bMZAFn61/q8=</dsig:DigestValue>
+      <dsig:DigestValue>xqvwkBXeWONqKQoj3ZyZDR+YmQwRmGuAy1y+I8DHUiA=</dsig:DigestValue>
     </hash>
   </file>
   <file name="TaskDb.mdf" size="3276800" writeableType="applicationData">

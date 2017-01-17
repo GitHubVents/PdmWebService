@@ -115,7 +115,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\DataConverter.cs" />
-    <Compile Include="Data\Solid\PartBuilders\IPartBuilder.cs" />
+    <Compile Include="Data\Solid\PartBuilders\AbstractBuilder.cs" />
+    <Compile Include="Data\Solid\PartBuilders\FlapBuilder.cs" />
+    <Compile Include="Data\Solid\PartBuilders\RoofBuilder.cs" />
     <Compile Include="Data\Solid\PartBuilders\VibroInsertionBuilder.cs" />
     <Compile Include="Data\SqlData\SqlDataAdapder.cs" />
     <Compile Include="Data\SqlData\SwPlusDbLinqORM.designer.cs">
@@ -135,7 +137,7 @@
     <Compile Include="Service.cs" />
     <Compile Include="ServiceInterfaice.cs" />
     <Compile Include="Singleton\AbstractSingeton.cs" />
-    <Compile Include="Data\Solid\SolidAdapter.cs" />
+    <Compile Include="Data\Solid\SolidWorksInstance.cs" />
     <Compile Include="TaskSystem\AirCadExecutor.cs" />
     <Compile Include="TaskSystem\AirCad\Observer.cs" />
     <Compile Include="TaskSystem\Data\DbModel.designer.cs">
@@ -214,6 +216,7 @@
       <DependentUpon>DbModel.dbml</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

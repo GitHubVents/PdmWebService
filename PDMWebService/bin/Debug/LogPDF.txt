@@ -952,3 +952,85 @@ System.NullReferenceException: Ссылка на объект не указыв�
 Автологин в системе Vents-PDM системного пользователя Vents-PDM
 
 
+Служба запущена
+Создан экземпляр Vents-PDM
+Автологин в системе Vents-PDM системного пользователя Vents-PDM
+
+
+Служба запущена
+Создан экземпляр Vents-PDM
+Автологин в системе Vents-PDM системного пользователя Vents-PDM
+
+
+Служба запущена
+Создан экземпляр Vents-PDM
+Автологин в системе Vents-PDM системного пользователя Vents-PDM
+
+
+Служба запущена
+Создан экземпляр Vents-PDM
+Автологин в системе Vents-PDM системного пользователя Vents-PDM
+
+
+Служба запущена
+Создан экземпляр Vents-PDM
+Автологин в системе Vents-PDM системного пользователя Vents-PDM
+
+
+Служба запущена
+Создан экземпляр Vents-PDM
+Автологин в системе Vents-PDM системного пользователя Vents-PDM
+
+
+Служба запущена
+Создан экземпляр Vents-PDM
+Автологин в системе Vents-PDM системного пользователя Vents-PDM
+
+
+Неудалось запустить веб службуSystem.Exception: Неудалось инициализировать веб службу
+
+System.ArgumentException: Не удалось добавить значение в коллекцию, так как в этой коллекции уже существует объект того же типа: "System.ServiceModel.Description.ServiceDebugBehavior". Эта коллекция поддерживает только по одному экземпляру каждого типа.
+Имя параметра: item
+   в System.Collections.Generic.KeyedByTypeCollection`1.InsertItem(Int32 index, TItem item)
+   в System.Collections.ObjectModel.Collection`1.Add(T item)
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 83
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 104
+   в PDMWebService.Service.Start() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 46
+Неудалось запустить веб службуSystem.Exception: Неудалось инициализировать веб службу
+
+System.ArgumentException: Не удалось добавить значение в коллекцию, так как в этой коллекции уже существует объект того же типа: "System.ServiceModel.Description.ServiceDebugBehavior". Эта коллекция поддерживает только по одному экземпляру каждого типа.
+Имя параметра: item
+   в System.Collections.Generic.KeyedByTypeCollection`1.InsertItem(Int32 index, TItem item)
+   в System.Collections.ObjectModel.Collection`1.Add(T item)
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 83
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 104
+   в PDMWebService.Service.Start() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 46
+Неудалось запустить веб службуSystem.Exception: Неудалось инициализировать веб службу
+
+System.ArgumentException: Не удалось добавить значение в коллекцию, так как в этой коллекции уже существует объект того же типа: "System.ServiceModel.Description.ServiceDebugBehavior". Эта коллекция поддерживает только по одному экземпляру каждого типа.
+Имя параметра: item
+   в System.Collections.Generic.KeyedByTypeCollection`1.InsertItem(Int32 index, TItem item)
+   в System.Collections.ObjectModel.Collection`1.Add(T item)
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 79
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 111
+   в PDMWebService.Service.Start() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 46
+Неудалось запустить веб службуSystem.Exception: Неудалось инициализировать веб службу
+
+System.ArgumentException: Не удалось добавить значение в коллекцию, так как в этой коллекции уже существует объект того же типа: "System.ServiceModel.Description.ServiceDebugBehavior". Эта коллекция поддерживает только по одному экземпляру каждого типа.
+Имя параметра: item
+   в System.Collections.Generic.KeyedByTypeCollection`1.InsertItem(Int32 index, TItem item)
+   в System.Collections.ObjectModel.Collection`1.Add(T item)
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 80
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 112
+   в PDMWebService.Service.Start() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 46
+Неудалось запустить веб службуSystem.Exception: Неудалось инициализировать веб службу
+
+System.ArgumentException: Не удалось добавить значение в коллекцию, так как в этой коллекции уже существует объект того же типа: "System.ServiceModel.Description.ServiceDebugBehavior". Эта коллекция поддерживает только по одному экземпляру каждого типа.
+Имя параметра: item
+   в System.Collections.Generic.KeyedByTypeCollection`1.InsertItem(Int32 index, TItem item)
+   в System.Collections.ObjectModel.Collection`1.Add(T item)
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 84
+   в PDMWebService.Service.Build() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 116
+   в PDMWebService.Service.Start() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 46
+Служба запущена
+Служба запущена

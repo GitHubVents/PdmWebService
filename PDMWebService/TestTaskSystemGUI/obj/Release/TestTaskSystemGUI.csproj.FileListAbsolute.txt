@@ -6,4 +6,3 @@ D:\Vlad\PDM-WebService\PDMWebService\TestTaskSystemGUI\bin\Release\TestTaskSyste
 D:\Vlad\PDM-WebService\PDMWebService\TestTaskSystemGUI\bin\Release\TestTaskSystemGUI.pdb
 D:\Vlad\PDM-WebService\PDMWebService\TestTaskSystemGUI\obj\Release\TestTaskSystemGUI.exe
 D:\Vlad\PDM-WebService\PDMWebService\TestTaskSystemGUI\obj\Release\TestTaskSystemGUI.pdb
-D:\Vlad\PDM-WebService\PDMWebService\TestTaskSystemGUI\obj\Release\TestTaskSystemGUI.csprojResolveAssemblyReference.cache

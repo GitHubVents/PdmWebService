@@ -12,7 +12,7 @@ namespace TestTaskSystem
         {
             try
             {
-                WebServiceExemplare.ISolidWebService sws = new WebServiceExemplare.SolidWebServiceClient();
+                ServiceReference1.ISolidWebService sws = new ServiceReference1.SolidWebServiceClient();
 
                 //  System.Threading.Thread.Sleep(5000);
                 //Console.WriteLine(  sws.testStaticFielsdMethod());
@@ -21,8 +21,8 @@ namespace TestTaskSystem
                 //sws.CreateVibroInsertion(rnd.Next(100, 3000), rnd.Next(100, 3000), WebServiceExemplare.VibroInsertionTypes.Thirty_mm, rnd.Next(100, 3000));
 
 
-                if (sws.testYesNotS(0) == 1)
-                    sws.testYesNotS(1);
+                //if (sws.testYesNotS(0) == 1)
+                //    sws.testYesNotS(1);
 
                  
             }

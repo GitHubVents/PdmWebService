@@ -45,8 +45,16 @@ namespace TestTaskSystemGUI
 
         private void button2_Click(object sender, EventArgs e)
         {
-            service = new ServiceReference1.SolidWebServiceClient();
-            service.OpenSolidWorks();
+            try
+            {
+                service = new ServiceReference1.SolidWebServiceClient();
+                service.OpenSolidWorks();
+            }
+            catch (Exception ex)
+
+            {
+                MessageBox.Show(ex.ToString());
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -71,5 +79,17 @@ namespace TestTaskSystemGUI
         {
          //   this.service.(random.Next(213, 3000), random.Next(213, 3000), (ServiceReference1.RoofTypes)(random.Next(1, 6)), 0);
         }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                service.UploadDXF(new Random().Next(30000, 50000));
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+            }
     }
 }

@@ -126,7 +126,7 @@ namespace PDMWebService.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\Vents-PDM")]
         public string DestinationFolder {
             get {
                 return ((string)(this["DestinationFolder"]));
@@ -199,7 +199,7 @@ namespace PDMWebService.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("DB-Tes")]
+        [global::System.Configuration.DefaultSettingValueAttribute("DB-Test")]
         public string TestSqlConnection {
             get {
                 return ((string)(this["TestSqlConnection"]));

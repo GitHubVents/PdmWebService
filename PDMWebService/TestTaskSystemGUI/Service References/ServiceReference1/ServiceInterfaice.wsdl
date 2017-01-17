@@ -39,11 +39,11 @@
   <wsdl:message name="ISolidWebService_GetSpecifications_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetSpecificationsResponse" />
   </wsdl:message>
-  <wsdl:message name="ISolidWebService_uploadDXF_InputMessage">
-    <wsdl:part name="parameters" element="tns:uploadDXF" />
+  <wsdl:message name="ISolidWebService_UploadDXF_InputMessage">
+    <wsdl:part name="parameters" element="tns:UploadDXF" />
   </wsdl:message>
-  <wsdl:message name="ISolidWebService_uploadDXF_OutputMessage">
-    <wsdl:part name="parameters" element="tns:uploadDXFResponse" />
+  <wsdl:message name="ISolidWebService_UploadDXF_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UploadDXFResponse" />
   </wsdl:message>
   <wsdl:message name="ISolidWebService_CreateRoof_InputMessage">
     <wsdl:part name="parameters" element="tns:CreateRoof" />
@@ -90,9 +90,9 @@
       <wsdl:input wsam:Action="http://tempuri.org/ISolidWebService/GetSpecifications" message="tns:ISolidWebService_GetSpecifications_InputMessage" />
       <wsdl:output wsam:Action="http://tempuri.org/ISolidWebService/GetSpecificationsResponse" message="tns:ISolidWebService_GetSpecifications_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="uploadDXF">
-      <wsdl:input wsam:Action="http://tempuri.org/ISolidWebService/uploadDXF" message="tns:ISolidWebService_uploadDXF_InputMessage" />
-      <wsdl:output wsam:Action="http://tempuri.org/ISolidWebService/uploadDXFResponse" message="tns:ISolidWebService_uploadDXF_OutputMessage" />
+    <wsdl:operation name="UploadDXF">
+      <wsdl:input wsam:Action="http://tempuri.org/ISolidWebService/UploadDXF" message="tns:ISolidWebService_UploadDXF_InputMessage" />
+      <wsdl:output wsam:Action="http://tempuri.org/ISolidWebService/UploadDXFResponse" message="tns:ISolidWebService_UploadDXF_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="CreateRoof">
       <wsdl:input wsam:Action="http://tempuri.org/ISolidWebService/CreateRoof" message="tns:ISolidWebService_CreateRoof_InputMessage" />
@@ -158,8 +158,8 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="uploadDXF">
-      <soap:operation soapAction="http://tempuri.org/ISolidWebService/uploadDXF" style="document" />
+    <wsdl:operation name="UploadDXF">
+      <soap:operation soapAction="http://tempuri.org/ISolidWebService/UploadDXF" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

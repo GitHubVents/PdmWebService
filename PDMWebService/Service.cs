@@ -76,10 +76,34 @@ namespace PDMWebService
                 {
 
                     host = new ServiceHost(typeof(ServiceInterfaice), serviceAddress);
-                    ServiceMetadataBehavior smb = new ServiceMetadataBehavior();
-                    smb.HttpGetEnabled = true;
-                    smb.MetadataExporter.PolicyVersion = PolicyVersion.Policy15;
-                    host.Description.Behaviors.Add(smb);
+                    foreach (var item in host.Description.Behaviors)
+                    {
+                        try
+                        {
+                            (item as ServiceDebugBehavior).IncludeExceptionDetailInFaults = true;
+                            Console.WriteLine("Да");
+                        }
+                        catch { Console.WriteLine("Нет"); }
+                    }
+
+                    try
+                    {
+                        host.Description.Behaviors.Add(new ServiceDebugBehavior() { IncludeExceptionDetailInFaults = true });
+                        Console.WriteLine("Да");
+                    }
+                    catch { Console.WriteLine("Нет"); }
+                    try
+                    {
+                        ServiceMetadataBehavior smb = new ServiceMetadataBehavior();
+                        smb.HttpGetEnabled = true;
+                        smb.MetadataExporter.PolicyVersion = PolicyVersion.Policy15;
+                        host.Description.Behaviors.Add(smb);
+                    }
+                    catch
+                    {
+
+                    }
+                
 
                     //host = new ServiceHost(typeof(ServiceInterfaice), serviceAddress);
                     //ServiceMetadataBehavior smb = new ServiceMetadataBehavior();
