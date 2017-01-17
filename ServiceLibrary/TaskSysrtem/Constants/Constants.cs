@@ -13,7 +13,9 @@
         Panel = 5,
         HousingBlock = 6,
         Monoblock = 7,
-        Frameless = 8
+        Frameless = 8,
+        Pdf = 9,
+        Dxf = 10
     }
 
 

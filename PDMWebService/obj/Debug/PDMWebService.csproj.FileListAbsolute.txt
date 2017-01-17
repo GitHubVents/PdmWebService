@@ -23,4 +23,3 @@ D:\Vlad\PDM-WebService\PDMWebService\obj\Debug\PDMWebService.exe.manifest
 D:\Vlad\PDM-WebService\PDMWebService\obj\Debug\PDMWebService.application
 D:\Vlad\PDM-WebService\PDMWebService\obj\Debug\PDMWebService.exe
 D:\Vlad\PDM-WebService\PDMWebService\obj\Debug\PDMWebService.pdb
-D:\Vlad\PDM-WebService\PDMWebService\obj\Debug\PDMWebService.csprojResolveAssemblyReference.cache

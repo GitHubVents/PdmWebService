@@ -1,7 +1,10 @@
-﻿using SolidWorks.Interop.sldworks;
-using SolidWorks.Interop.swconst;
+﻿using EPDM.Interop.epdm;
+using PDM_WebService.WcfServiceLibrary.DataContracts;
+using PDMWebService.Data.PDM;
+using SolidWorks.Interop.sldworks;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace PDMWebService.Data.Solid
@@ -65,6 +68,18 @@ namespace PDMWebService.Data.Solid
             Console.WriteLine("Convert dile " + path);
             ExportPartData.Dxf.Save(path, configuration, out ex, true, true, @"D:\TEMP\dxf\", true);
             return null;
+        }
+
+        public static  void ConvertToDXF(int FileId)
+        {
+            IEdmFile5 fileEdm = PDMAdapter.Instance.GetFileById(FileId); 
+            DataModel dm = PDMAdapter.Instance.SearchDoc(fileEdm.Name).First();  
+            PDMAdapter.Instance.DownLoadFile(dm); 
+            string[] configurations = PDMAdapter.Instance.GetConfigigurations(dm); 
+            foreach (var eachConfiguration in configurations)
+            {
+               ConvertToDXF(dm.Path, eachConfiguration);
+            } 
         }
     }
 }

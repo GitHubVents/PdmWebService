@@ -48,20 +48,16 @@ class TaskManager : AbstractSingeton<TaskManager>
     }
   
     public void CreateVibroInsertion(int height, int wight, VibroInsertionTypes type, int userId = 0)
-    {
-        int status = (int)TaskStatuses.Waiting;
-        Console.WriteLine("Пришел новый таск и стутс ему леги... " +  TaskStatuses.Waiting);
-        context.CreateTaskVibroInserion((int)type, wight, height, userId, status, DateTime.Today, (int)TasksTypes.VibroInsertion);
+    {  
+        context.CreateTaskVibroInserion((int)type, wight, height, userId, (int)TaskStatuses.Waiting, DateTime.Today, (int)TasksTypes.VibroInsertion);
         context.SubmitChanges();    
          if (!ExistTaskToExecute())
             Execute() ;        
     }
 
     public void CreateRoof(int height, int wight, RoofTypes type, int userId = 0)
-    {
-        int status = (int)TaskStatuses.Waiting;
-        Console.WriteLine("Пришел новый таск и стутс ему леги... " + TaskStatuses.Waiting);
-        context.CreateTaskRoof((int)type, wight, height, userId, status, DateTime.Today, (int)TasksTypes.Roof);
+    {  
+        context.CreateTaskRoof((int)type, wight, height, userId, (int)TaskStatuses.Waiting, DateTime.Today, (int)TasksTypes.Roof);
         context.SubmitChanges();
        if (!ExistTaskToExecute())
             Execute();
@@ -69,14 +65,13 @@ class TaskManager : AbstractSingeton<TaskManager>
 
  
     public void CreateFlap(FlapTypes type, int height, int wight, Meterials material, bool isOuter, float thickness, int userId = 0)
-    {
-        int status = (int)TaskStatuses.Waiting;
-        context.CreateFlap((int)type, wight, height, userId, status, DateTime.Today, (int)TasksTypes.Flap, (int)material, Convert.ToByte(isOuter), thickness);
-        context.SubmitChanges();
-
+    { 
+        context.CreateFlap((int)type, wight, height, userId, (int)TaskStatuses.Waiting, DateTime.Today, (int)TasksTypes.Flap, (int)material, Convert.ToByte(isOuter), thickness);
+        context.SubmitChanges(); 
         if (!ExistTaskToExecute())
             Execute();
     }
+
     #region not ported panel builder..
     public void CreatePanel(
         PanelProfiles profil,
@@ -90,10 +85,10 @@ class TaskManager : AbstractSingeton<TaskManager>
         int userId = 0
         )
     {
-        int status = (int)TaskStatuses.Waiting;
+     
         context.CreatePanel
             (
-                status,
+                (int)TaskStatuses.Waiting,
                 (int)TasksTypes.Panel,
                 userId,
                 DateTime.Today,
@@ -112,10 +107,30 @@ class TaskManager : AbstractSingeton<TaskManager>
             Execute();
     }
     #endregion
+
     public void CreateMountingFrame()
     {
         //  AirCadExecutor.Instance.mou
     }
+
+
+    public void CreatePdf (int idPdm, int userId = 0)
+    {
+        context.CreatePdf(idPdm, userId,(int)TaskStatuses.Waiting,  DateTime.Today, (int)TasksTypes.Pdf);
+        context.SubmitChanges();
+        if (!ExistTaskToExecute())
+            Execute();
+    }
+
+    public void CreateDxf(int idPdm, int userId = 0)
+    {
+        Console.WriteLine("dxf");
+        context.CreateDxf(idPdm, userId,  (int)TaskStatuses.Waiting , DateTime.Today, (int)TasksTypes.Dxf);
+        context.SubmitChanges();
+        if (!ExistTaskToExecute())
+            Execute();
+    }
+
 
     private void Execute(  )
     {
@@ -210,7 +225,26 @@ class TaskManager : AbstractSingeton<TaskManager>
                     Console.WriteLine("Эмуляция генерирования панели. Time out: 5 seconds");
                     System.Threading.Thread.Sleep(5000);
                     break;
+
+                case (int)TasksTypes.Dxf:
+                    try
+                    {
+                        DxfTarget dxfTarget = context.DxfTargets.First(each => each.Id == taskInstance.DataTaskId);
+                        PDMWebService.Data.Solid.SolidWorksInstance.ConvertToDXF((int)dxfTarget.IpPdm);
+                        ApplyCompleted(taskInstance.Id);
+                    }
+                    catch ( Exception ex)
+                    {
+                        Console.WriteLine(ex.ToString());
+                        ApplyError(taskInstance.Id);
+                    }
+                    break;
+
+                case (int)TasksTypes.Pdf:
+                    PdfTarget pdfTarget = context.PdfTargets.First(each => each.Id == taskInstance.DataTaskId);
                     
+                    ApplyCompleted(taskInstance.Id);
+                    break;
             }
 
         }

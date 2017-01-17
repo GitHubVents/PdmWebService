@@ -184,23 +184,14 @@ namespace PDMWebService
             taskManager.CreateFlap(type, height, wight, material, isOuter, thickness, userId);
         }
 
-        public void UploadDXF(int FileId)
-        { 
-            IEdmFile5 fileEdm = PDMAdapter.Instance.GetFileById(FileId);
-            Console.WriteLine("Количество найденых файлов... "+PDMAdapter.Instance.SearchDoc(fileEdm.Name).Count());
-             DataModel dm =  PDMAdapter.Instance.SearchDoc(fileEdm.Name).First();
-            Console.WriteLine(fileEdm.Name+"\n\n");
-            //var model = new DataModel() { Id = FileId, FileName = fileEdm.Name, FolderId = fileEdm.LockedInFolderID, Path = fileEdm };
-            PDMAdapter.Instance.DownLoadFile(dm);
+        public void CreateDxf(int FileId)
+        {
+            taskManager.CreateDxf(FileId);
+        }
 
-            string [] configurations =  PDMAdapter.Instance.GetConfigigurations(dm);
-           
-            foreach (var eachConfiguration in configurations)
-            {
-                SolidWorksInstance.ConvertToDXF(dm.Path, eachConfiguration);
-            }       
-            
-            Console.WriteLine("Work...\nid #" + dm.Id + ", name" + dm.FileName + ", path " +", folder id"+dm.FolderId);
-        } 
+        public void CreatePdf(int FileId)
+        {
+            taskManager.CreatePdf(FileId);
+        }
     }
 }

@@ -90,14 +90,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PDMWebService.exe" size="475096">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PDMWebService.exe" size="478168">
       <assemblyIdentity name="PDMWebService" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>wmUAOyvZvKK4YQy0wgXbTnO9bX8v2IGS910NDe1k6oc=</dsig:DigestValue>
+        <dsig:DigestValue>/7D4YqRkMLeg/vVRiK4VBJ41bQtSIPTtOxlXBUBwfs4=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -109,7 +109,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>wPiiyEdeL7eIKu6GODE7sV2cPk3ij0o1dYhJGFKqcEY=</dsig:DigestValue>
+        <dsig:DigestValue>0648byU4H7Nt5pv2j2wAy50vt1gl5o3jPrOCl9UvynA=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -152,7 +152,7 @@
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>PlJUSMf8xzYVeqYvFBm9UXZMnED6dobPudd0vsZ/lvc=</dsig:DigestValue>
+      <dsig:DigestValue>Bos43ggNi5R+WQKhtO7rXMsrcva7YUdScU8CcR6A0rM=</dsig:DigestValue>
     </hash>
   </file>
   <file name="TaskDb_log.ldf" size="573440" writeableType="applicationData">
@@ -161,7 +161,7 @@
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>JmhVs/5Dh6PyZpKHbr6AgGKynpO70HABisISo42quos=</dsig:DigestValue>
+      <dsig:DigestValue>nFi2dqCTL07hQIKAIDLEaUgY9YSBiSMJiQjNXWjyf/Y=</dsig:DigestValue>
     </hash>
   </file>
   <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">

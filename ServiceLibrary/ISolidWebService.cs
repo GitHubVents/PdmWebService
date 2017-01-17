@@ -55,26 +55,14 @@ namespace PDM_WebService.WcfServiceLibrary
         /// <returns></returns>
         //[OperationContract]
         //bool CheckDEF(int idPDM, string configuration, int version);
-        
+      
 
-        [OperationContract]
-        void UploadDXF(int FileId);
 
         [OperationContract]
         void CreateRoof(int height, int wight,  RoofTypes type, int userId);
         [OperationContract]
         void CreateVibroInsertion(int height, int wight, VibroInsertionTypes type, int userId);
-        ///// <summary>
-        ///// Create a flap with the material aluminium & zinc.
-        ///// </summary>
-        ///// <param name="type"></param>
-        ///// <param name="height"></param>
-        ///// <param name="wight"></param>
-        ///// <param name="material"></param>
-        ///// <param name="isOuter"></param>
-        ///// <param name="userId"></param>
-        //[OperationContract]
-        //void CreateFlap(FlapTypes type, int height, int wight, bool isOuter, int userId);
+   
         /// <summary>
         /// Create a flap with the custom material and thickness.
         /// </summary>
@@ -92,6 +80,13 @@ namespace PDM_WebService.WcfServiceLibrary
         /// </summary>
         [OperationContract]
         void OpenSolidWorks();
-         
+
+
+        [OperationContract]
+        void CreateDxf(int FileId);
+
+        [OperationContract]
+        void CreatePdf(int FileId);
+
     }
 }
