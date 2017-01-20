@@ -98,5 +98,11 @@
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
       <Value Profile="(Default)">Data Source=pdmsrv;Initial Catalog=TaskDataBase;Persist Security Info=True;User ID=AirVentsCad;Password=1</Value>
     </Setting>
+    <Setting Name="DefaultFolderForDxf" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\DXF\</Value>
+    </Setting>
+    <Setting Name="DefaultPathToBuildPdf" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\PDF\</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -5,6 +5,7 @@ D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\PDMWebService.exe.manifest
 D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\PDMWebService.application
 D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\PDMWebService.exe
 D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\PDMWebService.pdb
+D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\Bullzip.PDFWriter.dll
 D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\ExportPartData.dll
 D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\ServiceLibrary.dll
 D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\VentsCadLibrary.dll
@@ -23,3 +24,4 @@ D:\Vlad\PDM-WebService\PDMWebService\obj\Debug\PDMWebService.exe.manifest
 D:\Vlad\PDM-WebService\PDMWebService\obj\Debug\PDMWebService.application
 D:\Vlad\PDM-WebService\PDMWebService\obj\Debug\PDMWebService.exe
 D:\Vlad\PDM-WebService\PDMWebService\obj\Debug\PDMWebService.pdb
+D:\Vlad\PDM-WebService\PDMWebService\obj\Debug\PDMWebService.csprojResolveAssemblyReference.cache

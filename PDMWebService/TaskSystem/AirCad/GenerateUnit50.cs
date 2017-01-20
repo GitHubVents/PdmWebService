@@ -5674,10 +5674,10 @@ namespace PDMWebService.TaskSystem.AirCad
             {
                 VaultSystem.CheckInOutPdm(filesList, registration, vaultName);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
                  //Логгер.Ошибка(
-                 //   $"Во время регистрации документа по пути {ex.StackTrace} возникла ошибка\nБаза - {vaultName}. {ex.ToString()}", null,
+                 //   $"Во время регистрации документа по пути {exception.StackTrace} возникла ошибка\nБаза - {vaultName}. {exception.ToString()}", null,
                  //   "", "CheckInOutPdm");
             }
         }
@@ -5694,9 +5694,9 @@ namespace PDMWebService.TaskSystem.AirCad
             {
                 VaultSystem.CheckInOutPdm(filePath, registration, vaultName);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                 //Логгер.Ошибка( $"Во время регистрации документа по пути {ex.StackTrace} возникла ошибка\nБаза - {vaultName}. {ex}", null, "", "CheckInOutPdm");
+                 //Логгер.Ошибка( $"Во время регистрации документа по пути {exception.StackTrace} возникла ошибка\nБаза - {vaultName}. {exception}", null, "", "CheckInOutPdm");
             }
         }
 
@@ -5768,9 +5768,9 @@ namespace PDMWebService.TaskSystem.AirCad
                 {                    
                     Convert.ToDouble(value);
                 }
-                catch (Exception ex)
+                catch (Exception exception)
                 {
-                     //MessageBox.Show(ex.ToString() + " Повторите ввод данных!");
+                     //MessageBox.Show(exception.ToString() + " Повторите ввод данных!");
                     return false;
                 }
             }
@@ -6226,10 +6226,10 @@ namespace PDMWebService.TaskSystem.AirCad
                     matChangingModel.SetMaterialPropertyName2(configName, databaseName, AddMaterialtoXml(materialName));
                      //Логгер.Информация(string.Format("Для компонента {1} применен материал {0} ", AddMaterialtoXml(materialName), componentId), null, "", "SetMeterial");
                 }
-                catch (Exception ex)
+                catch (Exception exception)
                 {
-                     //Логгер.Ошибка($"Не удалось применить материал {AddMaterialtoXml(materialName)} для компонента {componentId}. {ex.ToString()}",
-                     //   ex.StackTrace, null, "SetMeterial");
+                     //Логгер.Ошибка($"Не удалось применить материал {AddMaterialtoXml(materialName)} для компонента {componentId}. {exception.ToString()}",
+                     //   exception.StackTrace, null, "SetMeterial");
                 }
             }
 
@@ -6246,9 +6246,9 @@ namespace PDMWebService.TaskSystem.AirCad
                      //   string.Format("Для детали {1} применен материал {0} ", AddMaterialtoXml(materialName),
                          //   swDoc.GetPathName()), null, "", "SetMeterial");
                 }
-                catch (Exception ex)
+                catch (Exception exception)
                 {
-                     //Логгер.Ошибка($"Не удалось применить материал {AddMaterialtoXml(materialName)} для детали {componentId}. {ex.ToString()}", ex.StackTrace, null, "SetMeterial");
+                     //Логгер.Ошибка($"Не удалось применить материал {AddMaterialtoXml(materialName)} для детали {componentId}. {exception.ToString()}", exception.StackTrace, null, "SetMeterial");
                 }
             }
 
@@ -6329,9 +6329,9 @@ namespace PDMWebService.TaskSystem.AirCad
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                 //MessageBox.Show($"{swmodel.GetTitle()}\n{ex.ToString()}\n{ex.StackTrace}", "GabaritsForPaintingCamera");
+                 //MessageBox.Show($"{swmodel.GetTitle()}\n{exception.ToString()}\n{exception.StackTrace}", "GabaritsForPaintingCamera");
             }
         }
 

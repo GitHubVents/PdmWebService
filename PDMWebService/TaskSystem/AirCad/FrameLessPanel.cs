@@ -2083,9 +2083,9 @@ namespace PDMWebService.TaskSystem.AirCad
                         типКрепежнойЧастиУсиливающейПанели = "Z";
                     }
                 }
-                catch (Exception ex)
+                catch (Exception exception)
                 {
-                    //  //MessageBox.Show(ex.ToString() + "\n" + ex.StackTrace);
+                    //  //MessageBox.Show(exception.ToString() + "\n" + exception.StackTrace);
                 }
             }
 
@@ -2824,9 +2824,9 @@ namespace PDMWebService.TaskSystem.AirCad
                     screwsByWidthInner = screws.ByWidthInner < 2000 ? 2000 : screws.ByWidthInner;
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                //MessageBox.Show(ex.ToString() + "\n" + ex.StackTrace);
+                //MessageBox.Show(exception.ToString() + "\n" + exception.StackTrace);
             }
 
             if (GetExistingFile(newPartPath, 1))//   (Path.GetFileNameWithoutExtension(newPartPath), 1))
@@ -4658,9 +4658,9 @@ namespace PDMWebService.TaskSystem.AirCad
                         #endregion
 
                     }
-                    catch (Exception ex)
+                    catch (Exception exception)
                     {
-                        //MessageBox.Show(ex.ToString() + "\n" + ex.StackTrace);
+                        //MessageBox.Show(exception.ToString() + "\n" + exception.StackTrace);
                     }
                 }
             }

@@ -26,9 +26,9 @@ namespace PDMWebService.TaskSystem.AirCad
             {
                 findedFile = cadFiles.Single(x => Path.GetFileNameWithoutExtension(x.Path).ToLower() == fileName.ToLower());
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-               // //MessageBox.Show(ex.ToString(), "findedFile");
+               // //MessageBox.Show(exception.ToString(), "findedFile");
             }
 
             if (findedFile == null)

@@ -231,9 +231,9 @@ namespace PDMWebService.TaskSystem.AirCad
                     : Path.GetFileName(pDown) + ".sldasm";
                 _swApp.CloseDoc(namePrt);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                //MessageBox.Show(ex.ToString());
+                //MessageBox.Show(exception.ToString());
             }
         }
 
@@ -662,7 +662,7 @@ namespace PDMWebService.TaskSystem.AirCad
                     swAsm.ReplaceComponents(панельВерхняя, "", false, true);
                     CloseSldAsm(панельВерхняя);
                 }
-                catch (Exception ex)
+                catch (Exception exception)
                 {  //MessageBox.Show(e.ToString()); 
                 }
 
@@ -672,7 +672,7 @@ namespace PDMWebService.TaskSystem.AirCad
                     swAsm.ReplaceComponents(panelLeft1, "", false, true);
                     CloseSldAsm(panelLeft1);
                 }
-                catch (Exception ex)
+                catch (Exception exception)
                 {
                     //MessageBox.Show(e.ToString()); 
                 }
@@ -683,7 +683,7 @@ namespace PDMWebService.TaskSystem.AirCad
                     swAsm.ReplaceComponents(panelRight1, "", false, true);
                     CloseSldAsm(panelRight1);
                 }
-                catch (Exception ex)
+                catch (Exception exception)
                 {
                     //MessageBox.Show(e.ToString()); 
                 }
@@ -716,7 +716,7 @@ namespace PDMWebService.TaskSystem.AirCad
                             swAsm.ReplaceComponents(panelLeft2, null, false, true);
                             CloseSldAsm(panelLeft2);
                         }
-                        catch (Exception ex)
+                        catch (Exception exception)
                         {
                             //MessageBox.Show(e.ToString());
                         }
@@ -733,7 +733,7 @@ namespace PDMWebService.TaskSystem.AirCad
                             swAsm.ReplaceComponents(panelRight2, null, false, true);
                             CloseSldAsm(panelRight2);
                         }
-                        catch (Exception ex)
+                        catch (Exception exception)
                         {
                             //MessageBox.Show(e.ToString()); 
                         }
@@ -760,7 +760,7 @@ namespace PDMWebService.TaskSystem.AirCad
                             swAsm.ReplaceComponents(panelLeft3, null, false, true);
                             CloseSldAsm(panelLeft3);
                         }
-                        catch (Exception ex)
+                        catch (Exception exception)
                         {
                             //MessageBox.Show(e.ToString()); 
                         }
@@ -775,7 +775,7 @@ namespace PDMWebService.TaskSystem.AirCad
                             swAsm.ReplaceComponents(panelRight3, null, false, true);
                             CloseSldAsm(panelRight3);
                         }
-                        catch (Exception ex)
+                        catch (Exception exception)
                         {
                             //MessageBox.Show(e.ToString()); 
                         }
@@ -806,7 +806,7 @@ namespace PDMWebService.TaskSystem.AirCad
                             swAsm.ReplaceComponents(промежуточныеСтойки[0], null, false, true);
                             CloseSldAsm(промежуточныеСтойки[0]);
                         }
-                        catch (Exception ex)
+                        catch (Exception exception)
                         {
                             //MessageBox.Show(e.Message); 
                         }
@@ -821,7 +821,7 @@ namespace PDMWebService.TaskSystem.AirCad
                             swAsm.ReplaceComponents(промежуточныеСтойки[0], null, false, true);
                             CloseSldAsm(промежуточныеСтойки[0]);
                         }
-                        catch (Exception ex)
+                        catch (Exception exception)
                         {
                             //MessageBox.Show(e.ToString()); 
                         }
@@ -854,7 +854,7 @@ namespace PDMWebService.TaskSystem.AirCad
                             swAsm.ReplaceComponents(промежуточныеСтойки[1], "", false, true);
                             CloseSldAsm(промежуточныеСтойки[1]);
                         }
-                        catch (Exception ex)
+                        catch (Exception exception)
                         {
                             //MessageBox.Show(e.ToString());
                         }
@@ -869,7 +869,7 @@ namespace PDMWebService.TaskSystem.AirCad
                             swAsm.ReplaceComponents(промежуточныеСтойки[1], "", false, true);
                             CloseSldAsm(промежуточныеСтойки[1]);
                         }
-                        catch (Exception ex)
+                        catch (Exception exception)
                         {
                             //MessageBox.Show(e.ToString());
                         }
@@ -906,7 +906,7 @@ namespace PDMWebService.TaskSystem.AirCad
                             swAsm.ReplaceComponents(промежуточныеСтойки[2], "", false, true);
                             CloseSldAsm(промежуточныеСтойки[2]);
                         }
-                        catch (Exception ex)
+                        catch (Exception exception)
                         {
                             //MessageBox.Show(e.ToString()); 
                         }
@@ -921,7 +921,7 @@ namespace PDMWebService.TaskSystem.AirCad
                             swAsm.ReplaceComponents(промежуточныеСтойки[2], "", false, true);
                             CloseSldAsm(промежуточныеСтойки[2]);
                         }
-                        catch (Exception ex)
+                        catch (Exception exception)
                         {
                             //MessageBox.Show(e.ToString()); 
                         }
@@ -958,7 +958,7 @@ namespace PDMWebService.TaskSystem.AirCad
                             swAsm.ReplaceComponents(промежуточныеСтойки[3], "", false, true);
                             CloseSldAsm(промежуточныеСтойки[3]);
                         }
-                        catch (Exception ex)
+                        catch (Exception exception)
                         {
                             //MessageBox.Show(e.ToString());
                         }
@@ -973,7 +973,7 @@ namespace PDMWebService.TaskSystem.AirCad
                             swAsm.ReplaceComponents(промежуточныеСтойки[3], "", false, true);
                             CloseSldAsm(промежуточныеСтойки[3]);
                         }
-                        catch (Exception ex)
+                        catch (Exception exception)
                         {
                             //MessageBox.Show(e.ToString()); 
                         }
@@ -1021,7 +1021,7 @@ namespace PDMWebService.TaskSystem.AirCad
                             swAsm.ReplaceComponents(панелиСъемные[4], "", false, true);
                             CloseSldAsm(панелиСъемные[4]);
                         }
-                        catch (Exception ex)
+                        catch (Exception exception)
                         {
                             //MessageBox.Show(e.ToString());
                         }
@@ -1065,7 +1065,7 @@ namespace PDMWebService.TaskSystem.AirCad
                             swAsm.ReplaceComponents(панелиСъемные[4], "", false, true);
                             CloseSldAsm(панелиСъемные[4]);
                         }
-                        catch (Exception ex)
+                        catch (Exception exception)
                         {
                             //MessageBox.Show(e.ToString()); 
                         }
@@ -1144,7 +1144,7 @@ namespace PDMWebService.TaskSystem.AirCad
                             swAsm.ReplaceComponents(панелиСъемные[5], "", false, true);
                             CloseSldAsm(панелиСъемные[5]);
                         }
-                        catch (Exception ex)
+                        catch (Exception exception)
                         {
                             //MessageBox.Show(e.ToString()); 
                         }
@@ -1188,7 +1188,7 @@ namespace PDMWebService.TaskSystem.AirCad
                             swAsm.ReplaceComponents(панелиСъемные[5], "", false, true);
                             CloseSldAsm(панелиСъемные[5]);
                         }
-                        catch (Exception ex)
+                        catch (Exception exception)
                         {
                             //MessageBox.Show(e.ToString()); 
                         }
@@ -1290,9 +1290,9 @@ namespace PDMWebService.TaskSystem.AirCad
                 {
                     value = Path.GetFileNameWithoutExtension(панельНижняя).Remove(5);
                 }
-                catch (Exception ex)
+                catch (Exception exception)
                 {
-                    //MessageBox.Show(ex.ToString() + "\n" + ex.StackTrace);
+                    //MessageBox.Show(exception.ToString() + "\n" + exception.StackTrace);
                 }
 
                 if (!string.IsNullOrEmpty(value))
@@ -1376,7 +1376,7 @@ namespace PDMWebService.TaskSystem.AirCad
                             swAsm.ReplaceComponents(троцевыеПанели[0], "", false, true);
                             CloseSldAsm(троцевыеПанели[0]);
                         }
-                        catch (Exception ex)
+                        catch (Exception exception)
                         {
                             //MessageBox.Show(e.ToString()); 
                         }
@@ -1396,7 +1396,7 @@ namespace PDMWebService.TaskSystem.AirCad
                             swAsm.ReplaceComponents(троцевыеПанели[1], "", false, true);
                             CloseSldAsm(троцевыеПанели[1]);
                         }
-                        catch (Exception ex)
+                        catch (Exception exception)
                         {
                             //MessageBox.Show(e.ToString()); 
                         }
@@ -1442,7 +1442,7 @@ namespace PDMWebService.TaskSystem.AirCad
                         swDoc.Extension.SelectByID2("D1@Plane1@" + ModelName.Replace(".SLDASM", ""), "DIMENSION", 0, 0, 0, true, 0, null, 0);
                         ((Dimension)(swDoc.Parameter("D1@Plane1"))).SystemValue = (dimensions.PlanelCentrDoor1) / 1000;
                     }
-                    catch (Exception ex)
+                    catch (Exception exception)
                     {
                         //MessageBox.Show(e.ToString());
                     }
@@ -1451,7 +1451,7 @@ namespace PDMWebService.TaskSystem.AirCad
                         swDoc.Extension.SelectByID2("D1@Plane2@" + ModelName.Replace(".SLDASM", ""), "DIMENSION", 0, 0, 0, true, 0, null, 0);
                         ((Dimension)(swDoc.Parameter("D1@Plane2"))).SystemValue = (dimensions.PlanelCentrDoor2) / 1000;
                     }
-                    catch (Exception ex)
+                    catch (Exception exception)
                     {
                         //MessageBox.Show(e.ToString());
                     }
@@ -1460,7 +1460,7 @@ namespace PDMWebService.TaskSystem.AirCad
                         swDoc.Extension.SelectByID2("D1@Plane3@" + ModelName.Replace(".SLDASM", ""), "DIMENSION", 0, 0, 0, true, 0, null, 0);
                         ((Dimension)(swDoc.Parameter("D1@Plane3"))).SystemValue = (dimensions.PlanelCentrDoor3) / 1000;
                     }
-                    catch (Exception ex)
+                    catch (Exception exception)
                     {
                         //MessageBox.Show(e.ToString());
                     }
@@ -1480,7 +1480,7 @@ namespace PDMWebService.TaskSystem.AirCad
                     #endregion
 
                 }
-                catch (Exception ex)
+                catch (Exception exception)
                 {
                     //MessageBox.Show(e.ToString());
                 }

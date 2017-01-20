@@ -5,6 +5,7 @@ D:\Vlad\PDM-WebService\PDMWebService\bin\Release\PDMWebService.exe.manifest
 D:\Vlad\PDM-WebService\PDMWebService\bin\Release\PDMWebService.application
 D:\Vlad\PDM-WebService\PDMWebService\bin\Release\PDMWebService.exe
 D:\Vlad\PDM-WebService\PDMWebService\bin\Release\PDMWebService.pdb
+D:\Vlad\PDM-WebService\PDMWebService\bin\Release\Bullzip.PDFWriter.dll
 D:\Vlad\PDM-WebService\PDMWebService\bin\Release\ExportPartData.dll
 D:\Vlad\PDM-WebService\PDMWebService\bin\Release\ServiceLibrary.dll
 D:\Vlad\PDM-WebService\PDMWebService\bin\Release\VentsCadLibrary.dll

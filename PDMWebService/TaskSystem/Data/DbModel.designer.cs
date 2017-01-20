@@ -48,12 +48,12 @@ namespace PDMWebService.TaskSystem.Data
     partial void InsertTaskType(TaskType instance);
     partial void UpdateTaskType(TaskType instance);
     partial void DeleteTaskType(TaskType instance);
-    partial void InsertDxfTarget(DxfTarget instance);
-    partial void UpdateDxfTarget(DxfTarget instance);
-    partial void DeleteDxfTarget(DxfTarget instance);
     partial void InsertPdfTarget(PdfTarget instance);
     partial void UpdatePdfTarget(PdfTarget instance);
     partial void DeletePdfTarget(PdfTarget instance);
+    partial void InsertDxfTarget(DxfTarget instance);
+    partial void UpdateDxfTarget(DxfTarget instance);
+    partial void DeleteDxfTarget(DxfTarget instance);
     #endregion
 		
 		public DbModelDataContext() : 
@@ -142,19 +142,19 @@ namespace PDMWebService.TaskSystem.Data
 			}
 		}
 		
-		public System.Data.Linq.Table<DxfTarget> DxfTargets
-		{
-			get
-			{
-				return this.GetTable<DxfTarget>();
-			}
-		}
-		
 		public System.Data.Linq.Table<PdfTarget> PdfTargets
 		{
 			get
 			{
 				return this.GetTable<PdfTarget>();
+			}
+		}
+		
+		public System.Data.Linq.Table<DxfTarget> DxfTargets
+		{
+			get
+			{
+				return this.GetTable<DxfTarget>();
 			}
 		}
 		
@@ -213,10 +213,17 @@ namespace PDMWebService.TaskSystem.Data
 			return ((int)(result.ReturnValue));
 		}
 		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.CreateDxf")]
-		public int CreateDxf([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> ipPdm, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> userId, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> status, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="DateTime")] System.Nullable<System.DateTime> timeStart, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> taskType)
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.CreateTaskInstance")]
+		public int CreateTaskInstance([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> userId, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> status, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="DateTime")] System.Nullable<System.DateTime> timeStart, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> taskType)
 		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), ipPdm, userId, status, timeStart, taskType);
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), userId, status, timeStart, taskType);
+			return ((int)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.CreateDxf")]
+		public int CreateDxf([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> ipPdm, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> taskId)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), ipPdm, taskId);
 			return ((int)(result.ReturnValue));
 		}
 	}
@@ -1298,8 +1305,8 @@ namespace PDMWebService.TaskSystem.Data
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.DxfTargets")]
-	public partial class DxfTarget : INotifyPropertyChanging, INotifyPropertyChanged
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.PdfTargets")]
+	public partial class PdfTarget : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
@@ -1318,7 +1325,7 @@ namespace PDMWebService.TaskSystem.Data
     partial void OnIpPdmChanged();
     #endregion
 		
-		public DxfTarget()
+		public PdfTarget()
 		{
 			OnCreated();
 		}
@@ -1384,15 +1391,17 @@ namespace PDMWebService.TaskSystem.Data
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.PdfTargets")]
-	public partial class PdfTarget : INotifyPropertyChanging, INotifyPropertyChanged
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.DxfTargets")]
+	public partial class DxfTarget : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
 		private int _Id;
 		
-		private System.Nullable<int> _IpPdm;
+		private int _IpPdm;
+		
+		private int _TaskId;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -1400,11 +1409,13 @@ namespace PDMWebService.TaskSystem.Data
     partial void OnCreated();
     partial void OnIdChanging(int value);
     partial void OnIdChanged();
-    partial void OnIpPdmChanging(System.Nullable<int> value);
+    partial void OnIpPdmChanging(int value);
     partial void OnIpPdmChanged();
+    partial void OnTaskIdChanging(int value);
+    partial void OnTaskIdChanged();
     #endregion
 		
-		public PdfTarget()
+		public DxfTarget()
 		{
 			OnCreated();
 		}
@@ -1429,8 +1440,8 @@ namespace PDMWebService.TaskSystem.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IpPdm", DbType="Int")]
-		public System.Nullable<int> IpPdm
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IpPdm", DbType="Int NOT NULL")]
+		public int IpPdm
 		{
 			get
 			{
@@ -1445,6 +1456,26 @@ namespace PDMWebService.TaskSystem.Data
 					this._IpPdm = value;
 					this.SendPropertyChanged("IpPdm");
 					this.OnIpPdmChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskId", DbType="Int NOT NULL")]
+		public int TaskId
+		{
+			get
+			{
+				return this._TaskId;
+			}
+			set
+			{
+				if ((this._TaskId != value))
+				{
+					this.OnTaskIdChanging(value);
+					this.SendPropertyChanging();
+					this._TaskId = value;
+					this.SendPropertyChanged("TaskId");
+					this.OnTaskIdChanged();
 				}
 			}
 		}

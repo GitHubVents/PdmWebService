@@ -2,6 +2,7 @@
 using PDM_WebService.WcfServiceLibrary.DataContracts;
 using PDMWebService.Data.PDM;
 using SolidWorks.Interop.sldworks;
+using SolidWorks.Interop.swconst;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -23,9 +24,23 @@ namespace PDMWebService.Data.Solid
 
         private static void InitSolidWorks()
         {
+            Console.WriteLine("InitSolidWorks");
             try
             {
-                sldWoksApp = (SldWorks)Marshal.GetActiveObject("SldWorks.Application");
+                //   sldWoksApp = (SldWorks)Marshal.GetActiveObject("SldWorks.Application");
+
+                //test
+                if (sldWoksApp == null)
+                {
+                    Process[] processes = Process.GetProcessesByName("SLDWORKS");
+                    foreach (var process in processes)
+                    {
+                        process.Kill();
+                    }
+
+                    sldWoksApp = new SldWorks() { Visible = true };
+
+                }
             }
             catch
             {
@@ -45,41 +60,51 @@ namespace PDMWebService.Data.Solid
 
         public static void CloseAllDocuments ()
         {
-           ModelDoc [] modelDocs  = sldWoksApp.GetDocuments() as ModelDoc[];
+          
+          var modelDocs  = sldWoksApp.GetDocuments()  ;
             foreach (var eachModelDoc in modelDocs)
             {
                 eachModelDoc.Close();
             }
         }
-
-
+      public  static void CloseDocument(IModelDoc2 swModel )
+        {
+            sldWoksApp.CloseDoc(swModel.GetTitle().ToLower().Contains(".sldprt") ? swModel.GetTitle() : swModel.GetTitle() + ".sldprt");
+        }
+       
         public static void CloseAllDocumentsAndExit()
         {
             CloseAllDocuments();
-            sldWoksApp.ExitApp();
+            SldWoksApp.ExitApp();
         }
 
 
 
 
-        public static string ConvertToDXF(string path, string configuration)
-        {
-            Exception ex;
-            Console.WriteLine("Convert dile " + path);
-            ExportPartData.Dxf.Save(path, configuration, out ex, true, true, @"D:\TEMP\dxf\", true);
-            return null;
-        }
+       
 
-        public static  void ConvertToDXF(int FileId)
+        public static bool IsSheetMetalPart(IPartDoc swPart)
         {
-            IEdmFile5 fileEdm = PDMAdapter.Instance.GetFileById(FileId); 
-            DataModel dm = PDMAdapter.Instance.SearchDoc(fileEdm.Name).First();  
-            PDMAdapter.Instance.DownLoadFile(dm); 
-            string[] configurations = PDMAdapter.Instance.GetConfigigurations(dm); 
-            foreach (var eachConfiguration in configurations)
+            var isSheetMetal = false;
+            try
             {
-               ConvertToDXF(dm.Path, eachConfiguration);
-            } 
+                var vBodies = swPart.GetBodies2((int)swBodyType_e.swSolidBody, false);
+
+                foreach (Body2 vBody in vBodies)
+                {
+                    isSheetMetal = vBody.IsSheetMetal();
+                    if (isSheetMetal)
+                    {
+                        return true;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return isSheetMetal;
         }
+
     }
 }

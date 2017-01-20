@@ -23,9 +23,9 @@ namespace PDMWebService.Data.PDM
             {
                 this.sqlAdapter = SqlDataAdapder.Instance;
             }
-            catch(Exception ex)
+            catch(Exception exception)
             {
-                Console.WriteLine(ex.ToString());
+                Console.WriteLine(exception.ToString());
             }
         }
         /// <summary>
@@ -76,9 +76,9 @@ namespace PDMWebService.Data.PDM
                 }
                 Logger.ToLog("По запросу " + segmentName + " найдено " + count);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Logger.ToLog("По запросу " + segmentName + " не найдено ни одного файла\n Ошибка: " + ex);
+                Logger.ToLog("По запросу " + segmentName + " не найдено ни одного файла\n Ошибка: " + exception);
 
             }
             return searchResult;
@@ -104,9 +104,9 @@ namespace PDMWebService.Data.PDM
 
                 Logger.ToLog("Файл " + dataModel.FileName + " с id " + dataModel.Id + " успешно скачан с PDM системы по пути " + dataModel.Path);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Logger.ToLog("Ошибка при скачивании файла " + dataModel.FileName + " с id " + dataModel.Id + ex.ToString());
+                Logger.ToLog("Ошибка при скачивании файла " + dataModel.FileName + " с id " + dataModel.Id + exception.ToString());
 
             }
         }
@@ -204,10 +204,10 @@ namespace PDMWebService.Data.PDM
                         File.Delete(copiedFilePath);
                         Logger.ToLog("Файл " + copiedFilePath + "удален.");
                     }
-                    catch (Exception ex)
+                    catch (Exception exception)
                     {
                         Logger.ToLog("Неудалось удалить файл по имени " + copiedFilePath +
-                            "\n по причине обозначеной в исключении " + ex);
+                            "\n по причине обозначеной в исключении " + exception);
                         Logger.ToLog("Дополнительная информация:\n" + "Копируемый файл " + dataModel.Path + "\nДиректория " + directoryPath + "\nРасширение файла " + fileExtension);
                     }
                 }
@@ -216,10 +216,10 @@ namespace PDMWebService.Data.PDM
                 Logger.ToLog("Файл " + dataModel.FileName + " с id " + dataModel.Id + " успешно скопирован.");
 
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
                 Logger.ToLog("Неудалось скопировать файл по имени " + dataModel.FileName + " с Id " + dataModel.Id + "в директорию " + copiedFilePath +
-                    "\n по причине обозначеной в исключении " + ex);
+                    "\n по причине обозначеной в исключении " + exception);
             }
             Logger.ToLog(copiedFilePath);
             return copiedFilePath;
@@ -325,10 +325,10 @@ namespace PDMWebService.Data.PDM
                     Logger.ToLog("Автологин в системе Vents-PDM системного пользователя " + vaultname);
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Logger.ToLog("Невозможно создать экземпляр Vents-PDM - " + this.vaultname + "\n" + ex);
-                throw new Exception("Невозможно создать экземпляр " + this.vaultname + "\n"+ex);
+                Logger.ToLog("Невозможно создать экземпляр Vents-PDM - " + this.vaultname + "\n" + exception);
+                throw new Exception("Невозможно создать экземпляр " + this.vaultname + "\n"+exception);
             }
             finally
             {
@@ -402,10 +402,10 @@ namespace PDMWebService.Data.PDM
                 return BomTableToBomList(bomTable);
 
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                exception = ex;
-                throw ex;
+                exception = exception;
+                throw exception;
             }            
         }       
 
@@ -500,9 +500,9 @@ namespace PDMWebService.Data.PDM
             //            }
             //    }
 
-            //    catch (Exception ex)
+            //    catch (Exception exception)
             //    {
-            //        MessageBox.Show(ex.ToString() + "\n" + ex.StackTrace + "\n" + ex.Source);
+            //        MessageBox.Show(exception.ToString() + "\n" + exception.StackTrace + "\n" + exception.Source);
             //    }
             //}
 
@@ -539,9 +539,9 @@ namespace PDMWebService.Data.PDM
             //        }
             //    }
 
-            //    catch (Exception ex)
+            //    catch (Exception exception)
             //    {
-            //        MessageBox.Show(ex.ToString() + "\n" + ex.StackTrace + "\n" + ex.Source);
+            //        MessageBox.Show(exception.ToString() + "\n" + exception.StackTrace + "\n" + exception.Source);
             //    }
             //}
 
@@ -595,9 +595,9 @@ namespace PDMWebService.Data.PDM
                                     goto m2;
                                 }
                             }
-                            catch (Exception ex)
+                            catch (Exception exception)
                             {
-                               // MessageBox.Show(ex.ToString());
+                               // MessageBox.Show(exception.ToString());
                             }
                         }
                         m3:
@@ -620,7 +620,7 @@ namespace PDMWebService.Data.PDM
                 }
                 if (!success)
                 {
-                    //LoggerError($"Во время регистрации документа по пути {file.FullName} возникла ошибка\nБаза - {vaultName}. {ex.ToString()}", "", "CheckInOutPdm");
+                    //LoggerError($"Во время регистрации документа по пути {file.FullName} возникла ошибка\nБаза - {vaultName}. {exception.ToString()}", "", "CheckInOutPdm");
                 }
             }
         }

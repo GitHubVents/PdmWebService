@@ -37,9 +37,9 @@ namespace PDMWebService.Data
                 {
                     Convert.ToDouble(value);
                 }
-                catch (Exception ex)
+                catch (Exception exception)
                 {
-                    //MessageBox.Show(ex.ToString() + " Повторите ввод данных!");
+                    //MessageBox.Show(exception.ToString() + " Повторите ввод данных!");
                     return false;
                 }
             }

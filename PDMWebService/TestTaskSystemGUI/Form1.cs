@@ -50,10 +50,10 @@ namespace TestTaskSystemGUI
                 service = new ServiceReference1.SolidWebServiceClient();
                 service.OpenSolidWorks();
             }
-            catch (Exception ex)
+            catch (Exception exception)
 
             {
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show(exception.ToString());
             }
         }
 
@@ -64,9 +64,9 @@ namespace TestTaskSystemGUI
 
                 this.service.CreateVibroInsertion(random.Next(213, 3000), random.Next(213, 3000), (ServiceReference1.VibroInsertionTypes) (random.Next(2,3)*10), 0);
             }
-            catch(Exception ex)
+            catch(Exception exception)
             {
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show(exception.ToString());
             }
         }
 
@@ -86,9 +86,9 @@ namespace TestTaskSystemGUI
             {
                 service.UploadDXF(new Random().Next(30000, 50000));
             }
-            catch(Exception ex)
+            catch(Exception exception)
             {
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show(exception.ToString());
             }
             }
     }

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ServiceLibrary.TaskSystem.Constants;
 using EPDM.Interop.epdm;
+using System.Threading;
 
 namespace PDMWebService
 {
@@ -16,13 +17,21 @@ namespace PDMWebService
         private TaskManager taskManager;
         public ServiceInterfaice()
         {
+           
+
+            Thread t = new Thread(InitTaskManager);
+            t.Start();
+        }
+
+        private void InitTaskManager ()
+        {
             try
-            { 
+            {
                 taskManager = TaskManager.Instance;
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Console.WriteLine(ex.ToString());
+                Console.WriteLine(exception.ToString());
             }
         }
 
@@ -38,9 +47,9 @@ namespace PDMWebService
                 filePath = PDMAdapter.Instance.CloneDowladFileTo(@"D:\temp\".ToUpper(), dataSolidModel);
                 UrlToSelectModel = filePath.ToUpper().Replace(@"D:\temp\".ToUpper(), "http://pdmsrv/test/eDrawings/".ToUpper()); // need get from config
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Logger.ToLog("Невозможно вернуть путь к файлу " + ex.Message);
+                Logger.ToLog("Невозможно вернуть путь к файлу " + exception.Message);
             }
             return UrlToSelectModel;
 
@@ -63,9 +72,9 @@ namespace PDMWebService
                 remoteInfo = new TransmittableFile(dataSolidModel.FileName, fileInfo.Length, ReadFully(stream));
 
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                throw ex;
+                throw exception;
             }
             return remoteInfo;
 
@@ -100,16 +109,16 @@ namespace PDMWebService
 
         public Specification[] GetSpecifications(DataModel dataSolidModel, string configuration)
         {
-            Exception ex = new Exception();
+            Exception exception = new Exception();
             try
             {
-                Specification[] specifications = PDMAdapter.Instance.GetSpecifications(dataSolidModel.Path, configuration, true, out ex).ToArray();
+                Specification[] specifications = PDMAdapter.Instance.GetSpecifications(dataSolidModel.Path, configuration, true, out exception).ToArray();
                 Logger.ToLog("Спецификации по модели " + dataSolidModel.FileName + " с конфигурацией " + configuration + " успешно получена");
                 return specifications;
             }
             catch
             {
-                Logger.ToLog("Ошобка при попытке получить список спецификаций по модели" + dataSolidModel.FileName + " с конфигурацией " + configuration + "\n" + ex.Message);
+                Logger.ToLog("Ошобка при попытке получить список спецификаций по модели" + dataSolidModel.FileName + " с конфигурацией " + configuration + "\n" + exception.Message);
                 return null;
             }
            
@@ -184,14 +193,46 @@ namespace PDMWebService
             taskManager.CreateFlap(type, height, wight, material, isOuter, thickness, userId);
         }
 
-        public void CreateDxf(int FileId)
+        //public void CreateDxf(int FileId)
+        //{
+           
+        //}
+
+        //public void CreatePdf(int FileId)
+        //{
+        //    taskManager.CreatePdf(FileId);
+        //}
+
+        public void CreateDxf(int[] filesId)
         {
-            taskManager.CreateDxf(FileId);
+            Console.WriteLine("пришел такс дхф");
+                taskManager.CreateDxf(filesId);
+            Console.WriteLine("Таск выполняеться. клиенту ответили что то...");
         }
 
-        public void CreatePdf(int FileId)
+        public void CreatePdf(int[] filesId)
         {
-            taskManager.CreatePdf(FileId);
+            foreach (var item in filesId)
+            {
+                Console.WriteLine("CreatePdf...\n" + "Ip pdm #" + item);
+                taskManager.CreatePdf(item);
+                Console.WriteLine("Таск выполняеться. клиенту ответили что то...");
+            }
         }
+
+//        int nWorkerThreads;
+//        int nCompletionThreads;
+//        ThreadPool.GetMaxThreads(out nWorkerThreads, out nCompletionThreads);
+//            foreach (var item in filesId)
+//            {
+//                ThreadPool.QueueUserWorkItem(delegate (object state)
+//                {
+//                    Console.WriteLine("пришел такс дхф");
+//                    taskManager.CreateDxf(filesId);
+//                });
+
+//            }
+
+//Console.WriteLine("Таск выполняеться. клиенту ответили что то...");
     }
 }

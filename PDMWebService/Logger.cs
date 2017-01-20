@@ -186,9 +186,9 @@ namespace PDMWebService {
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                // //MessageBox.Show(ex.Message + "; \n" + ex.StackTrace);
+                // //MessageBox.Show(exception.Message + "; \n" + exception.StackTrace);
             }
         }
         #endregion

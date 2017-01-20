@@ -262,5 +262,29 @@ namespace PDMWebService.Properties {
                 return ((string)(this["TaskDataBaseConnectionString1"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\DXF\\")]
+        public string DefaultFolderForDxf {
+            get {
+                return ((string)(this["DefaultFolderForDxf"]));
+            }
+            set {
+                this["DefaultFolderForDxf"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\PDF\\")]
+        public string DefaultPathToBuildPdf {
+            get {
+                return ((string)(this["DefaultPathToBuildPdf"]));
+            }
+            set {
+                this["DefaultPathToBuildPdf"] = value;
+            }
+        }
     }
 }

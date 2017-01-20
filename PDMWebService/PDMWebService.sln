@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDMWebService", "PDMWebServ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceLibrary", "..\ServiceLibrary\ServiceLibrary.csproj", "{72339207-CA2E-4581-BA9C-8E6A6A1052A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestTaskSystem", "..\TestTaskSystem\TestTaskSystem.csproj", "{5FFCCF28-A805-4A59-BC1E-3A79A87AC6B3}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestTaskSystemGUI", "TestTaskSystemGUI\TestTaskSystemGUI.csproj", "{5E8A5684-95C9-4594-A12B-9753263EEA38}"
 EndProject
 Global
@@ -25,10 +23,6 @@ Global
 		{72339207-CA2E-4581-BA9C-8E6A6A1052A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72339207-CA2E-4581-BA9C-8E6A6A1052A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72339207-CA2E-4581-BA9C-8E6A6A1052A6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5FFCCF28-A805-4A59-BC1E-3A79A87AC6B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5FFCCF28-A805-4A59-BC1E-3A79A87AC6B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5FFCCF28-A805-4A59-BC1E-3A79A87AC6B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5FFCCF28-A805-4A59-BC1E-3A79A87AC6B3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5E8A5684-95C9-4594-A12B-9753263EEA38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5E8A5684-95C9-4594-A12B-9753263EEA38}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E8A5684-95C9-4594-A12B-9753263EEA38}.Release|Any CPU.ActiveCfg = Release|Any CPU

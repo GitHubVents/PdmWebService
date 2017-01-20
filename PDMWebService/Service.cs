@@ -49,10 +49,10 @@ namespace PDMWebService
                 Logger.ToLog("Служба запущена" );
                 
             }
-            catch(Exception ex)
+            catch(Exception exception)
             {
-                Console.WriteLine("Неудалось запустить веб службу" + ex);
-               Logger.ToLog( "Неудалось запустить веб службу" + ex);
+                Console.WriteLine("Неудалось запустить веб службу" + exception);
+               Logger.ToLog( "Неудалось запустить веб службу" + exception);
             }
         }
 
@@ -62,9 +62,9 @@ namespace PDMWebService
             {
                 host.Close();
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                throw new Exception("Неудалось остановить веб службу\n\n" + ex);
+                throw new Exception("Неудалось остановить веб службу\n\n" + exception);
             }
         }
 
@@ -81,27 +81,41 @@ namespace PDMWebService
                         try
                         {
                             (item as ServiceDebugBehavior).IncludeExceptionDetailInFaults = true;
-                            Console.WriteLine("Да");
+                          
+                             
                         }
-                        catch { Console.WriteLine("Нет"); }
+                        catch {   }
                     }
 
                     try
                     {
                         host.Description.Behaviors.Add(new ServiceDebugBehavior() { IncludeExceptionDetailInFaults = true });
-                        Console.WriteLine("Да");
+                         
                     }
-                    catch { Console.WriteLine("Нет"); }
+                    catch {
+                    }
                     try
                     {
                         ServiceMetadataBehavior smb = new ServiceMetadataBehavior();
                         smb.HttpGetEnabled = true;
                         smb.MetadataExporter.PolicyVersion = PolicyVersion.Policy15;
+                        smb.HttpGetBinding.CloseTimeout = new TimeSpan(0, 10, 0);
+                        smb.HttpGetBinding.OpenTimeout = new TimeSpan(0, 10, 0);
+                        smb.HttpGetBinding.ReceiveTimeout = new TimeSpan(0, 10, 0);
+                        smb.HttpGetBinding.SendTimeout = new TimeSpan(0, 10, 0);
+
+
+                        smb.HttpsGetBinding.CloseTimeout = new TimeSpan(0, 10, 0);
+                        smb.HttpsGetBinding.OpenTimeout = new TimeSpan(0, 10, 0);
+                        smb.HttpsGetBinding.ReceiveTimeout = new TimeSpan(0, 10, 0);
+                        smb.HttpsGetBinding.SendTimeout = new TimeSpan(0, 10, 0);
+
                         host.Description.Behaviors.Add(smb);
+                        Console.WriteLine("smb Да");
                     }
                     catch
                     {
-
+                        Console.WriteLine("smb нет");
                     }
                 
 
@@ -121,10 +135,10 @@ namespace PDMWebService
 
 
                 }
-                catch (Exception ex)
+                catch (Exception exception)
                 {
-                    Console.WriteLine("Неудалось инициализировать веб службу\n\n" + ex);
-                    throw new Exception("Неудалось инициализировать веб службу\n\n" + ex);
+                    Console.WriteLine("Неудалось инициализировать веб службу\n\n" + exception);
+                    throw new Exception("Неудалось инициализировать веб службу\n\n" + exception);
                 }
             }        
         }

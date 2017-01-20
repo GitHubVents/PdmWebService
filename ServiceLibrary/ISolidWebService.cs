@@ -81,12 +81,11 @@ namespace PDM_WebService.WcfServiceLibrary
         [OperationContract]
         void OpenSolidWorks();
 
+        [OperationContract(IsOneWay = true)]
+        void CreateDxf(int [] filesId );
 
-        [OperationContract]
-        void CreateDxf(int FileId);
-
-        [OperationContract]
-        void CreatePdf(int FileId);
+        [OperationContract(IsOneWay = true)]
+        void CreatePdf(int[] filesId);
 
     }
 }

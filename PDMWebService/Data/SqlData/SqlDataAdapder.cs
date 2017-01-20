@@ -77,10 +77,10 @@ namespace PDMWebService.Data.SqlData
 
                 return specToArray;
             }
-            catch (System.Exception ex)
+            catch (System.Exception exception)
             {
-                Console.WriteLine(ex);
-                throw ex;
+                Console.WriteLine(exception);
+                throw exception;
             }
 
         }
@@ -106,9 +106,9 @@ namespace PDMWebService.Data.SqlData
             {
              //   swPlusContext.ExportDXF(new System.Data.Linq.Binary(dxf), idPdm, configuration, version);          
             }
-            catch(Exception ex)
+            catch(Exception exception)
             {
-                throw ex; 
+                throw exception; 
             }
         }
     }

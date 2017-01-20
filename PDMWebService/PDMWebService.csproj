@@ -70,6 +70,7 @@
     <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Bullzip.PDFWriter, Version=4.0.0.0, Culture=neutral, PublicKeyToken=041d71cacb6e853c, processorArchitecture=MSIL" />
     <Reference Include="EPDM.Interop.epdm">
       <HintPath>C:\Program Files\SOLIDWORKS PDM\EPDM.Interop.epdm.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -115,10 +116,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\DataConverter.cs" />
+    <Compile Include="Data\Solid\Bends.cs" />
+    <Compile Include="Data\Solid\Dxf\DxfBulder.cs" />
+    <Compile Include="Data\Solid\Dxf\DxfFile.cs" />
     <Compile Include="Data\Solid\PartBuilders\AbstractBuilder.cs" />
     <Compile Include="Data\Solid\PartBuilders\FlapBuilder.cs" />
     <Compile Include="Data\Solid\PartBuilders\RoofBuilder.cs" />
     <Compile Include="Data\Solid\PartBuilders\VibroInsertionBuilder.cs" />
+    <Compile Include="Data\Solid\Pdf\PdfBuilder.cs" />
     <Compile Include="Data\SqlData\SqlDataAdapder.cs" />
     <Compile Include="Data\SqlData\SwPlusDbLinqORM.designer.cs">
       <AutoGen>True</AutoGen>
