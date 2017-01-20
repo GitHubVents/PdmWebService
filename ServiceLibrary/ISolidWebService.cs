@@ -84,7 +84,7 @@ namespace PDM_WebService.WcfServiceLibrary
         [OperationContract(IsOneWay = true)]
         void CreateDxf(int [] filesId );
 
-        [OperationContract(IsOneWay = true)]
+        [OperationContract(IsOneWay = true)] 
         void CreatePdf(int[] filesId);
 
     }
