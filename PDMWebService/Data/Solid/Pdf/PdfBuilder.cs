@@ -1,61 +1,93 @@
 ﻿using Bullzip.PdfWriter;
+using EPDM.Interop.epdm;
+using PDM_WebService.WcfServiceLibrary.DataContracts;
+using PDMWebService.Data.PDM;
+using PDMWebService.Properties;
 using SolidWorks.Interop.sldworks;
 using SolidWorks.Interop.swconst;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using static ExportPartData.Dxf;
 
 namespace PDMWebService.Data.Solid.Pdf
 {
-   public class PdfBuilder : Singleton.AbstractSingeton<PdfBuilder>
+    public class PdfBuilder : Singleton.AbstractSingeton<PdfBuilder>
     {
-        private SldWorks solidWorksApp;
-        public PdfBuilder()
-        {
-           solidWorksApp =  SolidWorksInstance.SldWoksApp; 
-          
-        }
         /// <summary>
-        /// Builds pdf from solid works drawing
+        /// The path to final folder
+        /// </summary>
+        public string PdfFolder { get; set; }
+        /// <summary>
+        /// The path to temporary folder
+        /// </summary>
+        public string TempPdfFolder { get; set; }
+
+        private string PrinterName { get; } = "Bullzip PDF Printer";
+
+        private PdfBuilder() : base()
+        {
+            PdfFolder = Settings.Default.PdfFolder;
+            TempPdfFolder = Settings.Default.TempPdfFolder;
+        }
+
+
+        public string Build(int FileId)
+        {
+            IEdmFile5 fileEdm = PDMAdapter.Instance.GetFileById(FileId);
+            DataModel dataModel = PDMAdapter.Instance.SearchDoc(fileEdm.Name).First();
+            PDMAdapter.Instance.DownLoadFile(dataModel);
+
+            try
+            {
+                int Errors = 0;
+                ModelDoc2 swModel = SolidWorksInstance.SldWoksApp.OpenDoc2(dataModel.Path, (int)swDocumentTypes_e.swDocDRAWING, false, false, true, Errors);
+                return ConvertDrwToPdf(swModel, dataModel.Path);
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine("Failed open document    " + exception.ToString());
+                throw new Exception("Failed open document: " + exception.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Conert solid works drawing to pdf file.
         /// </summary>
         /// <param name="document">Document for building pdf</param>
         /// <param name="finalPath">Path to the build file</param>
         /// <returns></returns>
-      public  void ConvertDrwToPdf( ModelDoc2 document, string finalPath)
+        private string ConvertDrwToPdf(ModelDoc2 document, string path)
         {
-       
             try
             {
                 ModelDocExtension swModelDocExt;
                 PrintSpecification printSpec;
                 Sheet sheet;
-                string PRINTERNAME = "Bullzip PDF Printer";
 
                 swModelDocExt = document.Extension;
                 // applied to Sheet or App, Doc...
                 swModelDocExt.UsePageSetup = (int)swPageSetupInUse_e.swPageSetupInUse_DrawingSheet;
-
                 IDrawingDoc drawingDoc = document as IDrawingDoc;
-
                 PageSetup pageSetup;
                 string[] sheetNames = drawingDoc.GetSheetNames();
-
                 PdfSettings pdfSettings = new PdfSettings();
-
                 ClearDirectory();
-
                 int tempfileIndex = 0;
                 foreach (var sheetName in sheetNames)
                 {
+                    Console.WriteLine(sheetName);
                     drawingDoc.ActivateSheet(sheetName);
                     sheet = drawingDoc.GetCurrentSheet();
                     pageSetup = sheet.PageSetup;
                     var sheetPropertis = (double[])sheet.GetProperties2();
-                    pdfSettings.PrinterName = PRINTERNAME;
-                    if (!Directory.Exists(@"C:\pdf"))
+                    pdfSettings.PrinterName = PrinterName;
+                    if (!Directory.Exists(TempPdfFolder))
                     {
-                        Directory.CreateDirectory(@"C:\pdf");
+                        Directory.CreateDirectory(TempPdfFolder);
                     }
-                    pdfSettings.SetValue("Output", string.Format(@"C:\pdf\" + tempfileIndex + " temp " + sheetName + " .pdf"));
+                    pdfSettings.SetValue("Output", string.Format(TempPdfFolder + @"\" + tempfileIndex + " temp " + sheetName + " .pdf"));
                     tempfileIndex++;
                     pdfSettings.SetValue("ShowPDF", "no");
                     pdfSettings.SetValue("ShowSettings", "never");
@@ -69,19 +101,31 @@ namespace PDMWebService.Data.Solid.Pdf
                     printSpec = (PrintSpecification)swModelDocExt.GetPrintSpecification();
                     printSpec.ScaleMethod = (int)swPrintSelectionScaleFactor_e.swPrintCurrentSheet;
                     printSpec.PrintToFile = false;
-                    swModelDocExt.PrintOut4(PRINTERNAME, "", printSpec);
-                    System.Threading.Thread.Sleep(2000);
+                    try
+                    {
+                        swModelDocExt.PrintOut4(PrinterName, "", printSpec);
+                        System.Threading.Thread.Sleep(2000);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Possibly not fount the Bullzip PDF Printer\n" + ex.ToString());
+                    }
                 }
-
-                tempfileIndex = 0;
-                MergePdf(finalPath.ToUpper().Replace("SLDDRW", "PDF"));
-              
+                tempfileIndex = ResetIndex();
+                string NameAndExtension = System.IO.Path.GetFileName(path);
+                string PathToPdfFile = PdfFolder.ToUpper() + @"\" + NameAndExtension.Replace("SLDDRW", "PDF");
+                MergePdf(PathToPdfFile);
+                return PathToPdfFile;
             }
             catch (System.Exception exception)
             {
                 throw new System.Exception("Filed buld pdf file. " + exception.ToString());
             }
-           
+        }
+
+        private int ResetIndex()
+        {
+            return 0;
         }
 
         /// <summary>
@@ -89,7 +133,7 @@ namespace PDMWebService.Data.Solid.Pdf
         /// </summary>
         /// <param name="pagesetup"></param>
         /// <param name="propertis"></param>
-     private   void Orientation(PageSetup pagesetup, double[] propertis)
+        private void Orientation(PageSetup pagesetup, double[] propertis)
         {
             var width = propertis[5];
             var height = propertis[6];
@@ -170,33 +214,35 @@ namespace PDMWebService.Data.Solid.Pdf
 
         private void ClearDirectory()
         {
-            DirectoryInfo dirInfo = new DirectoryInfo(@"C:\pdf");
-
-            foreach (FileInfo file in dirInfo.GetFiles())
+            try
             {
-                file.Delete();
+                DirectoryInfo dirInfo = new DirectoryInfo(TempPdfFolder);
+                foreach (FileInfo file in dirInfo.GetFiles())
+                {
+                    file.Delete();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
             }
         }
+
         /// <summary>
         /// Merge the pdf files-pages.
         /// </summary>
         /// <param name="path"></param>
         private void MergePdf(string path)
         {
-            string PRINTERNAME = "Bullzip PDF Printer";
-            DirectoryInfo dirInfo = new DirectoryInfo(@"C:\pdf");
+            DirectoryInfo dirInfo = new DirectoryInfo(TempPdfFolder);
             List<string> files = new List<string>();
-
             files.Sort();
-
             foreach (var item in dirInfo.GetFiles())
             {
                 files.Add(item.FullName);
             }
-
-            PdfUtil.Merge(files.ToArray(), path, PRINTERNAME, 5000);
+            PdfUtil.Merge(files.ToArray(), path, PrinterName, 5000);
             Logger.ToLog("================\n успешная конвертация. файл сохранен по пути" + path + "\n================");
-
         }
     }
 }

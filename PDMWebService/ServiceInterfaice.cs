@@ -212,12 +212,9 @@ namespace PDMWebService
 
         public void CreatePdf(int[] filesId)
         {
-            foreach (var item in filesId)
-            {
-                Console.WriteLine("CreatePdf...\n" + "Ip pdm #" + item);
-                taskManager.CreatePdf(item);
-                Console.WriteLine("Таск выполняеться. клиенту ответили что то...");
-            }
+            Console.WriteLine("пришел такс pdf");
+            taskManager.CreatePdf(filesId);
+            Console.WriteLine("Таск выполняеться. клиенту ответили что то...");
         }
 
 //        int nWorkerThreads;

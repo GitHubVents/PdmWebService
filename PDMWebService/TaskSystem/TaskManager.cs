@@ -1,5 +1,6 @@
 ﻿using PDMWebService.Data.Solid.Dxf;
 using PDMWebService.Data.Solid.PartBuilders;
+using PDMWebService.Data.Solid.Pdf;
 using PDMWebService.Singleton;
 using PDMWebService.TaskSystem;
 using PDMWebService.TaskSystem.Data;
@@ -7,10 +8,9 @@ using ServiceLibrary.TaskSystem.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Contexts;
 using System.Threading;
 
-//[Synchronization()]
+ 
 class TaskManager : AbstractSingeton<TaskManager>
  {
     
@@ -126,14 +126,25 @@ class TaskManager : AbstractSingeton<TaskManager>
         //  AirCadExecutor.Instance.mou
     }
     #endregion
-    public void CreatePdf(int idPdm, int userId = 0)
+    public void CreatePdf(int[] idPdmArr, int userId = 0)
     {
-        Console.WriteLine("Whay pdf");
-        //context.CreatePdf(idPdm, userId,(int)TaskStatuses.Waiting,  DateTime.Today, (int)TasksTypes.Pdf);
-        //context.SubmitChanges();
-        //if (!ExistTaskToExecute())
-        //    Execute();
+        
+        Console.WriteLine("Created pdf task");
+
+        int TaskId = Context.CreateTaskInstance(userId, (int)TaskStatuses.Waiting, DateTime.Today, (int)TasksTypes.Pdf);
+        foreach (var idPdm in idPdmArr)
+        {
+            Context.CreatePdf(idPdm, TaskId);
+        }
+
+        Context.SubmitChanges();
+        if (!ExistTaskToExecute())
+        {
+            //threadExecute.Start();
+            Execute();
+        }
     }
+
 
     public void CreateDxf(int[] idPdmArr, int userId = 0)
     {
@@ -155,6 +166,7 @@ class TaskManager : AbstractSingeton<TaskManager>
 
     private void Execute()
     {
+        Console.WriteLine("Created == PDF == task");
         TaskInstance taskInstance;
         if (!ExistTaskToExecute() && ExistWaitingTasks())
         {
@@ -245,12 +257,11 @@ class TaskManager : AbstractSingeton<TaskManager>
                 case (int)TasksTypes.Dxf:
                     try
                     {
-                        Console.WriteLine("TasksTypes.Dxf");
                         IEnumerable<DxfTarget> dxfTargets = Context.DxfTargets.Where(each => each.TaskId == taskInstance.Id);
                         foreach (var eachDxfTarget in dxfTargets)
                         {
                             Console.WriteLine(eachDxfTarget.IpPdm);
-                            DxfBulder.Instance.BuildById((int)eachDxfTarget.IpPdm);
+                            DxfBulder.Instance.Build((int)eachDxfTarget.IpPdm);
                         }
                         ApplyCompleted(taskInstance.Id);
                     }
@@ -260,10 +271,26 @@ class TaskManager : AbstractSingeton<TaskManager>
                         ApplyError(taskInstance.Id);
                     }
                     break;
+
                 case (int)TasksTypes.Pdf:
-                    var pdfTarget = Context.PdfTargets.First(each => each.Id == taskInstance.DataTaskId);
-                    Console.WriteLine("почемуто выполняеться пдф");
-                    ApplyCompleted(taskInstance.Id);
+                    try
+                    {
+                        
+                        IEnumerable<PdfTarget> pdfTargets = Context.PdfTargets.Where(each => each.TaskId == taskInstance.Id);
+                        Console.WriteLine("Bild pdf array");
+                        foreach (var eachPdfTarget in pdfTargets)
+                        {
+                            Console.WriteLine("Bild pdf with id #" + eachPdfTarget.IpPdm);
+                            PdfBuilder.Instance.PdfFolder = @"D:\TEMP\pdf";
+                            PdfBuilder.Instance.Build((int)eachPdfTarget.IpPdm);
+                        }
+                        ApplyCompleted(taskInstance.Id);
+                    }
+                    catch (Exception exception)
+                    {
+                        Console.WriteLine(exception.ToString());
+                        ApplyError(taskInstance.Id);
+                    }
                     break;
                     #endregion
             }
@@ -272,9 +299,7 @@ class TaskManager : AbstractSingeton<TaskManager>
 
         if (this.ExistWaitingTasks())
         {
-            Execute();
-            //Thread t = new Thread(Execute);
-            //t.Start();
+            Execute(); 
         }
     }
 

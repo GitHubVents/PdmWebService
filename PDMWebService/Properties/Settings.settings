@@ -99,10 +99,13 @@
       <Value Profile="(Default)">Data Source=pdmsrv;Initial Catalog=TaskDataBase;Persist Security Info=True;User ID=AirVentsCad;Password=1</Value>
     </Setting>
     <Setting Name="DefaultFolderForDxf" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:\DXF\</Value>
+      <Value Profile="(Default)">D:\TEMP\DXF\</Value>
     </Setting>
-    <Setting Name="DefaultPathToBuildPdf" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:\PDF\</Value>
+    <Setting Name="PdfFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">D:\TEMP\PDF</Value>
+    </Setting>
+    <Setting Name="TempPdfFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">D:\TEMP\TEMP PDF</Value>
     </Setting>
   </Settings>
 </SettingsFile>

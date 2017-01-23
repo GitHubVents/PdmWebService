@@ -44,16 +44,16 @@
         <elementListCompartment Id="c159a056-8b3a-4953-8902-f5257707bc50" absoluteBounds="13.64, 1.335, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="bfb5357a-a9e7-49ea-abcf-c396703f8f1b" absoluteBounds="0.75, 3.875, 2, 1.1939925130208344">
-      <DataClassMoniker Name="/DbModelDataContext/PdfTarget" />
-      <nestedChildShapes>
-        <elementListCompartment Id="220093f6-d819-4ac1-a56e-956c604690d4" absoluteBounds="0.76499999999999968, 4.335, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
-      </nestedChildShapes>
-    </classShape>
     <classShape Id="12c10f5f-a205-4861-88a1-341baacec0c4" absoluteBounds="3.5, 3.75, 2, 1.3862939453125">
       <DataClassMoniker Name="/DbModelDataContext/DxfTarget" />
       <nestedChildShapes>
         <elementListCompartment Id="43d5144e-5ff1-4e96-a525-9e08895e6f95" absoluteBounds="3.515, 4.21, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="02e8d998-70ac-4011-bbb4-b9ff1d2f7262" absoluteBounds="0.875, 3.5, 2, 1.3862939453125">
+      <DataClassMoniker Name="/DbModelDataContext/PdfTarget" />
+      <nestedChildShapes>
+        <elementListCompartment Id="c3be5bf5-eeb7-4446-bb65-d367aa96fbdc" absoluteBounds="0.88999999999999968, 3.96, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
   </nestedChildShapes>

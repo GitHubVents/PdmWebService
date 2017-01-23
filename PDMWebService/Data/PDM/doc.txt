@@ -1,0 +1,2 @@
+﻿because the we can be using several pdm systems, it was created IPdmAdapter interface 
+which the gives overall functionality. You can initialize IPdmAdapter as PDMAdapter or others

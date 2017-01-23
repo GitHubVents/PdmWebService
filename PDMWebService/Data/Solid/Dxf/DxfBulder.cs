@@ -15,7 +15,9 @@ namespace PDMWebService.Data.Solid.Dxf
     {
         private DxfBulder( ) : base()
         {
+            Console.WriteLine("Create DxfBulder");
             this.solidWorksApp = SolidWorksInstance.SldWoksApp;
+            Pdm = PDMAdapter.Instance;  
         }
         private   SldWorks solidWorksApp;
         private Settings Settings
@@ -25,20 +27,20 @@ namespace PDMWebService.Data.Solid.Dxf
                 return Settings.Default;
             }
         }
- 
+        public IPdmAdapter Pdm { get; set; };
 
-  
 
-        public  void BuildById(int FileId)
+
+        public  void Build(int FileId)
         { 
-            IEdmFile5 fileEdm = PDMAdapter.Instance.GetFileById(FileId); 
-            DataModel dm = PDMAdapter.Instance.SearchDoc(fileEdm.Name).First(); 
-            PDMAdapter.Instance.DownLoadFile(dm); 
-            string[] configurations = PDMAdapter.Instance.GetConfigigurations(dm);
+            IEdmFile5 fileEdm = Pdm.GetFileById(FileId); 
+            DataModel dataModel = Pdm.SearchDoc(fileEdm.Name).First();
+            Pdm.DownLoadFile(dataModel); 
+            string[] configurations = PDMAdapter.Instance.GetConfigigurations(dataModel);
             List<DxfFile> dxfList; 
             foreach (var eachConfiguration in configurations)
             { 
-                Save(dm.Path, @"D:\TEMP\dxf\", eachConfiguration, dm.Id, fileEdm.CurrentVersion,out dxfList, true, true, true);
+                Save(dataModel.Path, @"D:\TEMP\dxf\", eachConfiguration, dataModel.Id, fileEdm.CurrentVersion,out dxfList, true, true, true);
             }
         }
  

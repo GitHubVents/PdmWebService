@@ -265,7 +265,7 @@ namespace PDMWebService.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\DXF\\")]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\TEMP\\DXF\\")]
         public string DefaultFolderForDxf {
             get {
                 return ((string)(this["DefaultFolderForDxf"]));
@@ -277,13 +277,25 @@ namespace PDMWebService.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\PDF\\")]
-        public string DefaultPathToBuildPdf {
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\TEMP\\PDF")]
+        public string PdfFolder {
             get {
-                return ((string)(this["DefaultPathToBuildPdf"]));
+                return ((string)(this["PdfFolder"]));
             }
             set {
-                this["DefaultPathToBuildPdf"] = value;
+                this["PdfFolder"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\TEMP\\TEMP PDF")]
+        public string TempPdfFolder {
+            get {
+                return ((string)(this["TempPdfFolder"]));
+            }
+            set {
+                this["TempPdfFolder"] = value;
             }
         }
     }

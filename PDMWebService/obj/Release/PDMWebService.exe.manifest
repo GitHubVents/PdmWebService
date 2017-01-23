@@ -102,14 +102,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PDMWebService.exe" size="472536">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PDMWebService.exe" size="473560">
       <assemblyIdentity name="PDMWebService" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>BLUP2PDp5tA4gbIpQtoF4JcoV89Fx7Sw4jQAlftBxW4=</dsig:DigestValue>
+        <dsig:DigestValue>6gGGVJ8pxOvVpueqynHTMVBzaapFH5vLuHbYMb/M5U4=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -121,7 +121,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>S1ra16gSTJ1vCjkvAfPFewEYP1A8tuVEbh87VPaHWjk=</dsig:DigestValue>
+        <dsig:DigestValue>S+hD5JKZFM/USiBGB1jqW4PiyeKn/tFNnpirTnIwSiI=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -149,13 +149,13 @@
       </hash>
     </dependentAssembly>
   </dependency>
-  <file name="PDMWebService.exe.config" size="5092">
+  <file name="PDMWebService.exe.config" size="5364">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>qL7a+VSnOP5/y9knrglsSzDYe79NthGV1VMriUnh7dc=</dsig:DigestValue>
+      <dsig:DigestValue>VliIbZ3tgiwBFdhbcjZG6TIpu/HtQAEspDJBuk1VsOo=</dsig:DigestValue>
     </hash>
   </file>
   <file name="TaskDb.mdf" size="3276800" writeableType="applicationData">

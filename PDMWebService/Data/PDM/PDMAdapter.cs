@@ -13,7 +13,7 @@ using System.Threading;
 
 namespace PDMWebService.Data.PDM
 {
-    public class PDMAdapter : AbstractSingeton<PDMAdapter>
+    public class PDMAdapter : AbstractSingeton<PDMAdapter>, IPdmAdapter
     {
 
         private PDMAdapter():base()
@@ -28,10 +28,13 @@ namespace PDMWebService.Data.PDM
                 Console.WriteLine(exception.ToString());
             }
         }
+
+        
+
         /// <summary>
         /// PDM exemplar.
         /// </summary>
-        private IEdmVault5 edmVault5 = null; // if   use insnace - apdater creater edmVault5
+        private IEdmVault5 edmVault5 = null;
 
         /// <summary>
         /// Vents pdm name.
@@ -172,7 +175,7 @@ namespace PDMWebService.Data.PDM
             catch (Exception exception)
             {
                 //Логгер.Ошибка($"Message - {exception.ToString()}\nPath - {path}\nStackTrace - {exception.StackTrace}", null, "GetEdmFile5", "SwEpdm");
-                return null;
+                throw exception;
             }
         }
 
@@ -402,10 +405,9 @@ namespace PDMWebService.Data.PDM
                 return BomTableToBomList(bomTable);
 
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
-                exception = exception;
-                throw exception;
+                throw ex;
             }            
         }       
 
