@@ -87,7 +87,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
 
             foreach (string item in new[] { new FileInfo(modelDamperDrw).FullName, new FileInfo(modelLamel).FullName })
             {
-                PDMWebService.Data.PDM.PDMAdapter.Instance.GetLastVersionAsmPdm(item);
+                PDMWebService.Data.PDM.SolidWorksPdmAdapter.Instance.GetLastVersionAsmPdm(item);
 
             }
          

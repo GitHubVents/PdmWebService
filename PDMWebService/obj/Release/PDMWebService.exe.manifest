@@ -102,26 +102,26 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PDMWebService.exe" size="473560">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PDMWebService.exe" size="477656">
       <assemblyIdentity name="PDMWebService" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>6gGGVJ8pxOvVpueqynHTMVBzaapFH5vLuHbYMb/M5U4=</dsig:DigestValue>
+        <dsig:DigestValue>ZsUikHNS0L7t1sRhDnxdWjk2I9qAw6ESF/3RBL7/Cos=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ServiceLibrary.dll" size="15360">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ServiceLibrary.dll" size="15872">
       <assemblyIdentity name="ServiceLibrary" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>S+hD5JKZFM/USiBGB1jqW4PiyeKn/tFNnpirTnIwSiI=</dsig:DigestValue>
+        <dsig:DigestValue>8/dKphHuDFQh8KQ82pSRTQ7sYwiXO2GhrVen/lIzTeI=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -149,6 +149,15 @@
       </hash>
     </dependentAssembly>
   </dependency>
+  <file name="Data\PDM\doc.txt" size="184">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>sPyqxWTdizwWjgjDB5ba7qa8p85YVGPOvrqadU9Ex/Y=</dsig:DigestValue>
+    </hash>
+  </file>
   <file name="PDMWebService.exe.config" size="5364">
     <hash>
       <dsig:Transforms>

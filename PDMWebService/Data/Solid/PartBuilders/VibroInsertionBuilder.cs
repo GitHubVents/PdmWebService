@@ -65,7 +65,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
             Dimension myDimension;
             var modelSpigotDrw = $@"{Settings.Default.SourceFolder}{SpigotFolder}\{drawing}.SLDDRW";
 
-          PDM.PDMAdapter.Instance.GetLastVersionAsmPdm(modelSpigotDrw );
+          PDM.SolidWorksPdmAdapter.Instance.GetLastVersionAsmPdm(modelSpigotDrw );
 
             //if (!Warning()) return "";
             var swDrwSpigot = SolidWorksInstance.SldWoksApp.OpenDoc6(modelSpigotDrw, (int)swDocumentTypes_e.swDocDRAWING,

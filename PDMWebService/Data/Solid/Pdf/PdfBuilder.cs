@@ -25,19 +25,16 @@ namespace PDMWebService.Data.Solid.Pdf
         public string TempPdfFolder { get; set; }
 
         private string PrinterName { get; } = "Bullzip PDF Printer";
-
+        public IPdmAdapter Pdm { get; set; }
         private PdfBuilder() : base()
-        {
+        { 
             PdfFolder = Settings.Default.PdfFolder;
             TempPdfFolder = Settings.Default.TempPdfFolder;
         }
 
 
-        public string Build(int FileId)
-        {
-            IEdmFile5 fileEdm = PDMAdapter.Instance.GetFileById(FileId);
-            DataModel dataModel = PDMAdapter.Instance.SearchDoc(fileEdm.Name).First();
-            PDMAdapter.Instance.DownLoadFile(dataModel);
+        public string Build(DataModel dataModel)
+        { 
 
             try
             {
@@ -112,9 +109,11 @@ namespace PDMWebService.Data.Solid.Pdf
                     }
                 }
                 tempfileIndex = ResetIndex();
-                string NameAndExtension = System.IO.Path.GetFileName(path);
+                 string NameAndExtension = System.IO.Path.GetFileName(path);
                 string PathToPdfFile = PdfFolder.ToUpper() + @"\" + NameAndExtension.Replace("SLDDRW", "PDF");
-                MergePdf(PathToPdfFile);
+
+              //  string PathToPdfFile = path.Replace("SLDDRW", "PDF");
+                MergePdf(PathToPdfFile); // Path to temp file
                 return PathToPdfFile;
             }
             catch (System.Exception exception)

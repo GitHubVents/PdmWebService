@@ -17,6 +17,8 @@ namespace PDMWebService.Data.PDM
         void GetLastVersionAsmPdm(string path);
 
         // need change!!!!!!!!!!!
-        IEdmFile5 GetFileById(int fileId);
+        DataModel GetFileById(int fileId, bool isDowload);
+
+       
     }
 }

@@ -43,8 +43,8 @@ namespace PDMWebService
             string filePath = " ";
             try
             {
-                PDMAdapter.Instance.DownLoadFile(dataSolidModel);
-                filePath = PDMAdapter.Instance.CloneDowladFileTo(@"D:\temp\".ToUpper(), dataSolidModel);
+                SolidWorksPdmAdapter.Instance.DownLoadFile(dataSolidModel);
+                filePath = Data.Explorer.ExplorerAdapter.FileCopyToVirtualFolder(@"D:\temp\".ToUpper(), dataSolidModel); //SolidWorksPdmAdapter.Instance.FileCopy(@"D:\temp\".ToUpper(), dataSolidModel);
                 UrlToSelectModel = filePath.ToUpper().Replace(@"D:\temp\".ToUpper(), "http://pdmsrv/test/eDrawings/".ToUpper()); // need get from config
             }
             catch (Exception exception)
@@ -59,7 +59,7 @@ namespace PDMWebService
         public TransmittableFile SelectFile(DataModel dataSolidModel)
         {
 
-            PDMAdapter.Instance.DownLoadFile(dataSolidModel);
+            SolidWorksPdmAdapter.Instance.DownLoadFile(dataSolidModel);
             TransmittableFile remoteInfo;
             try
             {
@@ -98,7 +98,7 @@ namespace PDMWebService
         DataModel[] ISolidWebService.Search(string nameSegment)
         {
             Console.WriteLine(nameSegment);
-            return PDMAdapter.Instance.SearchDoc(nameSegment).ToArray();
+            return SolidWorksPdmAdapter.Instance.SearchDoc(nameSegment).ToArray();
           
         }
 
@@ -112,7 +112,7 @@ namespace PDMWebService
             Exception exception = new Exception();
             try
             {
-                Specification[] specifications = PDMAdapter.Instance.GetSpecifications(dataSolidModel.Path, configuration, true, out exception).ToArray();
+                Specification[] specifications = SolidWorksPdmAdapter.Instance.GetSpecifications(dataSolidModel.Path, configuration, true, out exception).ToArray();
                 Logger.ToLog("Спецификации по модели " + dataSolidModel.FileName + " с конфигурацией " + configuration + " успешно получена");
                 return specifications;
             }

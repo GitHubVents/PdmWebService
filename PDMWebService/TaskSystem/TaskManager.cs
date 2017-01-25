@@ -1,4 +1,5 @@
-﻿using PDMWebService.Data.Solid.Dxf;
+﻿using PDMWebService.Data.PDM;
+using PDMWebService.Data.Solid.Dxf;
 using PDMWebService.Data.Solid.PartBuilders;
 using PDMWebService.Data.Solid.Pdf;
 using PDMWebService.Singleton;
@@ -10,7 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
- 
+
 class TaskManager : AbstractSingeton<TaskManager>
  {
     
@@ -27,43 +28,12 @@ class TaskManager : AbstractSingeton<TaskManager>
         }
 
     }
-
-
-    #region isExecute... not need because replaced on ExistTaskToExecute method
-    //private static Boolean _isExecute;
-    // private static object lockObject = new object();
-    ///// <summary>
-    ///// Status executing.
-    ///// </summary>
-    //private  static Boolean isExecute
-    //{
-    //    get
-    //    {
-    //        bool test = false;
-    //        lock (lockObject)
-    //        {
-    //            test = _isExecute;
-    //        }
-    //        return test;
-    //    }
-    //    set
-    //    {
-    //        lock (lockObject)
-    //        {
-    //            _isExecute = value;
-
-    //            Console.WriteLine(" Изменение состояния _isExecute");
-    //        }
-    //    }
-    //}
-    #endregion;
-
-   Thread threadExecute;
+  
     private TaskManager() : base()
-    {
-        threadExecute = new   Thread(Execute);
+    { 
         
     }
+
     #region create task of generetion
     public void CreateVibroInsertion(int height, int wight, VibroInsertionTypes type, int userId = 0)
     {
@@ -253,15 +223,18 @@ class TaskManager : AbstractSingeton<TaskManager>
                     System.Threading.Thread.Sleep(5000);
                     break;
                 #endregion
-                #region dxf-pdf
+
+                #region dxf
                 case (int)TasksTypes.Dxf:
                     try
                     {
                         IEnumerable<DxfTarget> dxfTargets = Context.DxfTargets.Where(each => each.TaskId == taskInstance.Id);
                         foreach (var eachDxfTarget in dxfTargets)
                         {
-                            Console.WriteLine(eachDxfTarget.IpPdm);
-                            DxfBulder.Instance.Build((int)eachDxfTarget.IpPdm);
+                            var pdm = PdmFactory.CreateSolidWorksPdmAdapter(); // add conditions: which of pdm systems will be initialised.                          
+                            var dataModel = pdm.GetFileById(eachDxfTarget.IpPdm, true); // get file data and download                           
+                            var configrations = pdm.GetConfigigurations(dataModel);                          
+                            DxfBulder.Instance.Build(dataModel, configrations);                            
                         }
                         ApplyCompleted(taskInstance.Id);
                     }
@@ -271,19 +244,28 @@ class TaskManager : AbstractSingeton<TaskManager>
                         ApplyError(taskInstance.Id);
                     }
                     break;
+                #endregion
+
+                #region pdf
 
                 case (int)TasksTypes.Pdf:
                     try
                     {
-                        
                         IEnumerable<PdfTarget> pdfTargets = Context.PdfTargets.Where(each => each.TaskId == taskInstance.Id);
-                        Console.WriteLine("Bild pdf array");
                         foreach (var eachPdfTarget in pdfTargets)
                         {
-                            Console.WriteLine("Bild pdf with id #" + eachPdfTarget.IpPdm);
-                            PdfBuilder.Instance.PdfFolder = @"D:\TEMP\pdf";
-                            PdfBuilder.Instance.Build((int)eachPdfTarget.IpPdm);
+                            //PdfBuilder.Instance.PdfFolder = @"D:\TEMP\pdf";
+                            var pdm = PdmFactory.CreateSolidWorksPdmAdapter();               // add conditions: which of pdm systems will be initialised. 
+                                                                                             //recomended using  PdmType with namespace PDM { SolidWorksPdm, Ips }
+
+                            var dataModel = pdm.GetFileById((int)eachPdfTarget.IpPdm, true); // get file data and download 
+                            string pathToTempFile = PdfBuilder.Instance.Build(dataModel);
+
+                            string pathToPdmFile = (pdm as SolidWorksPdmAdapter).AddToPdm(pathToTempFile, dataModel.FolderPath);
+
+                            (pdm as SolidWorksPdmAdapter).CheckInOutPdm(pathToPdmFile, true);
                         }
+
                         ApplyCompleted(taskInstance.Id);
                     }
                     catch (Exception exception)

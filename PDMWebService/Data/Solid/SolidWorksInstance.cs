@@ -27,20 +27,7 @@ namespace PDMWebService.Data.Solid
             Console.WriteLine("InitSolidWorks");
             try
             {
-                 sldWoksApp = (SldWorks)Marshal.GetActiveObject("SldWorks.Application");
-
-                //test
-                //if (sldWoksApp == null)
-                //{
-                //    Process[] processes = Process.GetProcessesByName("SLDWORKS");
-                //    foreach (var process in processes)
-                //    {
-                //        process.Kill();
-                //    }
-
-                //    sldWoksApp = new SldWorks() { Visible = true };
-
-                //}
+                 sldWoksApp = (SldWorks)Marshal.GetActiveObject("SldWorks.Application"); 
             }
             catch
             {

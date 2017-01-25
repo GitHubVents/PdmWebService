@@ -116,7 +116,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\DataConverter.cs" />
-    <Compile Include="Data\Solid\Bends.cs" />
+    <Compile Include="Data\Explorer\ExplorerAdapter.cs" />
+    <Compile Include="Data\PDM\IPdmAdapter.cs" />
+    <Compile Include="Data\PDM\IpsAdapter.cs" />
+    <Compile Include="Data\PDM\PdmFactory.cs" />
+    <Compile Include="Data\PDM\PdmType.cs" />
+    <Compile Include="Data\Solid\Dxf\Bends.cs" />
     <Compile Include="Data\Solid\Dxf\DxfBulder.cs" />
     <Compile Include="Data\Solid\Dxf\DxfFile.cs" />
     <Compile Include="Data\Solid\PartBuilders\AbstractBuilder.cs" />
@@ -131,7 +136,7 @@
       <DependentUpon>SwPlusDbLinqORM.dbml</DependentUpon>
     </Compile>
     <Compile Include="Logger.cs" />
-    <Compile Include="Data\PDM\PDMAdapter.cs" />
+    <Compile Include="Data\PDM\SolidWorksPdmAdapter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -208,6 +213,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Data\PDM\doc.txt" />
     <Content Include="TaskDb.mdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

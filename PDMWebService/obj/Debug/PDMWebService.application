@@ -7,14 +7,14 @@
     <framework targetVersion="4.6.1" profile="Full" supportedRuntime="4.0.30319" />
   </compatibleFrameworks>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="PDMWebService.exe.manifest" size="10681">
+    <dependentAssembly dependencyType="install" codebase="PDMWebService.exe.manifest" size="11074">
       <assemblyIdentity name="PDMWebService.exe" version="1.0.0.3" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>GVIfYob6OD1YTK8k6CtPGI0sr/DtA69Py7FP4ock5Ng=</dsig:DigestValue>
+        <dsig:DigestValue>2SIosbwMQ0CMdGuPezGh7g3nqyuG/lgohxzyXZIhWuo=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

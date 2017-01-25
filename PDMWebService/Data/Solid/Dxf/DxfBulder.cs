@@ -15,9 +15,8 @@ namespace PDMWebService.Data.Solid.Dxf
     {
         private DxfBulder( ) : base()
         {
-            Console.WriteLine("Create DxfBulder");
             this.solidWorksApp = SolidWorksInstance.SldWoksApp;
-            Pdm = PDMAdapter.Instance;  
+            Pdm = SolidWorksPdmAdapter.Instance;  
         }
         private   SldWorks solidWorksApp;
         private Settings Settings
@@ -27,26 +26,23 @@ namespace PDMWebService.Data.Solid.Dxf
                 return Settings.Default;
             }
         }
-        public IPdmAdapter Pdm { get; set; };
+        public IPdmAdapter Pdm { get; set; }
 
 
 
-        public  void Build(int FileId)
-        { 
-            IEdmFile5 fileEdm = Pdm.GetFileById(FileId); 
-            DataModel dataModel = Pdm.SearchDoc(fileEdm.Name).First();
-            Pdm.DownLoadFile(dataModel); 
-            string[] configurations = PDMAdapter.Instance.GetConfigigurations(dataModel);
+        public  void Build(DataModel dataModel, string[] configurations)
+        {  
             List<DxfFile> dxfList; 
             foreach (var eachConfiguration in configurations)
             { 
-                Save(dataModel.Path, @"D:\TEMP\dxf\", eachConfiguration, dataModel.Id, fileEdm.CurrentVersion,out dxfList, true, true, true);
+                Save(dataModel.Path, @"D:\TEMP\dxf\", eachConfiguration, dataModel.Id, dataModel.CurrentVersion,out dxfList, true, true, true);
             }
         }
  
 
         private bool Save(string partPath, string folderToSave, string configuration, int idPdm, int version, out List<DxfFile> dxfList, bool fixBends, bool closeAfterSave, bool includeNonSheetParts)
         {
+            Console.WriteLine("Построение dxf файла: " + partPath);
             bool isSave = false; 
             dxfList = new List<DxfFile>();
             if (string.IsNullOrEmpty(folderToSave))

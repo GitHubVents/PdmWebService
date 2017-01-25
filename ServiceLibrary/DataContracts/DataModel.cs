@@ -25,6 +25,11 @@ namespace PDM_WebService.WcfServiceLibrary.DataContracts
         [DataMember]
         public  string Path { get; set; }
 
+        [DataMember]
+        public string FolderPath { get; set; }
+        [DataMember]
+        public int CurrentVersion { get; set; }
+
         ///// <summary>
         ///// Convert VentsPDM_dll.DataModel to DataSolidModel
         ///// </summary>

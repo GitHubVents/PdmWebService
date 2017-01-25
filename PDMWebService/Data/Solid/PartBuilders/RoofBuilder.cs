@@ -58,7 +58,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
                 return "";
             }
 
-            PDM.PDMAdapter.Instance.GetLastVersionAsmPdm($@"{Settings.Default.SourceFolder}{SpigotFolder}\{"15-000.SLDASM"}");
+            PDM.SolidWorksPdmAdapter.Instance.GetLastVersionAsmPdm($@"{Settings.Default.SourceFolder}{SpigotFolder}\{"15-000.SLDASM"}");
 
             var modelRoofPath = $@"{Settings.Default.SourceFolder}{RoofFolder}\{modelName}.SLDASM";
 
@@ -321,7 +321,8 @@ namespace PDMWebService.Data.Solid.PartBuilders
             swDoc.SaveAs2(newRoofPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
             newComponents.Add(new FileInfo(newRoofPath));
             SolidWorksInstance.CloseAllDocumentsAndExit();
-            PDMWebService.Data.PDM.PDMAdapter.Instance.CheckInOutPdm(newComponents, true);
+            //  PDMWebService.Data.PDM.SolidWorksPdmAdapter.Instance.CheckInOutPdm(newComponents, true);
+            Console.WriteLine("RoofBuilder строка 324 пересмотреть CheckInOutPdm");
 
             foreach (var newComponent in NewComponents)
             {

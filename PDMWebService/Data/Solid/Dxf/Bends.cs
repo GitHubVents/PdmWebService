@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDMWebService.Data.Solid
+namespace PDMWebService.Data.Solid.Dxf
 {
     public class Bends
     {

@@ -291,7 +291,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
             m1:
             try
             {
-              PDMWebService.Data.PDM.PDMAdapter.Instance.GetLastVersionAsmPdm(найденныеФайлы[0].Path );
+              PDMWebService.Data.PDM.SolidWorksPdmAdapter.Instance.GetLastVersionAsmPdm(найденныеФайлы[0].Path );
                 var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(найденныеФайлы[0].Path);
                 return fileNameWithoutExtension != null && string.Equals(fileNameWithoutExtension, fileName, StringComparison.CurrentCultureIgnoreCase);
             }
@@ -387,7 +387,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
                     else
                     {
                        
-                      PDMWebService.Data.PDM.PDMAdapter.Instance.CheckInOutPdm(new List<FileInfo> { new FileInfo(findedFile.Path) }, false);
+                      PDMWebService.Data.PDM.SolidWorksPdmAdapter.Instance.CheckInOutPdm( findedFile.Path , false);
                         open = false;
                     }
                 }
