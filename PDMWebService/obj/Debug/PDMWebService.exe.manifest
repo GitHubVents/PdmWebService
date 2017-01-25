@@ -102,14 +102,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PDMWebService.exe" size="502232">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PDMWebService.exe" size="539096">
       <assemblyIdentity name="PDMWebService" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>PMsS3eBdOl1nXrT2U+nYcyUviqNZ1Lox6zAOsOenpmQ=</dsig:DigestValue>
+        <dsig:DigestValue>rDaunZVFW3sfRbTx9Cu9gv5WJjKYroQNd3o5u2KnrdA=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -121,7 +121,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>8/dKphHuDFQh8KQ82pSRTQ7sYwiXO2GhrVen/lIzTeI=</dsig:DigestValue>
+        <dsig:DigestValue>KrL2VQGyBZbQICUXbtzQy/zH8kQv1SbAWHj2j1Pu5iA=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

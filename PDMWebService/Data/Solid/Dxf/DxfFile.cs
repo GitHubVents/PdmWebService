@@ -12,5 +12,16 @@ namespace PDMWebService.Data.Solid.Dxf
         public int Version { get; set; }
         public string Configuration { get; set; }
         public string FilePath { get; set; }
+
+
+        public override string ToString()
+        {
+            StringBuilder stringBuilder = new StringBuilder("DxfFile [ ");
+            stringBuilder.Append("IdPdm: " + IdPdm);
+            stringBuilder.Append(", Version: " + Version);
+            stringBuilder.Append(", Configuration: " + Configuration);
+            stringBuilder.Append(", FilePath: " + Configuration + " ]");
+            return stringBuilder.ToString();
+        }
     }
 }

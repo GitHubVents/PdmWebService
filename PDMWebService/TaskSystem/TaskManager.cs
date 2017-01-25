@@ -233,7 +233,9 @@ class TaskManager : AbstractSingeton<TaskManager>
                         {
                             var pdm = PdmFactory.CreateSolidWorksPdmAdapter(); // add conditions: which of pdm systems will be initialised.                          
                             var dataModel = pdm.GetFileById(eachDxfTarget.IpPdm, true); // get file data and download                           
-                            var configrations = pdm.GetConfigigurations(dataModel);                          
+                            var configrations = pdm.GetConfigigurations(dataModel);
+                            DxfBulder.Instance.ToSql += Instance_ToSql;
+
                             DxfBulder.Instance.Build(dataModel, configrations);                            
                         }
                         ApplyCompleted(taskInstance.Id);
@@ -258,9 +260,11 @@ class TaskManager : AbstractSingeton<TaskManager>
                             var pdm = PdmFactory.CreateSolidWorksPdmAdapter();               // add conditions: which of pdm systems will be initialised. 
                                                                                              //recomended using  PdmType with namespace PDM { SolidWorksPdm, Ips }
 
-                            var dataModel = pdm.GetFileById((int)eachPdfTarget.IpPdm, true); // get file data and download 
+                            var dataModel = pdm.GetFileById((int)eachPdfTarget.IpPdm, true); // get file data and download
+                            
+                             
                             string pathToTempFile = PdfBuilder.Instance.Build(dataModel);
-
+                            
                             string pathToPdmFile = (pdm as SolidWorksPdmAdapter).AddToPdm(pathToTempFile, dataModel.FolderPath);
 
                             (pdm as SolidWorksPdmAdapter).CheckInOutPdm(pathToPdmFile, true);
@@ -284,6 +288,22 @@ class TaskManager : AbstractSingeton<TaskManager>
             Execute(); 
         }
     }
+
+    private void Instance_ToSql(List<DxfFile> dxfList)
+    {
+        Exception exception;
+        foreach (var eachDxf in dxfList)
+        {
+            Console.WriteLine(dxfList.ToArray());
+            PDMWebService.Data.SqlData.PartData.Database.AddDxf(eachDxf.FilePath, eachDxf.IdPdm, eachDxf.Configuration, eachDxf.Version, out exception);
+        }
+    }
+
+
+
+
+
+
 
     #region Apply statuses of the tasks
 

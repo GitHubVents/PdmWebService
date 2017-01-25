@@ -28,15 +28,21 @@ namespace PDMWebService.Data.Solid.Dxf
         }
         public IPdmAdapter Pdm { get; set; }
 
-
+        public delegate void ToSqlHandler (  List<DxfFile> dxfList );
+        public event ToSqlHandler ToSql;
 
         public  void Build(DataModel dataModel, string[] configurations)
         {  
-            List<DxfFile> dxfList; 
+            List<DxfFile> dxfList = new List<DxfFile>(); 
             foreach (var eachConfiguration in configurations)
             { 
                 Save(dataModel.Path, @"D:\TEMP\dxf\", eachConfiguration, dataModel.Id, dataModel.CurrentVersion,out dxfList, true, true, true);
+            
+                
+                    
             }
+            if (ToSql != null)
+                ToSql(dxfList);
         }
  
 
@@ -57,21 +63,25 @@ namespace PDMWebService.Data.Solid.Dxf
                     try
                     {
                         swModel = solidWorksApp.OpenDoc6(partPath, (int)swDocumentTypes_e.swDocPART,(int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", 0, 0);
+                        swModel = solidWorksApp.IActiveDoc2; // ??
+
+                       // Проверяет наличие дерева постоения в моделе.
+                        if (swModel == null)
+                        {
+                            return isSave;
+                        }
                     }
                     catch (Exception exception)
                     {
                         throw new Exception("Failed open document: " + exception.ToString());
                     }
                 }
-                else
-                {
-                    swModel = solidWorksApp.IActiveDoc2;
-                }
-
-                if (swModel == null)
-                {
-                    return isSave;
-                }
+                //else
+                //{
+                //    swModel = solidWorksApp.IActiveDoc2;
+                //}
+               
+                
 
                 bool isSheetmetal = true;
 
@@ -157,7 +167,7 @@ namespace PDMWebService.Data.Solid.Dxf
             }
 
             var sDxfName = DxfName(swModel.GetTitle(), configuration) + ".dxf";
-
+            string f = 
             dxfFilePath = Path.Combine(folderToSave, sDxfName);
             //  dxfFilePath = Path.Combine(@"C:\DXF", sDxfName);
 

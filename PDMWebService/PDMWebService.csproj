@@ -129,6 +129,16 @@
     <Compile Include="Data\Solid\PartBuilders\RoofBuilder.cs" />
     <Compile Include="Data\Solid\PartBuilders\VibroInsertionBuilder.cs" />
     <Compile Include="Data\Solid\Pdf\PdfBuilder.cs" />
+    <Compile Include="Data\SqlData\PartData\Bends.cs" />
+    <Compile Include="Data\SqlData\PartData\Database.cs" />
+    <Compile Include="Data\SqlData\PartData\DataToExport.cs" />
+    <Compile Include="Data\SqlData\PartData\Dxf.cs" />
+    <Compile Include="Data\SqlData\PartData\DxfFile.cs" />
+    <Compile Include="Data\SqlData\PartData\ExportXmlSql.cs" />
+    <Compile Include="Data\SqlData\PartData\Part.cs" />
+    <Compile Include="Data\SqlData\PartData\PartBendInfo.cs" />
+    <Compile Include="Data\SqlData\PartData\ResultList.cs" />
+    <Compile Include="Data\SqlData\PartData\SolidWorksFixPattern.cs" />
     <Compile Include="Data\SqlData\SqlDataAdapder.cs" />
     <Compile Include="Data\SqlData\SwPlusDbLinqORM.designer.cs">
       <AutoGen>True</AutoGen>
