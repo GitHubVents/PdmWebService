@@ -10,28 +10,31 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using PDM_WebService.WcfServiceLibrary;
+using ServiceLibrary.DataContracts;
 
+class TaskManager : AbstractSingeton<TaskManager>, ITaskSystemMonitor
+{
 
-class TaskManager : AbstractSingeton<TaskManager>
- {
-    
-    private  DbModelDataContext context;
-   
+    private DbModelDataContext context;
+
     /// <summary>
     /// Data base classes model.
     /// </summary>
-    private DbModelDataContext Context { get
+    private DbModelDataContext Context
+    {
+        get
         {
-            if(context == null)
-             context = new DbModelDataContext();
+            if (context == null)
+                context = new DbModelDataContext();
             return context;
         }
 
     }
-  
+
     private TaskManager() : base()
-    { 
-        
+    {
+
     }
 
     #region create task of generetion
@@ -98,7 +101,7 @@ class TaskManager : AbstractSingeton<TaskManager>
     #endregion
     public void CreatePdf(int[] idPdmArr, int userId = 0)
     {
-        
+
         Console.WriteLine("Created pdf task");
 
         int TaskId = Context.CreateTaskInstance(userId, (int)TaskStatuses.Waiting, DateTime.Today, (int)TasksTypes.Pdf);
@@ -118,7 +121,7 @@ class TaskManager : AbstractSingeton<TaskManager>
 
     public void CreateDxf(int[] idPdmArr, int userId = 0)
     {
-        Console.WriteLine("Created dxf task")   ;
+        Console.WriteLine("Created dxf task");
 
         int TaskId = Context.CreateTaskInstance(userId, (int)TaskStatuses.Waiting, DateTime.Today, (int)TasksTypes.Dxf);
         foreach (var idPdm in idPdmArr)
@@ -236,7 +239,7 @@ class TaskManager : AbstractSingeton<TaskManager>
                             var configrations = pdm.GetConfigigurations(dataModel);
                             DxfBulder.Instance.ToSql += Instance_ToSql;
 
-                            DxfBulder.Instance.Build(dataModel, configrations);                            
+                            DxfBulder.Instance.Build(dataModel, configrations);
                         }
                         ApplyCompleted(taskInstance.Id);
                     }
@@ -261,10 +264,10 @@ class TaskManager : AbstractSingeton<TaskManager>
                                                                                              //recomended using  PdmType with namespace PDM { SolidWorksPdm, Ips }
 
                             var dataModel = pdm.GetFileById((int)eachPdfTarget.IpPdm, true); // get file data and download
-                            
-                             
+
+
                             string pathToTempFile = PdfBuilder.Instance.Build(dataModel);
-                            
+
                             string pathToPdmFile = (pdm as SolidWorksPdmAdapter).AddToPdm(pathToTempFile, dataModel.FolderPath);
 
                             (pdm as SolidWorksPdmAdapter).CheckInOutPdm(pathToPdmFile, true);
@@ -285,7 +288,7 @@ class TaskManager : AbstractSingeton<TaskManager>
 
         if (this.ExistWaitingTasks())
         {
-            Execute(); 
+            Execute();
         }
     }
 
@@ -293,11 +296,11 @@ class TaskManager : AbstractSingeton<TaskManager>
     {
         Exception exception;
         Console.WriteLine("Выгрузка данных в DXF");
-       Console.WriteLine("Количество файлов для записив базу: " +dxfList.Count);
+        Console.WriteLine("Количество файлов для записив базу: " + dxfList.Count);
         foreach (var eachDxf in dxfList)
         {
             Console.WriteLine(eachDxf.ToString());
-             PDMWebService.Data.SqlData.PartData.Database.AddDxf(eachDxf.FilePath, eachDxf.IdPdm, eachDxf.Configuration, eachDxf.Version, out exception);
+            PDMWebService.Data.SqlData.PartData.Database.AddDxf(eachDxf.FilePath, eachDxf.IdPdm, eachDxf.Configuration, eachDxf.Version, out exception);
         }
     }
 
@@ -347,5 +350,61 @@ class TaskManager : AbstractSingeton<TaskManager>
     {
         return this.Context.ExistWaitingTasks() == 1 ? true : false;
     }
+
+
     #endregion
+
+    public TaskData[] GetTasksData(int userId, TasksTypes type, TaskStatuses status)
+    {
+        List<TaskData> TaskDataList = new List<TaskData>();
+        int countTasks = context.TaskInstances.Count();
+        var tasks = context.TaskInstances.Where(eachTask => eachTask.Id >= countTasks - 10);
+        var pdm = PdmFactory.CreateSolidWorksPdmAdapter() as SolidWorksPdmAdapter; // temp
+
+        foreach (var task in tasks)
+        {
+            switch (task.TypeTask)
+            {
+                case (int)TasksTypes.Dxf:
+                    var dxfDataList = context.DxfTargets;
+                    var taskData = new TaskData()
+                    {
+                        TaskId = task.Id,
+                        Status = (TaskStatuses)task.Status,
+                        type = (TasksTypes)task.TypeTask,
+                        User = task.UserId,
+
+                        //  Designation = pdm.GetFileById(eachDxf.IpPdm, false).FileName;
+                    };
+                    List<string> dxf_designations = new List<string>();
+                    foreach (var eachDxf in dxfDataList)
+                    {
+                        dxf_designations.Add(pdm.GetFileById(eachDxf.IpPdm, false).FileName);
+                    }
+                    taskData.Designation = dxf_designations.ToArray();
+
+                    break;
+                case (int)TasksTypes.Pdf:
+                    var pdfDataList = context.PdfTargets;
+                    var pdf_taskData = new TaskData()
+                    {
+                        TaskId = task.Id,
+                        Status = (TaskStatuses)task.Status,
+                        type = (TasksTypes)task.TypeTask,
+                        User = task.UserId,
+
+                        //  Designation = pdm.GetFileById(eachDxf.IpPdm, false).FileName;
+                    };
+                    List<string> pdf_designations = new List<string>();
+                    foreach (var eachPdf in pdfDataList)
+                    {
+                        pdf_designations.Add(pdm.GetFileById((int)eachPdf.IpPdm, false).FileName);
+                    }
+                    pdf_taskData.Designation = pdf_designations.ToArray();
+                    break;
+            }
+        }
+
+        return TaskDataList.ToArray();
+    }
 }

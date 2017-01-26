@@ -51,8 +51,7 @@ namespace PDMWebService.Data.PDM
         /// <param name="segmentName"></param>
         /// <returns></returns>
         public IEnumerable<DataModel> SearchDoc(string segmentName)
-        {
-            this.PDMInitialize();
+        { 
             List<DataModel> searchResult = new List<DataModel>();
             try
             {
@@ -104,8 +103,7 @@ namespace PDMWebService.Data.PDM
         /// <param name="dataModel"></param>
         public void DownLoadFile(DataModel dataModel)
         {
-           
-            this.PDMInitialize();
+            
             try
             {
                 var batchGetter = (IEdmBatchGet)(edmVault5 as IEdmVault7).CreateUtility(EdmUtility.EdmUtil_BatchGet);
@@ -291,13 +289,12 @@ namespace PDMWebService.Data.PDM
 
                      edmVault5 = new EdmVault5();
                     Logger.ToLog("Создан экземпляр Vents-PDM");
-                }
-
-                if (!edmVault5.IsLoggedIn)
-                {
-                    edmVault5.LoginAuto(vaultname, 0);
-                    Logger.ToLog("Автологин в системе Vents-PDM системного пользователя " + vaultname);
-                }
+                    if (!edmVault5.IsLoggedIn)
+                    {
+                        edmVault5.LoginAuto(vaultname, 0);
+                        Logger.ToLog("Автологин в системе Vents-PDM системного пользователя " + vaultname);
+                    }
+                }             
             }
             catch (Exception exception)
             {
@@ -315,8 +312,9 @@ namespace PDMWebService.Data.PDM
         {
             var processes = System.Diagnostics.Process.GetProcessesByName(name );
             foreach (var process in processes)
-            {
+            {               
                 process.Kill();
+                Console.WriteLine("\nFind proccess and kill: " + process);
             }
           
         }
@@ -575,6 +573,7 @@ namespace PDMWebService.Data.PDM
                     {
                         //
                     }
+                    throw exception;
                 }
             }
             if (!success)
@@ -595,9 +594,13 @@ namespace PDMWebService.Data.PDM
             string msg = "";
             try
             {
-
+                //if (File.Exists(pathToFile))
+                //{
+                //   File.SetAttributes(pathToFile, FileAttributes.Normal);
+                //    File.Delete(pathToFile);
+                //}
                 var edmFolder = edmVault5.GetFolderFromPath(folder);
-
+               
                 edmFolder.AddFile(0, pathToFile);
 
              

@@ -15,7 +15,8 @@
         Monoblock = 7,
         Frameless = 8,
         Pdf = 9,
-        Dxf = 10
+        Dxf = 10,
+        None = 0
     }
 
 
@@ -24,7 +25,7 @@
     /// </summary>
     public enum TaskStatuses
     {
-        Completed = 1, Waiting = 2, Error = 3, Execution = 4, Empty = 0
+        Completed = 1, Waiting = 2, Error = 3, Execution = 4, Empty = 0, All = 5 // All need for view all tasks 
     }
 
     /// <summary>

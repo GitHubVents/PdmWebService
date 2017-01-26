@@ -9,18 +9,18 @@ using System.Linq;
 using ServiceLibrary.TaskSystem.Constants;
 using EPDM.Interop.epdm;
 using System.Threading;
+using ServiceLibrary.DataContracts;
 
 namespace PDMWebService
 {
-    class ServiceInterfaice : ISolidWebService
+    class ServiceInterfaice : ISolidWebService, ITaskSystemMonitor
     { 
         private TaskManager taskManager;
+        private ITaskSystemMonitor taskSystemMonitor;
         public ServiceInterfaice()
         {
-           
-
-            Thread t = new Thread(InitTaskManager);
-            t.Start();
+            InitTaskManager();
+            
         }
 
         private void InitTaskManager ()
@@ -28,6 +28,7 @@ namespace PDMWebService
             try
             {
                 taskManager = TaskManager.Instance;
+                taskSystemMonitor = taskManager;
             }
             catch (Exception exception)
             {
@@ -217,19 +218,24 @@ namespace PDMWebService
             Console.WriteLine("Таск выполняеться. клиенту ответили что то...");
         }
 
-//        int nWorkerThreads;
-//        int nCompletionThreads;
-//        ThreadPool.GetMaxThreads(out nWorkerThreads, out nCompletionThreads);
-//            foreach (var item in filesId)
-//            {
-//                ThreadPool.QueueUserWorkItem(delegate (object state)
-//                {
-//                    Console.WriteLine("пришел такс дхф");
-//                    taskManager.CreateDxf(filesId);
-//                });
+       public TaskData[]  GetTasksData(int userId, TasksTypes type, TaskStatuses status)
+        {
+            return taskSystemMonitor.GetTasksData(userId, type, status);
+        }
 
-//            }
+        //        int nWorkerThreads;
+        //        int nCompletionThreads;
+        //        ThreadPool.GetMaxThreads(out nWorkerThreads, out nCompletionThreads);
+        //            foreach (var item in filesId)
+        //            {
+        //                ThreadPool.QueueUserWorkItem(delegate (object state)
+        //                {
+        //                    Console.WriteLine("пришел такс дхф");
+        //                    taskManager.CreateDxf(filesId);
+        //                });
 
-//Console.WriteLine("Таск выполняеться. клиенту ответили что то...");
+        //            }
+
+        //Console.WriteLine("Таск выполняеться. клиенту ответили что то...");
     }
 }
