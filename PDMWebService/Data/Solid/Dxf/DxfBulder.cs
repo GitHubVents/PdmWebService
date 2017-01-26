@@ -36,7 +36,7 @@ namespace PDMWebService.Data.Solid.Dxf
             List<DxfFile> dxfList = new List<DxfFile>(); 
             foreach (var eachConfiguration in configurations)
             { 
-                Save(dataModel.Path, @"D:\TEMP\dxf\", eachConfiguration, dataModel.Id, dataModel.CurrentVersion,out dxfList, true, true, true);
+                Save(dataModel.Path, @"D:\TEMP\dxf\", eachConfiguration, dataModel.Id, dataModel.CurrentVersion, ref dxfList, true, true, true);
             
                 
                     
@@ -46,11 +46,12 @@ namespace PDMWebService.Data.Solid.Dxf
         }
  
 
-        private bool Save(string partPath, string folderToSave, string configuration, int idPdm, int version, out List<DxfFile> dxfList, bool fixBends, bool closeAfterSave, bool includeNonSheetParts)
+        private bool Save(string partPath, string folderToSave, string configuration, int idPdm, int version, ref List<DxfFile> dxfList, bool fixBends, bool closeAfterSave, bool includeNonSheetParts)
         {
             Console.WriteLine("Построение dxf файла: " + partPath);
-            bool isSave = false; 
-            dxfList = new List<DxfFile>();
+            bool isSave = false;
+            if (dxfList == null)
+                dxfList = new List<DxfFile>();
             if (string.IsNullOrEmpty(folderToSave))
             {
                 folderToSave = Settings.DefaultFolderForDxf;

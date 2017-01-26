@@ -292,10 +292,12 @@ class TaskManager : AbstractSingeton<TaskManager>
     private void Instance_ToSql(List<DxfFile> dxfList)
     {
         Exception exception;
+        Console.WriteLine("Выгрузка данных в DXF");
+       Console.WriteLine("Количество файлов для записив базу: " +dxfList.Count);
         foreach (var eachDxf in dxfList)
         {
-            Console.WriteLine(dxfList.ToArray());
-            PDMWebService.Data.SqlData.PartData.Database.AddDxf(eachDxf.FilePath, eachDxf.IdPdm, eachDxf.Configuration, eachDxf.Version, out exception);
+            Console.WriteLine(eachDxf.ToString());
+             PDMWebService.Data.SqlData.PartData.Database.AddDxf(eachDxf.FilePath, eachDxf.IdPdm, eachDxf.Configuration, eachDxf.Version, out exception);
         }
     }
 

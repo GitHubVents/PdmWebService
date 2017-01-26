@@ -16,11 +16,11 @@ namespace PDMWebService.Data.Solid.Dxf
 
         public override string ToString()
         {
-            StringBuilder stringBuilder = new StringBuilder("DxfFile [ ");
+            StringBuilder stringBuilder = new StringBuilder("DxfFile [");
             stringBuilder.Append("IdPdm: " + IdPdm);
             stringBuilder.Append(", Version: " + Version);
             stringBuilder.Append(", Configuration: " + Configuration);
-            stringBuilder.Append(", FilePath: " + Configuration + " ]");
+            stringBuilder.Append(", FilePath: " + FilePath + " ]");
             return stringBuilder.ToString();
         }
     }
