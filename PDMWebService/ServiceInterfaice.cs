@@ -13,22 +13,22 @@ using ServiceLibrary.DataContracts;
 
 namespace PDMWebService
 {
-    class ServiceInterfaice : ISolidWebService, ITaskSystemMonitor
+    class ServiceInterfaice : ISolidWebService 
     { 
         private TaskManager taskManager;
         private ITaskSystemMonitor taskSystemMonitor;
         public ServiceInterfaice()
         {
-            InitTaskManager();
-            
+            taskManager = TaskManager.Instance;
+
         }
 
         private void InitTaskManager ()
         {
             try
             {
-                taskManager = TaskManager.Instance;
-                taskSystemMonitor = taskManager;
+              
+             
             }
             catch (Exception exception)
             {
@@ -218,11 +218,13 @@ namespace PDMWebService
             Console.WriteLine("Таск выполняеться. клиенту ответили что то...");
         }
 
-       public TaskData[]  GetTasksData(int userId, TasksTypes type, TaskStatuses status)
-        {
-            return taskSystemMonitor.GetTasksData(userId, type, status);
+       public TaskData[]  GetTasksData( )
+        { 
+            return taskManager.GetTasksData( );
         }
 
+         
+        #region del
         //        int nWorkerThreads;
         //        int nCompletionThreads;
         //        ThreadPool.GetMaxThreads(out nWorkerThreads, out nCompletionThreads);
@@ -237,5 +239,6 @@ namespace PDMWebService
         //            }
 
         //Console.WriteLine("Таск выполняеться. клиенту ответили что то...");
+        #endregion
     }
 }

@@ -56,5 +56,11 @@
         <elementListCompartment Id="c3be5bf5-eeb7-4446-bb65-d367aa96fbdc" absoluteBounds="0.88999999999999968, 3.96, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
+    <classShape Id="913ae87b-2635-495a-8883-16171f8f0e79" absoluteBounds="10.125, 4.25, 2, 1.9631982421875">
+      <DataClassMoniker Name="/DbModelDataContext/ActiveTask" />
+      <nestedChildShapes>
+        <elementListCompartment Id="693d7916-3c39-49c3-aae8-ab215bdddb29" absoluteBounds="10.14, 4.71, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
   </nestedChildShapes>
 </ordesignerObjectsDiagram>

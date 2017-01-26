@@ -10,11 +10,12 @@ namespace ServiceLibrary.DataContracts
         public int TaskId { get; set; }
         [DataMember]
         public int User { get; set; }
-        public TaskStatuses Status { get; set; }
+        [DataMember]
+        public int Status { get; set; }
         [DataMember]
         public string[] Designation { get; set; }
 
         [DataMember]
-        public TasksTypes type { get; set; }
+        public int type { get; set; }
     }
 }

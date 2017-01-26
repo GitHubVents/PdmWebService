@@ -158,6 +158,14 @@ namespace PDMWebService.TaskSystem.Data
 			}
 		}
 		
+		public System.Data.Linq.Table<ActiveTask> ActiveTasks
+		{
+			get
+			{
+				return this.GetTable<ActiveTask>();
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.CreateFlap", IsComposable=true)]
 		public object CreateFlap([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> type, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> wight, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> height, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> userId, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> status, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="DateTime")] System.Nullable<System.DateTime> timeStart, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> typeTask, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> materialId, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> isOuter, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Float")] System.Nullable<double> thickness)
 		{
@@ -1521,6 +1529,123 @@ namespace PDMWebService.TaskSystem.Data
 			if ((this.PropertyChanged != null))
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ActiveTasks")]
+	public partial class ActiveTask
+	{
+		
+		private int _Id;
+		
+		private int _TypeTask;
+		
+		private int _Status;
+		
+		private System.Nullable<System.DateTime> _TimeStart;
+		
+		private int _UserId;
+		
+		private int _DataTaskId;
+		
+		public ActiveTask()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.Always, DbType="Int NOT NULL IDENTITY", IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this._Id = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TypeTask", DbType="Int NOT NULL")]
+		public int TypeTask
+		{
+			get
+			{
+				return this._TypeTask;
+			}
+			set
+			{
+				if ((this._TypeTask != value))
+				{
+					this._TypeTask = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Int NOT NULL")]
+		public int Status
+		{
+			get
+			{
+				return this._Status;
+			}
+			set
+			{
+				if ((this._Status != value))
+				{
+					this._Status = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TimeStart", DbType="DateTime")]
+		public System.Nullable<System.DateTime> TimeStart
+		{
+			get
+			{
+				return this._TimeStart;
+			}
+			set
+			{
+				if ((this._TimeStart != value))
+				{
+					this._TimeStart = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="Int NOT NULL")]
+		public int UserId
+		{
+			get
+			{
+				return this._UserId;
+			}
+			set
+			{
+				if ((this._UserId != value))
+				{
+					this._UserId = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DataTaskId", DbType="Int NOT NULL")]
+		public int DataTaskId
+		{
+			get
+			{
+				return this._DataTaskId;
+			}
+			set
+			{
+				if ((this._DataTaskId != value))
+				{
+					this._DataTaskId = value;
+				}
 			}
 		}
 	}

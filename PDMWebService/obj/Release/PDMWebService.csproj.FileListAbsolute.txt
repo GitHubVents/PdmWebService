@@ -1,5 +1,3 @@
-D:\Vlad\PDM-WebService\PDMWebService\bin\Release\TaskDb.mdf
-D:\Vlad\PDM-WebService\PDMWebService\bin\Release\TaskDb_log.ldf
 D:\Vlad\PDM-WebService\PDMWebService\bin\Release\PDMWebService.exe.config
 D:\Vlad\PDM-WebService\PDMWebService\bin\Release\PDMWebService.exe.manifest
 D:\Vlad\PDM-WebService\PDMWebService\bin\Release\PDMWebService.application

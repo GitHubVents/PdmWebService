@@ -79,7 +79,7 @@
       <HintPath>..\..\..\Новая папка\Projects VisualStudio\Source\ExportPartData\ExportPartData\bin\Release\ExportPartData.dll</HintPath>
     </Reference>
     <Reference Include="ServiceLibrary">
-      <HintPath>..\ServiceLibrary\bin\Debug\ServiceLibrary.dll</HintPath>
+      <HintPath>..\ServiceLibrary\bin\Release\ServiceLibrary.dll</HintPath>
     </Reference>
     <Reference Include="SolidWorks.Interop.sldworks">
       <HintPath>..\..\..\Program Files\SOLIDWORKS Corp\SOLIDWORKS\api\redist\SolidWorks.Interop.sldworks.dll</HintPath>
@@ -187,7 +187,6 @@
       <LastGenOutput>SwPlusDbLinqORM.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="PDMWebService_TemporaryKey.pfx" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -224,13 +223,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Data\PDM\doc.txt" />
-    <Content Include="TaskDb.mdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TaskDb_log.ldf">
-      <DependentUpon>TaskDb.mdf</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="TaskSystem\Data\DbModel.dbml.layout">

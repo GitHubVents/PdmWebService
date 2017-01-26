@@ -102,26 +102,26 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PDMWebService.exe" size="512472">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PDMWebService.exe" size="513496">
       <assemblyIdentity name="PDMWebService" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>gpbmO33z6hBVQD6mIfjb1joLKxmK+qchsJgb2WU6p4g=</dsig:DigestValue>
+        <dsig:DigestValue>phAUNMX32ICnCIpvXNBqP/i0X7WTbRILv0IbWpgqkUg=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ServiceLibrary.dll" size="15872">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ServiceLibrary.dll" size="16384">
       <assemblyIdentity name="ServiceLibrary" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>0r2O39m3z6EuZ3EqfV6d7j48mOfihWC/IzH3fXp7G1s=</dsig:DigestValue>
+        <dsig:DigestValue>Au2VSeDxz4BMoLYgl/ftyo95cwnOK9JQg/lAlCyYMFo=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -165,24 +165,6 @@
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
       <dsig:DigestValue>VliIbZ3tgiwBFdhbcjZG6TIpu/HtQAEspDJBuk1VsOo=</dsig:DigestValue>
-    </hash>
-  </file>
-  <file name="TaskDb.mdf" size="3276800" writeableType="applicationData">
-    <hash>
-      <dsig:Transforms>
-        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-      </dsig:Transforms>
-      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>Bos43ggNi5R+WQKhtO7rXMsrcva7YUdScU8CcR6A0rM=</dsig:DigestValue>
-    </hash>
-  </file>
-  <file name="TaskDb_log.ldf" size="573440" writeableType="applicationData">
-    <hash>
-      <dsig:Transforms>
-        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-      </dsig:Transforms>
-      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>nFi2dqCTL07hQIKAIDLEaUgY9YSBiSMJiQjNXWjyf/Y=</dsig:DigestValue>
     </hash>
   </file>
   <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
