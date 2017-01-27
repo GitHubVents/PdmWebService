@@ -3,7 +3,7 @@ using PDM_WebService.WcfServiceLibrary.DataContracts;
 using ServiceLibrary.TaskSystem.Constants;
 using ServiceLibrary.DataContracts;
 
-namespace PDM_WebService.WcfServiceLibrary
+namespace ServiceLibrary
 {
 
     [ServiceContract]

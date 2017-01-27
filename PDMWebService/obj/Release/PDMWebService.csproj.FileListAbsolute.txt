@@ -17,9 +17,9 @@ D:\Vlad\PDM-WebService\PDMWebService\bin\Release\VentsCadLibrary.pdb
 D:\Vlad\PDM-WebService\PDMWebService\bin\Release\VentsMaterials.pdb
 D:\Vlad\PDM-WebService\PDMWebService\bin\Release\AddinConvertTo.pdb
 D:\Vlad\PDM-WebService\PDMWebService\bin\Release\PdmAsmBomToXml.pdb
-D:\Vlad\PDM-WebService\PDMWebService\obj\Release\PDMWebService.csprojResolveAssemblyReference.cache
 D:\Vlad\PDM-WebService\PDMWebService\obj\Release\PDMWebService.TrustInfo.xml
 D:\Vlad\PDM-WebService\PDMWebService\obj\Release\PDMWebService.exe.manifest
 D:\Vlad\PDM-WebService\PDMWebService\obj\Release\PDMWebService.application
 D:\Vlad\PDM-WebService\PDMWebService\obj\Release\PDMWebService.exe
 D:\Vlad\PDM-WebService\PDMWebService\obj\Release\PDMWebService.pdb
+D:\Vlad\PDM-WebService\PDMWebService\obj\Release\PDMWebService.csprojResolveAssemblyReference.cache

@@ -14,19 +14,19 @@ using PDM_WebService.WcfServiceLibrary;
 using ServiceLibrary.DataContracts;
 
 class TaskManager : AbstractSingeton<TaskManager>
-{ 
-    private DbModelDataContext context;
+{
+    private DbModelDataContext _dataBaseNodel;
 
     /// <summary>
     /// Data base classes model.
     /// </summary>
-    private DbModelDataContext Context
+    private DbModelDataContext DataBaseModel
     {
         get
         {
-            if (context == null)
-                context = new DbModelDataContext();
-            return context;
+            if (_dataBaseNodel == null)
+                _dataBaseNodel = new DbModelDataContext();
+            return _dataBaseNodel;
         }
 
     }
@@ -39,58 +39,59 @@ class TaskManager : AbstractSingeton<TaskManager>
     #region create task of generetion
     public void CreateVibroInsertion(int height, int wight, VibroInsertionTypes type, int userId = 0)
     {
-        Context.CreateTaskVibroInserion((int)type, wight, height, userId, (int)TaskStatuses.Waiting, DateTime.Today, (int)TasksTypes.VibroInsertion);
-        Context.SubmitChanges();
-        if (!ExistTaskToExecute())
-            Execute();
+        //Context.CreateTaskVibroInserion((int)type, wight, height, userId, (int)TaskStatuses.Waiting, DateTime.Today, (int)TasksTypes.VibroInsertion);
+        //Context.SubmitChanges();
+        //if (!ExistTaskToExecute())
+        //    Execute();
     }
     public void CreateRoof(int height, int wight, RoofTypes type, int userId = 0)
     {
-        Context.CreateTaskRoof((int)type, wight, height, userId, (int)TaskStatuses.Waiting, DateTime.Today, (int)TasksTypes.Roof);
-        Context.SubmitChanges();
-        if (!ExistTaskToExecute())
-            Execute();
+        //Context.CreateTaskRoof((int)type, wight, height, userId, (int)TaskStatuses.Waiting, DateTime.Today, (int)TasksTypes.Roof);
+        //Context.SubmitChanges();
+        //if (!ExistTaskToExecute())
+        //    Execute();
     }
     public void CreateFlap(FlapTypes type, int height, int wight, Meterials material, bool isOuter, float thickness, int userId = 0)
     {
-        Context.CreateFlap((int)type, wight, height, userId, (int)TaskStatuses.Waiting, DateTime.Today, (int)TasksTypes.Flap, (int)material, Convert.ToByte(isOuter), thickness);
-        Context.SubmitChanges();
-        if (!ExistTaskToExecute())
-            Execute();
+        //Context.CreateFlap((int)type, wight, height, userId, (int)TaskStatuses.Waiting, DateTime.Today, (int)TasksTypes.Flap, (int)material, Convert.ToByte(isOuter), thickness);
+        //Context.SubmitChanges();
+        //if (!ExistTaskToExecute())
+        //    Execute();
     }
+
     #region not ported panel builder..
-    public void CreatePanel(
-        PanelProfiles profil,
-        PanelTypes type,
-        int height,
-        int wight,
-        Meterials outerMaterial,
-        Meterials innerMaterial,
-        double thicknessInnerMaterial = 0.7f,
-        double thicknessOterMaterial = 0.7f,
-        int userId = 0
-        )
-    {
+    public void CreatePanel() { 
+    //    PanelProfiles profil,
+    //    PanelTypes type,
+    //    int height,
+    //    int wight,
+    //    Meterials outerMaterial,
+    //    Meterials innerMaterial,
+    //    double thicknessInnerMaterial = 0.7f,
+    //    double thicknessOterMaterial = 0.7f,
+    //    int userId = 0
+    //    )
+    //{
 
-        Context.CreatePanel
-            (
-                (int)TaskStatuses.Waiting,
-                (int)TasksTypes.Panel,
-                userId,
-                DateTime.Today,
-                (int)profil,
-                (int)type, wight,
-                height,
-                (int)outerMaterial,
-                (int)innerMaterial,
-                thicknessInnerMaterial,
-                thicknessOterMaterial
-            );
+    //    Context.CreatePanel
+    //        (
+    //            (int)TaskStatuses.Waiting,
+    //            (int)TasksTypes.Panel,
+    //            userId,
+    //            DateTime.Today,
+    //            (int)profil,
+    //            (int)type, wight,
+    //            height,
+    //            (int)outerMaterial,
+    //            (int)innerMaterial,
+    //            thicknessInnerMaterial,
+    //            thicknessOterMaterial
+    //        );
 
-        Context.SubmitChanges();
+    //    Context.SubmitChanges();
 
-        //   if (!ExistTaskToExecute())
-        Execute();
+    //    //   if (!ExistTaskToExecute())
+    //    Execute();
     }
     #endregion
     public void CreateMountingFrame()
@@ -98,23 +99,32 @@ class TaskManager : AbstractSingeton<TaskManager>
         //  AirCadExecutor.Instance.mou
     }
     #endregion
-    public void CreatePdf(int[] idPdmArr, int userId = 0)
+
+    public void CreatePdf(int[] arrayDocumentId, int userId = 0)
     {
 
-        Console.WriteLine("Created pdf task");
+        //Console.WriteLine("Created pdf task");
 
-        int TaskId = Context.CreateTaskInstance(userId, (int)TaskStatuses.Waiting, DateTime.Today, (int)TasksTypes.Pdf);
-        foreach (var idPdm in idPdmArr)
-        {
-            Context.CreatePdf(idPdm, TaskId);
-        }
+        //int TaskId = Context.CreateTaskInstance(userId, (int)TaskStatuses.Waiting, (int)TasksTypes.Pdf);
+        //foreach (var idPdm in idPdmArr)
+        //{
+        //    Context.CreatePdf(idPdm, TaskId);
+        //}
 
-        Context.SubmitChanges();
-        if (!ExistTaskToExecute())
+        //Context.SubmitChanges();
+        //if (!ExistExecutingTask())
+        //{
+        //    //threadExecute.Start();
+        //    Execute();
+        //}
+
+
+       int taskInstanceId =  this.DataBaseModel.Tasks_SetTaskInstance((int)TasksTypes.Pdf, 100500);
+        foreach (var item in arrayDocumentId)
         {
-            //threadExecute.Start();
-            Execute();
+            this.DataBaseModel.Tasks_SetTaskSelection(taskInstanceId,)
         }
+     
     }
 
 
@@ -122,14 +132,14 @@ class TaskManager : AbstractSingeton<TaskManager>
     {
         Console.WriteLine("Created dxf task");
 
-        int TaskId = Context.CreateTaskInstance(userId, (int)TaskStatuses.Waiting, DateTime.Today, (int)TasksTypes.Dxf);
+        int TaskId = DataBaseModel.CreateTaskInstance(userId, (int)TaskStatuses.Waiting, (int)TasksTypes.Dxf);
         foreach (var idPdm in idPdmArr)
         {
-            Context.CreateDxf(idPdm, TaskId);
+            DataBaseModel.CreateDxf(idPdm, TaskId);
         }
 
-        Context.SubmitChanges();
-        if (!ExistTaskToExecute())
+        DataBaseModel.SubmitChanges();
+        if (!ExistExecutingTask())
         {
             //threadExecute.Start();
             Execute();
@@ -140,9 +150,9 @@ class TaskManager : AbstractSingeton<TaskManager>
     {
         Console.WriteLine("Created == PDF == task");
         TaskInstance taskInstance;
-        if (!ExistTaskToExecute() && ExistWaitingTasks())
+        if (!ExistExecutingTask() && ExistWaitingTasks())
         {
-            taskInstance = Context.TaskInstances.First(tskInst => tskInst.Status == (int)TaskStatuses.Waiting);
+            taskInstance = DataBaseModel.TaskInstances.First(tskInst => tskInst.TaskStatus == (int)TaskStatuses.Waiting);
             ApplyExecution(taskInstance.Id);
         }
         else
@@ -150,87 +160,87 @@ class TaskManager : AbstractSingeton<TaskManager>
             throw new Exception("In queue is not  tasks to perform and waiting. Possibly incorrect saving a task");
         }
 
-        if (taskInstance != null && taskInstance.Status == (int)TaskStatuses.Execution)
+        if (taskInstance != null && taskInstance.TaskStatus == (int)TaskStatuses.Execution)
         {
             switch (taskInstance.TypeTask)
             {
                 #region generetion
-                case (int)TasksTypes.VibroInsertion:
-                    VibroInsertion vibroInsertion = Context.VibroInsertions.First(eachVbrInsert => eachVbrInsert.Id == taskInstance.DataTaskId);
-                    Console.WriteLine("Выполнение таска: " + (TasksTypes)taskInstance.TypeTask);
-                    try
-                    {
-                        VibroInsertionBuilder builder = new VibroInsertionBuilder();
-                        var pathToConveredFile = builder.Build(vibroInsertion.TypeVibroInsert.ToString(), vibroInsertion.Width.ToString(), vibroInsertion.Height.ToString());
-                        try
-                        {
-                            Console.WriteLine("Генерация " + (TasksTypes)taskInstance.TypeTask + " завершена...\nпуть к файлу: " + pathToConveredFile + "\n");
-                            ApplyCompleted(taskInstance.Id);
-                        }
-                        catch (Exception exception)
-                        {
-                            Console.WriteLine("Неудалось скопировать путь к сгенерированому файлу " + exception.ToString() + "\n");
-                        }
+                //case (int)TasksTypes.VibroInsertion:
+                //    VibroInsertion vibroInsertion = Context.VibroInsertions.First(eachVbrInsert => eachVbrInsert.Id == taskInstance.DataTaskId);
+                //    Console.WriteLine("Выполнение таска: " + (TasksTypes)taskInstance.TypeTask);
+                //    try
+                //    {
+                //        VibroInsertionBuilder builder = new VibroInsertionBuilder();
+                //        var pathToConveredFile = builder.Build(vibroInsertion.TypeVibroInsert.ToString(), vibroInsertion.Width.ToString(), vibroInsertion.Height.ToString());
+                //        try
+                //        {
+                //            Console.WriteLine("Генерация " + (TasksTypes)taskInstance.TypeTask + " завершена...\nпуть к файлу: " + pathToConveredFile + "\n");
+                //            ApplyCompleted(taskInstance.Id);
+                //        }
+                //        catch (Exception exception)
+                //        {
+                //            Console.WriteLine("Неудалось скопировать путь к сгенерированому файлу " + exception.ToString() + "\n");
+                //        }
 
 
-                        Console.WriteLine("task id: " + taskInstance.Id + " type task: " + (TasksTypes)taskInstance.TypeTask + " data: [" + vibroInsertion.Height + "," + vibroInsertion.Width + "]");
+                //        Console.WriteLine("task id: " + taskInstance.Id + " type task: " + (TasksTypes)taskInstance.TypeTask + " data: [" + vibroInsertion.Height + "," + vibroInsertion.Width + "]");
 
-                    }
-                    catch (Exception exception)
-                    {
-                        ApplyError(taskInstance.Id);
-                        // save the cause of the error in log & simplified in data base
-                        Console.WriteLine("Error:\n" + exception.ToString());
-                    }
-                    break;
+                //    }
+                //    catch (Exception exception)
+                //    {
+                //        ApplyError(taskInstance.Id);
+                //        // save the cause of the error in log & simplified in data base
+                //        Console.WriteLine("Error:\n" + exception.ToString());
+                //    }
+                //    break;
 
-                case (int)TasksTypes.Roof:
-                    Roof roof = Context.Roofs.First(eachRoof => eachRoof.Id == taskInstance.DataTaskId);
+                //case (int)TasksTypes.Roof:
+                //    Roof roof = Context.Roofs.First(eachRoof => eachRoof.Id == taskInstance.DataTaskId);
 
-                    Console.WriteLine("Выполнение таска: " + (TasksTypes)taskInstance.TypeTask);
+                //    Console.WriteLine("Выполнение таска: " + (TasksTypes)taskInstance.TypeTask);
 
-                    try
-                    {
-                        AirCadExecutor.Instance.Roof(roof.RoofType.ToString(), roof.Width.ToString(), roof.Height.ToString());
-                        ApplyCompleted(taskInstance.Id);
-                        Console.WriteLine(taskInstance.Id + " " + taskInstance.TypeTask + " " + roof.Height + " " + roof.Width);
-                        Console.WriteLine("Генерация " + (TasksTypes)taskInstance.TypeTask + " завершена");
-                    }
-                    catch (Exception exception)
-                    {
-                        ApplyError(taskInstance.Id);
-                        // save the cause of the error in log & simplified in data base
-                        Console.WriteLine("Error:\n" + exception.ToString());
-                    }
-                    break;
+                //    try
+                //    {
+                //        AirCadExecutor.Instance.Roof(roof.RoofType.ToString(), roof.Width.ToString(), roof.Height.ToString());
+                //        ApplyCompleted(taskInstance.Id);
+                //        Console.WriteLine(taskInstance.Id + " " + taskInstance.TypeTask + " " + roof.Height + " " + roof.Width);
+                //        Console.WriteLine("Генерация " + (TasksTypes)taskInstance.TypeTask + " завершена");
+                //    }
+                //    catch (Exception exception)
+                //    {
+                //        ApplyError(taskInstance.Id);
+                //        // save the cause of the error in log & simplified in data base
+                //        Console.WriteLine("Error:\n" + exception.ToString());
+                //    }
+                //    break;
 
-                case (int)TasksTypes.Flap:
+                //case (int)TasksTypes.Flap:
 
-                    Flap flap = Context.Flaps.First(each => each.Id == taskInstance.DataTaskId);
-                    Console.WriteLine("Выполнение таска: " + (TasksTypes)taskInstance.TypeTask);
-                    AirCadExecutor.Instance.Dumper(
-                        flap.FlapType.ToString(),
-                        flap.Width.ToString(),
-                        flap.Height.ToString(),
-                         flap.isOuter == 1 ? true : false,
-                         new string[] { flap.MaterialId.ToString(), flap.Thickness.ToString() }
-                         );
-                    Console.WriteLine("Генерация " + (TasksTypes)taskInstance.TypeTask + " завершена");
-                    ApplyCompleted(taskInstance.Id);
-                    break;
+                //    Flap flap = Context.Flaps.First(each => each.Id == taskInstance.DataTaskId);
+                //    Console.WriteLine("Выполнение таска: " + (TasksTypes)taskInstance.TypeTask);
+                //    AirCadExecutor.Instance.Dumper(
+                //        flap.FlapType.ToString(),
+                //        flap.Width.ToString(),
+                //        flap.Height.ToString(),
+                //         flap.isOuter == 1 ? true : false,
+                //         new string[] { flap.MaterialId.ToString(), flap.Thickness.ToString() }
+                //         );
+                //    Console.WriteLine("Генерация " + (TasksTypes)taskInstance.TypeTask + " завершена");
+                //    ApplyCompleted(taskInstance.Id);
+                //    break;
 
-                case (int)TasksTypes.Panel:
-                    //    AirCadExecutor.Instance.Panels30Build();
-                    Console.WriteLine("Эмуляция генерирования панели. Time out: 5 seconds");
-                    System.Threading.Thread.Sleep(5000);
-                    break;
+                //case (int)TasksTypes.Panel:
+                //    //    AirCadExecutor.Instance.Panels30Build();
+                //    Console.WriteLine("Эмуляция генерирования панели. Time out: 5 seconds");
+                //    System.Threading.Thread.Sleep(5000);
+                //    break;
                 #endregion
 
                 #region dxf
                 case (int)TasksTypes.Dxf:
                     try
                     {
-                        IEnumerable<DxfTarget> dxfTargets = Context.DxfTargets.Where(each => each.TaskId == taskInstance.Id);
+                        IEnumerable<DxfTarget> dxfTargets = DataBaseModel.DxfTargets.Where(each => each.TaskId == taskInstance.Id);
                         foreach (var eachDxfTarget in dxfTargets)
                         {
                             var pdm = PdmFactory.CreateSolidWorksPdmAdapter(); // add conditions: which of pdm systems will be initialised.                          
@@ -255,7 +265,7 @@ class TaskManager : AbstractSingeton<TaskManager>
                 case (int)TasksTypes.Pdf:
                     try
                     {
-                        IEnumerable<PdfTarget> pdfTargets = Context.PdfTargets.Where(each => each.TaskId == taskInstance.Id);
+                        IEnumerable<PdfTarget> pdfTargets = DataBaseModel.PdfTargets.Where(each => each.TaskId == taskInstance.Id);
                         foreach (var eachPdfTarget in pdfTargets)
                         {
                             //PdfBuilder.Instance.PdfFolder = @"D:\TEMP\pdf";
@@ -313,41 +323,43 @@ class TaskManager : AbstractSingeton<TaskManager>
 
     private void ApplyError(int id)
     {
-        Context.TaskInstances.First(eachTask => eachTask.Id == id).Status = (int)TaskStatuses.Error;
-        Context.SubmitChanges();
+        DataBaseModel.TaskInstances.First(eachTask => eachTask.Id == id).TaskStatus = (int)TaskStatuses.Error;
+        DataBaseModel.SubmitChanges();
     }
 
 
     private void ApplyCompleted(int id)
     {
-        Context.TaskInstances.First(eachTask => eachTask.Id == id).Status = (int)TaskStatuses.Completed;
-        Context.SubmitChanges();
+        DataBaseModel.TaskInstances.First(eachTask => eachTask.Id == id).TaskStatus = (int)TaskStatuses.Completed;
+        DataBaseModel.SubmitChanges();
     }
 
     private void ApplyWaiting(int id)
     {
-        Context.TaskInstances.First(eachTask => eachTask.Id == id).Status = (int)TaskStatuses.Waiting;
-        Context.SubmitChanges();
+        DataBaseModel.TaskInstances.First(eachTask => eachTask.Id == id).TaskStatus = (int)TaskStatuses.Waiting;
+        DataBaseModel.SubmitChanges();
     }
 
 
     private void ApplyExecution(int id)
     {
-        Context.TaskInstances.First(eachTask => eachTask.Id == id).Status = (int)TaskStatuses.Execution;
-        Context.SubmitChanges();
+        DataBaseModel.TaskInstances.First(eachTask => eachTask.Id == id).TaskStatus = (int)TaskStatuses.Execution;
+        DataBaseModel.SubmitChanges();
 
     }
     #endregion
 
-    #region exist 
-    private bool ExistTaskToExecute()
+    #region exist  
+    private bool ExistExecutingTask()
     {
-        return this.Context.ExistTaskToExecute() == 1 ? true : false;
+        int counExecutingTasks = DataBaseModel.View_ActiveTasks.Where(eachTask => eachTask.TaskStatus == (int)TaskStatuses.Execution).Count();
+        return counExecutingTasks > 1 ? true : false;
     }
 
     private bool ExistWaitingTasks()
     {
-        return this.Context.ExistWaitingTasks() == 1 ? true : false;
+      int countWaitingTasks =  DataBaseModel.View_ActiveTasks.Where(eachTask => eachTask.TaskStatus == (int)TaskStatuses.Waiting).Count();
+        return countWaitingTasks > 1 ? true : false;
     }
 
 
@@ -355,23 +367,17 @@ class TaskManager : AbstractSingeton<TaskManager>
 
     public TaskData[] GetTasksData( )
     {         
-        List<TaskData> TaskDataList = new List<TaskData>();  
-        var pdm = PdmFactory.CreateSolidWorksPdmAdapter() as SolidWorksPdmAdapter; // temp
-
-
-        var taskListFromDb = Context.ActiveTasks;
-        Console.WriteLine("Count tasks: " + taskListFromDb.Count());
-        foreach (var task in taskListFromDb)
+        List<TaskData> TaskDataList = new List<TaskData>();   
+        var activeTasks = DataBaseModel.View_ActiveTasks; 
+        foreach (var task in activeTasks)
         { 
-
             TaskDataList.Add(
                 new TaskData()
                 {
-                    TaskId = task.Id,
-                    type = task.TypeTask,
-                    Status = task.Status,
-                    User = task.UserId
-
+                    TaskId = task.TaskInstanceID,
+                    type = (int)task.TaskID,
+                    Status = task.TaskStatus,
+                    User = task.InitUserID
                 });
  
         }

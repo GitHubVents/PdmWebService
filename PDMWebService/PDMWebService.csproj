@@ -78,6 +78,10 @@
     <Reference Include="ExportPartData">
       <HintPath>..\..\..\Новая папка\Projects VisualStudio\Source\ExportPartData\ExportPartData\bin\Release\ExportPartData.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="ServiceLibrary">
       <HintPath>..\ServiceLibrary\bin\Release\ServiceLibrary.dll</HintPath>
     </Reference>
@@ -187,6 +191,7 @@
       <LastGenOutput>SwPlusDbLinqORM.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
+    <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

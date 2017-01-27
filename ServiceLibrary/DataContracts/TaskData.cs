@@ -7,6 +7,7 @@ namespace ServiceLibrary.DataContracts
    public class TaskData
     {
         [DataMember]
+   
         public int TaskId { get; set; }
         [DataMember]
         public int User { get; set; }

@@ -1034,3 +1034,4 @@ System.ArgumentException: Не удалось добавить значение 
    в PDMWebService.Service.Start() в D:\Vlad\PDM-WebService\PDMWebService\Service.cs:строка 46
 Служба запущена
 Служба запущена
+Служба запущена

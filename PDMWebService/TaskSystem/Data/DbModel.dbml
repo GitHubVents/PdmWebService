@@ -1,55 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="TaskDataBase" Class="DbModelDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Connection Mode="AppSettings" ConnectionString="Data Source=pdmsrv;Initial Catalog=TaskDataBase;Persist Security Info=True;User ID=AirVentsCad" SettingsObjectName="PDMWebService.Properties.Settings" SettingsPropertyName="TaskDataBaseConnectionString1" Provider="System.Data.SqlClient" />
-  <Table Name="dbo.VibroInsertions" Member="VibroInsertions">
-    <Type Name="VibroInsertion">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Height" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Width" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="TypeVibroInsert" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Flaps" Member="Flaps">
-    <Type Name="Flap">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Height" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Width" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="FlapType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="MaterialId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="isOuter" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Thickness" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Panels" Member="Panels">
-    <Type Name="Panel">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="PanelProfil" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="PanelType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Height" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Width" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="OuterMaterial" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="InnerMaterial" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="ThicknessOuterMaterial" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Column Name="ThicknessInnerMaterial" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Roofs" Member="Roofs">
-    <Type Name="Roof">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Height" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Width" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="RoofType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-    </Type>
-  </Table>
-  <Table Name="dbo.TaskInstance" Member="TaskInstances">
-    <Type Name="TaskInstance">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="TypeTask" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="TimeStart" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="UserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="DataTaskId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-    </Type>
-  </Table>
   <Table Name="dbo.TaskSystemLog" Member="TaskSystemLogs">
     <Type Name="TaskSystemLog">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsDbGenerated="true" CanBeNull="false" />
@@ -58,108 +8,56 @@
       <Column Name="Coments" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
-  <Table Name="dbo.TaskType" Member="TaskTypes">
-    <Type Name="TaskType">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Title" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+  <Table Name="dbo.TaskSelection" Member="TaskSelections">
+    <Type Name="TaskSelection">
+      <Column Name="TaskInstanceID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="DocumentID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Version" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ConfigurationID" Type="System.Int32" DbType="Int" CanBeNull="true" />
     </Type>
   </Table>
-  <Table Name="dbo.DxfTargets" Member="DxfTargets">
-    <Type Name="DxfTarget">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="IpPdm" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="TaskId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+  <Table Name="dbo.Tasks" Member="Tasks">
+    <Type Name="Task">
+      <Column Name="TaskID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TaskName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
-  <Table Name="dbo.PdfTargets" Member="PdfTargets">
-    <Type Name="PdfTarget">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="IpPdm" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="TaskId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+  <Table Name="dbo.TaskInstance" Member="TaskInstances">
+    <Type Name="TaskInstance">
+      <Column Name="TaskInstanceID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TaskID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="StartTime" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="EndTime" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="TaskStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="InitUserID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
-  <Table Name="dbo.ActiveTasks" Member="ActiveTasks">
-    <Type Name="ActiveTask">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="TypeTask" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="TimeStart" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="UserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="DataTaskId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+  <Table Name="dbo.View_ActiveTasks" Member="View_ActiveTasks">
+    <Type Name="View_ActiveTask">
+      <Column Name="TaskInstanceID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TaskID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="StartTime" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="EndTime" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="TaskStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="InitUserID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
-  <Function Name="dbo.CreateFlap" Method="CreateFlap" IsComposable="true">
-    <Parameter Name="type" Type="System.Int32" DbType="Int" />
-    <Parameter Name="wight" Type="System.Int32" DbType="Int" />
-    <Parameter Name="height" Type="System.Int32" DbType="Int" />
-    <Parameter Name="userId" Type="System.Int32" DbType="Int" />
-    <Parameter Name="status" Type="System.Int32" DbType="Int" />
-    <Parameter Name="timeStart" Type="System.DateTime" DbType="DateTime" />
-    <Parameter Name="typeTask" Type="System.Int32" DbType="Int" />
-    <Parameter Name="materialId" Type="System.Int32" DbType="Int" />
-    <Parameter Name="isOuter" Type="System.Int32" DbType="Int" />
-    <Parameter Name="thickness" Type="System.Double" DbType="Float" />
-    <Return Type="object" />
-  </Function>
-  <Function Name="dbo.ExistWaitingTasks" Method="ExistWaitingTasks">
+  <Function Name="dbo.Tasks_SetTaskStatus" Method="Tasks_SetTaskStatus">
+    <Parameter Name="TaskStatus" Parameter="taskStatus" Type="System.Int32" DbType="Int" />
+    <Parameter Name="TaskInstanceID" Parameter="taskInstanceID" Type="System.Int32" DbType="Int" />
     <Return Type="System.Int32" />
   </Function>
-  <Function Name="dbo.CreatePanel" Method="CreatePanel">
-    <Parameter Name="status" Type="System.Int32" DbType="Int" />
-    <Parameter Name="typeTask" Type="System.Int32" DbType="Int" />
-    <Parameter Name="userId" Type="System.Int32" DbType="Int" />
-    <Parameter Name="timeStart" Type="System.DateTime" DbType="DateTime" />
-    <Parameter Name="panelProfil" Type="System.Int32" DbType="Int" />
-    <Parameter Name="panelType" Type="System.Int32" DbType="Int" />
-    <Parameter Name="wight" Type="System.Int32" DbType="Int" />
-    <Parameter Name="height" Type="System.Int32" DbType="Int" />
-    <Parameter Name="outerMaterial" Type="System.Int32" DbType="Int" />
-    <Parameter Name="innerMaterial" Type="System.Int32" DbType="Int" />
-    <Parameter Name="thicknessOuterMaterial" Type="System.Double" DbType="Float" />
-    <Parameter Name="thicknessInnerMaterial" Type="System.Double" DbType="Float" />
+  <Function Name="dbo.Tasks_SetTaskInstance" Method="Tasks_SetTaskInstance">
+    <Parameter Name="TaskID" Parameter="taskID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="InitUserID" Parameter="initUserID" Type="System.Int32" DbType="Int" />
     <Return Type="System.Int32" />
   </Function>
-  <Function Name="dbo.CreateTaskRoof" Method="CreateTaskRoof">
-    <Parameter Name="type" Type="System.Int32" DbType="Int" />
-    <Parameter Name="wight" Type="System.Int32" DbType="Int" />
-    <Parameter Name="height" Type="System.Int32" DbType="Int" />
-    <Parameter Name="userId" Type="System.Int32" DbType="Int" />
-    <Parameter Name="status" Type="System.Int32" DbType="Int" />
-    <Parameter Name="timeStart" Type="System.DateTime" DbType="DateTime" />
-    <Parameter Name="typeTask" Type="System.Int32" DbType="Int" />
+  <Function Name="dbo.Tasks_DeleteTaskInstances" Method="Tasks_DeleteTaskInstances">
     <Return Type="System.Int32" />
   </Function>
-  <Function Name="dbo.CreateTaskVibroInserion" Method="CreateTaskVibroInserion">
-    <Parameter Name="type" Type="System.Int32" DbType="Int" />
-    <Parameter Name="wight" Type="System.Int32" DbType="Int" />
-    <Parameter Name="height" Type="System.Int32" DbType="Int" />
-    <Parameter Name="userId" Type="System.Int32" DbType="Int" />
-    <Parameter Name="status" Type="System.Int32" DbType="Int" />
-    <Parameter Name="timeStart" Type="System.DateTime" DbType="DateTime" />
-    <Parameter Name="taskType" Type="System.Int32" DbType="Int" />
-    <Return Type="System.Int32" />
-  </Function>
-  <Function Name="dbo.ExistTaskToExecute" Method="ExistTaskToExecute">
-    <Return Type="System.Int32" />
-  </Function>
-  <Function Name="dbo.LastTaskId" Method="LastTaskId">
-    <Return Type="System.Int32" />
-  </Function>
-  <Function Name="dbo.CreateTaskInstance" Method="CreateTaskInstance">
-    <Parameter Name="userId" Type="System.Int32" DbType="Int" />
-    <Parameter Name="status" Type="System.Int32" DbType="Int" />
-    <Parameter Name="timeStart" Type="System.DateTime" DbType="DateTime" />
-    <Parameter Name="taskType" Type="System.Int32" DbType="Int" />
-    <Return Type="System.Int32" />
-  </Function>
-  <Function Name="dbo.CreateDxf" Method="CreateDxf">
-    <Parameter Name="ipPdm" Type="System.Int32" DbType="Int" />
-    <Parameter Name="taskId" Type="System.Int32" DbType="Int" />
-    <Return Type="System.Int32" />
-  </Function>
-  <Function Name="dbo.CreatePdf" Method="CreatePdf">
-    <Parameter Name="ipPdm" Type="System.Int32" DbType="Int" />
-    <Parameter Name="taskId" Type="System.Int32" DbType="Int" />
+  <Function Name="dbo.Tasks_SetTaskSelection" Method="Tasks_SetTaskSelection">
+    <Parameter Name="TaskInstanceID" Parameter="taskInstanceID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="DocumentID" Parameter="documentID" Type="System.Int32" DbType="Int" />
     <Return Type="System.Int32" />
   </Function>
 </Database>

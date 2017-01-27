@@ -55,7 +55,6 @@
     <Compile Include="DataContracts\Specification.cs" />
     <Compile Include="DataContracts\TaskData.cs" />
     <Compile Include="DataContracts\TransmittableFile.cs" />
-    <Compile Include="IMonitorTaskSystem.cs" />
     <Compile Include="ISolidWebService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TaskSysrtem\Constants\Constants.cs" />

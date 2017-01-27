@@ -1,22 +1,17 @@
-﻿
-using PDM_WebService.WcfServiceLibrary;
-using PDM_WebService.WcfServiceLibrary.DataContracts;
+﻿using PDM_WebService.WcfServiceLibrary.DataContracts;
 using PDMWebService.Data.PDM;
 using PDMWebService.Data.Solid;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using ServiceLibrary.TaskSystem.Constants;
-using EPDM.Interop.epdm;
-using System.Threading;
 using ServiceLibrary.DataContracts;
+using ServiceLibrary;
 
 namespace PDMWebService
 {
     class ServiceInterfaice : ISolidWebService 
     { 
-        private TaskManager taskManager;
-        private ITaskSystemMonitor taskSystemMonitor;
+        private TaskManager taskManager; 
         public ServiceInterfaice()
         {
             taskManager = TaskManager.Instance;

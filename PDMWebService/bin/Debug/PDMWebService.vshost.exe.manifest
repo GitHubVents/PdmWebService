@@ -54,6 +54,18 @@
     </dependentAssembly>
   </dependency>
   <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Bullzip.PDFWriter.dll" size="108544">
+      <assemblyIdentity name="Bullzip.PdfWriter" version="4.0.0.0" publicKeyToken="041D71CACB6E853C" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>Hq0vdJjd8kiDit4PPzmgcVpO3etez60P3ag8DuhXAxQ=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ExportPartData.dll" size="1979904">
       <assemblyIdentity name="ExportPartData" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
@@ -90,26 +102,26 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PDMWebService.exe" size="475096">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PDMWebService.exe" size="541656">
       <assemblyIdentity name="PDMWebService" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>eiZ58besHRElyPwucBmEkLVDbx8XEHysp5TrJQs3VCA=</dsig:DigestValue>
+        <dsig:DigestValue>7OswXKjOfWTZtriPKvx46JvgYOQES37vlszBy8p+YcI=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ServiceLibrary.dll" size="15360">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ServiceLibrary.dll" size="16384">
       <assemblyIdentity name="ServiceLibrary" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>N5ZAZBgJ1NDQpaUY/7vZtSD5f4p/16sIrcOts0Lz688=</dsig:DigestValue>
+        <dsig:DigestValue>/nLYEt1m821gCqEeP6NctMum6R/LuefqOvKo/McVEzI=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -137,31 +149,22 @@
       </hash>
     </dependentAssembly>
   </dependency>
-  <file name="PDMWebService.exe.config" size="4957">
+  <file name="Data\PDM\doc.txt" size="184">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>xqvwkBXeWONqKQoj3ZyZDR+YmQwRmGuAy1y+I8DHUiA=</dsig:DigestValue>
+      <dsig:DigestValue>sPyqxWTdizwWjgjDB5ba7qa8p85YVGPOvrqadU9Ex/Y=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="TaskDb.mdf" size="3276800" writeableType="applicationData">
+  <file name="PDMWebService.exe.config" size="5364">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>PlJUSMf8xzYVeqYvFBm9UXZMnED6dobPudd0vsZ/lvc=</dsig:DigestValue>
-    </hash>
-  </file>
-  <file name="TaskDb_log.ldf" size="573440" writeableType="applicationData">
-    <hash>
-      <dsig:Transforms>
-        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-      </dsig:Transforms>
-      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>JmhVs/5Dh6PyZpKHbr6AgGKynpO70HABisISo42quos=</dsig:DigestValue>
+      <dsig:DigestValue>VliIbZ3tgiwBFdhbcjZG6TIpu/HtQAEspDJBuk1VsOo=</dsig:DigestValue>
     </hash>
   </file>
   <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">

@@ -30,30 +30,12 @@ namespace PDMWebService.TaskSystem.Data
 		
     #region Extensibility Method Definitions
     partial void OnCreated();
-    partial void InsertVibroInsertion(VibroInsertion instance);
-    partial void UpdateVibroInsertion(VibroInsertion instance);
-    partial void DeleteVibroInsertion(VibroInsertion instance);
-    partial void InsertFlap(Flap instance);
-    partial void UpdateFlap(Flap instance);
-    partial void DeleteFlap(Flap instance);
-    partial void InsertPanel(Panel instance);
-    partial void UpdatePanel(Panel instance);
-    partial void DeletePanel(Panel instance);
-    partial void InsertRoof(Roof instance);
-    partial void UpdateRoof(Roof instance);
-    partial void DeleteRoof(Roof instance);
+    partial void InsertTask(Task instance);
+    partial void UpdateTask(Task instance);
+    partial void DeleteTask(Task instance);
     partial void InsertTaskInstance(TaskInstance instance);
     partial void UpdateTaskInstance(TaskInstance instance);
     partial void DeleteTaskInstance(TaskInstance instance);
-    partial void InsertTaskType(TaskType instance);
-    partial void UpdateTaskType(TaskType instance);
-    partial void DeleteTaskType(TaskType instance);
-    partial void InsertDxfTarget(DxfTarget instance);
-    partial void UpdateDxfTarget(DxfTarget instance);
-    partial void DeleteDxfTarget(DxfTarget instance);
-    partial void InsertPdfTarget(PdfTarget instance);
-    partial void UpdatePdfTarget(PdfTarget instance);
-    partial void DeletePdfTarget(PdfTarget instance);
     #endregion
 		
 		public DbModelDataContext() : 
@@ -86,35 +68,27 @@ namespace PDMWebService.TaskSystem.Data
 			OnCreated();
 		}
 		
-		public System.Data.Linq.Table<VibroInsertion> VibroInsertions
+		public System.Data.Linq.Table<TaskSystemLog> TaskSystemLogs
 		{
 			get
 			{
-				return this.GetTable<VibroInsertion>();
+				return this.GetTable<TaskSystemLog>();
 			}
 		}
 		
-		public System.Data.Linq.Table<Flap> Flaps
+		public System.Data.Linq.Table<TaskSelection> TaskSelections
 		{
 			get
 			{
-				return this.GetTable<Flap>();
+				return this.GetTable<TaskSelection>();
 			}
 		}
 		
-		public System.Data.Linq.Table<Panel> Panels
+		public System.Data.Linq.Table<Task> Tasks
 		{
 			get
 			{
-				return this.GetTable<Panel>();
-			}
-		}
-		
-		public System.Data.Linq.Table<Roof> Roofs
-		{
-			get
-			{
-				return this.GetTable<Roof>();
+				return this.GetTable<Task>();
 			}
 		}
 		
@@ -126,1023 +100,40 @@ namespace PDMWebService.TaskSystem.Data
 			}
 		}
 		
-		public System.Data.Linq.Table<TaskSystemLog> TaskSystemLogs
+		public System.Data.Linq.Table<View_ActiveTask> View_ActiveTasks
 		{
 			get
 			{
-				return this.GetTable<TaskSystemLog>();
+				return this.GetTable<View_ActiveTask>();
 			}
 		}
 		
-		public System.Data.Linq.Table<TaskType> TaskTypes
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.Tasks_SetTaskStatus")]
+		public int Tasks_SetTaskStatus([global::System.Data.Linq.Mapping.ParameterAttribute(Name="TaskStatus", DbType="Int")] System.Nullable<int> taskStatus, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="TaskInstanceID", DbType="Int")] System.Nullable<int> taskInstanceID)
 		{
-			get
-			{
-				return this.GetTable<TaskType>();
-			}
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), taskStatus, taskInstanceID);
+			return ((int)(result.ReturnValue));
 		}
 		
-		public System.Data.Linq.Table<DxfTarget> DxfTargets
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.Tasks_SetTaskInstance")]
+		public int Tasks_SetTaskInstance([global::System.Data.Linq.Mapping.ParameterAttribute(Name="TaskID", DbType="Int")] System.Nullable<int> taskID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="InitUserID", DbType="Int")] System.Nullable<int> initUserID)
 		{
-			get
-			{
-				return this.GetTable<DxfTarget>();
-			}
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), taskID, initUserID);
+			return ((int)(result.ReturnValue));
 		}
 		
-		public System.Data.Linq.Table<PdfTarget> PdfTargets
-		{
-			get
-			{
-				return this.GetTable<PdfTarget>();
-			}
-		}
-		
-		public System.Data.Linq.Table<ActiveTask> ActiveTasks
-		{
-			get
-			{
-				return this.GetTable<ActiveTask>();
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.CreateFlap", IsComposable=true)]
-		public object CreateFlap([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> type, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> wight, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> height, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> userId, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> status, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="DateTime")] System.Nullable<System.DateTime> timeStart, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> typeTask, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> materialId, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> isOuter, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Float")] System.Nullable<double> thickness)
-		{
-			return ((object)(this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), type, wight, height, userId, status, timeStart, typeTask, materialId, isOuter, thickness).ReturnValue));
-		}
-		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.ExistWaitingTasks")]
-		public int ExistWaitingTasks()
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.Tasks_DeleteTaskInstances")]
+		public int Tasks_DeleteTaskInstances()
 		{
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())));
 			return ((int)(result.ReturnValue));
 		}
 		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.CreatePanel")]
-		public int CreatePanel([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> status, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> typeTask, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> userId, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="DateTime")] System.Nullable<System.DateTime> timeStart, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> panelProfil, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> panelType, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> wight, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> height, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> outerMaterial, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> innerMaterial, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Float")] System.Nullable<double> thicknessOuterMaterial, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Float")] System.Nullable<double> thicknessInnerMaterial)
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.Tasks_SetTaskSelection")]
+		public int Tasks_SetTaskSelection([global::System.Data.Linq.Mapping.ParameterAttribute(Name="TaskInstanceID", DbType="Int")] System.Nullable<int> taskInstanceID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="DocumentID", DbType="Int")] System.Nullable<int> documentID)
 		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), status, typeTask, userId, timeStart, panelProfil, panelType, wight, height, outerMaterial, innerMaterial, thicknessOuterMaterial, thicknessInnerMaterial);
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), taskInstanceID, documentID);
 			return ((int)(result.ReturnValue));
-		}
-		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.CreateTaskRoof")]
-		public int CreateTaskRoof([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> type, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> wight, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> height, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> userId, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> status, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="DateTime")] System.Nullable<System.DateTime> timeStart, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> typeTask)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), type, wight, height, userId, status, timeStart, typeTask);
-			return ((int)(result.ReturnValue));
-		}
-		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.CreateTaskVibroInserion")]
-		public int CreateTaskVibroInserion([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> type, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> wight, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> height, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> userId, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> status, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="DateTime")] System.Nullable<System.DateTime> timeStart, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> taskType)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), type, wight, height, userId, status, timeStart, taskType);
-			return ((int)(result.ReturnValue));
-		}
-		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.ExistTaskToExecute")]
-		public int ExistTaskToExecute()
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())));
-			return ((int)(result.ReturnValue));
-		}
-		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.LastTaskId")]
-		public int LastTaskId()
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())));
-			return ((int)(result.ReturnValue));
-		}
-		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.CreateTaskInstance")]
-		public int CreateTaskInstance([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> userId, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> status, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="DateTime")] System.Nullable<System.DateTime> timeStart, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> taskType)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), userId, status, timeStart, taskType);
-			return ((int)(result.ReturnValue));
-		}
-		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.CreateDxf")]
-		public int CreateDxf([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> ipPdm, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> taskId)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), ipPdm, taskId);
-			return ((int)(result.ReturnValue));
-		}
-		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.CreatePdf")]
-		public int CreatePdf([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> ipPdm, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> taskId)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), ipPdm, taskId);
-			return ((int)(result.ReturnValue));
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.VibroInsertions")]
-	public partial class VibroInsertion : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private int _Height;
-		
-		private int _Width;
-		
-		private int _TypeVibroInsert;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnHeightChanging(int value);
-    partial void OnHeightChanged();
-    partial void OnWidthChanging(int value);
-    partial void OnWidthChanged();
-    partial void OnTypeVibroInsertChanging(int value);
-    partial void OnTypeVibroInsertChanged();
-    #endregion
-		
-		public VibroInsertion()
-		{
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Height", DbType="Int NOT NULL")]
-		public int Height
-		{
-			get
-			{
-				return this._Height;
-			}
-			set
-			{
-				if ((this._Height != value))
-				{
-					this.OnHeightChanging(value);
-					this.SendPropertyChanging();
-					this._Height = value;
-					this.SendPropertyChanged("Height");
-					this.OnHeightChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Width", DbType="Int NOT NULL")]
-		public int Width
-		{
-			get
-			{
-				return this._Width;
-			}
-			set
-			{
-				if ((this._Width != value))
-				{
-					this.OnWidthChanging(value);
-					this.SendPropertyChanging();
-					this._Width = value;
-					this.SendPropertyChanged("Width");
-					this.OnWidthChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TypeVibroInsert", DbType="Int NOT NULL")]
-		public int TypeVibroInsert
-		{
-			get
-			{
-				return this._TypeVibroInsert;
-			}
-			set
-			{
-				if ((this._TypeVibroInsert != value))
-				{
-					this.OnTypeVibroInsertChanging(value);
-					this.SendPropertyChanging();
-					this._TypeVibroInsert = value;
-					this.SendPropertyChanged("TypeVibroInsert");
-					this.OnTypeVibroInsertChanged();
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Flaps")]
-	public partial class Flap : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private int _Height;
-		
-		private int _Width;
-		
-		private int _FlapType;
-		
-		private int _MaterialId;
-		
-		private int _isOuter;
-		
-		private int _Thickness;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnHeightChanging(int value);
-    partial void OnHeightChanged();
-    partial void OnWidthChanging(int value);
-    partial void OnWidthChanged();
-    partial void OnFlapTypeChanging(int value);
-    partial void OnFlapTypeChanged();
-    partial void OnMaterialIdChanging(int value);
-    partial void OnMaterialIdChanged();
-    partial void OnisOuterChanging(int value);
-    partial void OnisOuterChanged();
-    partial void OnThicknessChanging(int value);
-    partial void OnThicknessChanged();
-    #endregion
-		
-		public Flap()
-		{
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Height", DbType="Int NOT NULL")]
-		public int Height
-		{
-			get
-			{
-				return this._Height;
-			}
-			set
-			{
-				if ((this._Height != value))
-				{
-					this.OnHeightChanging(value);
-					this.SendPropertyChanging();
-					this._Height = value;
-					this.SendPropertyChanged("Height");
-					this.OnHeightChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Width", DbType="Int NOT NULL")]
-		public int Width
-		{
-			get
-			{
-				return this._Width;
-			}
-			set
-			{
-				if ((this._Width != value))
-				{
-					this.OnWidthChanging(value);
-					this.SendPropertyChanging();
-					this._Width = value;
-					this.SendPropertyChanged("Width");
-					this.OnWidthChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FlapType", DbType="Int NOT NULL")]
-		public int FlapType
-		{
-			get
-			{
-				return this._FlapType;
-			}
-			set
-			{
-				if ((this._FlapType != value))
-				{
-					this.OnFlapTypeChanging(value);
-					this.SendPropertyChanging();
-					this._FlapType = value;
-					this.SendPropertyChanged("FlapType");
-					this.OnFlapTypeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MaterialId", DbType="Int NOT NULL")]
-		public int MaterialId
-		{
-			get
-			{
-				return this._MaterialId;
-			}
-			set
-			{
-				if ((this._MaterialId != value))
-				{
-					this.OnMaterialIdChanging(value);
-					this.SendPropertyChanging();
-					this._MaterialId = value;
-					this.SendPropertyChanged("MaterialId");
-					this.OnMaterialIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_isOuter", DbType="Int NOT NULL")]
-		public int isOuter
-		{
-			get
-			{
-				return this._isOuter;
-			}
-			set
-			{
-				if ((this._isOuter != value))
-				{
-					this.OnisOuterChanging(value);
-					this.SendPropertyChanging();
-					this._isOuter = value;
-					this.SendPropertyChanged("isOuter");
-					this.OnisOuterChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Thickness", DbType="Int NOT NULL")]
-		public int Thickness
-		{
-			get
-			{
-				return this._Thickness;
-			}
-			set
-			{
-				if ((this._Thickness != value))
-				{
-					this.OnThicknessChanging(value);
-					this.SendPropertyChanging();
-					this._Thickness = value;
-					this.SendPropertyChanged("Thickness");
-					this.OnThicknessChanged();
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Panels")]
-	public partial class Panel : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private int _PanelProfil;
-		
-		private int _PanelType;
-		
-		private int _Height;
-		
-		private int _Width;
-		
-		private int _OuterMaterial;
-		
-		private int _InnerMaterial;
-		
-		private double _ThicknessOuterMaterial;
-		
-		private double _ThicknessInnerMaterial;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnPanelProfilChanging(int value);
-    partial void OnPanelProfilChanged();
-    partial void OnPanelTypeChanging(int value);
-    partial void OnPanelTypeChanged();
-    partial void OnHeightChanging(int value);
-    partial void OnHeightChanged();
-    partial void OnWidthChanging(int value);
-    partial void OnWidthChanged();
-    partial void OnOuterMaterialChanging(int value);
-    partial void OnOuterMaterialChanged();
-    partial void OnInnerMaterialChanging(int value);
-    partial void OnInnerMaterialChanged();
-    partial void OnThicknessOuterMaterialChanging(double value);
-    partial void OnThicknessOuterMaterialChanged();
-    partial void OnThicknessInnerMaterialChanging(double value);
-    partial void OnThicknessInnerMaterialChanged();
-    #endregion
-		
-		public Panel()
-		{
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PanelProfil", DbType="Int NOT NULL")]
-		public int PanelProfil
-		{
-			get
-			{
-				return this._PanelProfil;
-			}
-			set
-			{
-				if ((this._PanelProfil != value))
-				{
-					this.OnPanelProfilChanging(value);
-					this.SendPropertyChanging();
-					this._PanelProfil = value;
-					this.SendPropertyChanged("PanelProfil");
-					this.OnPanelProfilChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PanelType", DbType="Int NOT NULL")]
-		public int PanelType
-		{
-			get
-			{
-				return this._PanelType;
-			}
-			set
-			{
-				if ((this._PanelType != value))
-				{
-					this.OnPanelTypeChanging(value);
-					this.SendPropertyChanging();
-					this._PanelType = value;
-					this.SendPropertyChanged("PanelType");
-					this.OnPanelTypeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Height", DbType="Int NOT NULL")]
-		public int Height
-		{
-			get
-			{
-				return this._Height;
-			}
-			set
-			{
-				if ((this._Height != value))
-				{
-					this.OnHeightChanging(value);
-					this.SendPropertyChanging();
-					this._Height = value;
-					this.SendPropertyChanged("Height");
-					this.OnHeightChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Width", DbType="Int NOT NULL")]
-		public int Width
-		{
-			get
-			{
-				return this._Width;
-			}
-			set
-			{
-				if ((this._Width != value))
-				{
-					this.OnWidthChanging(value);
-					this.SendPropertyChanging();
-					this._Width = value;
-					this.SendPropertyChanged("Width");
-					this.OnWidthChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OuterMaterial", DbType="Int NOT NULL")]
-		public int OuterMaterial
-		{
-			get
-			{
-				return this._OuterMaterial;
-			}
-			set
-			{
-				if ((this._OuterMaterial != value))
-				{
-					this.OnOuterMaterialChanging(value);
-					this.SendPropertyChanging();
-					this._OuterMaterial = value;
-					this.SendPropertyChanged("OuterMaterial");
-					this.OnOuterMaterialChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InnerMaterial", DbType="Int NOT NULL")]
-		public int InnerMaterial
-		{
-			get
-			{
-				return this._InnerMaterial;
-			}
-			set
-			{
-				if ((this._InnerMaterial != value))
-				{
-					this.OnInnerMaterialChanging(value);
-					this.SendPropertyChanging();
-					this._InnerMaterial = value;
-					this.SendPropertyChanged("InnerMaterial");
-					this.OnInnerMaterialChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ThicknessOuterMaterial", DbType="Float NOT NULL")]
-		public double ThicknessOuterMaterial
-		{
-			get
-			{
-				return this._ThicknessOuterMaterial;
-			}
-			set
-			{
-				if ((this._ThicknessOuterMaterial != value))
-				{
-					this.OnThicknessOuterMaterialChanging(value);
-					this.SendPropertyChanging();
-					this._ThicknessOuterMaterial = value;
-					this.SendPropertyChanged("ThicknessOuterMaterial");
-					this.OnThicknessOuterMaterialChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ThicknessInnerMaterial", DbType="Float NOT NULL")]
-		public double ThicknessInnerMaterial
-		{
-			get
-			{
-				return this._ThicknessInnerMaterial;
-			}
-			set
-			{
-				if ((this._ThicknessInnerMaterial != value))
-				{
-					this.OnThicknessInnerMaterialChanging(value);
-					this.SendPropertyChanging();
-					this._ThicknessInnerMaterial = value;
-					this.SendPropertyChanged("ThicknessInnerMaterial");
-					this.OnThicknessInnerMaterialChanged();
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Roofs")]
-	public partial class Roof : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private int _Height;
-		
-		private int _Width;
-		
-		private int _RoofType;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnHeightChanging(int value);
-    partial void OnHeightChanged();
-    partial void OnWidthChanging(int value);
-    partial void OnWidthChanged();
-    partial void OnRoofTypeChanging(int value);
-    partial void OnRoofTypeChanged();
-    #endregion
-		
-		public Roof()
-		{
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Height", DbType="Int NOT NULL")]
-		public int Height
-		{
-			get
-			{
-				return this._Height;
-			}
-			set
-			{
-				if ((this._Height != value))
-				{
-					this.OnHeightChanging(value);
-					this.SendPropertyChanging();
-					this._Height = value;
-					this.SendPropertyChanged("Height");
-					this.OnHeightChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Width", DbType="Int NOT NULL")]
-		public int Width
-		{
-			get
-			{
-				return this._Width;
-			}
-			set
-			{
-				if ((this._Width != value))
-				{
-					this.OnWidthChanging(value);
-					this.SendPropertyChanging();
-					this._Width = value;
-					this.SendPropertyChanged("Width");
-					this.OnWidthChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RoofType", DbType="Int NOT NULL")]
-		public int RoofType
-		{
-			get
-			{
-				return this._RoofType;
-			}
-			set
-			{
-				if ((this._RoofType != value))
-				{
-					this.OnRoofTypeChanging(value);
-					this.SendPropertyChanging();
-					this._RoofType = value;
-					this.SendPropertyChanged("RoofType");
-					this.OnRoofTypeChanged();
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TaskInstance")]
-	public partial class TaskInstance : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private int _TypeTask;
-		
-		private int _Status;
-		
-		private System.Nullable<System.DateTime> _TimeStart;
-		
-		private int _UserId;
-		
-		private int _DataTaskId;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnTypeTaskChanging(int value);
-    partial void OnTypeTaskChanged();
-    partial void OnStatusChanging(int value);
-    partial void OnStatusChanged();
-    partial void OnTimeStartChanging(System.Nullable<System.DateTime> value);
-    partial void OnTimeStartChanged();
-    partial void OnUserIdChanging(int value);
-    partial void OnUserIdChanged();
-    partial void OnDataTaskIdChanging(int value);
-    partial void OnDataTaskIdChanged();
-    #endregion
-		
-		public TaskInstance()
-		{
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TypeTask", DbType="Int NOT NULL")]
-		public int TypeTask
-		{
-			get
-			{
-				return this._TypeTask;
-			}
-			set
-			{
-				if ((this._TypeTask != value))
-				{
-					this.OnTypeTaskChanging(value);
-					this.SendPropertyChanging();
-					this._TypeTask = value;
-					this.SendPropertyChanged("TypeTask");
-					this.OnTypeTaskChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Int NOT NULL")]
-		public int Status
-		{
-			get
-			{
-				return this._Status;
-			}
-			set
-			{
-				if ((this._Status != value))
-				{
-					this.OnStatusChanging(value);
-					this.SendPropertyChanging();
-					this._Status = value;
-					this.SendPropertyChanged("Status");
-					this.OnStatusChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TimeStart", DbType="DateTime")]
-		public System.Nullable<System.DateTime> TimeStart
-		{
-			get
-			{
-				return this._TimeStart;
-			}
-			set
-			{
-				if ((this._TimeStart != value))
-				{
-					this.OnTimeStartChanging(value);
-					this.SendPropertyChanging();
-					this._TimeStart = value;
-					this.SendPropertyChanged("TimeStart");
-					this.OnTimeStartChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="Int NOT NULL")]
-		public int UserId
-		{
-			get
-			{
-				return this._UserId;
-			}
-			set
-			{
-				if ((this._UserId != value))
-				{
-					this.OnUserIdChanging(value);
-					this.SendPropertyChanging();
-					this._UserId = value;
-					this.SendPropertyChanged("UserId");
-					this.OnUserIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DataTaskId", DbType="Int NOT NULL")]
-		public int DataTaskId
-		{
-			get
-			{
-				return this._DataTaskId;
-			}
-			set
-			{
-				if ((this._DataTaskId != value))
-				{
-					this.OnDataTaskIdChanging(value);
-					this.SendPropertyChanging();
-					this._DataTaskId = value;
-					this.SendPropertyChanged("DataTaskId");
-					this.OnDataTaskIdChanged();
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
 		}
 	}
 	
@@ -1227,67 +218,148 @@ namespace PDMWebService.TaskSystem.Data
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TaskType")]
-	public partial class TaskType : INotifyPropertyChanging, INotifyPropertyChanged
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TaskSelection")]
+	public partial class TaskSelection
+	{
+		
+		private int _TaskInstanceID;
+		
+		private System.Nullable<int> _DocumentID;
+		
+		private System.Nullable<int> _Version;
+		
+		private System.Nullable<int> _ConfigurationID;
+		
+		public TaskSelection()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskInstanceID", AutoSync=AutoSync.Always, DbType="Int NOT NULL IDENTITY", IsDbGenerated=true)]
+		public int TaskInstanceID
+		{
+			get
+			{
+				return this._TaskInstanceID;
+			}
+			set
+			{
+				if ((this._TaskInstanceID != value))
+				{
+					this._TaskInstanceID = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DocumentID", DbType="Int")]
+		public System.Nullable<int> DocumentID
+		{
+			get
+			{
+				return this._DocumentID;
+			}
+			set
+			{
+				if ((this._DocumentID != value))
+				{
+					this._DocumentID = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Version", DbType="Int")]
+		public System.Nullable<int> Version
+		{
+			get
+			{
+				return this._Version;
+			}
+			set
+			{
+				if ((this._Version != value))
+				{
+					this._Version = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ConfigurationID", DbType="Int")]
+		public System.Nullable<int> ConfigurationID
+		{
+			get
+			{
+				return this._ConfigurationID;
+			}
+			set
+			{
+				if ((this._ConfigurationID != value))
+				{
+					this._ConfigurationID = value;
+				}
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Tasks")]
+	public partial class Task : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private int _Id;
+		private int _TaskID;
 		
-		private string _Title;
+		private string _TaskName;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnTitleChanging(string value);
-    partial void OnTitleChanged();
+    partial void OnTaskIDChanging(int value);
+    partial void OnTaskIDChanged();
+    partial void OnTaskNameChanging(string value);
+    partial void OnTaskNameChanged();
     #endregion
 		
-		public TaskType()
+		public Task()
 		{
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int TaskID
 		{
 			get
 			{
-				return this._Id;
+				return this._TaskID;
 			}
 			set
 			{
-				if ((this._Id != value))
+				if ((this._TaskID != value))
 				{
-					this.OnIdChanging(value);
+					this.OnTaskIDChanging(value);
 					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
+					this._TaskID = value;
+					this.SendPropertyChanged("TaskID");
+					this.OnTaskIDChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Title", DbType="Text NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
-		public string Title
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskName", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string TaskName
 		{
 			get
 			{
-				return this._Title;
+				return this._TaskName;
 			}
 			set
 			{
-				if ((this._Title != value))
+				if ((this._TaskName != value))
 				{
-					this.OnTitleChanging(value);
+					this.OnTaskNameChanging(value);
 					this.SendPropertyChanging();
-					this._Title = value;
-					this.SendPropertyChanged("Title");
-					this.OnTitleChanged();
+					this._TaskName = value;
+					this.SendPropertyChanged("TaskName");
+					this.OnTaskNameChanged();
 				}
 			}
 		}
@@ -1313,91 +385,163 @@ namespace PDMWebService.TaskSystem.Data
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.DxfTargets")]
-	public partial class DxfTarget : INotifyPropertyChanging, INotifyPropertyChanged
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TaskInstance")]
+	public partial class TaskInstance : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private int _Id;
+		private int _TaskInstanceID;
 		
-		private int _IpPdm;
+		private System.Nullable<int> _TaskID;
 		
-		private int _TaskId;
+		private System.Nullable<System.DateTime> _StartTime;
+		
+		private System.Nullable<System.DateTime> _EndTime;
+		
+		private int _TaskStatus;
+		
+		private int _InitUserID;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnIpPdmChanging(int value);
-    partial void OnIpPdmChanged();
-    partial void OnTaskIdChanging(int value);
-    partial void OnTaskIdChanged();
+    partial void OnTaskInstanceIDChanging(int value);
+    partial void OnTaskInstanceIDChanged();
+    partial void OnTaskIDChanging(System.Nullable<int> value);
+    partial void OnTaskIDChanged();
+    partial void OnStartTimeChanging(System.Nullable<System.DateTime> value);
+    partial void OnStartTimeChanged();
+    partial void OnEndTimeChanging(System.Nullable<System.DateTime> value);
+    partial void OnEndTimeChanged();
+    partial void OnTaskStatusChanging(int value);
+    partial void OnTaskStatusChanged();
+    partial void OnInitUserIDChanging(int value);
+    partial void OnInitUserIDChanged();
     #endregion
 		
-		public DxfTarget()
+		public TaskInstance()
 		{
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskInstanceID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int TaskInstanceID
 		{
 			get
 			{
-				return this._Id;
+				return this._TaskInstanceID;
 			}
 			set
 			{
-				if ((this._Id != value))
+				if ((this._TaskInstanceID != value))
 				{
-					this.OnIdChanging(value);
+					this.OnTaskInstanceIDChanging(value);
 					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
+					this._TaskInstanceID = value;
+					this.SendPropertyChanged("TaskInstanceID");
+					this.OnTaskInstanceIDChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IpPdm", DbType="Int NOT NULL")]
-		public int IpPdm
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskID", DbType="Int")]
+		public System.Nullable<int> TaskID
 		{
 			get
 			{
-				return this._IpPdm;
+				return this._TaskID;
 			}
 			set
 			{
-				if ((this._IpPdm != value))
+				if ((this._TaskID != value))
 				{
-					this.OnIpPdmChanging(value);
+					this.OnTaskIDChanging(value);
 					this.SendPropertyChanging();
-					this._IpPdm = value;
-					this.SendPropertyChanged("IpPdm");
-					this.OnIpPdmChanged();
+					this._TaskID = value;
+					this.SendPropertyChanged("TaskID");
+					this.OnTaskIDChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskId", DbType="Int NOT NULL")]
-		public int TaskId
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartTime", DbType="SmallDateTime")]
+		public System.Nullable<System.DateTime> StartTime
 		{
 			get
 			{
-				return this._TaskId;
+				return this._StartTime;
 			}
 			set
 			{
-				if ((this._TaskId != value))
+				if ((this._StartTime != value))
 				{
-					this.OnTaskIdChanging(value);
+					this.OnStartTimeChanging(value);
 					this.SendPropertyChanging();
-					this._TaskId = value;
-					this.SendPropertyChanged("TaskId");
-					this.OnTaskIdChanged();
+					this._StartTime = value;
+					this.SendPropertyChanged("StartTime");
+					this.OnStartTimeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndTime", DbType="SmallDateTime")]
+		public System.Nullable<System.DateTime> EndTime
+		{
+			get
+			{
+				return this._EndTime;
+			}
+			set
+			{
+				if ((this._EndTime != value))
+				{
+					this.OnEndTimeChanging(value);
+					this.SendPropertyChanging();
+					this._EndTime = value;
+					this.SendPropertyChanged("EndTime");
+					this.OnEndTimeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskStatus", DbType="Int NOT NULL")]
+		public int TaskStatus
+		{
+			get
+			{
+				return this._TaskStatus;
+			}
+			set
+			{
+				if ((this._TaskStatus != value))
+				{
+					this.OnTaskStatusChanging(value);
+					this.SendPropertyChanging();
+					this._TaskStatus = value;
+					this.SendPropertyChanged("TaskStatus");
+					this.OnTaskStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InitUserID", DbType="Int NOT NULL")]
+		public int InitUserID
+		{
+			get
+			{
+				return this._InitUserID;
+			}
+			set
+			{
+				if ((this._InitUserID != value))
+				{
+					this.OnInitUserIDChanging(value);
+					this.SendPropertyChanging();
+					this._InitUserID = value;
+					this.SendPropertyChanged("InitUserID");
+					this.OnInitUserIDChanged();
 				}
 			}
 		}
@@ -1423,228 +567,118 @@ namespace PDMWebService.TaskSystem.Data
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.PdfTargets")]
-	public partial class PdfTarget : INotifyPropertyChanging, INotifyPropertyChanged
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.View_ActiveTasks")]
+	public partial class View_ActiveTask
 	{
 		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		private int _TaskInstanceID;
 		
-		private int _Id;
+		private System.Nullable<int> _TaskID;
 		
-		private System.Nullable<int> _IpPdm;
+		private System.Nullable<System.DateTime> _StartTime;
 		
-		private System.Nullable<int> _TaskId;
+		private System.Nullable<System.DateTime> _EndTime;
 		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnIpPdmChanging(System.Nullable<int> value);
-    partial void OnIpPdmChanged();
-    partial void OnTaskIdChanging(System.Nullable<int> value);
-    partial void OnTaskIdChanged();
-    #endregion
+		private int _TaskStatus;
 		
-		public PdfTarget()
+		private int _InitUserID;
+		
+		public View_ActiveTask()
 		{
-			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskInstanceID", AutoSync=AutoSync.Always, DbType="Int NOT NULL IDENTITY", IsDbGenerated=true)]
+		public int TaskInstanceID
 		{
 			get
 			{
-				return this._Id;
+				return this._TaskInstanceID;
 			}
 			set
 			{
-				if ((this._Id != value))
+				if ((this._TaskInstanceID != value))
 				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
+					this._TaskInstanceID = value;
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IpPdm", DbType="Int")]
-		public System.Nullable<int> IpPdm
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskID", DbType="Int")]
+		public System.Nullable<int> TaskID
 		{
 			get
 			{
-				return this._IpPdm;
+				return this._TaskID;
 			}
 			set
 			{
-				if ((this._IpPdm != value))
+				if ((this._TaskID != value))
 				{
-					this.OnIpPdmChanging(value);
-					this.SendPropertyChanging();
-					this._IpPdm = value;
-					this.SendPropertyChanged("IpPdm");
-					this.OnIpPdmChanged();
+					this._TaskID = value;
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskId", DbType="Int")]
-		public System.Nullable<int> TaskId
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartTime", DbType="SmallDateTime")]
+		public System.Nullable<System.DateTime> StartTime
 		{
 			get
 			{
-				return this._TaskId;
+				return this._StartTime;
 			}
 			set
 			{
-				if ((this._TaskId != value))
+				if ((this._StartTime != value))
 				{
-					this.OnTaskIdChanging(value);
-					this.SendPropertyChanging();
-					this._TaskId = value;
-					this.SendPropertyChanged("TaskId");
-					this.OnTaskIdChanged();
+					this._StartTime = value;
 				}
 			}
 		}
 		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ActiveTasks")]
-	public partial class ActiveTask
-	{
-		
-		private int _Id;
-		
-		private int _TypeTask;
-		
-		private int _Status;
-		
-		private System.Nullable<System.DateTime> _TimeStart;
-		
-		private int _UserId;
-		
-		private int _DataTaskId;
-		
-		public ActiveTask()
-		{
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.Always, DbType="Int NOT NULL IDENTITY", IsDbGenerated=true)]
-		public int Id
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndTime", DbType="SmallDateTime")]
+		public System.Nullable<System.DateTime> EndTime
 		{
 			get
 			{
-				return this._Id;
+				return this._EndTime;
 			}
 			set
 			{
-				if ((this._Id != value))
+				if ((this._EndTime != value))
 				{
-					this._Id = value;
+					this._EndTime = value;
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TypeTask", DbType="Int NOT NULL")]
-		public int TypeTask
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskStatus", DbType="Int NOT NULL")]
+		public int TaskStatus
 		{
 			get
 			{
-				return this._TypeTask;
+				return this._TaskStatus;
 			}
 			set
 			{
-				if ((this._TypeTask != value))
+				if ((this._TaskStatus != value))
 				{
-					this._TypeTask = value;
+					this._TaskStatus = value;
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Int NOT NULL")]
-		public int Status
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InitUserID", DbType="Int NOT NULL")]
+		public int InitUserID
 		{
 			get
 			{
-				return this._Status;
+				return this._InitUserID;
 			}
 			set
 			{
-				if ((this._Status != value))
+				if ((this._InitUserID != value))
 				{
-					this._Status = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TimeStart", DbType="DateTime")]
-		public System.Nullable<System.DateTime> TimeStart
-		{
-			get
-			{
-				return this._TimeStart;
-			}
-			set
-			{
-				if ((this._TimeStart != value))
-				{
-					this._TimeStart = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="Int NOT NULL")]
-		public int UserId
-		{
-			get
-			{
-				return this._UserId;
-			}
-			set
-			{
-				if ((this._UserId != value))
-				{
-					this._UserId = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DataTaskId", DbType="Int NOT NULL")]
-		public int DataTaskId
-		{
-			get
-			{
-				return this._DataTaskId;
-			}
-			set
-			{
-				if ((this._DataTaskId != value))
-				{
-					this._DataTaskId = value;
+					this._InitUserID = value;
 				}
 			}
 		}
