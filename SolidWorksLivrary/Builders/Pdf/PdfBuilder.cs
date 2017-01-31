@@ -1,43 +1,52 @@
 ﻿using Bullzip.PdfWriter;
-using PDMWebService.Data.PDM;
-using PDMWebService.Properties;
-using ServiceLibrary.DataContracts;
+using Patterns;
+using Patterns.Observer;
 using SolidWorks.Interop.sldworks;
 using SolidWorks.Interop.swconst;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace PDMWebService.Data.Solid.Pdf
+namespace SolidWorksLibrary.Builders.Pdf
 {
-    public class PdfBuilder : Singleton.AbstractSingeton<PdfBuilder>
+    public class PdfBuilder :  Singeton<PdfBuilder>
     {
         /// <summary>
         /// The path to final folder
         /// </summary>
         public string PdfFolder { get; set; }
+
         /// <summary>
         /// The path to temporary folder
         /// </summary>
         public string TempPdfFolder { get; set; }
 
-        private string PrinterName { get; } = "Bullzip PDF Printer";
-        public IPdmAdapter Pdm { get; set; }
+        /// <summary>
+        /// Name virtual printer
+        /// </summary>
+        public string PrinterName { get; set; } = "Bullzip PDF Printer";
+      
         private PdfBuilder() : base()
-        { 
-            PdfFolder = Settings.Default.PdfFolder;
-            TempPdfFolder = Settings.Default.TempPdfFolder;
+        {
+            MessageObserver.Instance.SetMessage("Create PdfBuilder", MessageType.System);
+
+            // -------- default data --------------
+            PdfFolder = @"D:\TEMP\PDF";
+            TempPdfFolder = @"D:\TEMP\TEMP PDF";
+            // -------------------------------------
         }
 
-
-        public string Build(DataModel dataModel)
-        { 
-
+        /// <summary>
+        /// Build pdf view on based SolidWorks drawwing
+        /// </summary>
+        /// <param name="pathToDrawing"></param>
+        /// <returns></returns>
+        public string Build(string pathToDrawing)
+        {
+            MessageObserver.Instance.SetMessage("Start build pdf file", MessageType.System);
             try
-            {
-                int Errors = 0;
-                ModelDoc2 swModel = SolidWorksInstance.SldWoksApp.OpenDoc2(dataModel.Path, (int)swDocumentTypes_e.swDocDRAWING, false, false, true, Errors);
-                return ConvertDrwToPdf(swModel, dataModel.Path);
+            { 
+                return ConvertDrwToPdf(  pathToDrawing);
             }
             catch (Exception exception)
             {
@@ -52,8 +61,10 @@ namespace PDMWebService.Data.Solid.Pdf
         /// <param name="document">Document for building pdf</param>
         /// <param name="finalPath">Path to the build file</param>
         /// <returns></returns>
-        private string ConvertDrwToPdf(ModelDoc2 document, string path)
+        private string ConvertDrwToPdf( string path)
         {
+            int Errors = 0;
+            ModelDoc2 document = SolidWorksAdapter.SldWoksApp.OpenDoc2(path, (int)swDocumentTypes_e.swDocDRAWING, false, false, true, Errors);
             try
             {
                 ModelDocExtension swModelDocExt;
@@ -137,7 +148,7 @@ namespace PDMWebService.Data.Solid.Pdf
             if (width < height)
             {
                 pagesetup.Orientation = (int)swPageSetupOrientation_e.swPageSetupOrient_Portrait;
-                SolidWorksInstance.SldWoksApp.SetUserPreferenceIntegerValue((int)swUserPreferenceIntegerValue_e.swPageSetupPrinterOrientation, (int)swPageSetupOrientation_e.swPageSetupOrient_Portrait);
+                SolidWorksAdapter.SldWoksApp.SetUserPreferenceIntegerValue((int)swUserPreferenceIntegerValue_e.swPageSetupPrinterOrientation, (int)swPageSetupOrientation_e.swPageSetupOrient_Portrait);
                 if (width <= 0.21)
                 {
                     pagesetup.PrinterPaperSize = (int)swDwgPaperSizes_e.swDwgPaperA4sizeVertical;
@@ -168,7 +179,7 @@ namespace PDMWebService.Data.Solid.Pdf
             {
 
                 pagesetup.Orientation = (int)swPageSetupOrientation_e.swPageSetupOrient_Landscape;
-                SolidWorksInstance.SldWoksApp.SetUserPreferenceIntegerValue((int)swUserPreferenceIntegerValue_e.swPageSetupPrinterOrientation, (int)swPageSetupOrientation_e.swPageSetupOrient_Landscape);
+                SolidWorksAdapter.SldWoksApp.SetUserPreferenceIntegerValue((int)swUserPreferenceIntegerValue_e.swPageSetupPrinterOrientation, (int)swPageSetupOrientation_e.swPageSetupOrient_Landscape);
                 if (width < 0.297)
                 {
                     pagesetup.PrinterPaperSize = (int)swDwgPaperSizes_e.swDwgPaperA4sizeVertical;
@@ -238,7 +249,7 @@ namespace PDMWebService.Data.Solid.Pdf
                 files.Add(item.FullName);
             }
             PdfUtil.Merge(files.ToArray(), path, PrinterName, 5000);
-            Logger.ToLog("================\n успешная конвертация. файл сохранен по пути" + path + "\n================");
+           // Logger.ToLog("================\n успешная конвертация. файл сохранен по пути" + path + "\n================");
         }
     }
 }

@@ -2,7 +2,6 @@
 
 using System.Collections.Generic;
 using System.IO;
-using PDM_WebService.WcfServiceLibrary.DataContracts;
 using System.Data;
 using System.Linq;
 
@@ -11,6 +10,7 @@ using PDMWebService.Data.SqlData;
 using EPDM.Interop.epdm;
 using System.Threading;
 using System.Runtime.InteropServices;
+using ServiceLibrary.DataContracts;
 
 namespace PDMWebService.Data.PDM
 {

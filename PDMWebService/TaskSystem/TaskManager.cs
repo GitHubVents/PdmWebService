@@ -1,18 +1,14 @@
 ﻿using PDMWebService.Data.PDM;
 using PDMWebService.Data.Solid.Dxf;
-using PDMWebService.Data.Solid.PartBuilders;
 using PDMWebService.Data.Solid.Pdf;
 using PDMWebService.Singleton;
-using PDMWebService.TaskSystem;
 using PDMWebService.TaskSystem.Data;
 using ServiceLibrary.TaskSystem.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using PDM_WebService.WcfServiceLibrary;
 using ServiceLibrary.DataContracts;
-
+ 
 class TaskManager : AbstractSingeton<TaskManager>
 {
     private DbModelDataContext _dataBaseNodel;
@@ -266,7 +262,8 @@ class TaskManager : AbstractSingeton<TaskManager>
                         foreach (var eachTaskSelections in taskSelections)
                         {                  
                             var dataModel = pdm.GetFileById((int)eachTaskSelections.DocumentID, true); // get file data and download    
-                            DxfBulder.Instance.Build(dataModel );
+                           // DxfBulder.Instance.Build(dataModel );
+                            SolidWorksLibrary.Builders.Dxf.DxfBulder.Instance
                         }
                         ApplyCompleted(taskInstance.TaskInstanceID);
                     }

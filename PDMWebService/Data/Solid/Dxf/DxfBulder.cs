@@ -1,7 +1,6 @@
-﻿using EPDM.Interop.epdm;
-using PDM_WebService.WcfServiceLibrary.DataContracts;
-using PDMWebService.Data.PDM;
+﻿using PDMWebService.Data.PDM;
 using PDMWebService.Properties;
+using ServiceLibrary.DataContracts;
 using SolidWorks.Interop.sldworks;
 using SolidWorks.Interop.swconst;
 using System;

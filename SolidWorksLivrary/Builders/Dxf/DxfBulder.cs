@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace SolidWorksLibrary.Builders.Dxf
+ namespace SolidWorksLibrary.Builders.Dxf
 {
     /// <summary>
     /// DxfBuilder allows builds dxf views on based SolidWorks parts. 
@@ -19,7 +19,7 @@ namespace SolidWorksLibrary.Builders.Dxf
             this.solidWorksApp = SolidWorksAdapter.SldWoksApp;  // Get SolidWorks exemplar
             FolderToSaveDxf = @"D:\TEMP\dxf\"; // default value
 
-            MesageObserver.Instance.SetMessage("Create DxfBulder",MessageType.Success);
+            MessageObserver.Instance.SetMessage("Create DxfBulder",MessageType.Success);
         }
         /// <summary>
         /// SolidWorks exemplar
@@ -72,7 +72,7 @@ namespace SolidWorksLibrary.Builders.Dxf
             // callback message code from solidWorks 
             int error = 0, warnings = 0;
 
-            MesageObserver.Instance.SetMessage("Start build Dxf file", MessageType.System);
+            MessageObserver.Instance.SetMessage("Start build Dxf file", MessageType.System);
 
             bool isSave = false;
             if (dxfList == null)
@@ -89,7 +89,7 @@ namespace SolidWorksLibrary.Builders.Dxf
                         modelDoc = solidWorksApp.OpenDoc6(partPath, (int)swDocumentTypes_e.swDocPART, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, emptyConfigyration, error, warnings);
                         modelDoc = solidWorksApp.IActiveDoc2;
 
-                        MesageObserver.Instance.SetMessage("\t\tOpened document " + Path.GetFileName(partPath), MessageType.System);
+                        MessageObserver.Instance.SetMessage("\t\tOpened document " + Path.GetFileName(partPath), MessageType.System);
                         // Проверяет наличие дерева постоения в моделе.
                         if (modelDoc == null)
                         {
@@ -98,18 +98,19 @@ namespace SolidWorksLibrary.Builders.Dxf
                     }
                     catch (Exception exception)
                     {
-                        MesageObserver.Instance.SetMessage("\t\tFailed open SolidWorks document; message exception {" + exception.ToString() + " }", MessageType.Error);
+                        MessageObserver.Instance.SetMessage("\t\tFailed open SolidWorks document; message exception {" + exception.ToString() + " }", MessageType.Error);
+                        throw exception;
                     }
                 } 
 
                 bool isSheetmetal = true;
 
+                
                 if (!SolidWorksAdapter.IsSheetMetalPart((IPartDoc)modelDoc))
                 {
                     isSheetmetal = false;
-                    if (!includeNonSheetParts)
+                    if (!includeNonSheetParts) // disable build  no sheet metal parts if IsSheetMetalPart = false, and return  
                     {
-
                         SolidWorksAdapter.CloseDocument(modelDoc);
                         return isSave;
                     }
@@ -124,11 +125,11 @@ namespace SolidWorksLibrary.Builders.Dxf
                 foreach (var eachConfiguration in configurations)
                 {
                     string filePath;                    
-                    isSave = SaveThisConfigurationToDxf(eachConfiguration, fixBends ? solidWorksApp : null, modelDoc, out filePath, isSheetmetal);
+                    isSave =  SaveThisConfigurationToDxf(eachConfiguration, fixBends ? solidWorksApp : null, modelDoc, out filePath, isSheetmetal);
 
                     if (isSave)
                     {
-                        MesageObserver.Instance.SetMessage("\t\t" + eachConfiguration + " succsess building. Add to result list", MessageType.Error);
+                        MessageObserver.Instance.SetMessage("\t\t" + eachConfiguration + " succsess building. Add to result list", MessageType.Success);
                         dxfList.Add(new DxfFile
                         {
                             Configuration = eachConfiguration,
@@ -146,56 +147,96 @@ namespace SolidWorksLibrary.Builders.Dxf
 
             catch (Exception exception)
             {
-                throw exception;
+                MessageObserver.Instance.SetMessage("\t\tFailed build dxf; message exception {" + exception.ToString() + " }", MessageType.Error);
             }
             return isSave;
         }
 
+        /// <summary>
+        /// Convert to dxf input configuration of document 
+        /// </summary>
+        /// <param name="configuration">Building configuration</param>
+        /// <param name="swApp">SolidWorks exemplare</param>
+        /// <param name="swModel">Building document</param>
+        /// <param name="dxfFilePath">Output path to file</param>
+        /// <param name="isSheetmetal">Enable or disable well whether build no sheet metal parts</param>
+        /// <returns></returns>
         public bool SaveThisConfigurationToDxf(string configuration, SldWorks swApp, IModelDoc2 swModel, out string dxfFilePath, bool isSheetmetal)
         {
-
-            swModel.ShowConfiguration2(configuration);
-            swModel.EditRebuild3();
-
-            if (swApp != null && isSheetmetal)
+            dxfFilePath = string.Empty;
+            try
             {
-                List<Bends.SolidWorksFixPattern.PartBendInfo> list;
-                Bends.Fix(swApp, out list, true);
+                swModel.ShowConfiguration2(configuration);
+                swModel.EditRebuild3();
+
+                if (swApp != null && isSheetmetal)
+                {
+                    List<Bends.SolidWorksFixPattern.PartBendInfo> list;
+                    Bends.Fix(swApp, out list, true);
+                }
+
+                var sDxfName = DxfNameBuild(swModel.GetTitle(), configuration) + ".dxf";
+                dxfFilePath = Path.Combine(FolderToSaveDxf, sDxfName);
+
+                Directory.CreateDirectory(FolderToSaveDxf);
+
+                var dataAlignment = new double[12];
+
+                dataAlignment[0] = 0.0;
+                dataAlignment[1] = 0.0;
+                dataAlignment[2] = 0.0;
+                dataAlignment[3] = 1.0;
+                dataAlignment[4] = 0.0;
+                dataAlignment[5] = 0.0;
+                dataAlignment[6] = 0.0;
+                dataAlignment[7] = 1.0;
+                dataAlignment[8] = 0.0;
+                dataAlignment[9] = 0.0;
+                dataAlignment[10] = 0.0;
+                dataAlignment[11] = 1.0;
+                object varAlignment = dataAlignment;
+
+                var swPart = (IPartDoc)swModel;
+                int sheetmetalOptions = SheetMetalOptions(true, false, false, false, false, true, false);
+
+                bool isExportToDWG2 =  swPart.ExportToDWG2(dxfFilePath, swModel.GetPathName(), isSheetmetal ? (int)swExportToDWG_e.swExportToDWG_ExportSheetMetal : (int)swExportToDWG_e.swExportToDWG_ExportSelectedFacesOrLoops, true, varAlignment, false, false, sheetmetalOptions,
+                    isSheetmetal ? 0 : (int)swExportToDWG_e.swExportToDWG_ExportAnnotationViews);
+                MessageObserver.Instance.SetMessage("\t\tCompleted building "  + swModel.GetTitle() + " with configuration \"" + configuration + "\"", MessageType.System);
+                return isExportToDWG2;
             }
-
-            var sDxfName = DxfName(swModel.GetTitle(), configuration) + ".dxf";
-            dxfFilePath = Path.Combine(FolderToSaveDxf, sDxfName);
-
-            Directory.CreateDirectory(FolderToSaveDxf);
-
-            var dataAlignment = new double[12];
-
-            dataAlignment[0] = 0.0;
-            dataAlignment[1] = 0.0;
-            dataAlignment[2] = 0.0;
-            dataAlignment[3] = 1.0;
-            dataAlignment[4] = 0.0;
-            dataAlignment[5] = 0.0;
-            dataAlignment[6] = 0.0;
-            dataAlignment[7] = 1.0;
-            dataAlignment[8] = 0.0;
-            dataAlignment[9] = 0.0;
-            dataAlignment[10] = 0.0;
-            dataAlignment[11] = 1.0;
-            object varAlignment = dataAlignment;
-
-            var swPart = (IPartDoc)swModel;
-            int sheetmetalOptions = SheetMetalOptions(true, false, false, false, false, true, false);
-            Console.WriteLine("ExportToDWG");
-            return swPart.ExportToDWG2(dxfFilePath, swModel.GetPathName(), isSheetmetal ? (int)swExportToDWG_e.swExportToDWG_ExportSheetMetal : (int)swExportToDWG_e.swExportToDWG_ExportSelectedFacesOrLoops, true, varAlignment, false, false, sheetmetalOptions,
-                isSheetmetal ? 0 : (int)swExportToDWG_e.swExportToDWG_ExportAnnotationViews);
-
+            catch(Exception exception)
+            {
+                string message = "\t\tFailed build dxf  " + swModel.GetTitle() + " with configuration \"" + configuration + "\"" + exception.ToString();
+                MessageObserver.Instance.SetMessage(message, MessageType.Error);
+                return false;
+            }            
         }
-        private string DxfName(string fileName, string config)
+
+        /// <summary>
+        ///  Combinate fileName and config for new dxf file
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="config"></param>
+        /// <returns></returns>
+        private string DxfNameBuild(string fileName, string config)
         {
             return $"{fileName.Replace("ВНС-", "").ToLower().Replace(".sldprt", "")}-{config}";
         }
 
+
+
+
+        /// <summary>
+        ///  Compute sheet metal options
+        /// </summary>
+        /// <param name="ExportGeometry"></param>
+        /// <param name="IcnludeHiddenEdges"></param>
+        /// <param name="ExportBendLines"></param>
+        /// <param name="IncludeScetches"></param>
+        /// <param name="MergeCoplanarFaces"></param>
+        /// <param name="ExportLibraryFeatures"></param>
+        /// <param name="ExportFirmingTools"></param>
+        /// <returns></returns>
         private int SheetMetalOptions(bool ExportGeometry, bool IcnludeHiddenEdges, bool ExportBendLines, bool IncludeScetches, bool MergeCoplanarFaces, bool ExportLibraryFeatures, bool ExportFirmingTools)
         {
             return SheetMetalOptions(
@@ -207,7 +248,17 @@ namespace SolidWorksLibrary.Builders.Dxf
                 ExportLibraryFeatures ? 1 : 0,
                 ExportFirmingTools ? 1 : 0);
         }
-
+        /// <summary>
+        /// Compute sheet metal options
+        /// </summary>
+        /// <param name="p0"></param>
+        /// <param name="p1"></param>
+        /// <param name="p2"></param>
+        /// <param name="p3"></param>
+        /// <param name="p4"></param>
+        /// <param name="p5"></param>
+        /// <param name="p6"></param>
+        /// <returns></returns>
         private int SheetMetalOptions(int p0, int p1, int p2, int p3, int p4, int p5, int p6)
         {
             return p0 * 1 + p1 * 2 + p2 * 4 + p3 * 8 + p4 * 16 + p5 * 32 + p6 * 64;

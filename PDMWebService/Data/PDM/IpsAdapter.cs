@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EPDM.Interop.epdm;
-using PDM_WebService.WcfServiceLibrary.DataContracts;
+using ServiceLibrary.DataContracts;
 
 namespace PDMWebService.Data.PDM
 {
-  public  class IpsAdapter : Singleton.AbstractSingeton<IpsAdapter>, IPdmAdapter
+    public  class IpsAdapter : Singleton.AbstractSingeton<IpsAdapter>, IPdmAdapter
     {
 
         private IpsAdapter() :base()

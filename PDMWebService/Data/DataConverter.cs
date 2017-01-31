@@ -1,4 +1,5 @@
-﻿using PDM_WebService.WcfServiceLibrary.DataContracts;
+﻿
+using ServiceLibrary.DataContracts;
 using System;
 using System.Collections.Generic;
 using System.Data;

@@ -30,6 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Bullzip.PDFWriter, Version=4.0.0.0, Culture=neutral, PublicKeyToken=041d71cacb6e853c, processorArchitecture=MSIL" />
     <Reference Include="SolidWorks.Interop.cosworks">
       <HintPath>..\..\..\Program Files\SOLIDWORKS Corp\SOLIDWORKS\api\redist\SolidWorks.Interop.cosworks.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -71,18 +72,22 @@
     <Compile Include="Builders\Dxf\Bends.cs" />
     <Compile Include="Builders\Dxf\DxfBulder.cs" />
     <Compile Include="Builders\Dxf\DxfFile.cs" />
+    <Compile Include="Builders\Pdf\PdfBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SolidWorksInstance.cs" />
+    <Compile Include="SolidWorksAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MessageLibrary\Patterns.csproj">
       <Project>{d0abf979-d32b-453d-92d5-f9bc7bdec44e}</Project>
       <Name>Patterns</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ServiceLibrary\ServiceLibrary.csproj">
+      <Project>{72339207-CA2E-4581-BA9C-8E6A6A1052A6}</Project>
+      <Name>ServiceLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Builders\Parts\" />
-    <Folder Include="Builders\Pdf\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

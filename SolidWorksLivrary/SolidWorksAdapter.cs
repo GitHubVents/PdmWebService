@@ -34,28 +34,28 @@ namespace SolidWorksLibrary
         {
             if (sldWoks_app == null)
             {
-                MesageObserver.Instance.SetMessage("Initialize SolidWorks exemplare");
+                MessageObserver.Instance.SetMessage("Initialize SolidWorks exemplare");
             try
             {
-                MesageObserver.Instance.SetMessage("\t\tTake an existing exemplar SolidWorks Application", MessageType.Success);
+                MessageObserver.Instance.SetMessage("\t\tTake an existing exemplar SolidWorks Application", MessageType.Success);
                 sldWoks_app = (SldWorks)Marshal.GetActiveObject("SldWorks.Application"); 
             }
             catch (Exception ex)
             {
-                MesageObserver.Instance.SetMessage("\t\tFailed take an existing exemplar SolidWorks Application " + ex, MessageType.Warning);
+                MessageObserver.Instance.SetMessage("\t\tFailed take an existing exemplar SolidWorks Application " + ex, MessageType.Warning);
                 
                     Process[] processes = Process.GetProcessesByName("SLDWORKS");
                     int processesLength = processes.Length;
                     if (processesLength > 0)
                     {
-                        MesageObserver.Instance.SetMessage("\t\tFound "+ processesLength + " exemplars SolidWorks Application; Start kill", MessageType.Warning);
+                        MessageObserver.Instance.SetMessage("\t\tFound "+ processesLength + " exemplars SolidWorks Application; Start kill", MessageType.Warning);
                         foreach (var process in processes)
                         {
                             process.Kill();
                         }
                     }                    
                     sldWoks_app = new SldWorks() { Visible = true };
-                    MesageObserver.Instance.SetMessage("\t\tCreate exemplar SolidWorks Application", MessageType.Success);
+                    MessageObserver.Instance.SetMessage("\t\tCreate exemplar SolidWorks Application", MessageType.Success);
                 }
             }
         }
@@ -72,11 +72,11 @@ namespace SolidWorksLibrary
                 {
                     eachModelDoc.Close();
                 }
-                MesageObserver.Instance.SetMessage("Closed all opened documents", MessageType.Success);
+                MessageObserver.Instance.SetMessage("Closed all opened documents", MessageType.Success);
             }
             catch(Exception ex)
             {
-                MesageObserver.Instance.SetMessage("Failed close documents " + ex, MessageType.Error);
+                MessageObserver.Instance.SetMessage("Failed close documents " + ex, MessageType.Error);
             }
         }
 
@@ -93,11 +93,11 @@ namespace SolidWorksLibrary
             try
             {
                 swModel.Close();
-                MesageObserver.Instance.SetMessage("Closed opened document " + swModel.GetTitle(), MessageType.Success);
+                MessageObserver.Instance.SetMessage("Closed opened document " + swModel.GetTitle(), MessageType.Success);
             }
             catch (Exception ex)
             {
-                MesageObserver.Instance.SetMessage("Failed close document " + swModel.GetTitle() + "\t" + ex, MessageType.Error);
+                MessageObserver.Instance.SetMessage("Failed close document " + swModel.GetTitle() + "\t" + ex, MessageType.Error);
             }
         }
 
@@ -110,12 +110,12 @@ namespace SolidWorksLibrary
             CloseAllDocuments();
             try
             {
-                MesageObserver.Instance.SetMessage("Exit from  SolidWorks Application" , MessageType.Success);
+                MessageObserver.Instance.SetMessage("Exit from  SolidWorks Application" , MessageType.Success);
                 SldWoksApp.ExitApp();
             }
             catch (Exception ex)
             {
-                MesageObserver.Instance.SetMessage("Failed exit from  SolidWorks Application", MessageType.Success);
+                MessageObserver.Instance.SetMessage("Failed exit from  SolidWorks Application", MessageType.Success);
             } 
         }       
 
@@ -135,14 +135,14 @@ namespace SolidWorksLibrary
                     isSheetMetal = body.IsSheetMetal();
                     if (isSheetMetal)
                     {
-                        MesageObserver.Instance.SetMessage("Check is sheet metal part; returned " + isSheetMetal, MessageType.Success);
+                        MessageObserver.Instance.SetMessage("Check is sheet metal part; returned " + isSheetMetal, MessageType.Success);
                         return true;
                     }
                 }               
             }
             catch (Exception)
             {
-                MesageObserver.Instance.SetMessage("Failed check is sheet metal part; returned " + false, MessageType.Success);
+                MessageObserver.Instance.SetMessage("Failed check is sheet metal part; returned " + false, MessageType.Success);
                 return false;
             }
             return isSheetMetal;

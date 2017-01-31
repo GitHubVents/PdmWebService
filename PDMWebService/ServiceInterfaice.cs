@@ -1,5 +1,4 @@
-﻿using PDM_WebService.WcfServiceLibrary.DataContracts;
-using PDMWebService.Data.PDM;
+﻿using PDMWebService.Data.PDM;
 using PDMWebService.Data.Solid;
 using System;
 using System.Linq;

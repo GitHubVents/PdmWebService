@@ -14,9 +14,9 @@ namespace Patterns.Observer
     /// <summary>
     /// A single entry point to manage messages.
     /// </summary>
-    public class MesageObserver:Singeton<MesageObserver>
+    public class MessageObserver:Singeton<MessageObserver>
     {
-        protected MesageObserver() : base()
+        protected MessageObserver() : base()
         {
             SetMessage("Create observer");
         }

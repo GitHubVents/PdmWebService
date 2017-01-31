@@ -1,15 +1,10 @@
-﻿using EPDM.Interop.epdm;
-using PDM_WebService.WcfServiceLibrary.DataContracts;
-using System;
+﻿using ServiceLibrary.DataContracts;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PDMWebService.Data.PDM
 {
 
-   public interface IPdmAdapter
+    public interface IPdmAdapter
     {
       IEnumerable<DataModel> SearchDoc(string segmentName);
         void DownLoadFile(DataModel dataModel);

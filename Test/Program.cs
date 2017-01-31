@@ -1,9 +1,6 @@
-﻿using MessageLibrary;
+﻿using Patterns.Observer;
+using SolidWorksLibrary.Builders.Dxf;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Test
 {
@@ -11,16 +8,18 @@ namespace Test
     {
         static void Main(string[] args)
         {
-            MesageObserver.Instance.ReceivedMessage += Instance_ReceivedMessage;
-            var v = SolidWorksLibrary.SolidWorksAdapter.SldWoksApp;
+            MessageObserver.Instance.ReceivedMessage += Instance_ReceivedMessage;
+
+
+            DxfBulder.Instance.Build(@"D:\Vents-PDM\Проекты\Промышленная вентиляция\ВНС-47.00.420 - Патрубок металлический ПМ\ВНС-47.00.420.SLDPRT", 0, 4);
 
             Console.ReadLine();
 
         }
 
-        private static void Instance_ReceivedMessage(string massage)
+        private static void Instance_ReceivedMessage(MessageEventArgs message)
         {
-            Console.WriteLine(massage);
+            Console.WriteLine(message.Message + " type " + message.Type);
         }
     }
 }
