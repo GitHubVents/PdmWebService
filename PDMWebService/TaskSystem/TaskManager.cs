@@ -30,10 +30,20 @@ class TaskManager : AbstractSingeton<TaskManager>
         }
 
     }
+    IPdmAdapter _pdm;
+    IPdmAdapter pdm
+    {
+        get
+        {
+            if (_pdm == null)
+                _pdm = PdmFactory.CreateSolidWorksPdmAdapter(); // add conditions: which of pdm systems will be initialised.  
+            return _pdm;
 
+        }
+    }
     private TaskManager() : base()
     {
-
+      //  DxfBulder.Instance.ToSql += Instance_ToSql;
     }
 
     #region create task of generetion
@@ -102,67 +112,76 @@ class TaskManager : AbstractSingeton<TaskManager>
 
     public void CreatePdf(int[] arrayDocumentId, int userId = 0)
     {
-
-        //Console.WriteLine("Created pdf task");
-
-        //int TaskId = Context.CreateTaskInstance(userId, (int)TaskStatuses.Waiting, (int)TasksTypes.Pdf);
-        //foreach (var idPdm in idPdmArr)
-        //{
-        //    Context.CreatePdf(idPdm, TaskId);
-        //}
-
-        //Context.SubmitChanges();
-        //if (!ExistExecutingTask())
-        //{
-        //    //threadExecute.Start();
-        //    Execute();
-        //}
-
-
-       int taskInstanceId =  this.DataBaseModel.Tasks_SetTaskInstance((int)TasksTypes.Pdf, 100500);
-        foreach (var item in arrayDocumentId)
+        int taskInstanceId = 0;
+        try
         {
-            this.DataBaseModel.Tasks_SetTaskSelection(taskInstanceId,)
+         taskInstanceId = this.DataBaseModel.Tasks_SetTaskInstance((int)TasksType.Pdf, 100500);
+            foreach (var eachDocumentId in arrayDocumentId)
+            {
+                this.DataBaseModel.Tasks_SetTaskSelection(taskInstanceId, eachDocumentId);
+            }
+            this.DataBaseModel.SubmitChanges();
         }
-     
+        catch(Exception ex)
+        {
+            if (taskInstanceId != 0)
+                ApplyError(taskInstanceId);
+            Console.WriteLine("Filed Create PDF Task on TaskManager level: " + ex.ToString());
+        }
+        if (!ExistExecutingTask())
+        {
+            Execute();
+        }
     }
 
 
-    public void CreateDxf(int[] idPdmArr, int userId = 0)
+    public void CreateDxf(int[] arrayDocumentId, int userId = 0)
     {
-        Console.WriteLine("Created dxf task");
-
-        int TaskId = DataBaseModel.CreateTaskInstance(userId, (int)TaskStatuses.Waiting, (int)TasksTypes.Dxf);
-        foreach (var idPdm in idPdmArr)
+        int taskInstanceId = 0;
+        try
         {
-            DataBaseModel.CreateDxf(idPdm, TaskId);
+             taskInstanceId = this.DataBaseModel.Tasks_SetTaskInstance((int)TasksType.Dxf, 100500);
+            foreach (var eachDocumentId in arrayDocumentId)
+            {
+                this.DataBaseModel.Tasks_SetTaskSelection(taskInstanceId, eachDocumentId);
+            }
+            this.DataBaseModel.SubmitChanges();
         }
-
-        DataBaseModel.SubmitChanges();
+        catch(Exception ex)
+        {
+            if (taskInstanceId != 0)
+                ApplyError(taskInstanceId);
+            Console.WriteLine("Filed Create PDF Task on TaskManager level: " + ex.ToString());
+        }
         if (!ExistExecutingTask())
         {
-            //threadExecute.Start();
+            Console.WriteLine("Exist tasks in waiting status");
             Execute();
         }
     }
 
     private void Execute()
-    {
-        Console.WriteLine("Created == PDF == task");
+    { 
         TaskInstance taskInstance;
-        if (!ExistExecutingTask() && ExistWaitingTasks())
+        if (ExistWaitingTasks() && !ExistExecutingTask())
         {
-            taskInstance = DataBaseModel.TaskInstances.First(tskInst => tskInst.TaskStatus == (int)TaskStatuses.Waiting);
-            ApplyExecution(taskInstance.Id);
-        }
-        else
-        {
-            throw new Exception("In queue is not  tasks to perform and waiting. Possibly incorrect saving a task");
-        }
 
-        if (taskInstance != null && taskInstance.TaskStatus == (int)TaskStatuses.Execution)
+            Console.WriteLine("Not exists task in execution");
+            taskInstance = DataBaseModel.TaskInstances.First(tskInst => tskInst.TaskStatus == (int)TaskStatus.Waiting);
+            Console.WriteLine("Get tasks with waiting status");
+            ApplyExecution(taskInstance.TaskInstanceID);
+           // taskInstance = DataBaseModel.TaskInstances.First(each => each.TaskInstanceID == taskInstance.TaskInstanceID);
+        }
+        else  
         {
-            switch (taskInstance.TypeTask)
+            Console.WriteLine("In queue is not  tasks to perform and waiting. Possibly incorrect saving a task");
+            throw new Exception("In queue is not  tasks to perform and waiting. Possibly incorrect saving a task");             
+        }
+        Console.WriteLine("Gotten task instance: " + taskInstance.TaskInstanceID + "; STATUS " + taskInstance.TaskStatus + " ~ " + (TaskStatus)taskInstance.TaskStatus);
+
+        if (taskInstance != null && taskInstance.TaskStatus == (int)TaskStatus.Execution)
+        { 
+            switch (taskInstance.TaskID) // check task type
             {
                 #region generetion
                 //case (int)TasksTypes.VibroInsertion:
@@ -237,42 +256,43 @@ class TaskManager : AbstractSingeton<TaskManager>
                 #endregion
 
                 #region dxf
-                case (int)TasksTypes.Dxf:
+                case (int)TasksType.Dxf:
                     try
                     {
-                        IEnumerable<DxfTarget> dxfTargets = DataBaseModel.DxfTargets.Where(each => each.TaskId == taskInstance.Id);
-                        foreach (var eachDxfTarget in dxfTargets)
-                        {
-                            var pdm = PdmFactory.CreateSolidWorksPdmAdapter(); // add conditions: which of pdm systems will be initialised.                          
-                            var dataModel = pdm.GetFileById(eachDxfTarget.IpPdm, true); // get file data and download                           
-                            var configrations = pdm.GetConfigigurations(dataModel);
-                            DxfBulder.Instance.ToSql += Instance_ToSql;
 
-                            DxfBulder.Instance.Build(dataModel, configrations);
+                        Console.WriteLine("Execute dxf task");
+                        IEnumerable<TaskSelection> taskSelections = DataBaseModel.TaskSelections
+                            .Where(eachTaskSelection => eachTaskSelection.TaskInstanceID == taskInstance.TaskInstanceID); 
+                        foreach (var eachTaskSelections in taskSelections)
+                        {                  
+                            var dataModel = pdm.GetFileById((int)eachTaskSelections.DocumentID, true); // get file data and download    
+                            DxfBulder.Instance.Build(dataModel );
                         }
-                        ApplyCompleted(taskInstance.Id);
+                        ApplyCompleted(taskInstance.TaskInstanceID);
                     }
                     catch (Exception exception)
                     {
                         Console.WriteLine(exception.ToString());
-                        ApplyError(taskInstance.Id);
+                     ApplyError(taskInstance.TaskInstanceID);
                     }
                     break;
                 #endregion
 
                 #region pdf
 
-                case (int)TasksTypes.Pdf:
+                case (int)TasksType.Pdf:
                     try
                     {
-                        IEnumerable<PdfTarget> pdfTargets = DataBaseModel.PdfTargets.Where(each => each.TaskId == taskInstance.Id);
-                        foreach (var eachPdfTarget in pdfTargets)
-                        {
-                            //PdfBuilder.Instance.PdfFolder = @"D:\TEMP\pdf";
+
+                        Console.WriteLine("Execute pdf task");
+
+                        IEnumerable<TaskSelection> taskSelections = DataBaseModel.TaskSelections.Where(eachTaskSelection => eachTaskSelection.TaskInstanceID == taskInstance.TaskInstanceID);
+                        foreach (var taskSelection in taskSelections)
+                        { 
                             var pdm = PdmFactory.CreateSolidWorksPdmAdapter();               // add conditions: which of pdm systems will be initialised. 
                                                                                              //recomended using  PdmType with namespace PDM { SolidWorksPdm, Ips }
 
-                            var dataModel = pdm.GetFileById((int)eachPdfTarget.IpPdm, true); // get file data and download
+                            var dataModel = pdm.GetFileById((int)taskSelection.DocumentID, true); // get file data and download
 
 
                             string pathToTempFile = PdfBuilder.Instance.Build(dataModel);
@@ -282,24 +302,26 @@ class TaskManager : AbstractSingeton<TaskManager>
                             (pdm as SolidWorksPdmAdapter).CheckInOutPdm(pathToPdmFile, true);
                         }
 
-                        ApplyCompleted(taskInstance.Id);
+                        ApplyCompleted(taskInstance.TaskInstanceID);
                     }
                     catch (Exception exception)
                     {
                         Console.WriteLine(exception.ToString());
-                        ApplyError(taskInstance.Id);
+                        ApplyError(taskInstance.TaskInstanceID);
                     }
                     break;
                     #endregion
             }
 
         }
-
+        taskInstance = null;
         if (this.ExistWaitingTasks())
         {
             Execute();
         }
     }
+
+   
 
     private void Instance_ToSql(List<DxfFile> dxfList)
     {
@@ -321,51 +343,59 @@ class TaskManager : AbstractSingeton<TaskManager>
 
     #region Apply statuses of the tasks
 
-    private void ApplyError(int id)
+    private void ApplyError(int taskInstanceId)
     {
-        DataBaseModel.TaskInstances.First(eachTask => eachTask.Id == id).TaskStatus = (int)TaskStatuses.Error;
+        Console.WriteLine("Apply Error " + taskInstanceId);
+        this.DataBaseModel.Tasks_SetTaskStatus((int)TaskStatus.Error, taskInstanceId);
         DataBaseModel.SubmitChanges();
     }
 
 
-    private void ApplyCompleted(int id)
+    private void ApplyCompleted(int taskInstanceId)
     {
-        DataBaseModel.TaskInstances.First(eachTask => eachTask.Id == id).TaskStatus = (int)TaskStatuses.Completed;
+        Console.WriteLine("Apply Completed" + taskInstanceId);
+        this.DataBaseModel.Tasks_SetTaskStatus((int)TaskStatus.Completed, taskInstanceId);
         DataBaseModel.SubmitChanges();
     }
 
-    private void ApplyWaiting(int id)
+    private void ApplyWaiting(int taskInstanceId)
     {
-        DataBaseModel.TaskInstances.First(eachTask => eachTask.Id == id).TaskStatus = (int)TaskStatuses.Waiting;
+        Console.WriteLine("Apply Waiting " + taskInstanceId);
+        this.DataBaseModel.Tasks_SetTaskStatus((int)TaskStatus.Waiting, taskInstanceId);
         DataBaseModel.SubmitChanges();
     }
 
 
-    private void ApplyExecution(int id)
+    private void ApplyExecution(int taskInstanceId)
     {
-        DataBaseModel.TaskInstances.First(eachTask => eachTask.Id == id).TaskStatus = (int)TaskStatuses.Execution;
-        DataBaseModel.SubmitChanges();
+        Console.WriteLine("Apply Execution " + taskInstanceId);
 
+        this.DataBaseModel.Tasks_SetTaskStatus((int)TaskStatus.Execution, taskInstanceId);
+        DataBaseModel.SubmitChanges();
+        DataBaseModel.Refresh(System.Data.Linq.RefreshMode.OverwriteCurrentValues, DataBaseModel.TaskInstances);
+        Console.WriteLine("status after update  "+ DataBaseModel.TaskInstances.First(x => x.TaskInstanceID == taskInstanceId).TaskStatus);
+    
     }
     #endregion
 
     #region exist  
     private bool ExistExecutingTask()
     {
-        int counExecutingTasks = DataBaseModel.View_ActiveTasks.Where(eachTask => eachTask.TaskStatus == (int)TaskStatuses.Execution).Count();
-        return counExecutingTasks > 1 ? true : false;
+        int counExecutingTasks = DataBaseModel.View_ActiveTasks.Where(eachTask => eachTask.TaskStatus == (int)TaskStatus.Execution).Count();
+     
+        return counExecutingTasks > 0 ? true : false;
     }
 
     private bool ExistWaitingTasks()
     {
-      int countWaitingTasks =  DataBaseModel.View_ActiveTasks.Where(eachTask => eachTask.TaskStatus == (int)TaskStatuses.Waiting).Count();
-        return countWaitingTasks > 1 ? true : false;
+      int countWaitingTasks =  DataBaseModel.View_ActiveTasks.Where(eachTask => eachTask.TaskStatus == (int)TaskStatus.Waiting).Count();
+        return countWaitingTasks > 0 ? true : false;
     }
 
 
     #endregion
 
-    public TaskData[] GetTasksData( )
+    public TaskData[] GetActiveTasksData( )
     {         
         List<TaskData> TaskDataList = new List<TaskData>();   
         var activeTasks = DataBaseModel.View_ActiveTasks; 
@@ -375,13 +405,34 @@ class TaskManager : AbstractSingeton<TaskManager>
                 new TaskData()
                 {
                     TaskId = task.TaskInstanceID,
-                    type = (int)task.TaskID,
+                    Type = (int)task.TaskID,
                     Status = task.TaskStatus,
-                    User = task.InitUserID
+                    UserId = task.InitUserID
                 });
  
         }
         return TaskDataList.ToArray();
       
+    }
+
+    public TaskData[] GetComplitedTasksData()
+    {
+        List<TaskData> TaskDataList = new List<TaskData>();
+        var completedTasks = DataBaseModel.View_CompletedTasks;
+        Console.WriteLine("Count copmleted tasks"+completedTasks.Count());
+        foreach (var task in completedTasks)
+        { 
+            TaskDataList.Add(
+               new TaskData()
+               {
+                   TaskId = task.TaskInstanceID,
+                   Type = (int)task.TaskID,
+                   Status = task.TaskStatus,
+                   UserId = task.InitUserID
+               });
+            Console.WriteLine("Our iteration (GetComplitedTasksData)");
+        }
+        Console.WriteLine("We returns our completed tasks");
+        return TaskDataList.ToArray();
     }
 }

@@ -16,7 +16,8 @@ namespace PDMWebService.Data.Solid.Dxf
         private DxfBulder( ) : base()
         {
             this.solidWorksApp = SolidWorksInstance.SldWoksApp;
-            Pdm = SolidWorksPdmAdapter.Instance;  
+            Pdm = SolidWorksPdmAdapter.Instance;
+            FolderToSaveDxf = @"D:\TEMP\dxf\";
         }
         private   SldWorks solidWorksApp;
         private Settings Settings
@@ -28,45 +29,50 @@ namespace PDMWebService.Data.Solid.Dxf
         }
         public IPdmAdapter Pdm { get; set; }
 
+        private string FolderToSaveDxf { get; set; }
+
+
         public delegate void ToSqlHandler (  List<DxfFile> dxfList );
         public event ToSqlHandler ToSql;
 
-        public  void Build(DataModel dataModel, string[] configurations)
+        public  void Build(DataModel dataModel )
         {  
             List<DxfFile> dxfList = new List<DxfFile>(); 
-            foreach (var eachConfiguration in configurations)
-            { 
-                Save(dataModel.Path, @"D:\TEMP\dxf\", eachConfiguration, dataModel.Id, dataModel.CurrentVersion, ref dxfList, true, true, true);
-            
-                
-                    
-            }
-            if (ToSql != null)
+         //   foreach (var eachConfiguration in configurations)
+          //  { 
+                CeateDxf(dataModel.Path, dataModel.Id, dataModel.CurrentVersion, ref dxfList, true, true, false);          
+                                    
+           // }
+            if (ToSql != null && dxfList.Count >0)
                 ToSql(dxfList);
         }
  
 
-        private bool Save(string partPath, string folderToSave, string configuration, int idPdm, int version, ref List<DxfFile> dxfList, bool fixBends, bool closeAfterSave, bool includeNonSheetParts)
+
+
+        private bool CeateDxf(string partPath,/* string folderToSave , string configuration ,*/ int idPdm, int version, ref List<DxfFile> dxfList, bool fixBends, bool closeAfterSave, bool includeNonSheetParts /*Включить не листовые детали*/)
         {
-            Console.WriteLine("Построение dxf файла: " + partPath);
+            int error = 0, warnings= 0;
             bool isSave = false;
             if (dxfList == null)
                 dxfList = new List<DxfFile>();
-            if (string.IsNullOrEmpty(folderToSave))
-            {
-                folderToSave = Settings.DefaultFolderForDxf;
-            }
+            //if (string.IsNullOrEmpty(FolderToSaveDxf))
+            //{
+            //    FolderToSaveDxf = Settings.DefaultFolderForDxf;
+            //}
             try
             {
                 IModelDoc2 swModel = null;
                 if (!string.IsNullOrEmpty(partPath))
                 {
+
                     try
                     {
-                        swModel = solidWorksApp.OpenDoc6(partPath, (int)swDocumentTypes_e.swDocPART,(int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", 0, 0);
+                        string noConfiguration = "";
+                        swModel = solidWorksApp.OpenDoc6(partPath, (int)swDocumentTypes_e.swDocPART, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, noConfiguration, error, warnings);
                         swModel = solidWorksApp.IActiveDoc2; // ??
 
-                       // Проверяет наличие дерева постоения в моделе.
+                        // Проверяет наличие дерева постоения в моделе.
                         if (swModel == null)
                         {
                             return isSave;
@@ -81,8 +87,8 @@ namespace PDMWebService.Data.Solid.Dxf
                 //{
                 //    swModel = solidWorksApp.IActiveDoc2;
                 //}
-               
-                
+
+
 
                 bool isSheetmetal = true;
 
@@ -90,49 +96,55 @@ namespace PDMWebService.Data.Solid.Dxf
                 {
                     isSheetmetal = false;
                     if (!includeNonSheetParts)
-                    {
+                    { 
+
                         SolidWorksInstance.CloseDocument(swModel);
                         return isSave;
                     }
                 }
-                if (!string.IsNullOrEmpty(configuration))
+
+                //if (!string.IsNullOrEmpty(configuration))
+                //{
+                //    try
+                //    {
+                //        Console.WriteLine("Деталь из листвого метала");
+                //        string filePath;
+                //        isSave = SaveThisConfigDxf(folderToSave, configuration, fixBends ? solidWorksApp : null, swModel, out filePath, isSheetmetal);
+                //        dxfList.Add(new DxfFile
+                //        {
+                //            Configuration = configuration,
+                //            FilePath = filePath,
+                //            IdPdm = idPdm,
+                //            Version = version
+                //        });
+                //    }
+                //    catch (Exception exception)
+                //    {
+                //        throw new Exception("Failed save configurations" + exception.ToString());
+                //    }
+                //    if (closeAfterSave)
+                //    {
+                //        SolidWorksInstance.CloseDocument(swModel);
+                //    }
+                //}
+                //else
+                //{
+
+                string[] swModelConfNames2 = (string[])swModel.GetConfigurationNames();
+
+                var configurations = from name in swModelConfNames2
+                                     let config = (Configuration)swModel.GetConfigurationByName(name)
+                                     where !config.IsDerived()
+                                     select name;
+
+                foreach (var configName in configurations)
                 {
-                    try
-                    {
-                        string filePath;
-                        isSave = SaveThisConfigDxf(folderToSave, configuration, fixBends ? solidWorksApp : null, swModel, out filePath, isSheetmetal);
-                        dxfList.Add(new DxfFile
-                        {
-                            Configuration = configuration,
-                            FilePath = filePath,
-                            IdPdm = idPdm,
-                            Version = version
-                        });
-                    }
-                    catch (Exception exception)
-                    {
-                        throw new Exception("Failed save configurations" + exception.ToString());
-                    }
-                    if (closeAfterSave)
-                    {
-                        SolidWorksInstance.CloseDocument(swModel);
-                    }
-                }
-                else
-                {
+                    string filePath;
+                    //  MessageBox.Show(swModel.GetTitle() + "\nsheetmetal-" + sheetmetal.ToString());
+                    isSave = SaveThisConfigDxf(/*folderToSave,*/ configName, fixBends ? solidWorksApp : null, swModel, out filePath, isSheetmetal);
 
-                    string[] swModelConfNames2 = (string[])swModel.GetConfigurationNames();
-
-                    var configurations = from name in swModelConfNames2
-                                         let config = (Configuration)swModel.GetConfigurationByName(name)
-                                         where !config.IsDerived()
-                                         select name;
-
-                    foreach (var configName in configurations)
+                    if (isSave)
                     {
-                        string filePath;
-                        //  MessageBox.Show(swModel.GetTitle() + "\nsheetmetal-" + sheetmetal.ToString());
-                        isSave = SaveThisConfigDxf(folderToSave, configName, fixBends ? solidWorksApp : null, swModel, out filePath, isSheetmetal);
                         dxfList.Add(new DxfFile
                         {
                             Configuration = configName,
@@ -141,12 +153,13 @@ namespace PDMWebService.Data.Solid.Dxf
                             Version = version
                         });
                     }
-                    if (closeAfterSave)
-                    {
-                        SolidWorksInstance.CloseDocument(swModel);
-                    }
+                }
+                if (closeAfterSave)
+                {
+                    SolidWorksInstance.CloseDocument(swModel);
                 }
             }
+            // }
             catch (Exception exception)
             {
                 throw exception;
@@ -155,24 +168,23 @@ namespace PDMWebService.Data.Solid.Dxf
             return isSave;
         }
 
-        public   bool SaveThisConfigDxf(string folderToSave, string configuration, SldWorks swApp, IModelDoc2 swModel, out string dxfFilePath, bool sheetmetal)
+        public   bool SaveThisConfigDxf(/*string folderToSave,*/ string configuration, SldWorks swApp, IModelDoc2 swModel, out string dxfFilePath, bool isSheetmetal)
         {
 
             swModel.ShowConfiguration2(configuration);
             swModel.EditRebuild3();
 
-            if (swApp != null && sheetmetal)
+            if (swApp != null && isSheetmetal)
             {
                 List<Bends.SolidWorksFixPattern.PartBendInfo> list;
                 Bends.Fix(swApp, out list, true);
             }
 
             var sDxfName = DxfName(swModel.GetTitle(), configuration) + ".dxf";
-            string f = 
-            dxfFilePath = Path.Combine(folderToSave, sDxfName);
+                dxfFilePath = Path.Combine(FolderToSaveDxf, sDxfName); 
             //  dxfFilePath = Path.Combine(@"C:\DXF", sDxfName);
 
-            Directory.CreateDirectory(folderToSave);
+            Directory.CreateDirectory(FolderToSaveDxf);
 
             var dataAlignment = new double[12];
 
@@ -191,18 +203,22 @@ namespace PDMWebService.Data.Solid.Dxf
             object varAlignment = dataAlignment;
 
             var swPart = (IPartDoc)swModel;
-            int sheetmetalOptions = SheetMetalOptions(true, sheetmetal, false, false, false, true, false);
+            int sheetmetalOptions = SheetMetalOptions(true, false, false, false, false, true, false);
 
             //MessageBox.Show(sheetmetalOptions.ToString());                               
 
-            if (sheetmetal)
-            {
-                return swPart.ExportToDWG(dxfFilePath, swModel.GetPathName(), sheetmetal ? 1 : 2, true, varAlignment, false, false, sheetmetalOptions, sheetmetal ? 0 : 3);
-            }
-            else
-            {
-                return swModel.SaveAs4(dxfFilePath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, 0, 0);
-            }
+           // if (isSheetmetal)
+       //     {
+                Console.WriteLine("ExportToDWG");
+            return swPart.ExportToDWG2(dxfFilePath, swModel.GetPathName(), isSheetmetal ? (int)swExportToDWG_e.swExportToDWG_ExportSheetMetal : (int)swExportToDWG_e.swExportToDWG_ExportSelectedFacesOrLoops, true, varAlignment, false, false, sheetmetalOptions,
+                isSheetmetal ? 0 : (int)swExportToDWG_e.swExportToDWG_ExportAnnotationViews);
+                    // old  return swPart.ExportToDWG(dxfFilePath, swModel.GetPathName(), isSheetmetal ? 1 : 2, true, varAlignment, false, false, sheetmetalOptions, isSheetmetal ? 0 : 3);
+         //   }
+            //else
+            //{
+            //    Console.WriteLine("SaveAs4 by path " + dxfFilePath);
+            //    return swModel.SaveAs4(dxfFilePath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, 0, 0);
+            //}
         }
         private   string DxfName(string fileName, string config)
         { 

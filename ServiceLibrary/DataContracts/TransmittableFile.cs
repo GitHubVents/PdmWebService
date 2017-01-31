@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace PDM_WebService.WcfServiceLibrary.DataContracts
+namespace  ServiceLibrary.DataContracts
 {
     /// <summary>
     /// Wrapper for transfer file.

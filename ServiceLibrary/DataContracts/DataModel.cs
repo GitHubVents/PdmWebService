@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace PDM_WebService.WcfServiceLibrary.DataContracts
+namespace ServiceLibrary.DataContracts
 {
 
     [DataContract]

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace PDM_WebService.WcfServiceLibrary.DataContracts
+namespace ServiceLibrary.DataContracts
 {
     [DataContract]
    public class Specification

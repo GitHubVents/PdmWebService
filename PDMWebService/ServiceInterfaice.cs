@@ -14,25 +14,17 @@ namespace PDMWebService
         private TaskManager taskManager; 
         public ServiceInterfaice()
         {
-            taskManager = TaskManager.Instance;
-
-        }
-
-        private void InitTaskManager ()
-        {
             try
             {
-              
-             
+                taskManager = TaskManager.Instance;
             }
-            catch (Exception exception)
+            catch(Exception ex)
             {
-                Console.WriteLine(exception.ToString());
+                Console.WriteLine("Filed created TaskManager exemplar; message { " + ex + " }" );
             }
+
         }
-
-
-
+  
         public string GetPathSelectFile(DataModel dataSolidModel)
         {
             string UrlToSelectModel = " ";
@@ -47,9 +39,7 @@ namespace PDMWebService
             {
                 Logger.ToLog("Невозможно вернуть путь к файлу " + exception.Message);
             }
-            return UrlToSelectModel;
-
-           
+            return UrlToSelectModel;           
         }
 
         public TransmittableFile SelectFile(DataModel dataSolidModel)
@@ -72,9 +62,7 @@ namespace PDMWebService
             {
                 throw exception;
             }
-            return remoteInfo;
-
-           
+            return remoteInfo;           
         }
 
         public static byte[] ReadFully(System.IO.Stream input)
@@ -88,14 +76,12 @@ namespace PDMWebService
                     ms.Write(buffer, 0, read);
                 }
                 return ms.ToArray();
-            }
-             
+            }             
         }
         DataModel[] ISolidWebService.Search(string nameSegment)
         {
             Console.WriteLine(nameSegment);
-            return SolidWorksPdmAdapter.Instance.SearchDoc(nameSegment).ToArray();
-          
+            return SolidWorksPdmAdapter.Instance.SearchDoc(nameSegment).ToArray();          
         }
 
         public string[] GetConfigiguration(DataModel dataSolidModel)
@@ -175,7 +161,7 @@ namespace PDMWebService
             }
             catch (Exception exc)
             {
-                Console.WriteLine("Неудалось запустить Solid Works... \n\n" + exc.ToString());
+                Console.WriteLine("Неудалось запустить SolidWorks... \n\n" + exc.ToString());
             }
         }
 
@@ -201,24 +187,43 @@ namespace PDMWebService
 
         public void CreateDxf(int[] filesId)
         {
-            Console.WriteLine("пришел такс дхф");
+            try
+            {
+                Console.WriteLine("Input request on service: Create dxf");
                 taskManager.CreateDxf(filesId);
-            Console.WriteLine("Таск выполняеться. клиенту ответили что то...");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exeption on seb service level; message { " + ex.ToString() + " }");
+            }
         }
 
         public void CreatePdf(int[] filesId)
         {
-            Console.WriteLine("пришел такс pdf");
-            taskManager.CreatePdf(filesId);
-            Console.WriteLine("Таск выполняеться. клиенту ответили что то...");
+            try
+            {
+                Console.WriteLine("Input request service: Create pdf");
+                taskManager.CreatePdf(filesId);
+            }
+            catch ( Exception ex)
+            {
+                Console.WriteLine("Exeption on seb service level; message { " +ex.ToString() + " }" );
+            }
         }
 
-       public TaskData[]  GetTasksData( )
-        { 
-            return taskManager.GetTasksData( );
+       public TaskData[]  GetActiveTasksData( )
+        {
+               Console.WriteLine("Input request service: Create pdf");
+                return taskManager.GetActiveTasksData();
+          
         }
 
-         
+        public TaskData[] GetComplitedTasksData()
+        {
+            return taskManager.GetComplitedTasksData();
+        }
+
+
         #region del
         //        int nWorkerThreads;
         //        int nCompletionThreads;

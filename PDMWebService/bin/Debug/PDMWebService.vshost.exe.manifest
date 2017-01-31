@@ -90,6 +90,18 @@
     </dependentAssembly>
   </dependency>
   <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Newtonsoft.Json.dll" size="526336">
+      <assemblyIdentity name="Newtonsoft.Json" version="9.0.0.0" publicKeyToken="30AD4FE6B2A6AEED" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>V14w+Y5OpCyeUW7ci7sprYtQsXOj5rNrW6OeEzzOlAY=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PdmAsmBomToXml.dll" size="31232">
       <assemblyIdentity name="PdmAsmBomToXml" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
@@ -102,14 +114,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PDMWebService.exe" size="541656">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PDMWebService.exe" size="527320">
       <assemblyIdentity name="PDMWebService" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>7OswXKjOfWTZtriPKvx46JvgYOQES37vlszBy8p+YcI=</dsig:DigestValue>
+        <dsig:DigestValue>pqPUhVrAiXDwVrdD5lzCQ6ebx4fxsjE1VHRemT1epL4=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -121,7 +133,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>/nLYEt1m821gCqEeP6NctMum6R/LuefqOvKo/McVEzI=</dsig:DigestValue>
+        <dsig:DigestValue>PLyzWL8k1YUOpluEfonm2GTtToVekSLbzfqqqcd98Bo=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

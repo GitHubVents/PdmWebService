@@ -2,34 +2,40 @@
 <ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="DbModel">
   <DataContextMoniker Name="/DbModelDataContext" />
   <nestedChildShapes>
-    <classShape Id="f144e48d-90a6-42a8-977d-e334e661412e" absoluteBounds="0.75, 0.75, 2, 1.5785953776041666">
-      <DataClassMoniker Name="/DbModelDataContext/TaskSystemLog" />
-      <nestedChildShapes>
-        <elementListCompartment Id="4a857aaf-6ceb-4488-864e-6b956fb04263" absoluteBounds="0.76500000000000012, 1.21, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
-      </nestedChildShapes>
-    </classShape>
-    <classShape Id="73bfaec4-7efd-4f8e-92be-d5a723d2ece0" absoluteBounds="3.5, 0.75, 2, 1.5785953776041666">
-      <DataClassMoniker Name="/DbModelDataContext/TaskSelection" />
-      <nestedChildShapes>
-        <elementListCompartment Id="5fdbc860-293e-4184-b802-564c76b63896" absoluteBounds="3.515, 1.21, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
-      </nestedChildShapes>
-    </classShape>
-    <classShape Id="15d2f04b-c45a-4b80-a170-3eebc1ca314b" absoluteBounds="6, 0.875, 2, 1.1939925130208333">
-      <DataClassMoniker Name="/DbModelDataContext/Task" />
-      <nestedChildShapes>
-        <elementListCompartment Id="1cde2320-d4e9-402c-8e8e-254bc9eebc57" absoluteBounds="6.015, 1.335, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
-      </nestedChildShapes>
-    </classShape>
-    <classShape Id="ed2f38d4-9928-4809-b2a8-8122b744fff8" absoluteBounds="8.375, 1, 2, 1.9631982421875">
+    <classShape Id="45495c4e-3e37-455f-8fbb-88f8543ae63c" absoluteBounds="0.75, 0.75, 2, 1.9631982421875">
       <DataClassMoniker Name="/DbModelDataContext/TaskInstance" />
       <nestedChildShapes>
-        <elementListCompartment Id="2785f3b5-4e13-47a6-9b25-b9825770cc15" absoluteBounds="8.39, 1.46, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="8fa12640-538a-4cc1-b590-e3a2dbc66f8f" absoluteBounds="0.765, 1.21, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="7cb8c166-3a24-4f7e-b25d-98a5b97fdb2a" absoluteBounds="0.75, 2.625, 2, 1.9631982421875">
+    <classShape Id="5054cba4-e043-47db-9510-a637130d3218" absoluteBounds="3.75, 0.75, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/DbModelDataContext/TaskSystemLog" />
+      <nestedChildShapes>
+        <elementListCompartment Id="4f4a28bd-c916-46cc-80b2-bb44b5d39c85" absoluteBounds="3.765, 1.21, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="7eb6c1f2-87e2-4d6d-9f47-f09c84dd975f" absoluteBounds="0.75, 3.75, 2, 1.193992513020834">
+      <DataClassMoniker Name="/DbModelDataContext/Task" />
+      <nestedChildShapes>
+        <elementListCompartment Id="f686934c-5e26-443f-9b8e-ba2d075fa151" absoluteBounds="0.765, 4.21, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="bc684d7c-2a3f-41d5-89bc-fc690ef980a5" absoluteBounds="3.75, 3.75, 2, 1.7708968098958327">
+      <DataClassMoniker Name="/DbModelDataContext/TaskSelection" />
+      <nestedChildShapes>
+        <elementListCompartment Id="2f91030d-2ec8-43af-bca0-0fb5ea690f57" absoluteBounds="3.765, 4.21, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="96ff67bc-8658-466f-b7f0-ec20dbba5133" absoluteBounds="6.5, 2.25, 2, 1.9631982421875">
       <DataClassMoniker Name="/DbModelDataContext/View_ActiveTask" />
       <nestedChildShapes>
-        <elementListCompartment Id="26d8b700-231f-4411-a7f6-26cb75313cbe" absoluteBounds="0.765, 3.085, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="cccfb863-0c0a-4000-9492-44d39a9c8d2e" absoluteBounds="6.515, 2.71, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="7d62106f-dc0d-4911-a8a2-2fe63f5e48be" absoluteBounds="6.5, 5.625, 2, 1.9631982421875">
+      <DataClassMoniker Name="/DbModelDataContext/View_CompletedTask" />
+      <nestedChildShapes>
+        <elementListCompartment Id="3ea89f80-8d44-4c1f-957b-aff6a8625124" absoluteBounds="6.515, 6.085, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
   </nestedChildShapes>

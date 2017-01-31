@@ -4,7 +4,7 @@
     /// <summary>
     /// Contain enumeration task types { VibroInsertion, Flap, Roof, MountingFrame, Panel, HousingBlock, Monoblock, Frameless } and their numeric constants
     /// </summary>
-    public enum TasksTypes
+    public enum TasksType
     {
         VibroInsertion = 1,
         Flap = 2,
@@ -22,7 +22,7 @@
     /// <summary>
     /// Contain enumeration task statuses {completed, waiting, error, execution} and their numeric constants
     /// </summary>
-    public enum TaskStatuses
+    public enum TaskStatus
     {
         Completed = 1,
         Waiting = 2,
@@ -109,5 +109,6 @@
     //    Sheet_A_3095_2B = 9
     //}
     #endregion
+         
 
 }

@@ -1,5 +1,4 @@
-﻿using System.ServiceModel;
-using PDM_WebService.WcfServiceLibrary.DataContracts;
+﻿using System.ServiceModel; 
 using ServiceLibrary.TaskSystem.Constants;
 using ServiceLibrary.DataContracts;
 
@@ -82,6 +81,7 @@ namespace ServiceLibrary
         [OperationContract]
         void OpenSolidWorks();
 
+
         [OperationContract(IsOneWay = true)]
         void CreateDxf(int [] filesId );
 
@@ -90,8 +90,10 @@ namespace ServiceLibrary
 
        
             [OperationContract]
-            TaskData[] GetTasksData( );
-       
+            TaskData[] GetActiveTasksData( );
+
+        [OperationContract]
+        TaskData[] GetComplitedTasksData();
 
     }
 }

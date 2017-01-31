@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDM_WebService.WcfServiceLibrary.DataContracts
+namespace ServiceLibrary.DataContracts
 {
     /// <summary>
     ///  Bill of Materials (BOM) view.

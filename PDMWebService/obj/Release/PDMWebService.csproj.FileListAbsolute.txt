@@ -22,4 +22,6 @@ D:\Vlad\PDM-WebService\PDMWebService\obj\Release\PDMWebService.exe.manifest
 D:\Vlad\PDM-WebService\PDMWebService\obj\Release\PDMWebService.application
 D:\Vlad\PDM-WebService\PDMWebService\obj\Release\PDMWebService.exe
 D:\Vlad\PDM-WebService\PDMWebService\obj\Release\PDMWebService.pdb
+D:\Vlad\PDM-WebService\PDMWebService\bin\Release\Newtonsoft.Json.dll
+D:\Vlad\PDM-WebService\PDMWebService\bin\Release\Newtonsoft.Json.xml
 D:\Vlad\PDM-WebService\PDMWebService\obj\Release\PDMWebService.csprojResolveAssemblyReference.cache
