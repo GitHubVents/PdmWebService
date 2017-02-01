@@ -37,8 +37,9 @@ namespace SolidWorksLibrary
                 MessageObserver.Instance.SetMessage("Initialize SolidWorks exemplare");
             try
             {
-                MessageObserver.Instance.SetMessage("\t\tTake an existing exemplar SolidWorks Application", MessageType.Success);
-                sldWoks_app = (SldWorks)Marshal.GetActiveObject("SldWorks.Application"); 
+              
+                sldWoks_app = (SldWorks)Marshal.GetActiveObject("SldWorks.Application");
+                MessageObserver.Instance.SetMessage("\t\tTake an existing exemplar SolidWorks Application", MessageType.System);
             }
             catch (Exception ex)
             {
@@ -47,15 +48,14 @@ namespace SolidWorksLibrary
                     Process[] processes = Process.GetProcessesByName("SLDWORKS");
                     int processesLength = processes.Length;
                     if (processesLength > 0)
-                    {
-                        MessageObserver.Instance.SetMessage("\t\tFound "+ processesLength + " exemplars SolidWorks Application; Start kill", MessageType.Warning);
+                    { 
                         foreach (var process in processes)
                         {
                             process.Kill();
                         }
                     }                    
                     sldWoks_app = new SldWorks() { Visible = true };
-                    MessageObserver.Instance.SetMessage("\t\tCreate exemplar SolidWorks Application", MessageType.Success);
+                    MessageObserver.Instance.SetMessage("\t\tCreate exemplar SolidWorks Application", MessageType.System);
                 }
             }
         }
@@ -72,11 +72,11 @@ namespace SolidWorksLibrary
                 {
                     eachModelDoc.Close();
                 }
-                MessageObserver.Instance.SetMessage("Closed all opened documents", MessageType.Success);
+                MessageObserver.Instance.SetMessage("\t\tClosed all opened documents", MessageType.System);
             }
             catch(Exception ex)
             {
-                MessageObserver.Instance.SetMessage("Failed close documents " + ex, MessageType.Error);
+                MessageObserver.Instance.SetMessage("\t\tFailed close documents " + ex, MessageType.Error);
             }
         }
 
@@ -87,7 +87,7 @@ namespace SolidWorksLibrary
         public static void CloseDocument(IModelDoc2 swModel)
         {
 
-            swModel.Close();
+            //swModel.Close();
             // sldWoks_app.CloseDoc(swModel.GetTitle().ToLower().Contains(".sldprt") ? swModel.GetTitle() : swModel.GetTitle() + ".sldprt"); ????????
 
             try

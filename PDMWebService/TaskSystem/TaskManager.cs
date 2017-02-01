@@ -1,15 +1,15 @@
 ﻿using PDMWebService.Data.PDM;
-using PDMWebService.Data.Solid.Dxf;
+//using PDMWebService.Data.Solid.Dxf;
 using PDMWebService.Data.Solid.Pdf;
-using PDMWebService.Singleton;
 using PDMWebService.TaskSystem.Data;
 using ServiceLibrary.TaskSystem.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using ServiceLibrary.DataContracts;
- 
-class TaskManager : AbstractSingeton<TaskManager>
+using SolidWorksLibrary.Builders.Dxf;
+
+class TaskManager : PDMWebService.Singleton.AbstractSingeton<TaskManager>
 {
     private DbModelDataContext _dataBaseNodel;
 
@@ -40,6 +40,8 @@ class TaskManager : AbstractSingeton<TaskManager>
     private TaskManager() : base()
     {
       //  DxfBulder.Instance.ToSql += Instance_ToSql;
+
+      
     }
 
     #region create task of generetion
@@ -173,7 +175,7 @@ class TaskManager : AbstractSingeton<TaskManager>
             Console.WriteLine("In queue is not  tasks to perform and waiting. Possibly incorrect saving a task");
             throw new Exception("In queue is not  tasks to perform and waiting. Possibly incorrect saving a task");             
         }
-        Console.WriteLine("Gotten task instance: " + taskInstance.TaskInstanceID + "; STATUS " + taskInstance.TaskStatus + " ~ " + (TaskStatus)taskInstance.TaskStatus);
+        Console.WriteLine("Got task instance: " + taskInstance.TaskInstanceID + "; STATUS " + taskInstance.TaskStatus + " ~ " + (TaskStatus)taskInstance.TaskStatus);
 
         if (taskInstance != null && taskInstance.TaskStatus == (int)TaskStatus.Execution)
         { 
@@ -262,8 +264,10 @@ class TaskManager : AbstractSingeton<TaskManager>
                         foreach (var eachTaskSelections in taskSelections)
                         {                  
                             var dataModel = pdm.GetFileById((int)eachTaskSelections.DocumentID, true); // get file data and download    
-                           // DxfBulder.Instance.Build(dataModel );
-                            SolidWorksLibrary.Builders.Dxf.DxfBulder.Instance
+                                                                                                       // DxfBulder.Instance.Build(dataModel );
+                            Patterns.Observer.MessageObserver.Instance.ReceivedMessage += delegate (Patterns.Observer.MessageEventArgs e) { if (e.Type == Patterns.Observer.MessageType.Error) ApplyError(taskInstance.TaskInstanceID); Console.WriteLine(e.Message); };
+                            DxfBulder.Instance.Build(dataModel.Path,dataModel.Id,dataModel.CurrentVersion);
+
                         }
                         ApplyCompleted(taskInstance.TaskInstanceID);
                     }

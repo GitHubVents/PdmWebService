@@ -235,6 +235,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MessageLibrary\Patterns.csproj">
+      <Project>{d0abf979-d32b-453d-92d5-f9bc7bdec44e}</Project>
+      <Name>Patterns</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SolidWorksLivrary\SolidWorksLibrary.csproj">
       <Project>{decc61e0-8d25-485f-99f4-d895177c7997}</Project>
       <Name>SolidWorksLibrary</Name>

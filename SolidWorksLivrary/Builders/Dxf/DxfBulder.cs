@@ -111,7 +111,9 @@ using System.Linq;
                     isSheetmetal = false;
                     if (!includeNonSheetParts) // disable build  no sheet metal parts if IsSheetMetalPart = false, and return  
                     {
-                        SolidWorksAdapter.CloseDocument(modelDoc);
+                        MessageObserver.Instance.SetMessage();
+                       this.solidWorksApp.CloseDoc(modelDoc.GetTitle().ToLower().Contains(".sldprt") ? modelDoc.GetTitle() : modelDoc.GetTitle() + ".sldprt");
+                        // SolidWorksAdapter.CloseDocument(modelDoc);
                         return isSave;
                     }
                 }

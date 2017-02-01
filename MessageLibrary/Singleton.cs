@@ -3,8 +3,7 @@ using System.Reflection;
 
 namespace Patterns
 {
-
-    public class Singeton<T> where T : class
+    public abstract class Singeton<T> where T : class
     {
         private static T _instance;
 
