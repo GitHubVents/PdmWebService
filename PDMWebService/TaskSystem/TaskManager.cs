@@ -264,7 +264,7 @@ class TaskManager : PDMWebService.Singleton.AbstractSingeton<TaskManager>
                         foreach (var eachTaskSelections in taskSelections)
                         {                  
                             var dataModel = pdm.GetFileById((int)eachTaskSelections.DocumentID, true); // get file data and download    
-                                                                                                       // DxfBulder.Instance.Build(dataModel );
+                              //   DxfBulder.Instance.Build(dataModel );
                             Patterns.Observer.MessageObserver.Instance.ReceivedMessage += delegate (Patterns.Observer.MessageEventArgs e) { if (e.Type == Patterns.Observer.MessageType.Error) ApplyError(taskInstance.TaskInstanceID); Console.WriteLine(e.Message); };
                             DxfBulder.Instance.Build(dataModel.Path,dataModel.Id,dataModel.CurrentVersion);
 

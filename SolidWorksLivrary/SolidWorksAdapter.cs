@@ -92,12 +92,12 @@ namespace SolidWorksLibrary
 
             try
             {
-                swModel.Close();
+                SldWoksApp.CloseDoc(swModel.GetTitle().ToLower().Contains(".sldprt") ? swModel.GetTitle() : swModel.GetTitle() + ".sldprt");
                 MessageObserver.Instance.SetMessage("Closed opened document " + swModel.GetTitle(), MessageType.Success);
             }
             catch (Exception ex)
             {
-                MessageObserver.Instance.SetMessage("Failed close document " + swModel.GetTitle() + "\t" + ex, MessageType.Error);
+                MessageObserver.Instance.SetMessage("Failed close document " + swModel.GetTitle() + "\t" + ex, MessageType.Warning);
             }
         }
 
@@ -107,15 +107,15 @@ namespace SolidWorksLibrary
         public static void CloseAllDocumentsAndExit()
         {
 
-            CloseAllDocuments();
             try
-            {
-                MessageObserver.Instance.SetMessage("Exit from  SolidWorks Application" , MessageType.Success);
+            {               
+                CloseAllDocuments();
                 SldWoksApp.ExitApp();
+                MessageObserver.Instance.SetMessage("Exit from  SolidWorks Application", MessageType.System);
             }
             catch (Exception ex)
             {
-                MessageObserver.Instance.SetMessage("Failed exit from  SolidWorks Application", MessageType.Success);
+                MessageObserver.Instance.SetMessage("Failed exit from  SolidWorks Application", MessageType.Warning);
             } 
         }       
 

@@ -89,7 +89,7 @@ using System.Linq;
                         modelDoc = solidWorksApp.OpenDoc6(partPath, (int)swDocumentTypes_e.swDocPART, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, emptyConfigyration, error, warnings);
                         modelDoc = solidWorksApp.IActiveDoc2;
 
-                        MessageObserver.Instance.SetMessage("\t\tOpened document " + Path.GetFileName(partPath), MessageType.System);
+                        MessageObserver.Instance.SetMessage("\tOpened document " + Path.GetFileName(partPath), MessageType.System);
                         // Проверяет наличие дерева постоения в моделе.
                         if (modelDoc == null)
                         {
@@ -98,7 +98,7 @@ using System.Linq;
                     }
                     catch (Exception exception)
                     {
-                        MessageObserver.Instance.SetMessage("\t\tFailed open SolidWorks document; message exception {" + exception.ToString() + " }", MessageType.Error);
+                        MessageObserver.Instance.SetMessage("\tFailed open SolidWorks document; message exception {" + exception.ToString() + " }", MessageType.Error);
                         throw exception;
                     }
                 } 
@@ -111,19 +111,18 @@ using System.Linq;
                     isSheetmetal = false;
                     if (!includeNonSheetParts) // disable build  no sheet metal parts if IsSheetMetalPart = false, and return  
                     {
-                        MessageObserver.Instance.SetMessage();
-                       this.solidWorksApp.CloseDoc(modelDoc.GetTitle().ToLower().Contains(".sldprt") ? modelDoc.GetTitle() : modelDoc.GetTitle() + ".sldprt");
-                        // SolidWorksAdapter.CloseDocument(modelDoc);
+                         this.solidWorksApp.CloseDoc(modelDoc.GetTitle().ToLower().Contains(".sldprt") ? modelDoc.GetTitle() : modelDoc.GetTitle() + ".sldprt");                    
                         return isSave;
                     }
                 }
                 string[] swModelConfNames2 = (string[])modelDoc.GetConfigurationNames();
 
+
                 var configurations = from name in swModelConfNames2
                                      let config = (Configuration)modelDoc.GetConfigurationByName(name)
                                      where !config.IsDerived()
                                      select name;
-
+                MessageObserver.Instance.SetMessage("\t got configuration "+configurations.Count()+" for opened document. Statrt bust configurations", MessageType.System);
                 foreach (var eachConfiguration in configurations)
                 {
                     string filePath;                    
@@ -131,7 +130,7 @@ using System.Linq;
 
                     if (isSave)
                     {
-                        MessageObserver.Instance.SetMessage("\t\t" + eachConfiguration + " succsess building. Add to result list", MessageType.Success);
+                        MessageObserver.Instance.SetMessage("\t" + eachConfiguration + " succsess building. Add to result list", MessageType.Success);
                         dxfList.Add(new DxfFile
                         {
                             Configuration = eachConfiguration,
@@ -143,13 +142,13 @@ using System.Linq;
                 }
                 if (closeAfterSave)
                 {
-                    SolidWorksAdapter.CloseDocument(modelDoc);
+                    this.solidWorksApp.CloseDoc(modelDoc.GetTitle().ToLower().Contains(".sldprt") ? modelDoc.GetTitle() : modelDoc.GetTitle() + ".sldprt"); // out in func...
                 }
             }
 
             catch (Exception exception)
             {
-                MessageObserver.Instance.SetMessage("\t\tFailed build dxf; message exception {" + exception.ToString() + " }", MessageType.Error);
+                MessageObserver.Instance.SetMessage("\tFailed build dxf; message exception {" + exception.ToString() + " }", MessageType.Error);
             }
             return isSave;
         }
@@ -203,12 +202,12 @@ using System.Linq;
 
                 bool isExportToDWG2 =  swPart.ExportToDWG2(dxfFilePath, swModel.GetPathName(), isSheetmetal ? (int)swExportToDWG_e.swExportToDWG_ExportSheetMetal : (int)swExportToDWG_e.swExportToDWG_ExportSelectedFacesOrLoops, true, varAlignment, false, false, sheetmetalOptions,
                     isSheetmetal ? 0 : (int)swExportToDWG_e.swExportToDWG_ExportAnnotationViews);
-                MessageObserver.Instance.SetMessage("\t\tCompleted building "  + swModel.GetTitle() + " with configuration \"" + configuration + "\"", MessageType.System);
+                MessageObserver.Instance.SetMessage("\tCompleted building "  + swModel.GetTitle() + " with configuration \"" + configuration + "\"", MessageType.System);
                 return isExportToDWG2;
             }
             catch(Exception exception)
             {
-                string message = "\t\tFailed build dxf  " + swModel.GetTitle() + " with configuration \"" + configuration + "\"" + exception.ToString();
+                string message = "\tFailed build dxf  " + swModel.GetTitle() + " with configuration \"" + configuration + "\"" + exception.ToString();
                 MessageObserver.Instance.SetMessage(message, MessageType.Error);
                 return false;
             }            

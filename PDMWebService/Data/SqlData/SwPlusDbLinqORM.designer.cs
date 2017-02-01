@@ -25,271 +25,271 @@ namespace PDMWebService.Data.SqlData
 	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="SWPlusDB")]
 	public partial class SwPlusDbLinqORMDataContext : System.Data.Linq.DataContext
 	{
-		
-		private static System.Data.Linq.Mapping.MappingSource mappingSource = new AttributeMappingSource();
-		
+	
+	private static System.Data.Linq.Mapping.MappingSource mappingSource = new AttributeMappingSource();
+	
     #region Extensibility Method Definitions
     partial void OnCreated();
     #endregion
-		
-		public SwPlusDbLinqORMDataContext() : 
-				base(global::PDMWebService.Properties.Settings.Default.SWPlusDBConnectionString, mappingSource)
+	
+	public SwPlusDbLinqORMDataContext() : 
+		base(global::PDMWebService.Properties.Settings.Default.SWPlusDBConnectionString, mappingSource)
+	{
+		OnCreated();
+	}
+	
+	public SwPlusDbLinqORMDataContext(string connection) : 
+		base(connection, mappingSource)
+	{
+		OnCreated();
+	}
+	
+	public SwPlusDbLinqORMDataContext(System.Data.IDbConnection connection) : 
+		base(connection, mappingSource)
+	{
+		OnCreated();
+	}
+	
+	public SwPlusDbLinqORMDataContext(string connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
+		base(connection, mappingSource)
+	{
+		OnCreated();
+	}
+	
+	public SwPlusDbLinqORMDataContext(System.Data.IDbConnection connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
+		base(connection, mappingSource)
+	{
+		OnCreated();
+	}
+	
+	public System.Data.Linq.Table<View_Part> View_Parts
+	{
+		get
 		{
-			OnCreated();
+		return this.GetTable<View_Part>();
 		}
-		
-		public SwPlusDbLinqORMDataContext(string connection) : 
-				base(connection, mappingSource)
-		{
-			OnCreated();
-		}
-		
-		public SwPlusDbLinqORMDataContext(System.Data.IDbConnection connection) : 
-				base(connection, mappingSource)
-		{
-			OnCreated();
-		}
-		
-		public SwPlusDbLinqORMDataContext(string connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
-				base(connection, mappingSource)
-		{
-			OnCreated();
-		}
-		
-		public SwPlusDbLinqORMDataContext(System.Data.IDbConnection connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
-				base(connection, mappingSource)
-		{
-			OnCreated();
-		}
-		
-		public System.Data.Linq.Table<View_Part> View_Parts
-		{
-			get
-			{
-				return this.GetTable<View_Part>();
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.DXFCheck")]
-		public int DXFCheck([global::System.Data.Linq.Mapping.ParameterAttribute(Name="IDPDM", DbType="Int")] System.Nullable<int> iDPDM, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Configuration", DbType="NVarChar(100)")] string configuration, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Version", DbType="Int")] System.Nullable<int> version)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), iDPDM, configuration, version);
-			return ((int)(result.ReturnValue));
-		}
-		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.ExportDXF")]
-		public int ExportDXF([global::System.Data.Linq.Mapping.ParameterAttribute(Name="DXF", DbType="VarBinary(MAX)")] System.Data.Linq.Binary dXF, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="IDPDM", DbType="Int")] System.Nullable<int> iDPDM, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Configuration", DbType="NVarChar(MAX)")] string configuration, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Version", DbType="Int")] System.Nullable<int> version)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), dXF, iDPDM, configuration, version);
-			return ((int)(result.ReturnValue));
-		}
+	}
+	
+	[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.DXFCheck")]
+	public int DXFCheck([global::System.Data.Linq.Mapping.ParameterAttribute(Name="IDPDM", DbType="Int")] System.Nullable<int> iDPDM, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Configuration", DbType="NVarChar(100)")] string configuration, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Version", DbType="Int")] System.Nullable<int> version)
+	{
+		IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), iDPDM, configuration, version);
+		return ((int)(result.ReturnValue));
+	}
+	
+	[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.ExportDXF")]
+	public int ExportDXF([global::System.Data.Linq.Mapping.ParameterAttribute(Name="DXF", DbType="VarBinary(MAX)")] System.Data.Linq.Binary dXF, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="IDPDM", DbType="Int")] System.Nullable<int> iDPDM, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Configuration", DbType="NVarChar(MAX)")] string configuration, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Version", DbType="Int")] System.Nullable<int> version)
+	{
+		IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), dXF, iDPDM, configuration, version);
+		return ((int)(result.ReturnValue));
+	}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.View_Parts")]
 	public partial class View_Part
 	{
-		
-		private System.Nullable<int> _Bend;
-		
-		private System.Nullable<decimal> _PaintX;
-		
-		private System.Nullable<decimal> _PaintY;
-		
-		private System.Nullable<decimal> _PaintZ;
-		
-		private System.Nullable<decimal> _SurfaceArea;
-		
-		private System.Nullable<decimal> _Thickness;
-		
-		private int _Version;
-		
-		private System.Nullable<decimal> _WorkpieceX;
-		
-		private System.Nullable<decimal> _WorkpieceY;
-		
-		private System.Nullable<int> _IDPDM;
-		
-		private string _ConfigurationName;
-		
-		public View_Part()
+	
+	private System.Nullable<int> _Bend;
+	
+	private System.Nullable<decimal> _PaintX;
+	
+	private System.Nullable<decimal> _PaintY;
+	
+	private System.Nullable<decimal> _PaintZ;
+	
+	private System.Nullable<decimal> _SurfaceArea;
+	
+	private System.Nullable<decimal> _Thickness;
+	
+	private int _Version;
+	
+	private System.Nullable<decimal> _WorkpieceX;
+	
+	private System.Nullable<decimal> _WorkpieceY;
+	
+	private System.Nullable<int> _IDPDM;
+	
+	private string _ConfigurationName;
+	
+	public View_Part()
+	{
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Bend", DbType="Int")]
+	public System.Nullable<int> Bend
+	{
+		get
 		{
+		return this._Bend;
 		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Bend", DbType="Int")]
-		public System.Nullable<int> Bend
+		set
 		{
-			get
-			{
-				return this._Bend;
-			}
-			set
-			{
-				if ((this._Bend != value))
-				{
-					this._Bend = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PaintX", DbType="Decimal(10,2)")]
-		public System.Nullable<decimal> PaintX
+		if ((this._Bend != value))
 		{
-			get
-			{
-				return this._PaintX;
-			}
-			set
-			{
-				if ((this._PaintX != value))
-				{
-					this._PaintX = value;
-				}
-			}
+			this._Bend = value;
 		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PaintY", DbType="Decimal(10,2)")]
-		public System.Nullable<decimal> PaintY
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PaintX", DbType="Decimal(10,2)")]
+	public System.Nullable<decimal> PaintX
+	{
+		get
 		{
-			get
-			{
-				return this._PaintY;
-			}
-			set
-			{
-				if ((this._PaintY != value))
-				{
-					this._PaintY = value;
-				}
-			}
+		return this._PaintX;
 		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PaintZ", DbType="Decimal(10,2)")]
-		public System.Nullable<decimal> PaintZ
+		set
 		{
-			get
-			{
-				return this._PaintZ;
-			}
-			set
-			{
-				if ((this._PaintZ != value))
-				{
-					this._PaintZ = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SurfaceArea", DbType="Decimal(10,3)")]
-		public System.Nullable<decimal> SurfaceArea
+		if ((this._PaintX != value))
 		{
-			get
-			{
-				return this._SurfaceArea;
-			}
-			set
-			{
-				if ((this._SurfaceArea != value))
-				{
-					this._SurfaceArea = value;
-				}
-			}
+			this._PaintX = value;
 		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Thickness", DbType="Decimal(3,1)")]
-		public System.Nullable<decimal> Thickness
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PaintY", DbType="Decimal(10,2)")]
+	public System.Nullable<decimal> PaintY
+	{
+		get
 		{
-			get
-			{
-				return this._Thickness;
-			}
-			set
-			{
-				if ((this._Thickness != value))
-				{
-					this._Thickness = value;
-				}
-			}
+		return this._PaintY;
 		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Version", DbType="Int NOT NULL")]
-		public int Version
+		set
 		{
-			get
-			{
-				return this._Version;
-			}
-			set
-			{
-				if ((this._Version != value))
-				{
-					this._Version = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_WorkpieceX", DbType="Decimal(10,2)")]
-		public System.Nullable<decimal> WorkpieceX
+		if ((this._PaintY != value))
 		{
-			get
-			{
-				return this._WorkpieceX;
-			}
-			set
-			{
-				if ((this._WorkpieceX != value))
-				{
-					this._WorkpieceX = value;
-				}
-			}
+			this._PaintY = value;
 		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_WorkpieceY", DbType="Decimal(10,2)")]
-		public System.Nullable<decimal> WorkpieceY
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PaintZ", DbType="Decimal(10,2)")]
+	public System.Nullable<decimal> PaintZ
+	{
+		get
 		{
-			get
-			{
-				return this._WorkpieceY;
-			}
-			set
-			{
-				if ((this._WorkpieceY != value))
-				{
-					this._WorkpieceY = value;
-				}
-			}
+		return this._PaintZ;
 		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IDPDM", DbType="Int")]
-		public System.Nullable<int> IDPDM
+		set
 		{
-			get
-			{
-				return this._IDPDM;
-			}
-			set
-			{
-				if ((this._IDPDM != value))
-				{
-					this._IDPDM = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ConfigurationName", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
-		public string ConfigurationName
+		if ((this._PaintZ != value))
 		{
-			get
-			{
-				return this._ConfigurationName;
-			}
-			set
-			{
-				if ((this._ConfigurationName != value))
-				{
-					this._ConfigurationName = value;
-				}
-			}
+			this._PaintZ = value;
 		}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SurfaceArea", DbType="Decimal(10,3)")]
+	public System.Nullable<decimal> SurfaceArea
+	{
+		get
+		{
+		return this._SurfaceArea;
+		}
+		set
+		{
+		if ((this._SurfaceArea != value))
+		{
+			this._SurfaceArea = value;
+		}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Thickness", DbType="Decimal(3,1)")]
+	public System.Nullable<decimal> Thickness
+	{
+		get
+		{
+		return this._Thickness;
+		}
+		set
+		{
+		if ((this._Thickness != value))
+		{
+			this._Thickness = value;
+		}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Version", DbType="Int NOT NULL")]
+	public int Version
+	{
+		get
+		{
+		return this._Version;
+		}
+		set
+		{
+		if ((this._Version != value))
+		{
+			this._Version = value;
+		}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_WorkpieceX", DbType="Decimal(10,2)")]
+	public System.Nullable<decimal> WorkpieceX
+	{
+		get
+		{
+		return this._WorkpieceX;
+		}
+		set
+		{
+		if ((this._WorkpieceX != value))
+		{
+			this._WorkpieceX = value;
+		}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_WorkpieceY", DbType="Decimal(10,2)")]
+	public System.Nullable<decimal> WorkpieceY
+	{
+		get
+		{
+		return this._WorkpieceY;
+		}
+		set
+		{
+		if ((this._WorkpieceY != value))
+		{
+			this._WorkpieceY = value;
+		}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IDPDM", DbType="Int")]
+	public System.Nullable<int> IDPDM
+	{
+		get
+		{
+		return this._IDPDM;
+		}
+		set
+		{
+		if ((this._IDPDM != value))
+		{
+			this._IDPDM = value;
+		}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ConfigurationName", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
+	public string ConfigurationName
+	{
+		get
+		{
+		return this._ConfigurationName;
+		}
+		set
+		{
+		if ((this._ConfigurationName != value))
+		{
+			this._ConfigurationName = value;
+		}
+		}
+	}
 	}
 }
 #pragma warning restore 1591

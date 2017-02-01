@@ -28,7 +28,7 @@ namespace Patterns.Observer
         /// Alerting about new massages all subscribers
         /// </summary>
         /// <param name="message"></param>
-        public void SetMessage (string message, MessageType messageType = 0)
+        public void SetMessage (string message, MessageType messageType =  MessageType.System)
         {
             if (this.ReceivedMessage != null)
                 this.ReceivedMessage(new MessageEventArgs { Message = message , Type = messageType});
