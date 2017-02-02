@@ -11,7 +11,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Patterns", "MessageLibrary\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolidWorksLibrary", "SolidWorksLivrary\SolidWorksLibrary.csproj", "{DECC61E0-8D25-485F-99F4-D895177C7997}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{34DBAC4B-6A3C-430C-9852-1BB7072602CE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleServiceHost", "ConsoleServiceHost\ConsoleServiceHost.csproj", "{E02B78CD-91F8-45C9-A3AE-535B3DDDDC82}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskSystemLibrary", "TaskSystemLibrary\TaskSystemLibrary.csproj", "{44EACAB1-6578-4B6A-B743-28D9899A8DA4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBaseDomian", "DataBaseDomian\DataBaseDomian.csproj", "{6AC06B1C-66F2-40E5-9B11-CBFA56B747B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PdmSolidWorksLibrary", "PdmSolidWorksLibrary\PdmSolidWorksLibrary.csproj", "{796CE95A-9827-4090-A509-039B84CB601F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWebService", "TestWebService\TestWebService.csproj", "{BA6001DC-7302-475C-95DA-1E73B30E09CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +43,26 @@ Global
 		{DECC61E0-8D25-485F-99F4-D895177C7997}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DECC61E0-8D25-485F-99F4-D895177C7997}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DECC61E0-8D25-485F-99F4-D895177C7997}.Release|Any CPU.Build.0 = Release|Any CPU
-		{34DBAC4B-6A3C-430C-9852-1BB7072602CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{34DBAC4B-6A3C-430C-9852-1BB7072602CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{34DBAC4B-6A3C-430C-9852-1BB7072602CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{34DBAC4B-6A3C-430C-9852-1BB7072602CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E02B78CD-91F8-45C9-A3AE-535B3DDDDC82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E02B78CD-91F8-45C9-A3AE-535B3DDDDC82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E02B78CD-91F8-45C9-A3AE-535B3DDDDC82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E02B78CD-91F8-45C9-A3AE-535B3DDDDC82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44EACAB1-6578-4B6A-B743-28D9899A8DA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44EACAB1-6578-4B6A-B743-28D9899A8DA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44EACAB1-6578-4B6A-B743-28D9899A8DA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44EACAB1-6578-4B6A-B743-28D9899A8DA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AC06B1C-66F2-40E5-9B11-CBFA56B747B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AC06B1C-66F2-40E5-9B11-CBFA56B747B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AC06B1C-66F2-40E5-9B11-CBFA56B747B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AC06B1C-66F2-40E5-9B11-CBFA56B747B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{796CE95A-9827-4090-A509-039B84CB601F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{796CE95A-9827-4090-A509-039B84CB601F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{796CE95A-9827-4090-A509-039B84CB601F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{796CE95A-9827-4090-A509-039B84CB601F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA6001DC-7302-475C-95DA-1E73B30E09CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA6001DC-7302-475C-95DA-1E73B30E09CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA6001DC-7302-475C-95DA-1E73B30E09CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA6001DC-7302-475C-95DA-1E73B30E09CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

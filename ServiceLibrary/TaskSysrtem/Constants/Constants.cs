@@ -94,6 +94,13 @@
         TheFrontPanel = 7
     }
 
+
+    public enum PdmType
+    {
+        SolidWorksPdm = 1,
+        IPS = 2
+    }
+
     #region material enums It contains everything a need all
     //public enum PanelMeterials
     //{

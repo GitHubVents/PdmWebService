@@ -228,6 +228,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Data\PDM\doc.txt" />
+    <Content Include="Data\Solid\Dxf\README_FOR_DXF .txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="TaskSystem\Data\DbModel.dbml.layout">
@@ -242,6 +243,10 @@
     <ProjectReference Include="..\SolidWorksLivrary\SolidWorksLibrary.csproj">
       <Project>{decc61e0-8d25-485f-99f4-d895177c7997}</Project>
       <Name>SolidWorksLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TaskSystemLibrary\TaskSystemLibrary.csproj">
+      <Project>{44eacab1-6578-4b6a-b743-28d9899a8da4}</Project>
+      <Name>TaskSystemLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -47,6 +47,7 @@ namespace PDMWebService.Data.SqlData
                                          WorkpieceX = spec == null ? string.Empty : spec.WorkpieceX.ToString(),
                                          WorkpieceY = spec == null ? string.Empty : spec.WorkpieceY.ToString(),
                                          SurfaceArea = spec == null ? string.Empty : spec.SurfaceArea.ToString()
+                                        
                                      };
 
 

@@ -55,7 +55,7 @@
     <Compile Include="DataContracts\Specification.cs" />
     <Compile Include="DataContracts\TaskData.cs" />
     <Compile Include="DataContracts\TransmittableFile.cs" />
-    <Compile Include="ISolidWebService.cs" />
+    <Compile Include="ServiceInterface\ISolidWebService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TaskSysrtem\Constants\Constants.cs" />
   </ItemGroup>
@@ -64,7 +64,9 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Service\" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <VSToolsPath Condition="'$(VSToolsPath)' == '' and '$(VisualStudioVersion)' != '' and '$(VisualStudioVersion)' != '11.0'">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

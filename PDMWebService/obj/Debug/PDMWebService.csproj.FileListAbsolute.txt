@@ -29,3 +29,9 @@ D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\SolidWorksLivrary.dll
 D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\MessageLibrary.dll
 D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\SolidWorksLivrary.pdb
 D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\MessageLibrary.pdb
+D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\TaskSystemLibrary.dll
+D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\DataBaseDomian.dll
+D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\PdmSolidWorksLibrary.dll
+D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\TaskSystemLibrary.pdb
+D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\DataBaseDomian.pdb
+D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\PdmSolidWorksLibrary.pdb

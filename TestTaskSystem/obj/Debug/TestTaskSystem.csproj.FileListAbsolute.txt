@@ -1,8 +1,0 @@
-D:\Vlad\PDM-WebService\TestTaskSystem\bin\Debug\TestTaskSystem.exe.config
-D:\Vlad\PDM-WebService\TestTaskSystem\bin\Debug\TestTaskSystem.exe
-D:\Vlad\PDM-WebService\TestTaskSystem\bin\Debug\TestTaskSystem.pdb
-D:\Vlad\PDM-WebService\TestTaskSystem\obj\Debug\TestTaskSystem.exe
-D:\Vlad\PDM-WebService\TestTaskSystem\obj\Debug\TestTaskSystem.pdb
-D:\Vlad\PDM-WebService\TestTaskSystem\bin\Debug\ServiceLibrary.dll
-D:\Vlad\PDM-WebService\TestTaskSystem\bin\Debug\ServiceLibrary.pdb
-D:\Vlad\PDM-WebService\TestTaskSystem\obj\Debug\TestTaskSystem.csprojResolveAssemblyReference.cache

@@ -13,6 +13,7 @@
       <Column Name="WorkpieceY" Type="System.Decimal" DbType="Decimal(10,2)" CanBeNull="true" />
       <Column Name="IDPDM" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="ConfigurationName" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="DXF" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
   <Function Name="dbo.DXFCheck" Method="DXFCheck">

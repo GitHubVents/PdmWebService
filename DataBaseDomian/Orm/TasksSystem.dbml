@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="TaskDataBase" Class="TasksSystemDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=pdmsrv;Initial Catalog=TaskDataBase;Persist Security Info=True;User ID=AirVentsCad" SettingsObjectName="DataBaseDomian.Properties.Settings" SettingsPropertyName="TaskDataBaseConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.TaskInstance" Member="TaskInstances">
+    <Type Name="TaskInstance">
+      <Column Name="TaskInstanceID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TaskID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="StartTime" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="EndTime" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="TaskStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="InitUserID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Tasks" Member="Tasks">
+    <Type Name="Task">
+      <Column Name="TaskID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TaskName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TaskSelection" Member="TaskSelections">
+    <Type Name="TaskSelection">
+      <Column Name="TaskSelectionID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TaskInstanceID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DocumentID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Version" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ConfigurationID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TaskSystemLog" Member="TaskSystemLogs">
+    <Type Name="TaskSystemLog">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TaskId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Coments" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.View_ActiveTasks" Member="View_ActiveTasks">
+    <Type Name="View_ActiveTask">
+      <Column Name="TaskInstanceID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TaskID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="StartTime" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="EndTime" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="TaskStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="InitUserID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.View_TaskSelection" Member="View_TaskSelections">
+    <Type Name="View_TaskSelection">
+      <Column Name="TaskID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="StartTime" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="EndTime" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="TaskStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="InitUserID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DocumentID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Version" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ConfigurationID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Filename" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.View_CompletedTasks" Member="View_CompletedTasks">
+    <Type Name="View_CompletedTask">
+      <Column Name="TaskInstanceID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TaskID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="StartTime" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="EndTime" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="TaskStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="InitUserID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Function Name="dbo.Tasks_DeleteTaskInstances" Method="Tasks_DeleteTaskInstances">
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.Tasks_SetTaskStatus" Method="Tasks_SetTaskStatus">
+    <Parameter Name="TaskStatus" Parameter="taskStatus" Type="System.Int32" DbType="Int" />
+    <Parameter Name="TaskInstanceID" Parameter="taskInstanceID" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.Tasks_GetTaskInfo" Method="Tasks_GetTaskInfo">
+    <Parameter Name="TaskInstanceID" Parameter="taskInstanceID" Type="System.Int32" DbType="Int" />
+    <ElementType Name="Tasks_GetTaskInfoResult">
+      <Column Name="TaskInstanceID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TaskID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="StartTime" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="EndTime" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="TaskStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="InitUserID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TaskSelectionID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TaskInstanceID1" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DocumentID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Version" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ConfigurationID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.Tasks_SetTaskInstance" Method="Tasks_SetTaskInstance">
+    <Parameter Name="TaskID" Parameter="taskID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="InitUserID" Parameter="initUserID" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.Tasks_SetTaskSelection" Method="Tasks_SetTaskSelection">
+    <Parameter Name="TaskInstanceID" Parameter="taskInstanceID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="DocumentID" Parameter="documentID" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+</Database>

@@ -5,25 +5,26 @@ using System.Linq;
 using ServiceLibrary.TaskSystem.Constants;
 using ServiceLibrary.DataContracts;
 using ServiceLibrary;
-
+using ServiceLibrary.ServiceInterface;
+using Patterns;
 namespace PDMWebService
 {
-    class ServiceInterfaice : ISolidWebService 
-    { 
-        private TaskManager taskManager; 
+    class ServiceInterfaice : ISolidWebService
+    {
+        private TaskSystemLibrary.TaskManager taskManager;
         public ServiceInterfaice()
         {
             try
             {
-                taskManager = TaskManager.Instance;
+                taskManager = TaskSystemLibrary.TaskManager.Instance;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Console.WriteLine("Filed created TaskManager exemplar; message { " + ex + " }" );
+                Console.WriteLine("Filed created TaskManager exemplar; message { " + ex + " }");
             }
 
         }
-  
+
         public string GetPathSelectFile(DataModel dataSolidModel)
         {
             string UrlToSelectModel = " ";
@@ -38,7 +39,7 @@ namespace PDMWebService
             {
                 Logger.ToLog("Невозможно вернуть путь к файлу " + exception.Message);
             }
-            return UrlToSelectModel;           
+            return UrlToSelectModel;
         }
 
         public TransmittableFile SelectFile(DataModel dataSolidModel)
@@ -61,7 +62,7 @@ namespace PDMWebService
             {
                 throw exception;
             }
-            return remoteInfo;           
+            return remoteInfo;
         }
 
         public static byte[] ReadFully(System.IO.Stream input)
@@ -75,12 +76,12 @@ namespace PDMWebService
                     ms.Write(buffer, 0, read);
                 }
                 return ms.ToArray();
-            }             
+            }
         }
-        DataModel[] ISolidWebService.Search(string nameSegment)
+       public DataModel[] Search(string nameSegment)
         {
             Console.WriteLine(nameSegment);
-            return SolidWorksPdmAdapter.Instance.SearchDoc(nameSegment).ToArray();          
+            return SolidWorksPdmAdapter.Instance.SearchDoc(nameSegment).ToArray();
         }
 
         public string[] GetConfigiguration(DataModel dataSolidModel)
@@ -102,7 +103,7 @@ namespace PDMWebService
                 Logger.ToLog("Ошобка при попытке получить список спецификаций по модели" + dataSolidModel.FileName + " с конфигурацией " + configuration + "\n" + exception.Message);
                 return null;
             }
-           
+
         }
 
 
@@ -138,12 +139,12 @@ namespace PDMWebService
 
         public void CreateRoof(int height, int wight, RoofTypes type, int userId)
         {
-            taskManager.CreateRoof(height, wight, type, userId);
+         //   taskManager.CreateRoof(height, wight, type, userId);
         }
 
         public void CreateVibroInsertion(int height, int wight, VibroInsertionTypes type, int userId)
         {
-            taskManager.CreateVibroInsertion(height, wight, type, userId);
+        //    taskManager.CreateVibroInsertion(height, wight, type, userId);
         }
 
         public void OpenSolidWorks()
@@ -166,17 +167,17 @@ namespace PDMWebService
 
         public void CreateFlap(FlapTypes type, int height, int wight, bool isOuter, int userId)
         {
-            taskManager.CreateFlap(type, height, wight, ServiceLibrary.TaskSystem.Constants.Meterials.Aluzinc_Az_150_07, isOuter, 0.7f, userId);
+          //  taskManager.CreateFlap(type, height, wight, ServiceLibrary.TaskSystem.Constants.Meterials.Aluzinc_Az_150_07, isOuter, 0.7f, userId);
         }
 
         public void CreateFlap(FlapTypes type, int height, int wight, Meterials material, bool isOuter, float thickness, int userId = 0)
         {
-            taskManager.CreateFlap(type, height, wight, material, isOuter, thickness, userId);
+          //  taskManager.CreateFlap(type, height, wight, material, isOuter, thickness, userId);
         }
 
         //public void CreateDxf(int FileId)
         //{
-           
+
         //}
 
         //public void CreatePdf(int FileId)
@@ -204,40 +205,23 @@ namespace PDMWebService
                 Console.WriteLine("Input request service: Create pdf");
                 taskManager.CreatePdf(filesId);
             }
-            catch ( Exception ex)
+            catch (Exception ex)
             {
-                Console.WriteLine("Exeption on seb service level; message { " +ex.ToString() + " }" );
+                Console.WriteLine("Exeption on seb service level; message { " + ex.ToString() + " }");
             }
         }
 
-       public TaskData[]  GetActiveTasksData( )
+        public TaskData[] GetActiveTasksData()
         {
-               Console.WriteLine("Input request service: Create pdf");
-                return taskManager.GetActiveTasksData();
-          
+            Console.WriteLine("Input request service: Create pdf");
+            return null;//taskManager.GetActiveTasksData();
+
         }
 
         public TaskData[] GetComplitedTasksData()
         {
-            return taskManager.GetComplitedTasksData();
+            return null;// taskManager.GetComplitedTasksData();
         }
 
-
-        #region del
-        //        int nWorkerThreads;
-        //        int nCompletionThreads;
-        //        ThreadPool.GetMaxThreads(out nWorkerThreads, out nCompletionThreads);
-        //            foreach (var item in filesId)
-        //            {
-        //                ThreadPool.QueueUserWorkItem(delegate (object state)
-        //                {
-        //                    Console.WriteLine("пришел такс дхф");
-        //                    taskManager.CreateDxf(filesId);
-        //                });
-
-        //            }
-
-        //Console.WriteLine("Таск выполняеться. клиенту ответили что то...");
-        #endregion
     }
 }
