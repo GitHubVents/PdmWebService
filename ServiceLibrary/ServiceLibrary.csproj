@@ -13,7 +13,7 @@
     <AssemblyName>ServiceLibrary</AssemblyName>
     <ProjectTypeGuids>{3D9AD99F-2412-4246-B90B-4EAA41C64699};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <StartArguments>/client:"WcfTestClient.exe"</StartArguments>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <WcfConfigValidationEnabled>True</WcfConfigValidationEnabled>
     <XsdCodeGenEnabled>True</XsdCodeGenEnabled>
     <TargetFrameworkProfile />
@@ -36,11 +36,26 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EPDM.Interop.epdm">
-      <HintPath>C:\Program Files\SOLIDWORKS PDM\EPDM.Interop.epdm.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
+    <Reference Include="Bullzip.PdfWriter, Version=4.0.0.0, Culture=neutral, PublicKeyToken=041d71cacb6e853c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\TaskSystemLibrary\bin\Release\Bullzip.PdfWriter.dll</HintPath>
+    </Reference>
+    <Reference Include="DataBaseDomian">
+      <HintPath>..\TaskSystemLibrary\bin\Release\DataBaseDomian.dll</HintPath>
+    </Reference>
+    <Reference Include="MessageLibrary">
+      <HintPath>..\TaskSystemLibrary\bin\Release\MessageLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PdmSolidWorksLibrary">
+      <HintPath>..\TaskSystemLibrary\bin\Release\PdmSolidWorksLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceConstants">
+      <HintPath>..\TaskSystemLibrary\bin\Release\ServiceConstants.dll</HintPath>
+    </Reference>
+    <Reference Include="SolidWorksLivrary">
+      <HintPath>..\TaskSystemLibrary\bin\Release\SolidWorksLivrary.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -48,24 +63,24 @@
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="TaskSystemLibrary">
+      <HintPath>..\TaskSystemLibrary\bin\Release\TaskSystemLibrary.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataContracts\BomShell.cs" />
-    <Compile Include="DataContracts\DataModel.cs" />
-    <Compile Include="DataContracts\Specification.cs" />
-    <Compile Include="DataContracts\TaskData.cs" />
-    <Compile Include="DataContracts\TransmittableFile.cs" />
+    <Compile Include="ConcreteService\VetsManagingWebService.cs" />
+    <Compile Include="Models\DataContracts\TransmittableFileModel.cs" />
+    <Compile Include="Models\DataContracts\TransmittableSpecification.cs" />
+    <Compile Include="Models\DataContracts\TransmittableTaskData.cs" />
+    <Compile Include="Models\DataContracts\TransmittableFile.cs" />
+    <Compile Include="Models\DataConverter.cs" />
     <Compile Include="ServiceInterface\ISolidWebService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TaskSysrtem\Constants\Constants.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Service\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

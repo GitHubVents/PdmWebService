@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace ServiceLibrary.DataContracts
+namespace ServiceLibrary.Models.DataContracts
 {
     [DataContract]
-   public class Specification
+   public class TransmittableSpecification
     {
         // from bom [t]
       //  [DataMember]
@@ -84,6 +84,11 @@ namespace ServiceLibrary.DataContracts
         /// Is entry have dxf data.
         /// </summary>
         [DataMember]
-        public bool isDxf {get; set;}
+        public string isDxf {get; set;}
+        /// <summary>
+        /// Item type {sldprt or sldasm}
+        /// </summary>
+        [DataMember]
+        public string Type { get; set; }
     }
 }

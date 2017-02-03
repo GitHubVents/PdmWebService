@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace  ServiceLibrary.DataContracts
+namespace  ServiceLibrary.Models.DataContracts
 {
     /// <summary>
     /// Wrapper for transfer file.

@@ -218,17 +218,17 @@ namespace PdmSolidWorksLibrary
             }
           
         }
-
+     const   int BOM_ID = 8;
         #region bom
-        private List<BomShell> GetBomShell(int bomId, string filePath, string bomConfiguration, EdmBomFlag bomFlag, out Exception exception)
+        public IEnumerable<BomShell> GetBomShell(string filePath, string bomConfiguration )
         {
-            exception = null;
+          
             try
             {
                 IEdmFolder5 oFolder;
 
                 IEdmFile7 EdmFile7 = (IEdmFile7)PdmExemplar.GetFileFromPath(filePath, out oFolder);
-                var bomView = EdmFile7.GetComputedBOM(Convert.ToInt32(bomId), Convert.ToInt32(-1), bomConfiguration, (int)bomFlag);
+                var bomView = EdmFile7.GetComputedBOM(Convert.ToInt32(BOM_ID), Convert.ToInt32(-1), bomConfiguration, (int)EdmBomFlag.EdmBf_ShowSelected);
 
                 if (bomView == null)
                     throw new Exception("Computed BOM it can not be null");
@@ -281,7 +281,7 @@ namespace PdmSolidWorksLibrary
                         bomTable.Rows[i][j + 4] = cell.GetPathName();
                     }
                 }
-                exception = null;
+           
                 return  BomTableToBomList(bomTable);
 
             }
@@ -292,7 +292,7 @@ namespace PdmSolidWorksLibrary
         }
         #endregion
 
-        public static List<BomShell> BomTableToBomList(DataTable table)
+        private   IEnumerable<BomShell> BomTableToBomList(DataTable table)
         {
             List<BomShell> BoomShellList = new List<BomShell>(table.Rows.Count);
 
@@ -321,7 +321,7 @@ namespace PdmSolidWorksLibrary
                                        Note = values[18].ToString(),
                                        Level = Convert.ToInt32(values[19]),
                                        ConfigurationMainAssembly = values[20].ToString(),
-                                       TypeObject = values[21].ToString(),
+                                       TypeObject = values[9].ToString(),
                                        GetPathName = values[22].ToString()
                                    });
 

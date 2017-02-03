@@ -57,6 +57,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="SwPlusRepository.cs" />
     <Compile Include="TaskSystemDataRepository.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -89,9 +90,9 @@
       <Project>{D0ABF979-D32B-453D-92D5-F9BC7BDEC44E}</Project>
       <Name>Patterns</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ServiceLibrary\ServiceLibrary.csproj">
-      <Project>{72339207-CA2E-4581-BA9C-8E6A6A1052A6}</Project>
-      <Name>ServiceLibrary</Name>
+    <ProjectReference Include="..\ServiceConstants\ServiceConstants.csproj">
+      <Project>{21A48C37-403D-4966-9414-6EA2327A204B}</Project>
+      <Name>ServiceConstants</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

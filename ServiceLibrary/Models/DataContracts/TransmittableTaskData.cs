@@ -1,13 +1,13 @@
 ﻿using System.Runtime.Serialization;
-using ServiceLibrary.TaskSystem.Constants;
+ 
 
-namespace ServiceLibrary.DataContracts
+namespace ServiceLibrary.Models.DataContracts
 {
     /// <summary>
     /// This model describes the information abaut task 
     /// </summary>
     [ DataContract]
-   public class TaskData
+   public class TransmittableTaskData
     {
         /// <summary>
         /// Task id in schedule.

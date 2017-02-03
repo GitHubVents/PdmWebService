@@ -1,6 +1,6 @@
-﻿using System.ServiceModel; 
-using ServiceLibrary.TaskSystem.Constants;
-using ServiceLibrary.DataContracts;
+﻿using ServiceLibrary.Models.DataContracts;
+using System.ServiceModel;
+
 
 namespace ServiceLibrary.ServiceInterface
 {
@@ -14,7 +14,7 @@ namespace ServiceLibrary.ServiceInterface
         /// <param name="nameSegment"></param>
         /// <returns></returns>
         [OperationContract]
-        DataModel[] Search(string nameSegment);
+        TransmittableFileModel[] Search(string nameSegment);
 
         /// <summary>
         /// Get serialize file fro selected model. 
@@ -22,21 +22,21 @@ namespace ServiceLibrary.ServiceInterface
         /// <param name="id"></param>
         /// <returns></returns>
         [OperationContract]
-        TransmittableFile SelectFile(DataModel dataSolidModel);
+        TransmittableFile SelectFile(TransmittableFileModel dataSolidModel);
         /// <summary>
         /// Get path to virtual folder for selected model
         /// </summary>
         /// <param name="dataSolidModel"></param>
         /// <returns></returns>
         [OperationContract]
-        string GetPathSelectFile(DataModel dataSolidModel);
+        string GetPathSelectFile(TransmittableFileModel dataSolidModel);
         /// <summary>
         /// Get configurations for selected model 
         /// </summary>
         /// <param name="dataSolidModel"></param>
         /// <returns></returns>
         [OperationContract]
-        string[] GetConfigiguration(DataModel dataSolidModel);
+        string[] GetConfigigurations(TransmittableFileModel dataSolidModel);
         /// <summary>
         ///  Get specifications by all parts selected model 
         /// </summary>
@@ -44,7 +44,7 @@ namespace ServiceLibrary.ServiceInterface
         /// <param name="configuration"></param>
         /// <returns></returns>
         [OperationContract]
-        Specification[] GetSpecifications(DataModel dataSolidModel, string configuration);
+        TransmittableSpecification[] GetSpecifications(TransmittableFileModel dataSolidModel, string configuration);
 
         /// <summary>
         /// Check dxf data
@@ -55,45 +55,52 @@ namespace ServiceLibrary.ServiceInterface
         /// <returns></returns>
         //[OperationContract]
         //bool CheckDEF(int idPDM, string configuration, int version);
-      
 
 
-        [OperationContract]
-        void CreateRoof(int height, int wight,  RoofTypes type, int userId);
-        [OperationContract]
-        void CreateVibroInsertion(int height, int wight, VibroInsertionTypes type, int userId);
-   
-        /// <summary>
-        /// Create a flap with the custom material and thickness.
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="height"></param>
-        /// <param name="wight"></param>
-        /// <param name="material"></param>
-        /// <param name="isOuter"></param>
-        /// <param name="thickness"></param>
-        /// <param name="userId"></param>
-        [OperationContract]
-        void CreateFlap(FlapTypes type, int height, int wight, Meterials material, bool isOuter, float thickness, int userId = 0);
-        /// <summary>
-        /// test method...
-        /// </summary>
-        [OperationContract]
-        void OpenSolidWorks();
+
+        //[OperationContract]
+        //void CreateRoof(int height, int wight,  RoofTypes type, int userId);
+        //[OperationContract]
+        //void CreateVibroInsertion(int height, int wight, VibroInsertionTypes type, int userId);
+
+        ///// <summary>
+        ///// Create a flap with the custom material and thickness.
+        ///// </summary>
+        ///// <param name="type"></param>
+        ///// <param name="height"></param>
+        ///// <param name="wight"></param>
+        ///// <param name="material"></param>
+        ///// <param name="isOuter"></param>
+        ///// <param name="thickness"></param>
+        ///// <param name="userId"></param>
+        //[OperationContract]
+        //void CreateFlap(FlapTypes type, int height, int wight, Meterials material, bool isOuter, float thickness, int userId = 0);
+        ///// <summary>
+        ///// test method...
+        ///// </summary>
+        //[OperationContract]
+        //void OpenSolidWorks();
 
 
         [OperationContract(IsOneWay = true)]
-        void CreateDxf(int [] filesId );
+        void CreateDxf(int[] filesId);
 
-        [OperationContract(IsOneWay = true)] 
+        [OperationContract(IsOneWay = true)]
         void CreatePdf(int[] filesId);
 
-       
-            [OperationContract]
-            TaskData[] GetActiveTasksData( );
-
+        /// <summary>
+        /// Returned data about active tasks
+        /// </summary>
+        /// <returns></returns>
         [OperationContract]
-        TaskData[] GetComplitedTasksData();
+        TransmittableTaskData[] GetActiveTasksData();
+
+        /// <summary>
+        /// Returned data about complited tasks
+        /// </summary>
+        /// <returns></returns>
+        [OperationContract]
+        TransmittableTaskData[] GetComplitedTasksData();
 
     }
 }

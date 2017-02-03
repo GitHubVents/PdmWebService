@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBaseDomian", "DataBaseD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PdmSolidWorksLibrary", "PdmSolidWorksLibrary\PdmSolidWorksLibrary.csproj", "{796CE95A-9827-4090-A509-039B84CB601F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWebService", "TestWebService\TestWebService.csproj", "{BA6001DC-7302-475C-95DA-1E73B30E09CF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceConstants", "ServiceConstants\ServiceConstants.csproj", "{21A48C37-403D-4966-9414-6EA2327A204B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,10 +59,10 @@ Global
 		{796CE95A-9827-4090-A509-039B84CB601F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{796CE95A-9827-4090-A509-039B84CB601F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{796CE95A-9827-4090-A509-039B84CB601F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BA6001DC-7302-475C-95DA-1E73B30E09CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BA6001DC-7302-475C-95DA-1E73B30E09CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BA6001DC-7302-475C-95DA-1E73B30E09CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BA6001DC-7302-475C-95DA-1E73B30E09CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21A48C37-403D-4966-9414-6EA2327A204B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21A48C37-403D-4966-9414-6EA2327A204B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21A48C37-403D-4966-9414-6EA2327A204B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21A48C37-403D-4966-9414-6EA2327A204B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

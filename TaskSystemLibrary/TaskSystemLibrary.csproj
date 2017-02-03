@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="ExecuterFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TaskData.cs" />
     <Compile Include="TaskManager.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -57,9 +58,9 @@
       <Project>{796CE95A-9827-4090-A509-039B84CB601F}</Project>
       <Name>PdmSolidWorksLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ServiceLibrary\ServiceLibrary.csproj">
-      <Project>{72339207-CA2E-4581-BA9C-8E6A6A1052A6}</Project>
-      <Name>ServiceLibrary</Name>
+    <ProjectReference Include="..\ServiceConstants\ServiceConstants.csproj">
+      <Project>{21a48c37-403d-4966-9414-6ea2327a204b}</Project>
+      <Name>ServiceConstants</Name>
     </ProjectReference>
     <ProjectReference Include="..\SolidWorksLivrary\SolidWorksLibrary.csproj">
       <Project>{DECC61E0-8D25-485F-99F4-D895177C7997}</Project>

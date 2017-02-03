@@ -2,11 +2,11 @@
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace ServiceLibrary.DataContracts
+namespace ServiceLibrary.Models.DataContracts
 {
 
     [DataContract]
-    public class DataModel  
+    public class TransmittableFileModel  
     {
         /// <summary>
         /// The file name and expansion

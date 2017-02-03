@@ -82,9 +82,6 @@
       <HintPath>packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ServiceLibrary">
-      <HintPath>..\ServiceLibrary\bin\Release\ServiceLibrary.dll</HintPath>
-    </Reference>
     <Reference Include="SolidWorks.Interop.sldworks">
       <HintPath>..\..\..\Program Files\SOLIDWORKS Corp\SOLIDWORKS\api\redist\SolidWorks.Interop.sldworks.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -239,6 +236,18 @@
     <ProjectReference Include="..\MessageLibrary\Patterns.csproj">
       <Project>{d0abf979-d32b-453d-92d5-f9bc7bdec44e}</Project>
       <Name>Patterns</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PdmSolidWorksLibrary\PdmSolidWorksLibrary.csproj">
+      <Project>{796CE95A-9827-4090-A509-039B84CB601F}</Project>
+      <Name>PdmSolidWorksLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ServiceConstants\ServiceConstants.csproj">
+      <Project>{21A48C37-403D-4966-9414-6EA2327A204B}</Project>
+      <Name>ServiceConstants</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ServiceLibrary\ServiceLibrary.csproj">
+      <Project>{72339207-CA2E-4581-BA9C-8E6A6A1052A6}</Project>
+      <Name>ServiceLibrary</Name>
     </ProjectReference>
     <ProjectReference Include="..\SolidWorksLivrary\SolidWorksLibrary.csproj">
       <Project>{decc61e0-8d25-485f-99f4-d895177c7997}</Project>

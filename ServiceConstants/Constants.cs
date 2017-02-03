@@ -1,10 +1,9 @@
-﻿namespace ServiceLibrary.TaskSystem.Constants
-{
-
+﻿namespace ServiceConstants
+{ 
     /// <summary>
     /// Contain enumeration task types { VibroInsertion, Flap, Roof, MountingFrame, Panel, HousingBlock, Monoblock, Frameless } and their numeric constants
     /// </summary>
-    public enum TasksType
+public enum TasksType
     {
         VibroInsertion = 1,
         Flap = 2,

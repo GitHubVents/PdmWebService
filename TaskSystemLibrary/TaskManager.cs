@@ -1,7 +1,7 @@
 ﻿
 using DataBaseDomian;
 using Patterns;
-using ServiceLibrary.TaskSystem.Constants;
+using ServiceConstants;
 using SolidWorksLibrary.Builders.Dxf;
 using System;
 using System.Collections.Generic;
@@ -94,45 +94,44 @@ namespace TaskSystemLibrary
         }
 
 
-        //public TaskData[] GetActiveTasksData()
-        //{
-        //    List<TaskData> TaskDataList = new List<TaskData>();
-        //    var activeTasks = DataBaseModel.View_ActiveTasks;
-        //    foreach (var task in activeTasks)
-        //    {
-        //        TaskDataList.Add(
-        //            new TaskData()
-        //            {
-        //                TaskId = task.TaskInstanceID,
-        //                Type = (int)task.TaskID,
-        //                Status = task.TaskStatus,
-        //                UserId = task.InitUserID
-        //            });
+        public TaskData[] GetActiveTasksData()
+        {
+            List<TaskData> TaskDataList = new List<TaskData>();
+            var activeTasks = TaskSystemDataRepository.Instance.ActiveTasks;
+            foreach (var task in activeTasks)
+            {
+                TaskDataList.Add(
+                    new TaskData()
+                    {
+                        TaskId = task.TaskInstanceID,
+                        TaskType = (int)task.TaskID,
+                        Status = task.TaskStatus,
+                        UserId = task.InitUserID
+                    });
 
-        //    }
-        //    return TaskDataList.ToArray();
+            }
+            return TaskDataList.ToArray();
 
-        //}
+        }
 
-        //public TaskData[] GetComplitedTasksData()
-        //{
-        //    List<TaskData> TaskDataList = new List<TaskData>();
-        //    var completedTasks = DataBaseModel.View_CompletedTasks;
-        //    Console.WriteLine("Count copmleted tasks" + completedTasks.Count());
-        //    foreach (var task in completedTasks)
-        //    {
-        //        TaskDataList.Add(
-        //           new TaskData()
-        //           {
-        //               TaskId = task.TaskInstanceID,
-        //               Type = (int)task.TaskID,
-        //               Status = task.TaskStatus,
-        //               UserId = task.InitUserID
-        //           });
-        //        Console.WriteLine("Our iteration (GetComplitedTasksData)");
-        //    }
-        //    Console.WriteLine("We returns our completed tasks");
-        //    return TaskDataList.ToArray();
-        //}
+        public TaskData[] GetComplitedTasksData()
+        {
+            List<TaskData> TaskDataList = new List<TaskData>();
+            var completedTasks = TaskSystemDataRepository.Instance.CompletedTasks; 
+            foreach (var task in completedTasks)
+            {
+                TaskDataList.Add(
+                   new TaskData()
+                   {
+                       TaskId = task.TaskInstanceID,
+                       TaskType = (int)task.TaskID,
+                       Status = task.TaskStatus,
+                       UserId = task.InitUserID
+                   });
+                Console.WriteLine("Our iteration (GetComplitedTasksData)");
+            }
+            Console.WriteLine("We returns our completed tasks");
+            return TaskDataList.ToArray();
+        }
     }
 }

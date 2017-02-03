@@ -1,17 +1,17 @@
 ﻿using Patterns;
 using System;
 using DataBaseDomian.Orm;
-using ServiceLibrary.TaskSystem.Constants;
 using Patterns.Observer;
 using System.Linq;
 using System.Collections.Generic;
+using ServiceConstants;
 
 namespace DataBaseDomian
 {
     /// <summary>
     /// Provides acces to tasks data base tasks 
     /// </summary>
-   public class TaskSystemDataRepository : Singeton<TaskSystemDataRepository>
+    public class TaskSystemDataRepository : Singeton<TaskSystemDataRepository>
     {
         /// <summary>
         /// Exemplar of an object oriented database model
@@ -29,13 +29,35 @@ namespace DataBaseDomian
                 {
                     _dataContext = new TasksSystemDataContext();
 
-                    MessageObserver.Instance.SetMessage("Open connection to data base",MessageType.System);
+                    MessageObserver.Instance.SetMessage("Open connection to TasksSystem data base", MessageType.System);
                 }
                 return _dataContext;
             }
         }
+        /// <summary>
+        /// Returns the active tasks that is to tasks with status waiting or execute 
+        /// </summary>
+        public IEnumerable< View_ActiveTask > ActiveTasks
+        {
+            get
+            {
+               return DataContext.View_ActiveTasks;
+            }
+        }
+        /// <summary>
+        /// Returns the completed tasks that is to tasks with status completed or error 
+        /// </summary>
+        public IEnumerable<View_CompletedTask> CompletedTasks
+        {
+            get
+            {
+                return DataContext.View_CompletedTasks;
+            }
+        }
 
-
+        /// <summary>
+        /// Returns the summary count of tasks instance
+        /// </summary>
         public long CountTasks
         {
             get
@@ -43,7 +65,12 @@ namespace DataBaseDomian
                 return DataContext.TaskInstances.LongCount();
             }
         }
-        public long CountSelectionsTask(int taskInstanceId)
+        /// <summary>
+        /// Returns the count of selections tasks by taskInstance Id
+        /// </summary>
+        /// <param name="taskInstanceId"> Task Instance id</param>
+        /// <returns></returns>
+        public long CountSelectionsTasks(int taskInstanceId)
         {
 
             return DataContext.TaskSelections.Where(eachSelectionTask => eachSelectionTask.TaskInstanceID == taskInstanceId).LongCount();
@@ -51,7 +78,7 @@ namespace DataBaseDomian
         }
 
 
-        protected TaskSystemDataRepository() : base(){}
+        protected TaskSystemDataRepository() : base() { }
 
         /// <summary>
         /// Adds new pdf task to data base. 
@@ -70,7 +97,7 @@ namespace DataBaseDomian
 
                 foreach (var eachDocumentId in arrayDocumentId)
                 {
-                   int taskSelectionId =  this.DataContext.Tasks_SetTaskSelection(taskInstanceId, eachDocumentId);
+                    int taskSelectionId = this.DataContext.Tasks_SetTaskSelection(taskInstanceId, eachDocumentId);
                     MessageObserver.Instance.SetMessage("Created TaskSelection with id " + taskSelectionId, MessageType.System);
                 }
                 this.DataContext.SubmitChanges();
@@ -85,7 +112,7 @@ namespace DataBaseDomian
                 else
                 {
                     MessageObserver.Instance.SetMessage("Failed added new task; message { " + ex + " }", MessageType.Error);
-                }            
+                }
             }
             return taskInstanceId;
         }
@@ -130,7 +157,7 @@ namespace DataBaseDomian
         /// Returns task instance with is waiting status 
         /// </summary>
         /// <returns></returns>
-        public TaskInstance GetWaitingTask ()
+        public TaskInstance GetWaitingTask()
         {
             try
             {
@@ -147,7 +174,8 @@ namespace DataBaseDomian
         /// </summary>
         /// <param name="taskInstancesID"></param>
         /// <returns></returns>
-        public IEnumerable<TaskSelection> GetSelectionsTasks(int taskInstancesID) {
+        public IEnumerable<TaskSelection> GetSelectionsTasks(int taskInstancesID)
+        {
             try
             {
                 return DataContext.TaskSelections.Where(eachTaskSelection => eachTaskSelection.TaskInstanceID == taskInstancesID);
@@ -165,7 +193,7 @@ namespace DataBaseDomian
         /// </summary>
         /// <param name="taskInstanceId"></param>
         public void ApplyError(int taskInstanceId)
-        {            
+        {
             this.DataContext.Tasks_SetTaskStatus((int)TaskStatus.Error, taskInstanceId);
             DataContext.SubmitChanges();
             DataContext.Refresh(System.Data.Linq.RefreshMode.OverwriteCurrentValues, DataContext.TaskInstances);
@@ -229,9 +257,6 @@ namespace DataBaseDomian
             int countWaitingTasks = DataContext.View_ActiveTasks.Where(eachTask => eachTask.TaskStatus == (int)TaskStatus.Waiting).Count();
             return countWaitingTasks > 0 ? true : false;
         }
-
-
-
         #endregion
     }
 }

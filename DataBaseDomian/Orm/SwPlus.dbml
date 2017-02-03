@@ -16,4 +16,10 @@
       <Column Name="DXF" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
+  <Function Name="dbo.DXFCheck" Method="DXFCheck">
+    <Parameter Name="IDPDM" Parameter="iDPDM" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Configuration" Parameter="configuration" Type="System.String" DbType="NVarChar(255)" />
+    <Parameter Name="Version" Parameter="version" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
 </Database>
