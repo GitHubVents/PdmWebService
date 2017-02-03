@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PdmSolidWorksLibrary", "Pdm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceConstants", "ServiceConstants\ServiceConstants.csproj", "{21A48C37-403D-4966-9414-6EA2327A204B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceHost", "ServiceHost\ServiceHost.csproj", "{C8B423A1-369E-42CF-BB71-1D6AE07B5064}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{21A48C37-403D-4966-9414-6EA2327A204B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21A48C37-403D-4966-9414-6EA2327A204B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21A48C37-403D-4966-9414-6EA2327A204B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8B423A1-369E-42CF-BB71-1D6AE07B5064}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8B423A1-369E-42CF-BB71-1D6AE07B5064}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8B423A1-369E-42CF-BB71-1D6AE07B5064}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8B423A1-369E-42CF-BB71-1D6AE07B5064}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
