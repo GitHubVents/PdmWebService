@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using Patterns;
 using PdmSolidWorksLibrary.Models;
 using System.Threading;
+using Patterns.Observer;
 
 namespace PdmSolidWorksLibrary
 {
@@ -21,6 +22,15 @@ namespace PdmSolidWorksLibrary
         /// PDM exemplar.
         /// </summary>
         private static IEdmVault5 edmVeult5 = null;
+
+        /// <summary>
+        /// Vents pdm name.
+        /// </summary>
+        private const string VAULT_NAME = "Vents-PDM";
+        private const int BOM_ID = 8;
+        /// <summary>
+        /// Returns exemplar pdm SolidWorks 
+        /// </summary>
         private IEdmVault5 PdmExemplar
         {
             get
@@ -37,7 +47,7 @@ namespace PdmSolidWorksLibrary
                      //   Logger.ToLog("Создан экземпляр Vents-PDM");
                         if (!edmVeult5.IsLoggedIn)
                         {
-                            edmVeult5.LoginAuto(vaultname, 0);
+                            edmVeult5.LoginAuto(VAULT_NAME, 0);
                             //ogger.ToLog("Автологин в системе Vents-PDM системного пользователя " + vaultname);
                         }
                     }
@@ -45,26 +55,19 @@ namespace PdmSolidWorksLibrary
                     return edmVeult5;
                 }
                 catch (Exception exception)
-                {
-                   // Logger.ToLog("Невозможно создать экземпляр Vents-PDM - " + this.vaultname + "\n" + exception);
-                    throw new Exception("Невозможно создать экземпляр " + this.vaultname + "\n" + exception);
+                { 
+                    MessageObserver.Instance.SetMessage("Невозможно создать экземпляр Vents-PDM - " + VAULT_NAME + "\n" + exception,MessageType.Warning);
+                    return null;
                 }
-                finally
-                {
-                 //   Logger.ToLog("\n");
-                }
+                
             }
         }
 
-        /// <summary>
-        /// Vents pdm name.
-        /// </summary>
-        private string vaultname { get; set; } = "Vents-PDM";
-         
+
 
 
         /// <summary>
-        /// Search document by name.
+        /// Search document by name and returns colection the FileModelPdm .
         /// </summary>
         /// <param name="segmentName"></param>
         /// <returns></returns>
@@ -80,10 +83,7 @@ namespace PdmSolidWorksLibrary
 
                 IEdmSearchResult5 Result = Search.GetFirstResult();
                 while (Result != null)
-                {
-                    
-
-                    
+                {                    
                     searchResult.Add(new FileModelPdm
                     {
                         FileName = Result.Name,
@@ -94,22 +94,15 @@ namespace PdmSolidWorksLibrary
                         CurrentVersion = Result.Version
                     });
 
-
-
                     Result = Search.GetNextResult();
                     count++;
-                }
-                //Logger.ToLog("По запросу " + segmentName + " найдено " + count);
-
-                Console.WriteLine("Succsess search: return result model");
-
+                }            
+                MessageObserver.Instance.SetMessage ("Поиск успешно завершон, найдено объектов " + searchResult.Count + " по запросу " + segmentName);
             }
             catch (Exception exception)
             {
-              //  Logger.ToLog("По запросу " + segmentName + " не найдено ни одного файла\n Ошибка: " + exception);
-                Console.WriteLine(exception.ToString());
+                MessageObserver.Instance.SetMessage("Поиск по запросу "+ segmentName+" завершон c ошибкой: "+ exception.ToString() + " в связи с чем возвращена пустая колекция FileModelPdm", MessageType.Warning);
                 throw exception;
-
             }
             return searchResult;
         }
@@ -120,8 +113,7 @@ namespace PdmSolidWorksLibrary
         /// </summary>
         /// <param name="fileModel"></param>
         public void DownLoadFile(FileModelPdm fileModel)
-        {
-            
+        {            
             try
             {
                 var batchGetter = (IEdmBatchGet)(PdmExemplar as IEdmVault7).CreateUtility(EdmUtility.EdmUtil_BatchGet);
@@ -131,14 +123,11 @@ namespace PdmSolidWorksLibrary
                     batchGetter.CreateTree(0, (int)EdmGetCmdFlags.Egcf_SkipUnlockedWritable);
                     batchGetter.GetFiles(0, null);
                 }
-                Console.WriteLine("Download file");
-              //  Logger.ToLog("Файл " + dataModel.FileName + " с id " + dataModel.Id + " успешно скачан с PDM системы по пути " + dataModel.Path);
+                MessageObserver.Instance.SetMessage("Файл " + fileModel.FileName + " с id " + fileModel.IDPdm + " получен локально. путь:" + fileModel.Path);
             }
             catch (Exception exception)
             {
-               // Logger.ToLog("Ошибка при скачивании файла " + dataModel.FileName + " с id " + dataModel.Id + exception.ToString());
-
-                Console.WriteLine(exception.ToString());
+                MessageObserver.Instance.SetMessage("Неудалось получить файл " + fileModel.FileName + " с id " + fileModel.IDPdm + "; путь:" + fileModel.Path,MessageType.Error);
                 throw exception;
 
             }
@@ -218,7 +207,7 @@ namespace PdmSolidWorksLibrary
             }
           
         }
-     const   int BOM_ID = 8;
+   
         #region bom
         public IEnumerable<BomShell> GetBomShell(string filePath, string bomConfiguration )
         {
@@ -564,33 +553,39 @@ namespace PdmSolidWorksLibrary
 
 
             }
-            catch (COMException ex)
+            catch (Exception ex)
             {
                 // Logger.ToLog("ERROR BatchSetVariable файл: " + fileNameErr + ", " + ex.Message);
+                throw ex;
             }
         }
 
-
-        public FileModelPdm GetFileById(int fileId, bool isDownload)
+        /// <summary>
+        /// Returns FileModelPdm by file id 
+        /// </summary>
+        /// <param name="fileId">Id in pdm</param>
+        /// <param name="isDownload">It allows download file in local</param>
+        /// <returns></returns>
+        public FileModelPdm GetFileById(int fileId, bool isDownload = false)
         {
             try
             {
                 IEdmFile5 pdmFile = (IEdmFile5)PdmExemplar.GetObject(EdmObjectType.EdmObject_File, fileId);
                 Console.WriteLine(SearchDoc(pdmFile.Name).Count());
-                FileModelPdm ileModel = SearchDoc(pdmFile.Name).First();
-                Console.WriteLine("GetFileById");
+                FileModelPdm fileModel = SearchDoc(pdmFile.Name).First();
+
+             
+
                 if (isDownload)
-                {
-                    Console.WriteLine("\t\tGetFileById: start DownLoadFile");
-                    DownLoadFile(ileModel);
-                    Console.WriteLine("\t\tGetFileById: end DownLoadFile");
+                {                
+                    DownLoadFile(fileModel);   
                 }
-                
-                return ileModel;
+                MessageObserver.Instance.SetMessage("Получен файл " + fileModel.FileName + " по id " + fileId );
+                return fileModel;
             }
             catch (Exception exception)
             {
-                Console.WriteLine(exception.ToString());
+                MessageObserver.Instance.SetMessage("Неудалось получить файл с id " + fileId +  " " + exception,MessageType.Error);
                 throw exception; 
             }
         }

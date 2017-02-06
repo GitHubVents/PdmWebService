@@ -1,4 +1,5 @@
-﻿using ServiceLibrary.ConcreteService;
+﻿using Patterns.Observer;
+using ServiceLibrary.ConcreteService;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,12 +13,12 @@ using System.Threading.Tasks;
 namespace ConsoleServiceHost
 {
     class Program
-    {
-        public static void startHost ()
+    { 
+        public static void CreateHost()
         {
 
             using (System.ServiceModel.ServiceHost host = new
-                System.ServiceModel.ServiceHost(typeof(VetsManagingWebService)))
+                System.ServiceModel.ServiceHost(typeof(VentsManagingWebService)))
             {
 
                 host.Open();
@@ -27,12 +28,13 @@ namespace ConsoleServiceHost
         }
         static void Main(string[] args)
         {
-         //   string port = "8080";
-          //  ServiceManager.Instance.BuildHost(new Uri("http://" + "192.168.14.43" + ":" + port));
-          //  ServiceManager.Instance.StartHost();
+
+            MessageObserver.Instance.ReceivedMessage += Instance_ReceivedMessage;
+
+
             try
             {
-                Thread thread = new Thread(startHost);
+                Thread thread = new Thread(CreateHost);
                 thread.Start();
 
             }
@@ -52,6 +54,12 @@ namespace ConsoleServiceHost
             Console.ReadLine();
 
         }
+
+        private static void Instance_ReceivedMessage(MessageEventArgs e)
+        {
+            Console.WriteLine("Message status: "+ e.Type+ "; "+ e.Message );
+        }
+
         private static IPAddress LocalIPAddress()
         {
             if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())

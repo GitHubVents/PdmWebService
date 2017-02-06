@@ -165,7 +165,7 @@ namespace DataBaseDomian
             }
             catch
             {
-                MessageObserver.Instance.SetMessage("In queue is not exist tasks to execute and waiting. Possibly incorrect saving a task instance", MessageType.Error);
+                MessageObserver.Instance.SetMessage("In queue is not exist tasks to execute and waiting. Possibly incorrect saving a task instance", MessageType.Warning);
                 return null;
             }
         }
@@ -197,7 +197,7 @@ namespace DataBaseDomian
             this.DataContext.Tasks_SetTaskStatus((int)TaskStatus.Error, taskInstanceId);
             DataContext.SubmitChanges();
             DataContext.Refresh(System.Data.Linq.RefreshMode.OverwriteCurrentValues, DataContext.TaskInstances);
-            MessageObserver.Instance.SetMessage("Apply Error " + taskInstanceId);
+            MessageObserver.Instance.SetMessage("Apply Error for task instance by id " + taskInstanceId);
         }
 
         /// <summary>
@@ -209,7 +209,7 @@ namespace DataBaseDomian
             this.DataContext.Tasks_SetTaskStatus((int)TaskStatus.Completed, taskInstanceId);
             DataContext.SubmitChanges();
             DataContext.Refresh(System.Data.Linq.RefreshMode.OverwriteCurrentValues, DataContext.TaskInstances);
-            MessageObserver.Instance.SetMessage("Apply Completed" + taskInstanceId);
+            MessageObserver.Instance.SetMessage("Apply Completed for task instance by id " + taskInstanceId);
         }
 
         /// <summary>
@@ -221,7 +221,7 @@ namespace DataBaseDomian
             this.DataContext.Tasks_SetTaskStatus((int)TaskStatus.Waiting, taskInstanceId);
             DataContext.SubmitChanges();
             DataContext.Refresh(System.Data.Linq.RefreshMode.OverwriteCurrentValues, DataContext.TaskInstances);
-            MessageObserver.Instance.SetMessage("Apply Waiting " + taskInstanceId);
+            MessageObserver.Instance.SetMessage("Apply Waiting for task instance by id " + taskInstanceId);
         }
 
         /// <summary>
@@ -233,7 +233,7 @@ namespace DataBaseDomian
             this.DataContext.Tasks_SetTaskStatus((int)TaskStatus.Execution, taskInstanceId);
             DataContext.SubmitChanges();
             DataContext.Refresh(System.Data.Linq.RefreshMode.OverwriteCurrentValues, DataContext.TaskInstances);
-            MessageObserver.Instance.SetMessage("Apply Execution " + taskInstanceId);
+            MessageObserver.Instance.SetMessage("Apply Execution for task instance by id " + taskInstanceId);
         }
         #endregion
 

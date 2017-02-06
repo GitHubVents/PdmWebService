@@ -8,10 +8,10 @@ using TaskSystemLibrary;
 
 namespace ServiceLibrary.ConcreteService
 {
-    public class VetsManagingWebService : ISolidWebService
+    public class VentsManagingWebService : ISolidWebService
     {
         private TaskManager taskManager;
-        public VetsManagingWebService()
+        public VentsManagingWebService()
         {
             try
             {
