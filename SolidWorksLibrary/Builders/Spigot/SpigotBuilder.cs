@@ -62,17 +62,24 @@ namespace PDMWebService.Data.Solid.PartBuilders
 
         public string Build(SpigotType type, int width, int height)
         {
+            string modelName = DeterminateModelName(type);
+            NewSpigotName = GetSpigotName(type, width, height);
+
             string newPartName = string.Empty;
             string newPartPath = string.Empty;
+
             IModelDoc2 partModeltDocument;
             bool isPartExist = false;
             Dimension myDimension;
-            string modelName = DeterminateModelName(type);
-            NewSpigotName = GetSpigotName(type, width, height);
+           
             int addDimH = modelName == "12-30" ? 10 : 1;
-            var newSpigotPath = $@"{RootFolder}{SpigotDestinationFolder}\{NewSpigotName}";
+
+            string newSpigotPath = $@"{RootFolder}{SpigotDestinationFolder}\{NewSpigotName}";
+
             string drawingName = modelName == "12-30" ? modelName : "12-00";
+
             var modelSpigotDrw = $@"{RootFolder}{SpigotFolder}\{drawingName}.SLDDRW";
+
             ModelDoc2 swDrawingSpigot = SolidWorksAdapter.OpenDocument(modelSpigotDrw, swDocumentTypes_e.swDocDRAWING);
             solidWorksDocument = SolidWorksAdapter.AcativeteDoc("12-00");
             AssemblyDoc assemblyDocument = (AssemblyDoc)solidWorksDocument;
@@ -112,7 +119,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
                     solidWorksDocument = SolidWorksAdapter.AcativeteDoc("12-00.SLDASM");
                     solidWorksDocument.Extension.SelectByID2("12-20-001-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
                     assemblyDocument.ReplaceComponents(newPartPath, "", true, true);
-                    SolidWorksAdapter.SldWoksApp.CloseDoc("12-20-001.SLDPRT");
+                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("12-20-001.SLDPRT");
                 }
                 else
                 {
@@ -126,7 +133,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
                     partModeltDocument.Extension.SaveAs(newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
                     SaveExeptionInitiator(error, warning, newPartPath);
                     ComponentsPathList.Add(newPartPath);
-                    SolidWorksAdapter.SldWoksApp.CloseDoc(newPartName);
+                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newPartName);
                 }
 
                 //12-20-002
@@ -147,10 +154,10 @@ namespace PDMWebService.Data.Solid.PartBuilders
 
                 if (isPartExist)
                 {
-                    solidWorksDocument = SolidWorksAdapter.SldWoksApp.ActivateDoc("12-00.SLDASM");
+                    solidWorksDocument = SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc("12-00.SLDASM");
                     solidWorksDocument.Extension.SelectByID2("12-20-002-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
                     assemblyDocument.ReplaceComponents(newPartPath, "", true, true);
-                    SolidWorksAdapter.SldWoksApp.CloseDoc("12-20-002.SLDPRT");
+                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("12-20-002.SLDPRT");
                 }
                 else
                 {
@@ -164,7 +171,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
                     partModeltDocument.Extension.SaveAs(newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
                     SaveExeptionInitiator(error, warning, newPartPath);
                     ComponentsPathList.Add(newPartPath);
-                    SolidWorksAdapter.SldWoksApp.CloseDoc(newPartName);
+                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newPartName);
                 }
 
                 //12-003
@@ -186,7 +193,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
                     solidWorksDocument = SolidWorksAdapter.AcativeteDoc("12-00.SLDASM");
                     solidWorksDocument.Extension.SelectByID2("12-003-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
                     assemblyDocument.ReplaceComponents(newPartPath, "", true, true);
-                    SolidWorksAdapter.SldWoksApp.CloseDoc("12-003.SLDPRT");
+                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("12-003.SLDPRT");
                 }
                 else
                 {
@@ -201,7 +208,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
                     partModeltDocument.Extension.SaveAs(newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
                     SaveExeptionInitiator(error, warning, newPartPath);
                     ComponentsPathList.Add(newPartPath);
-                    SolidWorksAdapter.SldWoksApp.CloseDoc(newPartName);
+                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newPartName);
                 }
             }
             if (modelName == "12-30")
@@ -226,7 +233,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
                     solidWorksDocument = SolidWorksAdapter.AcativeteDoc("12-00.SLDASM");
                     solidWorksDocument.Extension.SelectByID2("12-30-001-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
                     assemblyDocument.ReplaceComponents(newPartPath, "", true, true);
-                    SolidWorksAdapter.SldWoksApp.CloseDoc("12-30-001.SLDPRT");
+                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("12-30-001.SLDPRT");
                 }
                 else
                 {
@@ -240,7 +247,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
                     partModeltDocument.Extension.SaveAs(newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
                     SaveExeptionInitiator(error, warning, newPartPath);
                     ComponentsPathList.Add(newPartPath);
-                    SolidWorksAdapter.SldWoksApp.CloseDoc(newPartName);
+                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newPartName);
                 }
                 //12-30-002
                 partModeltDocument = SolidWorksAdapter.AcativeteDoc("12-30-002");
@@ -261,7 +268,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
                     solidWorksDocument = SolidWorksAdapter.AcativeteDoc("12-00.SLDASM");
                     solidWorksDocument.Extension.SelectByID2("12-30-002-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
                     assemblyDocument.ReplaceComponents(newPartPath, "", true, true);
-                    SolidWorksAdapter.SldWoksApp.CloseDoc("12-30-002.SLDPRT");
+                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("12-30-002.SLDPRT");
                 }
                 else
                 {
@@ -275,7 +282,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
                     partModeltDocument.Extension.SaveAs(newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
                     SaveExeptionInitiator(error, warning, newPartPath);
                     ComponentsPathList.Add(newPartPath);
-                    SolidWorksAdapter.SldWoksApp.CloseDoc(newPartName);
+                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newPartName);
                 }
                 //12-003
 
@@ -295,7 +302,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
                     solidWorksDocument = SolidWorksAdapter.AcativeteDoc("12-00.SLDASM");
                     solidWorksDocument.Extension.SelectByID2("12-003-2@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
                     assemblyDocument.ReplaceComponents(newPartPath, "", true, true);
-                    SolidWorksAdapter.SldWoksApp.CloseDoc("12-003.SLDPRT");
+                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("12-003.SLDPRT");
                 }
                 else
                 {
@@ -310,7 +317,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
                     partModeltDocument.Extension.SaveAs(newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
                     SaveExeptionInitiator(error, warning, newPartPath);
                     ComponentsPathList.Add(newPartPath);
-                    SolidWorksAdapter.SldWoksApp.CloseDoc(newPartName);
+                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newPartName);
                 }
             }
 
@@ -318,7 +325,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
             solidWorksDocument.Extension.SaveAs(newSpigotPath + ".SLDASM", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
             SaveExeptionInitiator(error, warning, newSpigotPath + ".SLDASM");
 
-            SolidWorksAdapter.SldWoksApp.CloseDoc(NewSpigotName + ".SLDASM");
+            SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(NewSpigotName + ".SLDASM");
             ComponentsPathList.Add(newSpigotPath + ".SLDASM");
             swDrawingSpigot.Extension.SelectByID2("DRW1", "SHEET", 0, 0, 0, false, 0, null, 0);
             var drw = (DrawingDoc)SolidWorksAdapter.AcativeteDoc(drawingName + ".SLDDRW");

@@ -19,7 +19,7 @@ namespace SolidWorksLibrary
         /// <summary>
         /// Get SolidWorksExemplare
         /// </summary>
-        public static SldWorks SldWoksApp
+        public static SldWorks SldWoksAppExemplare
         {
             get
             {
@@ -67,7 +67,7 @@ namespace SolidWorksLibrary
         {
             try
             {
-                var modelDocs = SldWoksApp.GetDocuments();
+                var modelDocs = SldWoksAppExemplare.GetDocuments();
                 foreach (var eachModelDoc in modelDocs)
                 {
                     eachModelDoc.Close();
@@ -92,7 +92,7 @@ namespace SolidWorksLibrary
 
             try
             {
-                SldWoksApp.CloseDoc(swModel.GetTitle().ToLower().Contains(".sldprt") ? swModel.GetTitle() : swModel.GetTitle() + ".sldprt");
+                SldWoksAppExemplare.CloseDoc(swModel.GetTitle().ToLower().Contains(".sldprt") ? swModel.GetTitle() : swModel.GetTitle() + ".sldprt");
                 MessageObserver.Instance.SetMessage("Closed opened document " + swModel.GetTitle(), MessageType.Success);
             }
             catch (Exception ex)
@@ -110,7 +110,7 @@ namespace SolidWorksLibrary
             try
             {               
                // CloseAllDocuments();
-                SldWoksApp.ExitApp();
+                SldWoksAppExemplare.ExitApp();
                 MessageObserver.Instance.SetMessage("Exit from  SolidWorks Application", MessageType.System);
             }
             catch (Exception ex)
@@ -159,8 +159,8 @@ namespace SolidWorksLibrary
                 openDocOptions += (int)swOpenDocOptions_e.swOpenDocOptions_LoadModel;
             }
 
-            var swDocument = SolidWorksAdapter.SldWoksApp.OpenDoc6(path, (int)documentType, openDocOptions, configuration, errors, warnings);
-            SolidWorksAdapter.SldWoksApp.Visible = true;
+            var swDocument = SolidWorksAdapter.SldWoksAppExemplare.OpenDoc6(path, (int)documentType, openDocOptions, configuration, errors, warnings);
+            SolidWorksAdapter.SldWoksAppExemplare.Visible = true;
 
             if (errors != 0)
             {
@@ -187,7 +187,7 @@ namespace SolidWorksLibrary
                 MessageObserver.Instance.SetMessage("Exeption at activate solid works document: code {" + errors+"}, description error {" + (swActivateDocError_e) errors + "}");
             }
 
-            return  SolidWorksAdapter.SldWoksApp.ActivateDoc3(docTitle, true, (int) swOpenDocOptions_e.swOpenDocOptions_Silent, errors);
+            return  SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc3(docTitle, true, (int) swOpenDocOptions_e.swOpenDocOptions_Silent, errors);
         }
     }
 }

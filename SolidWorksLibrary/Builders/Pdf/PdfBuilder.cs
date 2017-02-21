@@ -64,7 +64,7 @@ namespace SolidWorksLibrary.Builders.Pdf
         private string ConvertDrwToPdf( string path)
         {
             int Errors = 0;
-            ModelDoc2 document = SolidWorksAdapter.SldWoksApp.OpenDoc2(path, (int)swDocumentTypes_e.swDocDRAWING, false, false, true, Errors);
+            ModelDoc2 document = SolidWorksAdapter.SldWoksAppExemplare.OpenDoc2(path, (int)swDocumentTypes_e.swDocDRAWING, false, false, true, Errors);
             try
             {
                 ModelDocExtension swModelDocExt;
@@ -148,7 +148,7 @@ namespace SolidWorksLibrary.Builders.Pdf
             if (width < height)
             {
                 pagesetup.Orientation = (int)swPageSetupOrientation_e.swPageSetupOrient_Portrait;
-                SolidWorksAdapter.SldWoksApp.SetUserPreferenceIntegerValue((int)swUserPreferenceIntegerValue_e.swPageSetupPrinterOrientation, (int)swPageSetupOrientation_e.swPageSetupOrient_Portrait);
+                SolidWorksAdapter.SldWoksAppExemplare.SetUserPreferenceIntegerValue((int)swUserPreferenceIntegerValue_e.swPageSetupPrinterOrientation, (int)swPageSetupOrientation_e.swPageSetupOrient_Portrait);
                 if (width <= 0.21)
                 {
                     pagesetup.PrinterPaperSize = (int)swDwgPaperSizes_e.swDwgPaperA4sizeVertical;
@@ -179,7 +179,7 @@ namespace SolidWorksLibrary.Builders.Pdf
             {
 
                 pagesetup.Orientation = (int)swPageSetupOrientation_e.swPageSetupOrient_Landscape;
-                SolidWorksAdapter.SldWoksApp.SetUserPreferenceIntegerValue((int)swUserPreferenceIntegerValue_e.swPageSetupPrinterOrientation, (int)swPageSetupOrientation_e.swPageSetupOrient_Landscape);
+                SolidWorksAdapter.SldWoksAppExemplare.SetUserPreferenceIntegerValue((int)swUserPreferenceIntegerValue_e.swPageSetupPrinterOrientation, (int)swPageSetupOrientation_e.swPageSetupOrient_Landscape);
                 if (width < 0.297)
                 {
                     pagesetup.PrinterPaperSize = (int)swDwgPaperSizes_e.swDwgPaperA4sizeVertical;

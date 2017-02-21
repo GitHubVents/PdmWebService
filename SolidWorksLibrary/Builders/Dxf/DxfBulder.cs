@@ -16,7 +16,7 @@ using System.Linq;
     {
         private DxfBulder() : base()
         {
-            this.solidWorksApp = SolidWorksAdapter.SldWoksApp;   
+            this.solidWorksApp = SolidWorksAdapter.SldWoksAppExemplare;   
             MessageObserver.Instance.SetMessage("Create DxfBulder",MessageType.Success);
         }
         /// <summary>
@@ -79,8 +79,8 @@ using System.Linq;
                     try
                     {
                         string emptyConfigyration = "";
-                        modelDoc = SolidWorksAdapter.SldWoksApp.OpenDoc6(partPath, (int)swDocumentTypes_e.swDocPART, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, emptyConfigyration, error, warnings);
-                        modelDoc = SolidWorksAdapter.SldWoksApp.IActiveDoc2;
+                        modelDoc = SolidWorksAdapter.SldWoksAppExemplare.OpenDoc6(partPath, (int)swDocumentTypes_e.swDocPART, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, emptyConfigyration, error, warnings);
+                        modelDoc = SolidWorksAdapter.SldWoksAppExemplare.IActiveDoc2;
 
                         MessageObserver.Instance.SetMessage("\tOpened document " + Path.GetFileName(partPath), MessageType.System);
                         // Проверяет наличие дерева постоения в моделе.
@@ -106,7 +106,7 @@ using System.Linq;
                     {
                         try
                         {
-                       SolidWorksAdapter.SldWoksApp.CloseDoc(modelDoc.GetTitle().ToLower().Contains(".sldprt") ? modelDoc.GetTitle() : modelDoc.GetTitle() + ".sldprt");
+                       SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(modelDoc.GetTitle().ToLower().Contains(".sldprt") ? modelDoc.GetTitle() : modelDoc.GetTitle() + ".sldprt");
                            
                         }
                         catch (Exception ex)
@@ -160,7 +160,7 @@ using System.Linq;
 
                     }
                 }
-                SolidWorksAdapter.SldWoksApp.CloseDoc(modelDoc.GetTitle().ToLower().Contains(".sldprt") ? modelDoc.GetTitle() : modelDoc.GetTitle() + ".sldprt"); // out in func...
+                SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(modelDoc.GetTitle().ToLower().Contains(".sldprt") ? modelDoc.GetTitle() : modelDoc.GetTitle() + ".sldprt"); // out in func...
                 
             }
 

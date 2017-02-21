@@ -6,6 +6,8 @@ using System.IO;
 
 namespace SolidWorksLibrary.Builders.Roof
 {
+
+    //TO DO loock save as
     [Serializable]
         public delegate void CheckExistPartHandler(string partName, out bool isExesitPatrt, out string pathToPartt);
   public  class RoofBuilder
@@ -67,7 +69,7 @@ namespace SolidWorksLibrary.Builders.Roof
             var modelRoofPath = $@"{RootFolder}{RoofFolder}\{modelName}.SLDASM";
 
             //if (!Warning()) return "";
-            var swDoc = SolidWorksAdapter.SldWoksApp.OpenDoc6(modelRoofPath, (int)swDocumentTypes_e.swDocASSEMBLY,
+            var swDoc = SolidWorksAdapter.SldWoksAppExemplare.OpenDoc6(modelRoofPath, (int)swDocumentTypes_e.swDocASSEMBLY,
                 (int)swOpenDocOptions_e.swOpenDocOptions_LoadModel + (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "00", 0, 0);
 
 
@@ -191,16 +193,16 @@ namespace SolidWorksLibrary.Builders.Roof
             var newComponents = new List<FileInfo>();
 
             //15-001
-                SolidWorksAdapter.SldWoksApp.IActivateDoc2("15-001", true, 0);
+                SolidWorksAdapter.SldWoksAppExemplare.IActivateDoc2("15-001", true, 0);
                 var newPartName = $"15-0{type}-01-{width}-{lenght}";
                
                 CheckExistPart(newPartName, out IsExistPart, out newPartPath);
                 if ( IsExistPart)
                 {
-                    swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksApp.ActivateDoc2("15-000.SLDASM", true, 0)));
+                    swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2("15-000.SLDASM", true, 0)));
                     swDoc.Extension.SelectByID2("15-001-1@15-000", "COMPONENT", 0, 0, 0, false, 0, null, 0);
                     swAsm.ReplaceComponents(newPartPath, "", true, true);
-                    SolidWorksAdapter.SldWoksApp.CloseDoc("15-001.SLDPRT");
+                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("15-001.SLDPRT");
                 }
                 else
                 {
@@ -233,7 +235,7 @@ namespace SolidWorksLibrary.Builders.Roof
                         Patterns.Observer.MessageObserver.Instance.SetMessage(e.ToString()) ;
                     }
 
-                    SolidWorksAdapter.SldWoksApp.CloseDoc(newPartName);
+                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newPartName);
                 }
 
 
@@ -243,17 +245,17 @@ namespace SolidWorksLibrary.Builders.Roof
             {
                 try
                 {
-                    SolidWorksAdapter.SldWoksApp.IActivateDoc2("15-002", true, 0);
+                    SolidWorksAdapter.SldWoksAppExemplare.IActivateDoc2("15-002", true, 0);
                       newPartName = $"15-0{type}-02-{width}-{lenght}";
                   
 
                     CheckExistPart(newPartName, out IsExistPart, out newPartPath);
                     if (IsExistPart)
                     {
-                        swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksApp.ActivateDoc2("15-000.SLDASM", true, 0)));
+                        swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2("15-000.SLDASM", true, 0)));
                         swDoc.Extension.SelectByID2("15-002-1@15-000", "COMPONENT", 0, 0, 0, false, 0, null, 0);
                         swAsm.ReplaceComponents(newPartPath, "", true, true);
-                        SolidWorksAdapter.SldWoksApp.CloseDoc("15-002.SLDPRT");
+                        SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("15-002.SLDPRT");
                     }
                     else
                     {
@@ -285,9 +287,9 @@ namespace SolidWorksLibrary.Builders.Roof
                             //MessageBox.Show(e.ToString());
                         }
 
-                        SolidWorksAdapter.SldWoksApp.CloseDoc(newPartName);
+                        SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newPartName);
                     }
-                    swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksApp.ActivateDoc2("15-000.SLDASM", true, 0)));
+                    swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2("15-000.SLDASM", true, 0)));
                     swDoc.Extension.SelectByID2("15-001-3@15-000", "COMPONENT", 0, 0, 0, false, 0, null, 0);
                     swDoc.Extension.SelectByID2("ЗеркальныйКомпонент2@15-000", "COMPPATTERN", 0, 0, 0, false, 0, null, 0);
                     swDoc.EditSuppress2();
@@ -299,7 +301,7 @@ namespace SolidWorksLibrary.Builders.Roof
             }
             else if (type != 6)
             {
-                swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksApp.ActivateDoc2("15-000.SLDASM", true, 0)));
+                swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2("15-000.SLDASM", true, 0)));
                 swDoc.Extension.SelectByID2("15-002-1@15-000", "COMPONENT", 0, 0, 0, false, 0, null, 0);
                 swDoc.EditDelete();
             }
@@ -359,7 +361,7 @@ namespace SolidWorksLibrary.Builders.Roof
                 int error = 0;
                 int warnings = 0;
 
-                swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksApp.ActivateDoc2(partName + ".SLDPRT", true, 0)));
+                swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2(partName + ".SLDPRT", true, 0)));
                 var modName = swDoc.GetPathName();
                 for (var i = 0; i < newParams.Length / 2; i++)
                 {
@@ -407,7 +409,7 @@ namespace SolidWorksLibrary.Builders.Roof
                     }
 
 
-                    SolidWorksAdapter.SldWoksApp.CloseDoc(newName + ".SLDPRT");
+                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName + ".SLDPRT");
                     //Логгер.Отладка($"Деталь {partName} изменена и сохранена по пути {new FileInfo(newName).FullName}", "",
                     //    "", "SwPartParamsChangeWithNewName");
                     //  //MessageBox.Show("Все хорошо... же.");
