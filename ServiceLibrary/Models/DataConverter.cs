@@ -62,12 +62,12 @@ namespace ServiceLibrary.Models
         }
 
 
-        public static TransmittableSpecification[] GetSpecification(TransmittableFileModel dataSolidModel, string configuration)
+        public static TransmittableSpecification[] GetSpecification(string filePath, string configuration)
         {
             try
             {
                 var parts = DataBaseDomian.SwPlusRepository.Instance.Parts;
-                var bomShell = SolidWorksPdmAdapter.Instance.GetBomShell(dataSolidModel.Path, configuration);
+                var bomShell = SolidWorksPdmAdapter.Instance.GetBomShell(filePath, configuration);
                 Console.WriteLine(parts.Count());
                 Console.WriteLine(bomShell.Count());
                 var specifications = from eachBom in bomShell
@@ -77,17 +77,18 @@ namespace ServiceLibrary.Models
                                      from spec in Spec_s.DefaultIfEmpty()
                                      select new TransmittableSpecification
                                      {
-                                         Name = eachBom.Name,
-                                         Count = eachBom.Count.ToString(),
+                                         Description = eachBom.Description,
+                                         Count = (int) eachBom.Count  ,
                                          Weight = eachBom.Weight,
                                          Partition = eachBom.Partition,
-                                         Designation = eachBom.Designation,
+                                         PartNumber = eachBom.PartNumber,
                                          ERPCode = eachBom.ErpCode,
                                          SummMaterial = eachBom.SummMaterial,
                                          Configuration = eachBom.Configuration,
                                          IDPDM = eachBom.IdPdm.ToString(),
                                          CodeMaterial = eachBom.CodeMaterial,
                                          Type = eachBom.FileType,
+                                         Level = (int) eachBom.Level,
 
                                          Version = (spec == null ? string.Empty : spec.Version.ToString()),
                                          Bend = spec == null ? string.Empty : spec.Bend.ToString(),
@@ -99,6 +100,8 @@ namespace ServiceLibrary.Models
                                          SurfaceArea = spec == null ? string.Empty : spec.SurfaceArea.ToString(),
                                          // isDxf = System.Convert.ToInt32(spec.DXF) == 1 ? true : false
                                          isDxf = spec != null && spec.DXF == "1"   ? "true" : "false"
+
+                                        , FileName = eachBom.FileName
 
                                      };
                 Patterns.Observer.MessageObserver.Instance.SetMessage("Got specification", Patterns.Observer.MessageType.Success);

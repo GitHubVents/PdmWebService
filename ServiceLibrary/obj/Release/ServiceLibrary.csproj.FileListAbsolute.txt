@@ -1,5 +1,6 @@
 D:\Vlad\PDM-WebService\ServiceLibrary\bin\Release\Bullzip.PdfWriter.dll
 D:\Vlad\PDM-WebService\ServiceLibrary\obj\Release\ServiceLibrary.csprojResolveAssemblyReference.cache
+D:\Vlad\PDM-WebService\ServiceLibrary\obj\Release\ServiceLibrary.csproj.ResolveComReference.cache
 D:\Vlad\PDM-WebService\ServiceLibrary\bin\Release\ServiceLibrary.dll.config
 D:\Vlad\PDM-WebService\ServiceLibrary\bin\Release\ServiceLibrary.dll
 D:\Vlad\PDM-WebService\ServiceLibrary\bin\Release\ServiceLibrary.pdb
@@ -7,13 +8,14 @@ D:\Vlad\PDM-WebService\ServiceLibrary\bin\Release\DataBaseDomian.dll
 D:\Vlad\PDM-WebService\ServiceLibrary\bin\Release\MessageLibrary.dll
 D:\Vlad\PDM-WebService\ServiceLibrary\bin\Release\PdmSolidWorksLibrary.dll
 D:\Vlad\PDM-WebService\ServiceLibrary\bin\Release\ServiceConstants.dll
-D:\Vlad\PDM-WebService\ServiceLibrary\bin\Release\SolidWorksLivrary.dll
+D:\Vlad\PDM-WebService\ServiceLibrary\bin\Release\SolidWorksLibrary.dll
 D:\Vlad\PDM-WebService\ServiceLibrary\bin\Release\TaskSystemLibrary.dll
+D:\Vlad\PDM-WebService\ServiceLibrary\bin\Release\EPDM.Interop.EPDMResultCode.dll
 D:\Vlad\PDM-WebService\ServiceLibrary\bin\Release\DataBaseDomian.pdb
 D:\Vlad\PDM-WebService\ServiceLibrary\bin\Release\MessageLibrary.pdb
 D:\Vlad\PDM-WebService\ServiceLibrary\bin\Release\PdmSolidWorksLibrary.pdb
 D:\Vlad\PDM-WebService\ServiceLibrary\bin\Release\ServiceConstants.pdb
-D:\Vlad\PDM-WebService\ServiceLibrary\bin\Release\SolidWorksLivrary.pdb
+D:\Vlad\PDM-WebService\ServiceLibrary\bin\Release\SolidWorksLibrary.pdb
 D:\Vlad\PDM-WebService\ServiceLibrary\bin\Release\TaskSystemLibrary.pdb
 D:\Vlad\PDM-WebService\ServiceLibrary\obj\Release\ServiceLibrary.dll
 D:\Vlad\PDM-WebService\ServiceLibrary\obj\Release\ServiceLibrary.pdb

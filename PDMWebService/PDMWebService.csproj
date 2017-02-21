@@ -249,7 +249,7 @@
       <Project>{72339207-CA2E-4581-BA9C-8E6A6A1052A6}</Project>
       <Name>ServiceLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SolidWorksLivrary\SolidWorksLibrary.csproj">
+    <ProjectReference Include="..\SolidWorksLibrary\SolidWorksLibrary.csproj">
       <Project>{decc61e0-8d25-485f-99f4-d895177c7997}</Project>
       <Name>SolidWorksLibrary</Name>
     </ProjectReference>

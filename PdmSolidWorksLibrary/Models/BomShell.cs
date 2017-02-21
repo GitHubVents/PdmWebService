@@ -53,12 +53,12 @@ namespace PdmSolidWorksLibrary.Models
         /// Обозначение
         /// </summary>
        
-        public string Designation { get; set; } // +
+        public string PartNumber { get; set; } // +
         /// <summary>
         /// Наименование
         /// </summary>
      
-        public string Name { get; set; } // +
+        public string Description { get; set; } // +
         /// <summary>
         /// Материал
         /// </summary>

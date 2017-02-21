@@ -25,9 +25,9 @@ D:\Vlad\PDM-WebService\PDMWebService\obj\Debug\PDMWebService.pdb
 D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\Newtonsoft.Json.dll
 D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\Newtonsoft.Json.xml
 D:\Vlad\PDM-WebService\PDMWebService\obj\Debug\PDMWebService.csprojResolveAssemblyReference.cache
-D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\SolidWorksLivrary.dll
+D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\SolidWorksLibrary.dll
 D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\MessageLibrary.dll
-D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\SolidWorksLivrary.pdb
+D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\SolidWorksLibrary.pdb
 D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\MessageLibrary.pdb
 D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\TaskSystemLibrary.dll
 D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\DataBaseDomian.dll

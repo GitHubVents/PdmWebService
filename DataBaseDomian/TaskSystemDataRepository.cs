@@ -11,7 +11,7 @@ namespace DataBaseDomian
     /// <summary>
     /// Provides acces to tasks data base tasks 
     /// </summary>
-    public class TaskSystemDataRepository : Singeton<TaskSystemDataRepository>
+    public class TaskSystemDataRepository : Singeton<TaskSystemDataRepository>, IUpdater
     {
         /// <summary>
         /// Exemplar of an object oriented database model
@@ -41,7 +41,8 @@ namespace DataBaseDomian
         {
             get
             {
-               return DataContext.View_ActiveTasks;
+               
+                return DataContext.View_ActiveTasks;
             }
         }
         /// <summary>
@@ -51,6 +52,7 @@ namespace DataBaseDomian
         {
             get
             {
+             
                 return DataContext.View_CompletedTasks;
             }
         }
@@ -62,6 +64,7 @@ namespace DataBaseDomian
         {
             get
             {
+             
                 return DataContext.TaskInstances.LongCount();
             }
         }
@@ -72,7 +75,7 @@ namespace DataBaseDomian
         /// <returns></returns>
         public long CountSelectionsTasks(int taskInstanceId)
         {
-
+            
             return DataContext.TaskSelections.Where(eachSelectionTask => eachSelectionTask.TaskInstanceID == taskInstanceId).LongCount();
 
         }
@@ -87,7 +90,9 @@ namespace DataBaseDomian
         /// <param name="userId"></param>
         public int CretaPdfTask(int[] arrayDocumentId, int userId = 0)
         {
-            MessageObserver.Instance.SetMessage("Add new task to data base { " + TasksType.Pdf + " }", MessageType.System);
+            
+
+          //  MessageObserver.Instance.SetMessage("Add new task to data base { " + TasksType.Pdf + " }", MessageType.System);
 
             int taskInstanceId = 0;
             try
@@ -123,6 +128,8 @@ namespace DataBaseDomian
         /// <param name="userId"></param>
         public int CreateDxfTask(int[] arrayDocumentId, int userId = 0)
         {
+           
+
             MessageObserver.Instance.SetMessage("Add new task to data base { " + TasksType.Dxf + " }", MessageType.System);
 
             int taskInstanceId = 0;
@@ -133,8 +140,8 @@ namespace DataBaseDomian
 
                 foreach (var eachDocumentId in arrayDocumentId)
                 {
-                    int taskSelectionId = this.DataContext.Tasks_SetTaskSelection(taskInstanceId, eachDocumentId);
-                    MessageObserver.Instance.SetMessage("Created TaskSelection with id " + taskSelectionId, MessageType.System);
+                     this.DataContext.Tasks_SetTaskSelection(taskInstanceId, eachDocumentId);
+                    MessageObserver.Instance.SetMessage("Created TaskSelection with. Document id " + eachDocumentId , MessageType.System);
                 }
                 this.DataContext.SubmitChanges();
             }
@@ -161,6 +168,7 @@ namespace DataBaseDomian
         {
             try
             {
+                RefreshRepositoryStatus();
                 return DataContext.TaskInstances.First(eachTaskInstance => eachTaskInstance.TaskStatus == (int)TaskStatus.Waiting);
             }
             catch
@@ -178,6 +186,7 @@ namespace DataBaseDomian
         {
             try
             {
+                 
                 return DataContext.TaskSelections.Where(eachTaskSelection => eachTaskSelection.TaskInstanceID == taskInstancesID);
             }
             catch
@@ -196,7 +205,8 @@ namespace DataBaseDomian
         {
             this.DataContext.Tasks_SetTaskStatus((int)TaskStatus.Error, taskInstanceId);
             DataContext.SubmitChanges();
-            DataContext.Refresh(System.Data.Linq.RefreshMode.OverwriteCurrentValues, DataContext.TaskInstances);
+
+            RefreshRepositoryStatus();
             MessageObserver.Instance.SetMessage("Apply Error for task instance by id " + taskInstanceId);
         }
 
@@ -208,7 +218,8 @@ namespace DataBaseDomian
         {
             this.DataContext.Tasks_SetTaskStatus((int)TaskStatus.Completed, taskInstanceId);
             DataContext.SubmitChanges();
-            DataContext.Refresh(System.Data.Linq.RefreshMode.OverwriteCurrentValues, DataContext.TaskInstances);
+
+            RefreshRepositoryStatus();
             MessageObserver.Instance.SetMessage("Apply Completed for task instance by id " + taskInstanceId);
         }
 
@@ -220,7 +231,8 @@ namespace DataBaseDomian
         {
             this.DataContext.Tasks_SetTaskStatus((int)TaskStatus.Waiting, taskInstanceId);
             DataContext.SubmitChanges();
-            DataContext.Refresh(System.Data.Linq.RefreshMode.OverwriteCurrentValues, DataContext.TaskInstances);
+
+            RefreshRepositoryStatus();
             MessageObserver.Instance.SetMessage("Apply Waiting for task instance by id " + taskInstanceId);
         }
 
@@ -232,7 +244,8 @@ namespace DataBaseDomian
         {
             this.DataContext.Tasks_SetTaskStatus((int)TaskStatus.Execution, taskInstanceId);
             DataContext.SubmitChanges();
-            DataContext.Refresh(System.Data.Linq.RefreshMode.OverwriteCurrentValues, DataContext.TaskInstances);
+
+            RefreshRepositoryStatus();
             MessageObserver.Instance.SetMessage("Apply Execution for task instance by id " + taskInstanceId);
         }
         #endregion
@@ -244,7 +257,11 @@ namespace DataBaseDomian
         /// <returns></returns>
         public bool ExistExecutingTask()
         {
+
+            RefreshRepositoryStatus();
+
             int counExecutingTasks = DataContext.View_ActiveTasks.Where(eachTask => eachTask.TaskStatus == (int)TaskStatus.Execution).Count();
+
             return counExecutingTasks > 0 ? true : false;
         }
 
@@ -254,9 +271,48 @@ namespace DataBaseDomian
         /// <returns></returns>
         public bool ExistWaitingTasks()
         {
+
+            RefreshRepositoryStatus();
             int countWaitingTasks = DataContext.View_ActiveTasks.Where(eachTask => eachTask.TaskStatus == (int)TaskStatus.Waiting).Count();
             return countWaitingTasks > 0 ? true : false;
         }
         #endregion
+
+        public void UpDateCutList(string configuration, byte[] DXFByte, decimal? workpieceX = null, decimal? workpieceY = null, int? bend = null,
+                                 decimal? thickness = null, int? version = null,
+                                 decimal? paintX = null, decimal? paintY = null, decimal? paintZ = null,
+                                  int? IdPdm = null, decimal? surfaceArea = null)
+        {
+            DataContext.UpDateCutList
+                (
+                    workpieceX,
+                    workpieceY,
+                    bend,
+                    thickness,
+                    configuration,
+                    version,
+                    paintX,
+                    paintY,
+                    paintZ,
+                    IdPdm,
+                    surfaceArea,
+                    DXFByte
+               );
+        }
+
+  
+        public void RefreshRepositoryStatus()
+        {
+            try
+            {
+                DataContext.Refresh(System.Data.Linq.RefreshMode.OverwriteCurrentValues, DataContext.TaskInstances);
+                DataContext.Refresh(System.Data.Linq.RefreshMode.OverwriteCurrentValues, DataContext.TaskSelections);               
+          
+            }
+            catch(Exception exception)
+            {
+               MessageObserver.Instance.SetMessage("Failed refresh entities { " + exception.ToString() + " }");
+            }
+        }
     }
 }

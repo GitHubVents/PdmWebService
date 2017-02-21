@@ -1,15 +1,14 @@
-﻿//using PDMWebService.Properties;
-//using SolidWorks.Interop.sldworks;
+﻿//using SolidWorks.Interop.sldworks;
 //using SolidWorks.Interop.swconst;
+//using SolidWorksLibrary;
 //using System;
 //using System.Collections.Generic;
 //using System.IO;
 //using System.Linq;
-//using VentsCadLibrary;
 
 //namespace PDMWebService.Data.Solid.PartBuilders
 //{
-//    class FlapBuilder : AbstractBuilder
+//    class FlapBuilder  
 //    {
 //        /// <summary>
 //        /// Папка с исходной моделью "Регулятора расхода воздуха". 
@@ -20,6 +19,54 @@
 //        /// </summary>
 //        private string DamperDestinationFolder = @"\Проекты\Blauberg\11 - Регулятор расхода воздуха";
 
+//        private string RootFolder;
+
+//        private List<FileInfo> NewComponentsFull;
+
+//        public FlapBuilder()
+//        {
+//            NewComponentsFull = new List<FileInfo>();
+//        }
+
+
+
+//        protected bool GetExistingFile(string fileName, int type)
+//        {
+//            if (new FileInfo(fileName).Exists)
+//            {
+//                fileName = Path.GetFileNameWithoutExtension(fileName);
+//            }
+
+//            List<VaultSystem.SearchInVault.FindedDocuments> найденныеФайлы;
+//            switch (type)
+
+//            {
+//                case 0:
+//                    VaultSystem.SearchInVault.SearchDoc(fileName, VaultSystem.SearchInVault.SwDocType.SwDocAssembly, out найденныеФайлы, Settings.Default.PdmBaseName);
+//                    if (найденныеФайлы?.Count > 0) goto m1;
+//                    break;
+//                case 1:
+//                    VaultSystem.SearchInVault.SearchDoc(fileName, VaultSystem.SearchInVault.SwDocType.SwDocPart, out найденныеФайлы, Settings.Default.PdmBaseName);
+//                    if (найденныеФайлы?.Count > 0) goto m1;
+//                    break;
+//            }
+
+//            goto m2;
+//            m1:
+//            try
+//            {
+//               //// PDMWebService.Data.PDM.SolidWorksPdmAdapter.Instance.GetLastVersionAsmPdm(найденныеФайлы[0].Path);
+//                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(найденныеФайлы[0].Path);
+//                return fileNameWithoutExtension != null && string.Equals(fileNameWithoutExtension, fileName, StringComparison.CurrentCultureIgnoreCase);
+//            }
+//            catch (Exception e)
+//            {
+//                //MessageBox.Show(e.ToString());return false;
+//            }
+//            m2:
+//            return false;
+//        }
+
 //        /// <summary>
 //        /// Dumpers the s.
 //        /// </summary>
@@ -29,9 +76,9 @@
 //        /// <param name="isOutDoor"></param>
 //        /// <param name="material"></param>
 //        /// <returns></returns>
-//        public string Build(string typeOfFlange, string width, string height, bool isOutDoor, string[] material)
+//        public string Build(int typeOfFlange, int width, int height, bool isOutDoor, string[] material)
 //        {
-//            if (!DataConverter.IsConvertToInt(new[] { width, height })) { return ""; }
+           
 
 //            string modelName = null;
 //            string modelDamperPath = null;
@@ -46,13 +93,13 @@
 
 //            switch (typeOfFlange)
 //            {
-//                case "20":
+//                case 20:
 //                    modelName = "11-20";
 //                    modelDamperPath = DamperFolder;
 //                    nameAsm = "11 - Damper";
 //                    lastChangedDate = new DateTime(2016, 5, 20);
 //                    break;
-//                case "30":
+//                case 30:
 //                    modelName = "11-30";
 //                    modelDamperPath = DamperFolder;
 //                    nameAsm = "11-30";
@@ -68,8 +115,8 @@
 //            { drawing = modelName; }
 //            var newDamperName = modelName + "-" + width + "-" + height + modelType + (isOutDoor ? "-O" : "");
 //            // //MessageBox.Show(newDamperName); return null;
-//            var newDamperPath = $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newDamperName}.SLDDRW";
-//            var newDamperAsmPath = $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newDamperName}.SLDASM";
+//            var newDamperPath = $@"{RootFolder}\{DamperDestinationFolder}\{newDamperName}.SLDDRW";
+//            var newDamperAsmPath = $@"{RootFolder}\{DamperDestinationFolder}\{newDamperName}.SLDASM";
 
 
 //            if (OpenIfExist(newDamperPath, VaultSystem.VentsCadFile.Type.Drawing, lastChangedDate)) return null;
@@ -88,16 +135,16 @@
 //                PDMWebService.Data.PDM.SolidWorksPdmAdapter.Instance.GetLastVersionAsmPdm(item);
 
 //            }
-         
- 
-//            var swDocDrw =SolidWorksInstance.SldWoksApp.OpenDoc6(@modelDamperDrw, (int)swDocumentTypes_e.swDocDRAWING,
+
+
+//            var swDocDrw = SolidWorksAdapter.SldWoksApp.OpenDoc6(@modelDamperDrw, (int)swDocumentTypes_e.swDocDRAWING,
 //                (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", 0, 0);
 
-//            ModelDoc2 swDoc = SolidWorksInstance.SldWoksApp.ActivateDoc2(nameAsm, false, 0);
+//            ModelDoc2 swDoc = SolidWorksAdapter.SldWoksApp.ActivateDoc2(nameAsm, false, 0);
 //            var swAsm = (AssemblyDoc)swDoc;
 //            swAsm.ResolveAllLightWeightComponents(false);
 
-             
+
 
 //            // Габариты
 //            var widthD = Convert.ToDouble(width);
@@ -119,7 +166,7 @@
 
 //            #region typeOfFlange = "20"
 
-//            if (typeOfFlange == "20")
+//            if (typeOfFlange == 20)
 //            {
 //                if (Convert.ToInt32(countL / 1000) % 2 == 1) //нечетное
 //                {
@@ -153,19 +200,19 @@
 
 //                    // 11-005 
 //                    newName = "11-05-" + height + modelType;
-//                    newPartPath = $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
+//                    newPartPath = $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
 //                    if (VersionsFileInfo.Replaced.ExistLatestVersion(newPartPath, VaultSystem.VentsCadFile.Type.Part, lastChangedDate, Settings.Default.PdmBaseName))
 //                    {
-//                        swDoc = ((ModelDoc2)(SolidWorksInstance.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
+//                        swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
 //                        swDoc.Extension.SelectByID2("11-005-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //                        swAsm.ReplaceComponents(newPartPath, "", false, true);
-//                        SolidWorksInstance.SldWoksApp.CloseDoc("11-005.SLDPRT");
+//                        SolidWorksAdapter.SldWoksApp.CloseDoc("11-005.SLDPRT");
 //                    }
 //                    else
 //                    {
 
 //                        SwPartParamsChangeWithNewName("11-005",
-//                            $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newName}",
+//                            $@"{RootFolder}\{DamperDestinationFolder}\{newName}",
 //                            new[,]
 //                            {
 //                                {"D3@Эскиз1", Convert.ToString(heightD)},
@@ -181,18 +228,18 @@
 
 //                    // 11-006 
 //                    newName = "11-06-" + height + modelType;
-//                    newPartPath = $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
+//                    newPartPath = $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
 //                    if (VersionsFileInfo.Replaced.ExistLatestVersion(newPartPath, VaultSystem.VentsCadFile.Type.Part, lastChangedDate, Settings.Default.PdmBaseName))
 //                    {
-//                        swDoc = ((ModelDoc2)(SolidWorksInstance.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
+//                        swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
 //                        swDoc.Extension.SelectByID2("11-006-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //                        swAsm.ReplaceComponents(newPartPath, "", false, true);
-//                        SolidWorksInstance.SldWoksApp.CloseDoc("11-006.SLDPRT");
+//                        SolidWorksAdapter.SldWoksApp.CloseDoc("11-006.SLDPRT");
 //                    }
 //                    else
 //                    {
 //                        SwPartParamsChangeWithNewName("11-006",
-//                            $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newName}",
+//                            $@"{RootFolder}\{DamperDestinationFolder}\{newName}",
 //                            new[,]
 //                            {
 //                                {"D3@Эскиз1", Convert.ToString(heightD)},
@@ -238,18 +285,18 @@
 //                // 11-001 
 //                newName = "11-01-" + height + modelType + (isOutDoor ? "-O" : "");
 
-//                newPartPath = $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
+//                newPartPath = $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
 //                if (VersionsFileInfo.Replaced.ExistLatestVersion(newPartPath, VaultSystem.VentsCadFile.Type.Part, lastChangedDate, Settings.Default.PdmBaseName))
 //                {
-//                    swDoc = ((ModelDoc2)(SolidWorksInstance.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
+//                    swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
 //                    swDoc.Extension.SelectByID2("11-001-7@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //                    swAsm.ReplaceComponents(newPartPath, "", false, true);
-//                    SolidWorksInstance.SldWoksApp.CloseDoc("11-001.SLDPRT");
+//                    SolidWorksAdapter.SldWoksApp.CloseDoc("11-001.SLDPRT");
 //                }
 //                else
 //                {
 //                    SwPartParamsChangeWithNewName("11-001",
-//                        $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newName}",
+//                        $@"{RootFolder}\{DamperDestinationFolder}\{newName}",
 //                        new[,]
 //                        {
 //                            {"D2@Эскиз1", Convert.ToString(heightD + 7.94)}, {"D1@Эскиз27", Convert.ToString(countL/10 - 100)},
@@ -258,7 +305,7 @@
 //                        }, false, null);
 //                    AddMaterial(material, newName);
 //                    NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(newPartPath).FullName });
-//                    SolidWorksInstance.SldWoksApp.CloseDoc(newName + ".SLDPRT");
+//                    SolidWorksAdapter.SldWoksApp.CloseDoc(newName + ".SLDPRT");
 //                }
 
 //                #region OutDoor
@@ -268,10 +315,10 @@
 //                    try
 //                    {
 //                        swDoc
-//                           = ((ModelDoc2)(SolidWorksInstance.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
+//                           = ((ModelDoc2)(SolidWorksAdapter.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
 //                        swDoc.Extension.SelectByID2("11-003-6@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //                        swAsm.ReplaceComponents(newPartPath, "", false, true);
-//                        SolidWorksInstance.SldWoksApp.CloseDoc("11-003.SLDPRT");
+//                        SolidWorksAdapter.SldWoksApp.CloseDoc("11-003.SLDPRT");
 //                    }
 //                    catch (Exception e)
 //                    {
@@ -283,19 +330,19 @@
 
 //                // 11-002
 //                newName = "11-03-" + width + modelType;
-//                newPartPath = $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
+//                newPartPath = $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
 
 //                if (VersionsFileInfo.Replaced.ExistLatestVersion(newPartPath, VaultSystem.VentsCadFile.Type.Part, lastChangedDate, Settings.Default.PdmBaseName))
 //                {
-//                    swDoc = ((ModelDoc2)(SolidWorksInstance.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
+//                    swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
 //                    swDoc.Extension.SelectByID2("11-002-4@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //                    swAsm.ReplaceComponents(newPartPath, "", true, true);
-//                    SolidWorksInstance.SldWoksApp.CloseDoc("11-002.SLDPRT");
+//                    SolidWorksAdapter.SldWoksApp.CloseDoc("11-002.SLDPRT");
 //                }
 //                else
 //                {
 //                    SwPartParamsChangeWithNewName("11-002",
-//                        $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newName}",
+//                        $@"{RootFolder}\{DamperDestinationFolder}\{newName}",
 //                        new[,]
 //                        {
 //                            {"D2@Эскиз1", Convert.ToString(widthD - 0.96)},
@@ -317,19 +364,19 @@
 //                {
 //                    // 11-003 
 //                    newName = "11-02-" + height + modelType + (isOutDoor ? "-O" : "");
-//                    newPartPath = $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
+//                    newPartPath = $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
 
 //                    if (VersionsFileInfo.Replaced.ExistLatestVersion(newPartPath, VaultSystem.VentsCadFile.Type.Part, lastChangedDate, Settings.Default.PdmBaseName))
 //                    {
-//                        swDoc = ((ModelDoc2)(SolidWorksInstance.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
+//                        swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
 //                        swDoc.Extension.SelectByID2("11-003-6@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //                        swAsm.ReplaceComponents(newPartPath, "", false, true);
-//                        SolidWorksInstance.SldWoksApp.CloseDoc("11-003.SLDPRT");
+//                        SolidWorksAdapter.SldWoksApp.CloseDoc("11-003.SLDPRT");
 //                    }
 //                    else
 //                    {
 //                        SwPartParamsChangeWithNewName("11-003",
-//                            $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newName}",
+//                            $@"{RootFolder}\{DamperDestinationFolder}\{newName}",
 //                            new[,]
 //                            {
 //                                {"D2@Эскиз1", Convert.ToString(heightD + 7.94)},
@@ -351,19 +398,19 @@
 
 //                // 11-004
 //                newName = "11-04-" + width + "-" + hC + modelType;
-//                newPartPath = $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
+//                newPartPath = $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
 
 //                if (VersionsFileInfo.Replaced.ExistLatestVersion(newPartPath, VaultSystem.VentsCadFile.Type.Part, lastChangedDate, Settings.Default.PdmBaseName))
 //                {
-//                    swDoc = ((ModelDoc2)(SolidWorksInstance.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
+//                    swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
 //                    swDoc.Extension.SelectByID2("11-004-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //                    swAsm.ReplaceComponents(newPartPath, "", true, true);
-//                    SolidWorksInstance.SldWoksApp.CloseDoc("11-004.SLDPRT");
+//                    SolidWorksAdapter.SldWoksApp.CloseDoc("11-004.SLDPRT");
 //                }
 //                else
 //                {
 //                    SwPartParamsChangeWithNewName("11-004",
-//                        $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newName}",
+//                        $@"{RootFolder}\{DamperDestinationFolder}\{newName}",
 //                        new[,]
 //                        {
 //                            {"D2@Эскиз1", Convert.ToString(widthD - 24)},
@@ -386,71 +433,71 @@
 //                //11-100 Сборка лопасти
 //                var newNameAsm = "11-" + width;
 //                var newPartPathAsm =
-//                    $@"{Settings.Default.DestinationFolder}{DamperDestinationFolder}\{newNameAsm}.SLDASM";
+//                    $@"{RootFolder}{DamperDestinationFolder}\{newNameAsm}.SLDASM";
 //                if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPathAsm), 0))
 //                {
-//                    swDoc = ((ModelDoc2)(SolidWorksInstance.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
+//                    swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
 //                    swDoc.Extension.SelectByID2("11-100-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //                    swAsm.ReplaceComponents(newPartPathAsm, "", true, true);
-//                    SolidWorksInstance.SldWoksApp.CloseDoc("11-100.SLDASM");
+//                    SolidWorksAdapter.SldWoksApp.CloseDoc("11-100.SLDASM");
 //                }
 //                else
 //                {
 //                    #region  11-101  Профиль лопасти
 
 //                    newName = "11-" + (Math.Truncate(widthD - 23)) + "-01" + modelType;
-//                    newPartPath = $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
+//                    newPartPath = $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
 //                    if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
 //                    {
-//                        SolidWorksInstance.SldWoksApp.IActivateDoc2("10-100", false, 0);
-//                        swDoc = (ModelDoc2)((IModelDoc2)(SolidWorksInstance.SldWoksApp.ActiveDoc));
+//                        SolidWorksAdapter.SldWoksApp.IActivateDoc2("10-100", false, 0);
+//                        swDoc = (ModelDoc2)((IModelDoc2)(SolidWorksAdapter.SldWoksApp.ActiveDoc));
 //                        swDoc.Extension.SelectByID2("11-101-1@11-100", "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //                        swAsm.ReplaceComponents(newPartPath, "", true, true);
-//                        SolidWorksInstance.SldWoksApp.CloseDoc("11-100.SLDASM");
+//                        SolidWorksAdapter.SldWoksApp.CloseDoc("11-100.SLDASM");
 //                    }
 //                    else
 //                    {
-//                        SolidWorksInstance.SldWoksApp.IActivateDoc2("10-100", false, 0);
-//                        swDoc = (ModelDoc2)((IModelDoc2)(SolidWorksInstance.SldWoksApp.ActiveDoc));
+//                        SolidWorksAdapter.SldWoksApp.IActivateDoc2("10-100", false, 0);
+//                        swDoc = (ModelDoc2)((IModelDoc2)(SolidWorksAdapter.SldWoksApp.ActiveDoc));
 //                        swDoc.Extension.SelectByID2("D1@Вытянуть1@11-101-1@11-100", "DIMENSION", 0, 0, 0, false, 0, null, 0);
 //                        var myDimension = ((Dimension)(swDoc.Parameter("D1@Вытянуть1@11-101.Part")));
 //                        myDimension.SystemValue = (widthD - 23) / 1000;
-//                        SolidWorksInstance.SldWoksApp.ActivateDoc2("11-101", false, 0);
-//                        swDoc = ((ModelDoc2)(SolidWorksInstance.SldWoksApp.ActiveDoc));
+//                        SolidWorksAdapter.SldWoksApp.ActivateDoc2("11-101", false, 0);
+//                        swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksApp.ActiveDoc));
 //                        swDoc.SaveAs2(newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
 
 //                        // ToDo Delete
-//                        SolidWorksInstance.SldWoksApp.CloseDoc(newName + ".sldasm");
+//                        SolidWorksAdapter.SldWoksApp.CloseDoc(newName + ".sldasm");
 
 //                        NewComponentsFull.Add(new VaultSystem.VentsCadFile
 //                        {
 //                            LocalPartFileInfo = new FileInfo(
-//                            $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newName}.sldasm").FullName
+//                            $@"{RootFolder}\{DamperDestinationFolder}\{newName}.sldasm").FullName
 //                        });
 //                    }
 
 //                    #endregion
 
-//                    SolidWorksInstance.SldWoksApp.ActivateDoc2("11-100", false, 0);
-//                    swDoc = ((ModelDoc2)(SolidWorksInstance.SldWoksApp.ActiveDoc));
+//                    SolidWorksAdapter.SldWoksApp.ActivateDoc2("11-100", false, 0);
+//                    swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksApp.ActiveDoc));
 //                    swDoc.ForceRebuild3(false);
 
-//                    var docDrw100 = SolidWorksInstance.SldWoksApp.OpenDoc6(modelLamel, (int)swDocumentTypes_e.swDocDRAWING, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", 0, 0);
+//                    var docDrw100 = SolidWorksAdapter.SldWoksApp.OpenDoc6(modelLamel, (int)swDocumentTypes_e.swDocDRAWING, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", 0, 0);
 //                    swDoc.SaveAs2(newPartPathAsm, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
 
 //                    try
 //                    {
 //                        //_swApp.CloseDoc(newNameAsm);                    
-//                        SolidWorksInstance.SldWoksApp.ActivateDoc2(docDrw100?.GetTitle(), false, 0);
+//                        SolidWorksAdapter.SldWoksApp.ActivateDoc2(docDrw100?.GetTitle(), false, 0);
 //                        docDrw100?.ForceRebuild3(true);
 
 //                        docDrw100.SaveAs2(
-//                            $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newNameAsm}.SLDDRW", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
-//                        SolidWorksInstance.SldWoksApp.CloseDoc(Path.GetFileNameWithoutExtension(new FileInfo(
-//                            $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newNameAsm}.SLDDRW").FullName) + " - DRW1");
+//                            $@"{RootFolder}\{DamperDestinationFolder}\{newNameAsm}.SLDDRW", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
+//                        SolidWorksAdapter.SldWoksApp.CloseDoc(Path.GetFileNameWithoutExtension(new FileInfo(
+//                            $@"{RootFolder}\{DamperDestinationFolder}\{newNameAsm}.SLDDRW").FullName) + " - DRW1");
 
 //                        NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(newPartPath).FullName });
-//                        NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo($@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newNameAsm}.SLDDRW").FullName });
+//                        NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo($@"{RootFolder}\{DamperDestinationFolder}\{newNameAsm}.SLDDRW").FullName });
 
 //                    }
 //                    catch (Exception e)
@@ -464,7 +511,7 @@
 
 //            #region typeOfFlange = "30"
 
-//            if (typeOfFlange == "30")
+//            if (typeOfFlange == 30)
 //            {
 //                string newName;
 //                string newPartPath;
@@ -490,18 +537,18 @@
 
 //                    // 11-005 
 //                    newName = "11-05-" + height + modelType;
-//                    newPartPath = $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
+//                    newPartPath = $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
 //                    if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
 //                    {
-//                        swDoc = ((ModelDoc2)(SolidWorksInstance.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
+//                        swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
 //                        swDoc.Extension.SelectByID2("11-005-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //                        swAsm.ReplaceComponents(newPartPath, "", false, true);
-//                        SolidWorksInstance.SldWoksApp.CloseDoc("11-005.SLDPRT");
+//                        SolidWorksAdapter.SldWoksApp.CloseDoc("11-005.SLDPRT");
 //                    }
 //                    else
 //                    {
 //                        SwPartParamsChangeWithNewName("11-005",
-//                            $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newName}",
+//                            $@"{RootFolder}\{DamperDestinationFolder}\{newName}",
 //                            new[,]
 //                            {
 //                                {"D3@Эскиз1", Convert.ToString(heightD)},
@@ -521,18 +568,18 @@
 
 //                    // 11-006 
 //                    newName = "11-06-" + height + modelType;
-//                    newPartPath = $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
+//                    newPartPath = $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
 //                    if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
 //                    {
-//                        swDoc = ((ModelDoc2)(SolidWorksInstance.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
+//                        swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
 //                        swDoc.Extension.SelectByID2("11-006-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //                        swAsm.ReplaceComponents(newPartPath, "", false, true);
-//                        SolidWorksInstance.SldWoksApp.CloseDoc("11-006.SLDPRT");
+//                        SolidWorksAdapter.SldWoksApp.CloseDoc("11-006.SLDPRT");
 //                    }
 //                    else
 //                    {
 //                        SwPartParamsChangeWithNewName("11-006",
-//                            $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newName}",
+//                            $@"{RootFolder}\{DamperDestinationFolder}\{newName}",
 //                            new[,]
 //                            {
 //                                {"D3@Эскиз1", Convert.ToString(heightD)},
@@ -602,7 +649,7 @@
 
 //                if (!isdouble)
 //                {
-//                    swDoc = ((ModelDoc2)(SolidWorksInstance.SldWoksApp.ActiveDoc));
+//                    swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksApp.ActiveDoc));
 //                    swDoc.Extension.SelectByID2("11-30-100-4@11-30", "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //                    swDoc.Extension.SelectByID2("11-30-100-4@11-30", "COMPONENT", 0, 0, 0, false, 0, null, 0); swDoc.EditDelete();
 //                    swDoc.Extension.SelectByID2("11-100-13@11-30", "COMPONENT", 0, 0, 0, false, 0, null, 0); swDoc.EditDelete();
@@ -641,7 +688,7 @@
 //                {
 //                    lp = widthD / 2 - 59.5;
 //                    lp2 = lp - 11.6;
-//                    lProfName = Convert.ToString(Math.Truncate(Convert.ToDouble(Convert.ToDouble(width)) / 2 - 9));
+//                    lProfName =(int) Math.Truncate(Convert.ToDouble( width) / 2 - 9);
 //                    lProfNameLength = (widthD / 2 - 23) / 1000;
 //                }
 
@@ -651,19 +698,19 @@
 
 //                // 11-30-001 
 //                newName = "11-30-03-" + width + modelType;
-//                newPartPath = $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
+//                newPartPath = $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
 //                if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
 //                {
-//                    swDoc = ((ModelDoc2)(SolidWorksInstance.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
+//                    swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
 //                    swDoc.Extension.SelectByID2("11-30-001-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //                    swAsm.ReplaceComponents(newPartPath, "", true, true);
-//                    SolidWorksInstance.SldWoksApp.CloseDoc("11-30-001.SLDPRT");
+//                    SolidWorksAdapter.SldWoksApp.CloseDoc("11-30-001.SLDPRT");
 //                }
 //                else
 //                {
 //                    if (!isdouble)
 //                    {
-//                        swDoc = ((ModelDoc2)(SolidWorksInstance.SldWoksApp.ActivateDoc2("11-30-001.SLDPRT", true, 0)));
+//                        swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksApp.ActivateDoc2("11-30-001.SLDPRT", true, 0)));
 //                        swDoc.Extension.SelectByID2("Эскиз17", "SKETCH", 0, 0, 0, false, 0, null, 0);
 //                        swDoc.EditSketch();
 //                        swDoc.ClearSelection2(true);
@@ -682,7 +729,7 @@
 //                    }
 
 //                    SwPartParamsChangeWithNewName("11-30-001",
-//                        $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newName}",
+//                        $@"{RootFolder}\{DamperDestinationFolder}\{newName}",
 //                        new[,]
 //                        {
 //                            {"D2@Эскиз1", Convert.ToString(widthD/2 - 0.8)},
@@ -699,18 +746,18 @@
 
 //                // 11-30-002 
 //                newName = "11-30-01-" + height + modelType + (isOutDoor ? "-O" : "");
-//                newPartPath = $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
+//                newPartPath = $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
 //                if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
 //                {
-//                    swDoc = ((ModelDoc2)(SolidWorksInstance.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
+//                    swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
 //                    swDoc.Extension.SelectByID2("11-30-002-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //                    swAsm.ReplaceComponents(newPartPath, "", false, true);
-//                    SolidWorksInstance.SldWoksApp.CloseDoc("11-30-002.SLDPRT");
+//                    SolidWorksAdapter.SldWoksApp.CloseDoc("11-30-002.SLDPRT");
 //                }
 //                else
 //                {
 //                    SwPartParamsChangeWithNewName("11-30-002",
-//                        $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newName}",
+//                        $@"{RootFolder}\{DamperDestinationFolder}\{newName}",
 //                        new[,]
 //                        {
 //                            {"D2@Эскиз1", Convert.ToString(heightD + 10)},
@@ -732,18 +779,18 @@
 
 //                // 11-30-004 
 //                newName = "11-30-02-" + height + modelType + (isOutDoor ? "-O" : "");
-//                newPartPath = $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
+//                newPartPath = $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
 //                if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
 //                {
-//                    swDoc = ((ModelDoc2)(SolidWorksInstance.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
+//                    swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
 //                    swDoc.Extension.SelectByID2("11-30-004-2@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //                    swAsm.ReplaceComponents(newPartPath, "", false, true);
-//                    SolidWorksInstance.SldWoksApp.CloseDoc("11-30-004.SLDPRT");
+//                    SolidWorksAdapter.SldWoksApp.CloseDoc("11-30-004.SLDPRT");
 //                }
 //                else
 //                {
 //                    SwPartParamsChangeWithNewName("11-30-004",
-//                        $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newName}",
+//                        $@"{RootFolder}\{DamperDestinationFolder}\{newName}",
 //                        new[,]
 //                        {
 //                            {"D2@Эскиз1", Convert.ToString(heightD + 10)},
@@ -765,18 +812,18 @@
 
 //                // 11-30-003 
 //                newName = "11-30-04-" + Math.Truncate(lp) + "-" + hC + modelType;
-//                newPartPath = $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
+//                newPartPath = $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
 //                if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
 //                {
-//                    swDoc = ((ModelDoc2)(SolidWorksInstance.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
+//                    swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
 //                    swDoc.Extension.SelectByID2("11-30-003-2@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //                    swAsm.ReplaceComponents(newPartPath, "", true, true);
-//                    SolidWorksInstance.SldWoksApp.CloseDoc("11-30-003.SLDPRT");
+//                    SolidWorksAdapter.SldWoksApp.CloseDoc("11-30-003.SLDPRT");
 //                }
 //                else
 //                {
 //                    SwPartParamsChangeWithNewName("11-30-003",
-//                        $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newName}",
+//                        $@"{RootFolder}\{DamperDestinationFolder}\{newName}",
 //                        new[,]
 //                        {
 //                            {"D2@Эскиз1", Convert.ToString(lp)},
@@ -800,16 +847,16 @@
 
 //                var newNameAsm = "11-2-" + lProfName;
 //                string newPartPathAsm =
-//                    $@"{Settings.Default.DestinationFolder}{DamperDestinationFolder}\{newNameAsm}.SLDASM";
+//                    $@"{RootFolder}{DamperDestinationFolder}\{newNameAsm}.SLDASM";
 
 //                if (isdouble)
 //                {
 //                    if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPathAsm), 0))
 //                    {
-//                        swDoc = ((ModelDoc2)(SolidWorksInstance.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
+//                        swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
 //                        swDoc.Extension.SelectByID2("11-100-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //                        swAsm.ReplaceComponents(newPartPathAsm, "", true, true);
-//                        SolidWorksInstance.SldWoksApp.CloseDoc("11-100.SLDASM");
+//                        SolidWorksAdapter.SldWoksApp.CloseDoc("11-100.SLDASM");
 //                    }
 //                    else
 //                    {
@@ -817,27 +864,27 @@
 
 //                        newName = "11-" + (Math.Truncate(lProfNameLength * 1000)) + "-01";
 //                        newPartPath =
-//                            $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
+//                            $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
 //                        if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
 //                        {
-//                            SolidWorksInstance.SldWoksApp.IActivateDoc2("10-100", false, 0);
-//                            swDoc = (ModelDoc2)((IModelDoc2)(SolidWorksInstance.SldWoksApp.ActiveDoc));
+//                            SolidWorksAdapter.SldWoksApp.IActivateDoc2("10-100", false, 0);
+//                            swDoc = (ModelDoc2)((IModelDoc2)(SolidWorksAdapter.SldWoksApp.ActiveDoc));
 //                            swDoc.Extension.SelectByID2("11-101-1@11-100", "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //                            swAsm.ReplaceComponents(newPartPath, "", true, true);
-//                            SolidWorksInstance.SldWoksApp.CloseDoc("11-100.SLDASM");
+//                            SolidWorksAdapter.SldWoksApp.CloseDoc("11-100.SLDASM");
 //                        }
 //                        else
 //                        {
-//                            SolidWorksInstance.SldWoksApp.IActivateDoc2("10-100", false, 0);
-//                            swDoc = (ModelDoc2)((IModelDoc2)(SolidWorksInstance.SldWoksApp.ActiveDoc));
+//                            SolidWorksAdapter.SldWoksApp.IActivateDoc2("10-100", false, 0);
+//                            swDoc = (ModelDoc2)((IModelDoc2)(SolidWorksAdapter.SldWoksApp.ActiveDoc));
 //                            swDoc.Extension.SelectByID2("D1@Вытянуть1@11-101-1@11-100", "DIMENSION", 0, 0, 0, false, 0,
 //                                null, 0);
 //                            var myDimension = ((Dimension)(swDoc.Parameter("D1@Вытянуть1@11-101.Part")));
 //                            myDimension.SystemValue = lProfNameLength;
-//                            SolidWorksInstance.SldWoksApp.ActivateDoc2("11-101", false, 0);
-//                            swDoc = ((ModelDoc2)(SolidWorksInstance.SldWoksApp.ActiveDoc));
+//                            SolidWorksAdapter.SldWoksApp.ActivateDoc2("11-101", false, 0);
+//                            swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksApp.ActiveDoc));
 //                            swDoc.SaveAs2(newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
-//                            SolidWorksInstance.SldWoksApp.CloseDoc(newName);
+//                            SolidWorksAdapter.SldWoksApp.CloseDoc(newName);
 //                            NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(newPartPath).FullName });
 //                        }
 
@@ -849,13 +896,13 @@
 //                {
 //                    newNameAsm = "11-" + lProfName;
 //                    newPartPathAsm =
-//                        $@"{Settings.Default.DestinationFolder}{DamperDestinationFolder}\{newNameAsm}.SLDASM";
+//                        $@"{RootFolder}{DamperDestinationFolder}\{newNameAsm}.SLDASM";
 //                    if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPathAsm), 0))
 //                    {
-//                        swDoc = ((ModelDoc2)(SolidWorksInstance.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
+//                        swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
 //                        swDoc.Extension.SelectByID2("11-100-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //                        swAsm.ReplaceComponents(newPartPathAsm, "", true, true);
-//                        SolidWorksInstance.SldWoksApp.CloseDoc("11-100.SLDASM");
+//                        SolidWorksAdapter.SldWoksApp.CloseDoc("11-100.SLDASM");
 //                    }
 //                    else
 //                    {
@@ -863,27 +910,27 @@
 
 //                        newName = "11-" + (Math.Truncate(lProfNameLength * 1000)) + "-01";
 //                        newPartPath =
-//                            $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
+//                            $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
 //                        if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
 //                        {
-//                            SolidWorksInstance.SldWoksApp.IActivateDoc2("10-100", false, 0);
-//                            swDoc = (ModelDoc2)((IModelDoc2)(SolidWorksInstance.SldWoksApp.ActiveDoc));
+//                            SolidWorksAdapter.SldWoksApp.IActivateDoc2("10-100", false, 0);
+//                            swDoc = (ModelDoc2)((IModelDoc2)(SolidWorksAdapter.SldWoksApp.ActiveDoc));
 //                            swDoc.Extension.SelectByID2("11-101-1@11-100", "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //                            swAsm.ReplaceComponents(newPartPath, "", true, true);
-//                            SolidWorksInstance.SldWoksApp.CloseDoc("11-100.SLDASM");
+//                            SolidWorksAdapter.SldWoksApp.CloseDoc("11-100.SLDASM");
 //                        }
 //                        else
 //                        {
-//                            SolidWorksInstance.SldWoksApp.IActivateDoc2("10-100", false, 0);
-//                            swDoc = (ModelDoc2)((IModelDoc2)(SolidWorksInstance.SldWoksApp.ActiveDoc));
+//                            SolidWorksAdapter.SldWoksApp.IActivateDoc2("10-100", false, 0);
+//                            swDoc = (ModelDoc2)((IModelDoc2)(SolidWorksAdapter.SldWoksApp.ActiveDoc));
 //                            swDoc.Extension.SelectByID2("D1@Вытянуть1@11-101-1@11-100", "DIMENSION", 0, 0, 0, false, 0,
 //                                null, 0);
 //                            var myDimension = ((Dimension)(swDoc.Parameter("D1@Вытянуть1@11-101.Part")));
 //                            myDimension.SystemValue = lProfNameLength;
-//                            SolidWorksInstance.SldWoksApp.ActivateDoc2("11-101", false, 0);
-//                            swDoc = ((ModelDoc2)(SolidWorksInstance.SldWoksApp.ActiveDoc));
+//                            SolidWorksAdapter.SldWoksApp.ActivateDoc2("11-101", false, 0);
+//                            swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksApp.ActiveDoc));
 //                            swDoc.SaveAs2(newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
-//                            SolidWorksInstance.SldWoksApp.CloseDoc(newName);
+//                            SolidWorksAdapter.SldWoksApp.CloseDoc(newName);
 //                            NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(newPartPath).FullName });
 //                        }
 
@@ -891,8 +938,8 @@
 //                    }
 //                }
 
-//                SolidWorksInstance.SldWoksApp.ActivateDoc2("11-100", false, 0);
-//                swDoc = ((ModelDoc2)(SolidWorksInstance.SldWoksApp.ActiveDoc));
+//                SolidWorksAdapter.SldWoksApp.ActivateDoc2("11-100", false, 0);
+//                swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksApp.ActiveDoc));
 //                if (isdouble)
 //                {
 //                    swDoc.Extension.SelectByID2("Совпадение76", "MATE", 0, 0, 0, false, 0, null, 0); swDoc.EditSuppress2();
@@ -900,36 +947,36 @@
 //                    swDoc.Extension.SelectByID2("ВНС-47.91.101-2@11-100", "COMPONENT", 0, 0, 0, false, 0, null, 0); swDoc.EditDelete();
 //                }
 
-//                var docDrw100 = SolidWorksInstance.SldWoksApp.OpenDoc6($@"{Settings.Default.SourceFolder}{modelDamperPath}\{"11-100"}.SLDDRW", (int)swDocumentTypes_e.swDocDRAWING, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", 0, 0);
+//                var docDrw100 = SolidWorksAdapter.SldWoksApp.OpenDoc6($@"{Settings.Default.SourceFolder}{modelDamperPath}\{"11-100"}.SLDDRW", (int)swDocumentTypes_e.swDocDRAWING, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", 0, 0);
 
-//                SolidWorksInstance.SldWoksApp.ActivateDoc2(Path.GetFileNameWithoutExtension(newPartPathAsm), false, 0);
+//                SolidWorksAdapter.SldWoksApp.ActivateDoc2(Path.GetFileNameWithoutExtension(newPartPathAsm), false, 0);
 //                swDoc.ForceRebuild3(false);
 //                swDoc.SaveAs2(newPartPathAsm, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
-//                SolidWorksInstance.SldWoksApp.CloseDoc(newNameAsm);
+//                SolidWorksAdapter.SldWoksApp.CloseDoc(newNameAsm);
 //                docDrw100.ForceRebuild3(false);
 //                docDrw100.SaveAs2(
-//                    $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newNameAsm}.SLDDRW", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
-//                SolidWorksInstance.SldWoksApp.CloseDoc(Path.GetFileNameWithoutExtension(new FileInfo(
-//                    $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newNameAsm}.SLDDRW").FullName) + " - DRW1");
+//                    $@"{RootFolder}\{DamperDestinationFolder}\{newNameAsm}.SLDDRW", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
+//                SolidWorksAdapter.SldWoksApp.CloseDoc(Path.GetFileNameWithoutExtension(new FileInfo(
+//                    $@"{RootFolder}\{DamperDestinationFolder}\{newNameAsm}.SLDDRW").FullName) + " - DRW1");
 
 //                NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(newPartPathAsm).FullName });
-//                NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo($@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newNameAsm}.SLDDRW").FullName });
+//                NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo($@"{RootFolder}\{DamperDestinationFolder}\{newNameAsm}.SLDDRW").FullName });
 
 //                #endregion
 
 //                #region 11-30-100 Сборка Перемычки
 
 //                newNameAsm = "11-30-100-" + height + modelType;
-//                newPartPathAsm = $@"{Settings.Default.DestinationFolder}{DamperDestinationFolder}\{newNameAsm}.SLDASM";
+//                newPartPathAsm = $@"{RootFolder}{DamperDestinationFolder}\{newNameAsm}.SLDASM";
 
 //                if (isdouble)
 //                {
 //                    if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPathAsm), 0))
 //                    {
-//                        swDoc = ((ModelDoc2)(SolidWorksInstance.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
+//                        swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksApp.ActivateDoc2(nameAsm + ".SLDASM", true, 0)));
 //                        swDoc.Extension.SelectByID2("11-30-100-4@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //                        swAsm.ReplaceComponents(newPartPathAsm, "", true, true);
-//                        SolidWorksInstance.SldWoksApp.CloseDoc("11-30-100.SLDASM");
+//                        SolidWorksAdapter.SldWoksApp.CloseDoc("11-30-100.SLDASM");
 //                    }
 //                    else
 //                    {
@@ -937,19 +984,19 @@
 
 //                        newName = "11-30-101-" + height + modelType;
 //                        newPartPath =
-//                            $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
+//                            $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
 //                        if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 0))
 //                        {
-//                            SolidWorksInstance.SldWoksApp.IActivateDoc2("10-30-100", false, 0);
-//                            swDoc = (ModelDoc2)((IModelDoc2)(SolidWorksInstance.SldWoksApp.ActiveDoc));
+//                            SolidWorksAdapter.SldWoksApp.IActivateDoc2("10-30-100", false, 0);
+//                            swDoc = (ModelDoc2)((IModelDoc2)(SolidWorksAdapter.SldWoksApp.ActiveDoc));
 //                            swDoc.Extension.SelectByID2("11-30-101-2@11-30-100", "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //                            swAsm.ReplaceComponents(newPartPath, "", true, true);
-//                            SolidWorksInstance.SldWoksApp.CloseDoc("11-30-100.SLDASM");
+//                            SolidWorksAdapter.SldWoksApp.CloseDoc("11-30-100.SLDASM");
 //                        }
 //                        else
 //                        {
 //                            SwPartParamsChangeWithNewName("11-30-101",
-//                                $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newName}",
+//                                $@"{RootFolder}\{DamperDestinationFolder}\{newName}",
 //                                new[,]
 //                                {
 //                                    {"D2@Эскиз1", Convert.ToString(heightD + 10)},
@@ -962,33 +1009,33 @@
 //                                null);
 //                            AddMaterial(material, newName);
 
-//                            SolidWorksInstance.SldWoksApp.CloseDoc(newName);
-//                            NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo($@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newNameAsm}").FullName });
+//                            SolidWorksAdapter.SldWoksApp.CloseDoc(newName);
+//                            NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo($@"{RootFolder}\{DamperDestinationFolder}\{newNameAsm}").FullName });
 //                        }
 
 //                        #endregion
 
-//                        SolidWorksInstance.SldWoksApp.ActivateDoc2("11-30-100", false, 0);
-//                        swDoc = ((ModelDoc2)(SolidWorksInstance.SldWoksApp.ActiveDoc));
+//                        SolidWorksAdapter.SldWoksApp.ActivateDoc2("11-30-100", false, 0);
+//                        swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksApp.ActiveDoc));
 //                        swDoc.ForceRebuild3(true);
 
 //                        #region  11-30-102  Профиль перемычки
 
 //                        newName = "11-30-102-" + height + modelType;
 //                        newPartPath =
-//                            $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
+//                            $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
 //                        if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 0))
 //                        {
-//                            SolidWorksInstance.SldWoksApp.IActivateDoc2("10-30-100", false, 0);
-//                            swDoc = (ModelDoc2)((IModelDoc2)(SolidWorksInstance.SldWoksApp.ActiveDoc));
+//                            SolidWorksAdapter.SldWoksApp.IActivateDoc2("10-30-100", false, 0);
+//                            swDoc = (ModelDoc2)((IModelDoc2)(SolidWorksAdapter.SldWoksApp.ActiveDoc));
 //                            swDoc.Extension.SelectByID2("11-30-102-2@11-30-100", "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //                            swAsm.ReplaceComponents(newPartPath, "", true, true);
-//                            SolidWorksInstance.SldWoksApp.CloseDoc("11-30-100.SLDASM");
+//                            SolidWorksAdapter.SldWoksApp.CloseDoc("11-30-100.SLDASM");
 //                        }
 //                        else
 //                        {
 //                            SwPartParamsChangeWithNewName("11-30-102",
-//                                $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newName}",
+//                                $@"{RootFolder}\{DamperDestinationFolder}\{newName}",
 //                                new[,]
 //                                {
 //                                    {"D2@Эскиз1", Convert.ToString(heightD + 10)},
@@ -1008,18 +1055,18 @@
 //                                //MessageBox.Show($"{newName}\n{e.Message}\n{e.StackTrace}", "11-30-102  Профиль перемычки");                                
 //                            }
 
-//                            SolidWorksInstance.SldWoksApp.CloseDoc(newName);
-//                            NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo($@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newNameAsm}").FullName });
+//                            SolidWorksAdapter.SldWoksApp.CloseDoc(newName);
+//                            NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo($@"{RootFolder}\{DamperDestinationFolder}\{newNameAsm}").FullName });
 //                        }
 
 //                        #endregion
 
-//                        SolidWorksInstance.SldWoksApp.ActivateDoc2("11-30-100", false, 0);
-//                        swDoc = ((ModelDoc2)(SolidWorksInstance.SldWoksApp.ActiveDoc));
+//                        SolidWorksAdapter.SldWoksApp.ActivateDoc2("11-30-100", false, 0);
+//                        swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksApp.ActiveDoc));
 //                        swDoc.ForceRebuild3(false); swDoc.ForceRebuild3(true);
 //                        swDoc.SaveAs2(newPartPathAsm, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
-//                        SolidWorksInstance.SldWoksApp.CloseDoc(newNameAsm);
-//                        NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo($@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newNameAsm}").FullName });
+//                        SolidWorksAdapter.SldWoksApp.CloseDoc(newNameAsm);
+//                        NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo($@"{RootFolder}\{DamperDestinationFolder}\{newNameAsm}").FullName });
 
 //                        #endregion
 
@@ -1031,27 +1078,27 @@
 
 //            #endregion
 
-//            swDoc = ((ModelDoc2)(SolidWorksInstance.SldWoksApp.ActivateDoc2(nameAsm, true, 0)));
+//            swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksApp.ActivateDoc2(nameAsm, true, 0)));
 
 //            GabaritsForPaintingCamera(swDoc);
 //            swDoc.EditRebuild3();
 //            swDoc.ForceRebuild3(true);
-//            var name = $@"{Settings.Default.DestinationFolder}\{DamperDestinationFolder}\{newDamperName}";
+//            var name = $@"{RootFolder}\{DamperDestinationFolder}\{newDamperName}";
 //            swDoc.SaveAs2(name + ".SLDASM", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
-//            SolidWorksInstance.SldWoksApp.CloseDoc(Path.GetFileNameWithoutExtension(new FileInfo(name + ".SLDASM").FullName));
+//            SolidWorksAdapter.SldWoksApp.CloseDoc(Path.GetFileNameWithoutExtension(new FileInfo(name + ".SLDASM").FullName));
 //            swDocDrw.Extension.SelectByID2("DRW1", "SHEET", 0, 0, 0, false, 0, null, 0);
-//            var drw = (DrawingDoc)(SolidWorksInstance.SldWoksApp.IActivateDoc3(drawing + ".SLDDRW", true, 0));
+//            var drw = (DrawingDoc)(SolidWorksAdapter.SldWoksApp.IActivateDoc3(drawing + ".SLDDRW", true, 0));
 //            drw.ActivateSheet("DRW1");
 //            var m = 5;
 //            if (Convert.ToInt32(width) > 500 || Convert.ToInt32(height) > 500) { m = 10; }
 //            if (Convert.ToInt32(width) > 850 || Convert.ToInt32(height) > 850) { m = 15; }
 //            if (Convert.ToInt32(width) > 1250 || Convert.ToInt32(height) > 1250) { m = 20; }
 
-//            //drw.SetupSheet5("DRW1", 12, 12, 1, m, true, Settings.Default.DestinationFolder + @"\\srvkb\SolidWorks Admin\Templates\Основные надписи\A2-A-1.slddrt", 0.42, 0.297, "По умолчанию", false);
+//            //drw.SetupSheet5("DRW1", 12, 12, 1, m, true, RootFolder + @"\\srvkb\SolidWorks Admin\Templates\Основные надписи\A2-A-1.slddrt", 0.42, 0.297, "По умолчанию", false);
 
 //            swDocDrw.SaveAs2(name + ".SLDDRW", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
-//            SolidWorksInstance.SldWoksApp.CloseDoc(newDamperPath);
-//            SolidWorksInstance.SldWoksApp.ExitApp();
+//            SolidWorksAdapter.SldWoksApp.CloseDoc(newDamperPath);
+//            SolidWorksAdapter.SldWoksApp.ExitApp();
 
 //            NewComponentsFull.AddRange(new List<VaultSystem.VentsCadFile>
 //                        {
@@ -1059,7 +1106,7 @@
 //                            new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(name + ".SLDDRW").FullName },
 //                         });
 
-            
+
 
 //            string message = null;
 
@@ -1104,7 +1151,7 @@
 //                //MessageBox.Show(list, message);// $" Следующие файлы были обновлены {newList.Count()} listToCheckOut - {listToCheckOut.Count()}"); // obs
 //            }
 
-//            SolidWorksInstance.CloseAllDocumentsAndExit();
+//            SolidWorksAdapter.CloseAllDocumentsAndExit();
 //            return newDamperPath;
 //        }
 

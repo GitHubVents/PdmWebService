@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.IO;
 using System.Data;
 using System.Linq;
-using EPDM.Interop.epdm;
 using System.Runtime.InteropServices;
-
+using EPDM.Interop.EPDMResultCode;
 using Patterns;
 using PdmSolidWorksLibrary.Models;
 using System.Threading;
 using Patterns.Observer;
+using EdmLib;
 
 namespace PdmSolidWorksLibrary
 {
     public class SolidWorksPdmAdapter :Singeton<SolidWorksPdmAdapter>
     {
-
+         
         private SolidWorksPdmAdapter() : base(){}
 
         /// <summary>
@@ -34,8 +34,7 @@ namespace PdmSolidWorksLibrary
         private IEdmVault5 PdmExemplar
         {
             get
-            {
-
+            { 
                 try
                 {
                     if (edmVeult5 == null)
@@ -51,7 +50,6 @@ namespace PdmSolidWorksLibrary
                             //ogger.ToLog("Автологин в системе Vents-PDM системного пользователя " + vaultname);
                         }
                     }
-
                     return edmVeult5;
                 }
                 catch (Exception exception)
@@ -139,11 +137,11 @@ namespace PdmSolidWorksLibrary
         /// </summary>
         /// <param name="fileModel"></param>
         /// <returns></returns>
-        public string[] GetConfigigurations(FileModelPdm fileModel)
+        public string[] GetConfigigurations(string filePath)
         {
             IEdmFile9 fileModelInf;
             IEdmFolder5 ppoRetParentFolder;
-            fileModelInf = (IEdmFile9)PdmExemplar.GetFileFromPath(fileModel.Path, out ppoRetParentFolder);
+            fileModelInf = (IEdmFile9)PdmExemplar.GetFileFromPath(filePath, out ppoRetParentFolder);
 
             EdmStrLst5 cfgList;
             cfgList = fileModelInf.GetConfigurations();
@@ -176,7 +174,7 @@ namespace PdmSolidWorksLibrary
             }
             catch (Exception exception)
             {
-                // Logger.ToLog($"Message - {exception.ToString()}\nPath - {path}\nStackTrace - {exception.StackTrace}", null, "GetLastVersionOfFile", "SwEpdm");
+               MessageObserver.Instance.SetMessage("Got last version for file by path" + path);
             }
         }
 
@@ -211,18 +209,18 @@ namespace PdmSolidWorksLibrary
         #region bom
         public IEnumerable<BomShell> GetBomShell(string filePath, string bomConfiguration )
         {
-          
+
             try
             {
                 IEdmFolder5 oFolder;
 
                 IEdmFile7 EdmFile7 = (IEdmFile7)PdmExemplar.GetFileFromPath(filePath, out oFolder);
-                var bomView = EdmFile7.GetComputedBOM(Convert.ToInt32(BOM_ID), Convert.ToInt32(-1), bomConfiguration, (int)EdmBomFlag.EdmBf_ShowSelected);
+                var bomView = EdmFile7.GetComputedBOM(BOM_ID, -1, bomConfiguration, (int)EdmBomFlag.EdmBf_ShowSelected);
 
                 if (bomView == null)
                     throw new Exception("Computed BOM it can not be null");
-                object[] bomRows;
-                EdmBomColumn[] bomColumns;
+                Array bomRows;
+                Array bomColumns;
                 bomView.GetRows(out bomRows);
                 bomView.GetColumns(out bomColumns);
                 var bomTable = new DataTable();
@@ -270,14 +268,16 @@ namespace PdmSolidWorksLibrary
                         bomTable.Rows[i][j + 4] = cell.GetPathName();
                     }
                 }
-           
-                return  BomTableToBomList(bomTable);
+
+                return BomTableToBomList(bomTable);
 
             }
-            catch (Exception ex)
+            catch (System.Runtime.InteropServices.COMException ex)
             {
-                throw ex;
+                MessageObserver.Instance.SetMessage("Failed get bom shell " + (EdmResultErrorCodes_e)ex.ErrorCode);
+                return null;
             }
+
         }
         #endregion
 
@@ -290,8 +290,8 @@ namespace PdmSolidWorksLibrary
                                    select new BomShell
                                    {
                                        Partition = values[0].ToString(),
-                                       Designation = values[1].ToString(),
-                                       Name = values[2].ToString(),
+                                       PartNumber = values[1].ToString(),
+                                       Description = values[2].ToString(),
                                        Material = values[3].ToString(),
                                        MaterialCmi = values[4].ToString(),
                                        SheetThickness = values[5].ToString(),
@@ -508,7 +508,7 @@ namespace PdmSolidWorksLibrary
         public string AddToPdm(string pathToFile, string folder)
         {
             
-            string msg = "";
+           
             try
             {
                 //if (File.Exists(pathToFile))
@@ -570,12 +570,27 @@ namespace PdmSolidWorksLibrary
         {
             try
             {
-                IEdmFile5 pdmFile = (IEdmFile5)PdmExemplar.GetObject(EdmObjectType.EdmObject_File, fileId);
-                Console.WriteLine(SearchDoc(pdmFile.Name).Count());
-                FileModelPdm fileModel = SearchDoc(pdmFile.Name).First();
+                IEdmFile5 pdmFile ;
+                IEdmFolder5 folder;
+                
+                     pdmFile = (IEdmFile5)PdmExemplar.GetObject(EdmObjectType.EdmObject_File, fileId);
 
-             
+                //Console.WriteLine(SearchDoc(pdmFile.Name).Count());
+                FileModelPdm fileModel =  SearchDoc(pdmFile.Name).First(); 
+                    //new FileModelPdm
+                    //{
+                    //    CurrentVersion = pdmFile.CurrentVersion,
+                    //    IDPdm = pdmFile.ID,
+                    //    FileName = pdmFile.Name,
+                    //    //  FolderId = folder.ID,
+                    //    //  FolderPath = folder.LocalPath
 
+                    //    Path = pdmFile.LockFile
+                      
+                    //};
+
+
+                Console.WriteLine("\n\t\t debug: получен интерфейс файла: " +fileModel.FileName + " id" + fileModel.IDPdm + ", folder path " + fileModel.FolderPath + "\n");
                 if (isDownload)
                 {                
                     DownLoadFile(fileModel);   

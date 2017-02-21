@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataBaseDomian
 {
-  public  class SwPlusRepository :Singeton<SwPlusRepository>
+    public class SwPlusRepository : Singeton<SwPlusRepository> , IUpdater
     {
         protected SwPlusRepository()
         {
@@ -38,12 +38,26 @@ namespace DataBaseDomian
         }
 
 
-        public IEnumerable< View_Part> Parts
+        public IEnumerable<View_Part> Parts
         {
             get
             {
+                
                 return DataContext.View_Parts;
             }
-        } 
+        }
+
+        public void RefreshRepositoryStatus()
+        {
+            try
+            {
+                // only tables
+            //    DataContext.Refresh(System.Data.Linq.RefreshMode.OverwriteCurrentValues, new object[] { DataContext.View_Parts });
+            }
+            catch (Exception exception)
+            {
+                throw new Exception("Failed refresh entities { " + exception.ToString() + " }");
+            }
+        }
     }
 }

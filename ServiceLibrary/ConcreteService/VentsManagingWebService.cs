@@ -1,8 +1,14 @@
-﻿using PdmSolidWorksLibrary;
+﻿using DataBaseDomian.XML;
+using Patterns.Observer;
+using PdmSolidWorksLibrary;
+using PDMWebService.Data.Solid.PartBuilders;
+using ServiceConstants;
 using ServiceLibrary.Models;
 using ServiceLibrary.Models.DataContracts;
 using ServiceLibrary.ServiceInterface;
+using SolidWorksLibrary.Builders.Roof;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using TaskSystemLibrary;
 
@@ -10,19 +16,31 @@ namespace ServiceLibrary.ConcreteService
 {
     public class VentsManagingWebService : ISolidWebService
     {
-        private TaskManager taskManager;
-        public VentsManagingWebService()
-        {
-            try
-            {
-                taskManager = TaskSystemLibrary.TaskManager.Instance;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Filed created TaskManager exemplar; message { " + ex + " }");
-            }
+      
+   
 
-        }
+
+
+
+        private TaskManager taskManager;
+        //public VentsManagingWebService()
+        //{
+        //    try
+        //    {
+        //        taskManager = TaskSystemLibrary.TaskManager.Instance;
+                
+        //        spigotBuilder = new SpigotBuilder();
+        //        spigotBuilder.CheckExistPart = global_CheckExistPartEvent;
+        //        spigotBuilder.FinishedBuild = SpigotBuilder_FinishedBuildEvent;
+
+  
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //       MessageObserver.Instance.SetMessage("Filed created TaskManager exemplar; message { " + ex + " }");
+        //    }
+
+        //}
 
         public string GetPathSelectFile(TransmittableFileModel dataSolidModel)
         {
@@ -46,7 +64,7 @@ namespace ServiceLibrary.ConcreteService
         public TransmittableFile SelectFile(TransmittableFileModel dataSolidModel)
         {
 
-            SolidWorksPdmAdapter.Instance.DownLoadFile(DataConverter.ToFileModelPdm(dataSolidModel));
+            SolidWorksPdmAdapter.Instance.GetFileById(DataConverter.ToFileModelPdm(dataSolidModel).IDPdm,true);
 
             TransmittableFile remoteInfo;
             try
@@ -82,28 +100,19 @@ namespace ServiceLibrary.ConcreteService
         }
         public TransmittableFileModel[] Search(string nameSegment)
         {
-            Console.WriteLine(nameSegment);
+           MessageObserver.Instance.SetMessage(nameSegment);
             return DataConverter.ToTransferFileModel(SolidWorksPdmAdapter.Instance.SearchDoc(nameSegment)).ToArray();
         }
 
-        public string[] GetConfigigurations(TransmittableFileModel dataSolidModel)
+        public string[] GetConfigigurations(string filePath)
         {
-            return SolidWorksPdmAdapter.Instance.GetConfigigurations(DataConverter.ToFileModelPdm(dataSolidModel));
+            return SolidWorksPdmAdapter.Instance.GetConfigigurations(filePath);
         }
 
-        public TransmittableSpecification[] GetSpecifications(TransmittableFileModel dataSolidModel, string configuration)
-        {
-
-            Exception exception = new Exception();
-            try
-            {
-                return DataConverter.GetSpecification(dataSolidModel, configuration);
-            }
-            catch
-            {
-                //  Logger.ToLog("Ошобка при попытке получить список спецификаций по модели" + dataSolidModel.FileName + " с конфигурацией " + configuration + "\n" + exception.Message);
-                return null;
-            }
+        public TransmittableSpecification[] GetSpecifications(string filePath, string configuration)
+        { 
+                return DataConverter.GetSpecification(filePath,   configuration);
+           
 
         }
 
@@ -114,18 +123,18 @@ namespace ServiceLibrary.ConcreteService
         ////    List<DataModel> datamodels = new List<DataModel>();
         ////    string n = name.Split('.')[0];
         ////    datamodels.AddRange(PDMAdapter.Instance.SearchDoc("%" + n + "%"));
-        ////    Console.WriteLine("d m count " + datamodels);
+        ////   MessageObserver.Instance.SetMessage("d m count " + datamodels);
 
         ////    foreach (var model in datamodels)
         ////    {
-        ////        Console.WriteLine(model.FileName);
+        ////       MessageObserver.Instance.SetMessage(model.FileName);
 
         ////        PDMAdapter.Instance.DownLoadFile(model);
 
         ////        string sldModelPath = PDMAdapter.Instance.CloneDowladFileTo(@"D:\TEMP\dxf\".ToUpper(), model);
-        ////        Console.WriteLine(sldModelPath);
+        ////       MessageObserver.Instance.SetMessage(sldModelPath);
         ////        //  string dxfPath = SolidWorksInstance. SolidAdapter.ConvertToDXF(sldModelPath, configuration);
-        ////        Console.WriteLine("Dxf сконвертирован");
+        ////       MessageObserver.Instance.SetMessage("Dxf сконвертирован");
 
         ////        //System.IO.FileInfo fileInfo = new System.IO.FileInfo(dxfPath);
         ////        //if (!fileInfo.Exists)
@@ -174,12 +183,12 @@ namespace ServiceLibrary.ConcreteService
         {
             try
             {
-                Console.WriteLine("Input request on service: Create dxf");
+               MessageObserver.Instance.SetMessage("Input request on service: Create dxf");
                 taskManager.CreateDxf(filesId);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Exeption on seb service level; message { " + ex.ToString() + " }");
+               MessageObserver.Instance.SetMessage("Exeption on seb service level; message { " + ex.ToString() + " }");
             }
         }
 
@@ -187,25 +196,166 @@ namespace ServiceLibrary.ConcreteService
         {
             try
             {
-                Console.WriteLine("Input request service: Create pdf");
+               MessageObserver.Instance.SetMessage("Input request service: Create pdf");
                 taskManager.CreatePdf(filesId);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Exeption on seb service level; message { " + ex.ToString() + " }");
+               MessageObserver.Instance.SetMessage("Exeption on seb service level; message { " + ex.ToString() + " }");
             }
         }
 
         public TransmittableTaskData[] GetActiveTasksData()
         {
-            Console.WriteLine("Input request service: Create pdf");
+           MessageObserver.Instance.SetMessage("Input request service: Create pdf");
             return DataConverter.ToTaskDataTransmittable(taskManager.GetActiveTasksData()).ToArray();
 
         }
 
         public TransmittableTaskData[] GetComplitedTasksData()
         {
+          
             return DataConverter.ToTaskDataTransmittable(taskManager.GetComplitedTasksData()).ToArray();
         }
+
+        public void ExportPartDataToXml(TransmittableSpecification[] specification)
+        {
+            List<Specification> list = new List<Specification>();
+                 
+
+            foreach (var item in specification)
+            {
+                list.Add(new Specification
+                {
+                    Bend = item.Bend,
+                    CodeMaterial = item.CodeMaterial,
+                    Configuration = item.Configuration,
+                    Count = item.Count.ToString(),
+                    Description = item.Description,
+                    ERPCode = item.ERPCode,
+                    FileName = item.FileName,
+                    IDPDM = item.IDPDM,
+                    isDxf = item.isDxf,
+                    Level = item.Level,
+                    PaintX = item.PaintX,
+                    PaintY = item.PaintY,
+                    PaintZ = item.PaintZ,
+                    Partition= item.Partition,
+                    PartNumber = item.PartNumber,
+                    SummMaterial = item.SummMaterial,
+                    SurfaceArea = item.SurfaceArea,
+                    Thickness = item.Thickness,
+                    Type = item.Type,
+                    Version  = item.Version,
+                    Weight = item.Weight,
+                    WorkpieceX = item.WorkpieceX,
+                    WorkpieceY = item.WorkpieceY 
+                });
+            }
+                                                                                // only parts
+            DataBaseDomian.XML.ExportToXml.ExportPartDataToXml(list.Where(each => each.Level == 2));
+        }
+
+        public bool isServiceWork()
+        {
+            return true;
+        }
+
+        //  ===================================    TEST CREATE SPIGOT REGION ======================================================
+        // ========================================================================================================================
+
+       private static  SpigotBuilder spigotBuilder;
+
+        //                                                        TEST CONSTRUCTOR
+        public VentsManagingWebService()
+        {
+            try
+            {
+                taskManager = TaskSystemLibrary.TaskManager.Instance;
+
+                spigotBuilder = new SpigotBuilder();
+                spigotBuilder.CheckExistPart = global_CheckExistPartEvent;
+                spigotBuilder.FinishedBuild = SpigotBuilder_FinishedBuildEvent;
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageObserver.Instance.SetMessage("Filed created TaskManager exemplar; message { " + ex + " }");
+            }
+
+        }
+        // ===================================           METHODS  ==========================================================================
+
+
+        //TO DO
+        public void CreateSpigot(SpigotType type, int width, int height)
+        {
+            MessageObserver.Instance.SetMessage("Пришел запрос на генерацию вибровставки с параметрами { тип: " + type + ", ширина: " + width + ", высота: " + height);
+            if (spigotBuilder == null) spigotBuilder = new SpigotBuilder();
+         
+            var modelName = PDMWebService.Data.Solid.PartBuilders.SpigotBuilder.GetSpigotName(type, width, height, true);
+            if (!System.IO.File.Exists(@"C:\TestPDM\12 - Вибровставка\" + modelName))
+            {
+
+                MessageObserver.Instance.SetMessage("я ненашел сборку с подобными параметрами. начинаю генерацию");
+
+                spigotBuilder.Build(type, width, height);
+            }
+            else
+            {
+                MessageObserver.Instance.SetMessage("я нашел сборку с подобными параметрами. генерация отменена");
+            }
+
+        }
+        /// <summary>
+        /// test method for handle finished build
+        /// </summary>
+        /// <param name="ComponentsPathList"></param>
+        private static void SpigotBuilder_FinishedBuildEvent(List<string> ComponentsPathList)
+        {
+            MessageObserver.Instance.SetMessage("SpigotBuilder_FinishedBuildEvent");
+            if (ComponentsPathList.Count > 0)
+            {
+                MessageObserver.Instance.SetMessage("Я закончил генерацию:");
+                foreach (var item in ComponentsPathList)
+                {
+                    MessageObserver.Instance.SetMessage("\t" + item);
+                }
+
+            }
+            else
+            {
+                MessageObserver.Instance.SetMessage("Я ничего не сгенерировал:");
+            }
+        }
+
+        /// <summary>
+        /// test method for handle checking exist part
+        /// </summary>
+        /// <param name="partName"></param>
+        /// <param name="isExesitPatrt"></param>
+        /// <param name="pathToPartt"></param>
+        private static void global_CheckExistPartEvent(string partName, out bool isExesitPatrt, out string pathToPartt)
+        {
+           MessageObserver.Instance.SetMessage("global_CheckExistPartEvent");
+           MessageObserver.Instance.SetMessage("partName" + partName);
+           MessageObserver.Instance.SetMessage("Проверяю наличие детали " + partName ) ;
+            if (System.IO.File.Exists(@"C:\TestPDM\15 - Крыша\" + partName))
+            {
+               MessageObserver.Instance.SetMessage("Наличие детали " + partName + " подтверждена. Путь к файлу " + @"C:\TestPDM\12 - Вибровставка\" + partName);
+                isExesitPatrt = true;
+                pathToPartt = @"C:\TestPDM\15 - Крыша\" + partName;
+            }
+
+            else
+            {
+               MessageObserver.Instance.SetMessage("Наличие детали " + partName + " не подтверждена."  );
+                isExesitPatrt = false;
+                pathToPartt = string.Empty;
+            }
+        }
+
+       
     }
 }

@@ -7,8 +7,8 @@
     <ProjectGuid>{DECC61E0-8D25-485F-99F4-D895177C7997}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SolidWorksLivrary</RootNamespace>
-    <AssemblyName>SolidWorksLivrary</AssemblyName>
+    <RootNamespace>SolidWorksLibrary</RootNamespace>
+    <AssemblyName>SolidWorksLibrary</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -70,9 +70,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Builders\Dxf\Bends.cs" />
+    <Compile Include="Builders\Dxf\DXF.cs" />
+    <Compile Include="Builders\Dxf\CutList.cs" />
+    <Compile Include="Builders\Dxf\DataToExport.cs" />
     <Compile Include="Builders\Dxf\DxfBulder.cs" />
     <Compile Include="Builders\Dxf\DxfFile.cs" />
+    <Compile Include="Builders\Flap\FlapBuilder.cs" />
     <Compile Include="Builders\Pdf\PdfBuilder.cs" />
+    <Compile Include="Builders\Roof\RoofBuilder.cs" />
+    <Compile Include="Builders\Spigot\SpigotBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SolidWorksAdapter.cs" />
   </ItemGroup>
@@ -81,10 +87,12 @@
       <Project>{d0abf979-d32b-453d-92d5-f9bc7bdec44e}</Project>
       <Name>Patterns</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ServiceConstants\ServiceConstants.csproj">
+      <Project>{21A48C37-403D-4966-9414-6EA2327A204B}</Project>
+      <Name>ServiceConstants</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Builders\Parts\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

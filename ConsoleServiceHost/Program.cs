@@ -57,7 +57,10 @@ namespace ConsoleServiceHost
 
         private static void Instance_ReceivedMessage(MessageEventArgs e)
         {
-            Console.WriteLine("Message status: "+ e.Type+ "; "+ e.Message );
+             
+                Console.WriteLine("Message: " + e.Type + "  time " + e.time.ToShortDateString()+  "; " + e.Message + "\n");
+
+            
         }
 
         private static IPAddress LocalIPAddress()

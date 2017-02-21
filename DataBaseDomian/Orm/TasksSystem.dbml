@@ -100,4 +100,19 @@
     <Parameter Name="DocumentID" Parameter="documentID" Type="System.Int32" DbType="Int" />
     <Return Type="System.Int32" />
   </Function>
+  <Function Name="dbo.UpDateCutList" Method="UpDateCutList">
+    <Parameter Name="WorkpieceX" Parameter="workpieceX" Type="System.Decimal" DbType="Decimal(10,2)" />
+    <Parameter Name="WorkpieceY" Parameter="workpieceY" Type="System.Decimal" DbType="Decimal(10,2)" />
+    <Parameter Name="Bend" Parameter="bend" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Thickness" Parameter="thickness" Type="System.Decimal" DbType="Decimal(3,1)" />
+    <Parameter Name="Configuration" Parameter="configuration" Type="System.String" DbType="NVarChar(255)" />
+    <Parameter Name="Version" Parameter="version" Type="System.Int32" DbType="Int" />
+    <Parameter Name="PaintX" Parameter="paintX" Type="System.Decimal" DbType="Decimal(10,2)" />
+    <Parameter Name="PaintY" Parameter="paintY" Type="System.Decimal" DbType="Decimal(10,2)" />
+    <Parameter Name="PaintZ" Parameter="paintZ" Type="System.Decimal" DbType="Decimal(10,2)" />
+    <Parameter Name="IDPDM" Parameter="iDPDM" Type="System.Int32" DbType="Int" />
+    <Parameter Name="SurfaceArea" Parameter="surfaceArea" Type="System.Decimal" DbType="Decimal(10,3)" />
+    <Parameter Name="DXFByte" Parameter="dXFByte" Type="System.Data.Linq.Binary" DbType="VarBinary(MAX)" />
+    <Return Type="System.Int32" />
+  </Function>
 </Database>

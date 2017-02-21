@@ -158,6 +158,13 @@ namespace DataBaseDomian.Orm
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), taskInstanceID, documentID);
 			return ((int)(result.ReturnValue));
 		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.UpDateCutList")]
+		public int UpDateCutList([global::System.Data.Linq.Mapping.ParameterAttribute(Name="WorkpieceX", DbType="Decimal(10,2)")] System.Nullable<decimal> workpieceX, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="WorkpieceY", DbType="Decimal(10,2)")] System.Nullable<decimal> workpieceY, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Bend", DbType="Int")] System.Nullable<int> bend, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Thickness", DbType="Decimal(3,1)")] System.Nullable<decimal> thickness, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Configuration", DbType="NVarChar(255)")] string configuration, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Version", DbType="Int")] System.Nullable<int> version, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="PaintX", DbType="Decimal(10,2)")] System.Nullable<decimal> paintX, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="PaintY", DbType="Decimal(10,2)")] System.Nullable<decimal> paintY, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="PaintZ", DbType="Decimal(10,2)")] System.Nullable<decimal> paintZ, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="IDPDM", DbType="Int")] System.Nullable<int> iDPDM, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="SurfaceArea", DbType="Decimal(10,3)")] System.Nullable<decimal> surfaceArea, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="DXFByte", DbType="VarBinary(MAX)")] System.Data.Linq.Binary dXFByte)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), workpieceX, workpieceY, bend, thickness, configuration, version, paintX, paintY, paintZ, iDPDM, surfaceArea, dXFByte);
+			return ((int)(result.ReturnValue));
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TaskInstance")]

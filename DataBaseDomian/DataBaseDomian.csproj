@@ -41,10 +41,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IUpdater.cs" />
     <Compile Include="Orm\SwPlus.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>SwPlus.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Orm\TasksSystem.cs">
+      <DependentUpon>TasksSystem.dbml</DependentUpon>
     </Compile>
     <Compile Include="Orm\TasksSystem.designer.cs">
       <AutoGen>True</AutoGen>
@@ -59,6 +63,8 @@
     </Compile>
     <Compile Include="SwPlusRepository.cs" />
     <Compile Include="TaskSystemDataRepository.cs" />
+    <Compile Include="XML\ExportToXml.cs" />
+    <Compile Include="XML\Specification.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

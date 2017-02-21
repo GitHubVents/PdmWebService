@@ -109,7 +109,7 @@ namespace SolidWorksLibrary
 
             try
             {               
-                CloseAllDocuments();
+               // CloseAllDocuments();
                 SldWoksApp.ExitApp();
                 MessageObserver.Instance.SetMessage("Exit from  SolidWorks Application", MessageType.System);
             }
@@ -146,6 +146,48 @@ namespace SolidWorksLibrary
                 return false;
             }
             return isSheetMetal;
+        }
+
+
+
+        public static ModelDoc2 OpenDocument(string path, swDocumentTypes_e documentType, string configuration = "00")
+        {
+            int errors = 0, warnings = 0;
+
+            int openDocOptions = (int)swOpenDocOptions_e.swOpenDocOptions_Silent;
+            if (documentType == swDocumentTypes_e.swDocDRAWING) {
+                openDocOptions += (int)swOpenDocOptions_e.swOpenDocOptions_LoadModel;
+            }
+
+            var swDocument = SolidWorksAdapter.SldWoksApp.OpenDoc6(path, (int)documentType, openDocOptions, configuration, errors, warnings);
+            SolidWorksAdapter.SldWoksApp.Visible = true;
+
+            if (errors != 0)
+            {
+                MessageObserver.Instance.SetMessage("Error at open solid works document: code {" + errors + "}, description error {" + (swFileLoadError_e)errors + "}");
+            }
+            if (warnings != 0)
+            {
+                MessageObserver.Instance.SetMessage("Warning at open solid works document: code {" + warnings + "}, description warning {" + (swFileLoadWarning_e)errors + "}");
+            }
+
+
+            return swDocument;
+        }
+
+        public static ModelDoc2 AcativeteDoc(string docTitle)
+        {
+
+            int errors = 0;
+        
+
+
+            if (errors != 0)
+            {
+                MessageObserver.Instance.SetMessage("Exeption at activate solid works document: code {" + errors+"}, description error {" + (swActivateDocError_e) errors + "}");
+            }
+
+            return  SolidWorksAdapter.SldWoksApp.ActivateDoc3(docTitle, true, (int) swOpenDocOptions_e.swOpenDocOptions_Silent, errors);
         }
     }
 }

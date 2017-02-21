@@ -1,4 +1,5 @@
-﻿using ServiceLibrary.Models.DataContracts;
+﻿using ServiceConstants;
+using ServiceLibrary.Models.DataContracts;
 using System.ServiceModel;
 
 
@@ -36,15 +37,15 @@ namespace ServiceLibrary.ServiceInterface
         /// <param name="dataSolidModel"></param>
         /// <returns></returns>
         [OperationContract]
-        string[] GetConfigigurations(TransmittableFileModel dataSolidModel);
+        string[] GetConfigigurations(string filePath);
         /// <summary>
         ///  Get specifications by all parts selected model 
         /// </summary>
-        /// <param name="dataSolidModel"></param>
+        /// <param name="filePath"></param>
         /// <param name="configuration"></param>
         /// <returns></returns>
         [OperationContract]
-        TransmittableSpecification[] GetSpecifications(TransmittableFileModel dataSolidModel, string configuration);
+        TransmittableSpecification[] GetSpecifications(string filePath, string configuration);
 
         /// <summary>
         /// Check dxf data
@@ -101,6 +102,16 @@ namespace ServiceLibrary.ServiceInterface
         /// <returns></returns>
         [OperationContract]
         TransmittableTaskData[] GetComplitedTasksData();
+
+        [OperationContract(IsOneWay = true)]
+        void ExportPartDataToXml(TransmittableSpecification[] specification);
+
+
+        [OperationContract]
+        bool isServiceWork();
+
+        [OperationContract(IsOneWay =true)]
+        void CreateSpigot(SpigotType type, int width, int height);
 
     }
 }

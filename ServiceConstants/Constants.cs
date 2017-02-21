@@ -32,7 +32,7 @@ public enum TasksType
     /// <summary>
     /// Containe vibro insertion type and their values { 20mm, 30mm }
     /// </summary>
-    public enum VibroInsertionTypes
+    public enum SpigotType
     {
         Twenty_mm = 20, Thirty_mm = 30
     }

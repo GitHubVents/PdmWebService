@@ -31,7 +31,7 @@ namespace Patterns.Observer
         public void SetMessage (string message, MessageType messageType =  MessageType.System)
         {
             if (this.ReceivedMessage != null)
-                this.ReceivedMessage(new MessageEventArgs { Message = message , Type = messageType});
+                this.ReceivedMessage(new MessageEventArgs { Message = message , Type = messageType, time = DateTime.Now /* new DateTime(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second)*/ });
         }        
               
     }
@@ -40,6 +40,7 @@ namespace Patterns.Observer
     {
         public string Message { get; set; }
         public MessageType Type { get; set; }
+        public DateTime time { get; set; }
     }
 
 

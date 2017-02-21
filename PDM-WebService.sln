@@ -5,11 +5,9 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceLibrary", "ServiceLibrary\ServiceLibrary.csproj", "{72339207-CA2E-4581-BA9C-8E6A6A1052A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDMWebService", "PDMWebService\PDMWebService.csproj", "{E205AE40-1DF2-4413-890F-0A8E77C18C75}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Patterns", "MessageLibrary\Patterns.csproj", "{D0ABF979-D32B-453D-92D5-F9BC7BDEC44E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolidWorksLibrary", "SolidWorksLivrary\SolidWorksLibrary.csproj", "{DECC61E0-8D25-485F-99F4-D895177C7997}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolidWorksLibrary", "SolidWorksLibrary\SolidWorksLibrary.csproj", "{DECC61E0-8D25-485F-99F4-D895177C7997}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleServiceHost", "ConsoleServiceHost\ConsoleServiceHost.csproj", "{E02B78CD-91F8-45C9-A3AE-535B3DDDDC82}"
 EndProject
@@ -21,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PdmSolidWorksLibrary", "Pdm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceConstants", "ServiceConstants\ServiceConstants.csproj", "{21A48C37-403D-4966-9414-6EA2327A204B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsoleApplication", "TestConsoleApplication\TestConsoleApplication.csproj", "{6A9FCC9D-F46C-45F5-8AC7-387C6562E4CD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,10 +31,6 @@ Global
 		{72339207-CA2E-4581-BA9C-8E6A6A1052A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72339207-CA2E-4581-BA9C-8E6A6A1052A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72339207-CA2E-4581-BA9C-8E6A6A1052A6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E205AE40-1DF2-4413-890F-0A8E77C18C75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E205AE40-1DF2-4413-890F-0A8E77C18C75}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E205AE40-1DF2-4413-890F-0A8E77C18C75}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E205AE40-1DF2-4413-890F-0A8E77C18C75}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D0ABF979-D32B-453D-92D5-F9BC7BDEC44E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D0ABF979-D32B-453D-92D5-F9BC7BDEC44E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0ABF979-D32B-453D-92D5-F9BC7BDEC44E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -63,6 +59,10 @@ Global
 		{21A48C37-403D-4966-9414-6EA2327A204B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21A48C37-403D-4966-9414-6EA2327A204B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21A48C37-403D-4966-9414-6EA2327A204B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A9FCC9D-F46C-45F5-8AC7-387C6562E4CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A9FCC9D-F46C-45F5-8AC7-387C6562E4CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A9FCC9D-F46C-45F5-8AC7-387C6562E4CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A9FCC9D-F46C-45F5-8AC7-387C6562E4CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,24 +1,25 @@
 ﻿using System;
-using System.Runtime.Serialization;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace ServiceLibrary.Models.DataContracts
+namespace DataBaseDomian.XML
 {
-    [Serializable]
-    [DataContract]
-   public class TransmittableSpecification
+    public class Specification
     {
         // from bom [t]
-      [DataMember]
-    public    string FileName { get; set; }
+        //  [DataMember]
+        //public    string FileName { get; set; }
 
         // from Nomenclature [t] 
         //[DataMember]
         //public string Nomenclature { get; set; }
         //[DataMember]
         //public int NomenclatureGroupID { get; set; }
-        [DataMember]
+      
         public string ERPCode { get; set; }
-        [DataMember] 
+   
         public string IDPDM { get; set; }
         //[DataMember]
         //public bool Deleted { get; set; }
@@ -28,71 +29,70 @@ namespace ServiceLibrary.Models.DataContracts
         //[DataMember]
         //public int MaterialID { get; set; } //change on material name
 
-        [DataMember]
+   
         public string WorkpieceX { get; set; }
 
-        [DataMember]
+        public string FileName { get; set; }
 
         public string WorkpieceY { get; set; }
-        [DataMember]
+      
         public string Bend { get; set; }
-        [DataMember]
-       public string Thickness { get; set; }
-        [DataMember]
-        public string Configuration { get; set; }  
-        [DataMember]
+ 
+        public string Thickness { get; set; }
+    
+        public string Configuration { get; set; }
+     
         public string Version { get; set; }
-        [DataMember]
+ 
         public string PaintX { get; set; }
-        [DataMember]
+       
         public string PaintY { get; set; }
-        [DataMember]
+     
         public string PaintZ { get; set; }
 
-        [DataMember]
+         
         public string SurfaceArea { get; set; }
 
         /// <summary>
         /// Количество
         /// </summary>
-        [DataMember]
-        public int Count { get; set; } // +
+   
+        public string Count { get; set; } // +
+
  
-         
-        [DataMember]
         public string Partition { get; set; } // +
         /// <summary>
         /// Обозначение
         /// </summary>
-        [DataMember]
+     
         public string PartNumber { get; set; } // +
         /// <summary>
         /// Наименование
         /// </summary>
-        [DataMember]
+  
         public string Description { get; set; } // +     
-    
-      
-        [DataMember]
-        public string SummMaterial { get; set; }  
-        [DataMember]
+
+
+     
+        public string SummMaterial { get; set; }
+     
         public string Weight { get; set; }
 
-        [DataMember]
-        public string CodeMaterial { get; set; } 
-         
+        
+        public string CodeMaterial { get; set; }
+
         /// <summary>
         /// Is entry have dxf data.
         /// </summary>
-        [DataMember]
-        public string isDxf {get; set;}
+      
+        public string isDxf { get; set; }
         /// <summary>
         /// Item type {sldprt or sldasm}
         /// </summary>
-        [DataMember]
+    
         public string Type { get; set; }
 
-        [DataMember]
+      
         public int Level { get; set; }
     }
 }

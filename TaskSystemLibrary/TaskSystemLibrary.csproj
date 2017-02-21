@@ -62,7 +62,7 @@
       <Project>{21a48c37-403d-4966-9414-6ea2327a204b}</Project>
       <Name>ServiceConstants</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SolidWorksLivrary\SolidWorksLibrary.csproj">
+    <ProjectReference Include="..\SolidWorksLibrary\SolidWorksLibrary.csproj">
       <Project>{DECC61E0-8D25-485F-99F4-D895177C7997}</Project>
       <Name>SolidWorksLibrary</Name>
     </ProjectReference>
