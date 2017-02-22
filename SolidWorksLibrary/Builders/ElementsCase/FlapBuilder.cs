@@ -5,10 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using ServiceConstants;
-using SolidWorksLibrary.Builders.Parts;
+using ServiceConstants; 
+using SolidWorksLibrary.Builders.ElementsCase;
 
-namespace PDMWebService.Data.Solid.Parts.PartBuilders
+namespace PDMWebService.Data.Solid.ElementsCase
 {
    public class FlapBuilder : IFeedbackBuilder
     {
@@ -1186,6 +1186,8 @@ namespace PDMWebService.Data.Solid.Parts.PartBuilders
             //    swDoc.SaveAs2(new FileInfo(copies[1] + ".SLDPRT").FullName, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, true, true);
             //}
             // _swApp.CloseDoc(newName + ".SLDPRT");
+
+            SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
         }
 
 

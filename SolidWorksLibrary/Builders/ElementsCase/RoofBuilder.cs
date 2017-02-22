@@ -4,7 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using ServiceConstants;
-namespace SolidWorksLibrary.Builders.Parts.Roof
+using SolidWorksLibrary.Builders.Parts;
+
+namespace SolidWorksLibrary.Builders.ElementsCase
 { 
     //TO DO loock save as
   

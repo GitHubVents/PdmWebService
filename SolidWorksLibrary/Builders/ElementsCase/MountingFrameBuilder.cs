@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolidWorksLibrary.Builders.Parts.MountingFrame
+namespace SolidWorksLibrary.Builders.ElementsCase
 {
     /// <summary>
     /// Монтажная рама

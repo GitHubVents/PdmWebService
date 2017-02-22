@@ -3,14 +3,14 @@ using ServiceConstants;
 using SolidWorks.Interop.sldworks;
 using SolidWorks.Interop.swconst;
 using SolidWorksLibrary;
-using SolidWorksLibrary.Builders.Parts;
+using SolidWorksLibrary.Builders.ElementsCase;
 using System;
 using System.Collections.Generic;
 
-namespace PDMWebService.Data.Solid.Parts.PartBuilders
+namespace PDMWebService.Data.Solid.ElementsCase
 {
-
-    public class SpigotBuilder : IFeedbackBuilder
+     
+    public sealed class SpigotBuilder : AbstractBuilder, IFeedbackBuilder 
     {
         /// <summary>
         /// Is path list
@@ -57,7 +57,7 @@ namespace PDMWebService.Data.Solid.Parts.PartBuilders
 
         public string Build(SpigotType type, int width, int height)
         {
-            string modelName = DeterminateModelName(type);
+            string modelName = GetModelName(type);
             NewSpigotName = GetSpigotName(type, width, height);
 
             string newPartName = string.Empty;
@@ -126,7 +126,7 @@ namespace PDMWebService.Data.Solid.Parts.PartBuilders
                     myDimension = ((Dimension)(solidWorksDocument.Parameter("D1@Кривая1@12-20-001.Part")));
                     myDimension.SystemValue = weldHeight;
                     partModeltDocument.Extension.SaveAs(newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
-                    SaveExeptionInitiator(error, warning, newPartPath);
+                    InitiatorSaveExeption(error, warning, newPartPath);
                     ComponentsPathList.Add(newPartPath);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newPartName);
                 }
@@ -164,7 +164,7 @@ namespace PDMWebService.Data.Solid.Parts.PartBuilders
                     myDimension = ((Dimension)(solidWorksDocument.Parameter("D1@Кривая1@12-20-002.Part")));
                     myDimension.SystemValue = weldWidth;
                     partModeltDocument.Extension.SaveAs(newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
-                    SaveExeptionInitiator(error, warning, newPartPath);
+                    InitiatorSaveExeption(error, warning, newPartPath);
                     ComponentsPathList.Add(newPartPath);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newPartName);
                 }
@@ -201,7 +201,7 @@ namespace PDMWebService.Data.Solid.Parts.PartBuilders
                     myDimension.SystemValue = h;
                     solidWorksDocument.EditRebuild3();
                     partModeltDocument.Extension.SaveAs(newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
-                    SaveExeptionInitiator(error, warning, newPartPath);
+                    InitiatorSaveExeption(error, warning, newPartPath);
                     ComponentsPathList.Add(newPartPath);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newPartName);
                 }
@@ -240,7 +240,7 @@ namespace PDMWebService.Data.Solid.Parts.PartBuilders
                     myDimension = ((Dimension)(solidWorksDocument.Parameter("D1@Кривая1@12-30-001.Part")));
                     myDimension.SystemValue = weldHeight;
                     partModeltDocument.Extension.SaveAs(newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
-                    SaveExeptionInitiator(error, warning, newPartPath);
+                    InitiatorSaveExeption(error, warning, newPartPath);
                     ComponentsPathList.Add(newPartPath);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newPartName);
                 }
@@ -275,7 +275,7 @@ namespace PDMWebService.Data.Solid.Parts.PartBuilders
                     myDimension = ((Dimension)(solidWorksDocument.Parameter("D1@Кривая1@12-30-002.Part")));
                     myDimension.SystemValue = weldHeight;
                     partModeltDocument.Extension.SaveAs(newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
-                    SaveExeptionInitiator(error, warning, newPartPath);
+                    InitiatorSaveExeption(error, warning, newPartPath);
                     ComponentsPathList.Add(newPartPath);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newPartName);
                 }
@@ -310,7 +310,7 @@ namespace PDMWebService.Data.Solid.Parts.PartBuilders
                     myDimension.SystemValue = h;
                     solidWorksDocument.EditRebuild3();
                     partModeltDocument.Extension.SaveAs(newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
-                    SaveExeptionInitiator(error, warning, newPartPath);
+                    InitiatorSaveExeption(error, warning, newPartPath);
                     ComponentsPathList.Add(newPartPath);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newPartName);
                 }
@@ -318,7 +318,7 @@ namespace PDMWebService.Data.Solid.Parts.PartBuilders
 
             solidWorksDocument.ForceRebuild3(true);
             solidWorksDocument.Extension.SaveAs(newSpigotPath + ".SLDASM", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
-            SaveExeptionInitiator(error, warning, newSpigotPath + ".SLDASM");
+            InitiatorSaveExeption(error, warning, newSpigotPath + ".SLDASM");
 
             SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(NewSpigotName + ".SLDASM");
             ComponentsPathList.Add(newSpigotPath + ".SLDASM");
@@ -327,7 +327,7 @@ namespace PDMWebService.Data.Solid.Parts.PartBuilders
             drw.ActivateSheet("DRW1");
             drw.SetupSheet5("DRW1", 12, 12, 1, GetDrawingScale(width, height), true, @"\\pdmsrv\SolidWorks Admin\Templates\Основные надписи\A3-A-1.slddrt", 0.42, 0.297, "По умолчанию", false);
             swDrawingSpigot.Extension.SaveAs(newSpigotPath + ".SLDDRW", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
-            SaveExeptionInitiator(error, warning, newSpigotPath + ".SLDDRW");
+            InitiatorSaveExeption(error, warning, newSpigotPath + ".SLDDRW");
 
             ComponentsPathList.Add(newSpigotPath + ".SLDDRW");
             SolidWorksAdapter.CloseAllDocumentsAndExit();
@@ -374,14 +374,15 @@ namespace PDMWebService.Data.Solid.Parts.PartBuilders
             }
         }
 
-
         /// <summary>
         /// Удаляет лишние компоненты для каждого типа.
         /// </summary>
-        /// <param name="type"></param>
-        private void DeleteComponents(SpigotType type)
+        /// <param name="e_type"></param>
+       
+        protected override void DeleteComponents(int type)
         {
-            if (type == SpigotType.Twenty_mm)
+            SpigotType e_type = (SpigotType)type;
+            if (e_type == SpigotType.Twenty_mm)
             {
                 const int deleteOption = (int)swDeleteSelectionOptions_e.swDelete_Absorbed + (int)swDeleteSelectionOptions_e.swDelete_Children;
 
@@ -406,7 +407,7 @@ namespace PDMWebService.Data.Solid.Parts.PartBuilders
                 solidWorksDocument.Extension.SelectByID2("Клей-2@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
                 solidWorksDocument.Extension.DeleteSelection2(deleteOption);
             }
-            if (type == SpigotType.Thirty_mm)
+            if (e_type == SpigotType.Thirty_mm)
             {
                 const int deleteOption = (int)swDeleteSelectionOptions_e.swDelete_Absorbed + (int)swDeleteSelectionOptions_e.swDelete_Children;
                 solidWorksDocument.Extension.SelectByID2("12-20-001-1@12-00", "COMPONENT", 0, 0, 0, true, 0, null, 0);
@@ -451,7 +452,7 @@ namespace PDMWebService.Data.Solid.Parts.PartBuilders
         {
             // if we need show extension for example that 
             // a check the availability in the data base
-            var spigotName = DeterminateModelName(spigotType) + "-" + width + "-" + height;
+            var spigotName = GetModelName(spigotType) + "-" + width + "-" + height;
             if (isShowExtension)
                 spigotName += ".ASMSLD";
             return spigotName;
@@ -461,7 +462,7 @@ namespace PDMWebService.Data.Solid.Parts.PartBuilders
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        private static  string DeterminateModelName(SpigotType type)
+        private static  string GetModelName(SpigotType type)
         {
             switch (type)
             {
@@ -483,7 +484,7 @@ namespace PDMWebService.Data.Solid.Parts.PartBuilders
         /// <param name="error"></param>
         /// <param name="warning"></param>
         /// <param name="path"></param>
-        private void SaveExeptionInitiator(int error, int warning, string path = "")
+        protected override  void InitiatorSaveExeption(int error, int warning, string path = "")
         {
             if (error != 0 || warning != 0)
             {
@@ -495,9 +496,7 @@ namespace PDMWebService.Data.Solid.Parts.PartBuilders
                 MessageObserver.Instance.SetMessage(exeption.ToString(), MessageType.Error);
             }
         }
-
-
-
+        
         private int GetDrawingScale(int width, int height)
         {
             int scale = 5;

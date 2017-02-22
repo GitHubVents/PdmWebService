@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolidWorksLibrary.Builders.Parts
+namespace SolidWorksLibrary.Builders.ElementsCase
 {
     /// <summary>
     /// describes the delegate signature checkeExist part  
