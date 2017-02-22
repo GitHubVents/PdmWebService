@@ -3,18 +3,14 @@ using ServiceConstants;
 using SolidWorks.Interop.sldworks;
 using SolidWorks.Interop.swconst;
 using SolidWorksLibrary;
+using SolidWorksLibrary.Builders.Parts;
 using System;
 using System.Collections.Generic;
 
-namespace PDMWebService.Data.Solid.PartBuilders
+namespace PDMWebService.Data.Solid.Parts.PartBuilders
 {
 
-    #region delegates 
-    public delegate void CheckExistPartHandler(string partName, out bool isExesitPatrt, out string pathToPartt);
-    public delegate void FinishedBuildHandler(List<string> ComponentsPathList);
-    #endregion
-
-    public class SpigotBuilder
+    public class SpigotBuilder : IFeedbackBuilder
     {
         /// <summary>
         /// Is path list
@@ -35,6 +31,8 @@ namespace PDMWebService.Data.Solid.PartBuilders
 
         private string NewSpigotName { get; set; }
 
+        private ModelDoc2 solidWorksDocument { get; set; }
+
         // ========================= README about CheckExistPart delegate =====================================================================  
         // When the event is fired, a check runs to find whether the part or assembly exists. It returnes the path to file if file exists 
         // and boolean flag using out operators.it allows not to be bound to file format such as PDM, IPS,SQL, explorer etc
@@ -49,9 +47,6 @@ namespace PDMWebService.Data.Solid.PartBuilders
         /// Informing subscribers the completion of building 
         /// </summary>
         public FinishedBuildHandler FinishedBuild { get; set; }
-
-
-        private ModelDoc2 solidWorksDocument { get; set; }
 
         public SpigotBuilder() : base()
         {
@@ -71,7 +66,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
             IModelDoc2 partModeltDocument;
             bool isPartExist = false;
             Dimension myDimension;
-           
+
             int addDimH = modelName == "12-30" ? 10 : 1;
 
             string newSpigotPath = $@"{RootFolder}{SpigotDestinationFolder}\{NewSpigotName}";
@@ -329,8 +324,8 @@ namespace PDMWebService.Data.Solid.PartBuilders
             ComponentsPathList.Add(newSpigotPath + ".SLDASM");
             swDrawingSpigot.Extension.SelectByID2("DRW1", "SHEET", 0, 0, 0, false, 0, null, 0);
             var drw = (DrawingDoc)SolidWorksAdapter.AcativeteDoc(drawingName + ".SLDDRW");
-            drw.ActivateSheet("DRW1");           
-            drw.SetupSheet5("DRW1", 12, 12, 1, GetDrawingScale(width,height), true, @"\\pdmsrv\SolidWorks Admin\Templates\Основные надписи\A3-A-1.slddrt", 0.42, 0.297, "По умолчанию", false);
+            drw.ActivateSheet("DRW1");
+            drw.SetupSheet5("DRW1", 12, 12, 1, GetDrawingScale(width, height), true, @"\\pdmsrv\SolidWorks Admin\Templates\Основные надписи\A3-A-1.slddrt", 0.42, 0.297, "По умолчанию", false);
             swDrawingSpigot.Extension.SaveAs(newSpigotPath + ".SLDDRW", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
             SaveExeptionInitiator(error, warning, newSpigotPath + ".SLDDRW");
 
@@ -379,43 +374,6 @@ namespace PDMWebService.Data.Solid.PartBuilders
             }
         }
 
-
-        /// <summary>
-        ///  Determinate adn returns spigot name by main params
-        /// </summary>
-        /// <param name="spigotType">Spigot type</param>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        /// <param name="isShowExtension">Put true if need name and extension </param>
-        /// <returns></returns>
-        public static string GetSpigotName(SpigotType spigotType, int width, int height, bool isShowExtension = false)
-        {
-            // if we need show extension for example that 
-            // a check the availability in the data base
-            var spigotName = DeterminateModelName(spigotType) + "-" + width + "-" + height;
-            if (isShowExtension)
-                spigotName += ".ASMSLD";
-            return spigotName;
-        }
-        /// <summary>
-        /// Determinate model name by type
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        private static string DeterminateModelName(SpigotType type)
-        {
-            switch (type)
-            {
-                case SpigotType.Twenty_mm:
-                    return "12-20";
-
-                case SpigotType.Thirty_mm:
-                    return "12-30";
-
-                default:
-                    throw new Exception("Type {" + type + "} is invelid");
-            }
-        }
 
         /// <summary>
         /// Удаляет лишние компоненты для каждого типа.
@@ -479,6 +437,46 @@ namespace PDMWebService.Data.Solid.PartBuilders
         }
         #endregion
 
+
+
+        /// <summary>
+        ///  Determinate adn returns spigot name by main params
+        /// </summary>
+        /// <param name="spigotType">Spigot type</param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="isShowExtension">Put true if need name and extension </param>
+        /// <returns></returns>
+        public static  string GetSpigotName(SpigotType spigotType, int width, int height, bool isShowExtension = false)
+        {
+            // if we need show extension for example that 
+            // a check the availability in the data base
+            var spigotName = DeterminateModelName(spigotType) + "-" + width + "-" + height;
+            if (isShowExtension)
+                spigotName += ".ASMSLD";
+            return spigotName;
+        }
+        /// <summary>
+        /// Determinate model name by type
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private static  string DeterminateModelName(SpigotType type)
+        {
+            switch (type)
+            {
+                case SpigotType.Twenty_mm:
+                    return "12-20";
+
+                case SpigotType.Thirty_mm:
+                    return "12-30";
+
+                default:
+                    throw new Exception("Type {" + type + "} is invelid");
+            }
+        }
+
+
         /// <summary>
         /// Initiate exeption message and send to observer. 
         /// </summary>
@@ -500,7 +498,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
 
 
 
-        private int GetDrawingScale (int width, int height)
+        private int GetDrawingScale(int width, int height)
         {
             int scale = 5;
             if (Convert.ToInt32(width) > 500 || Convert.ToInt32(height) > 500)

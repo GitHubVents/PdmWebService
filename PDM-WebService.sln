@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceConstants", "Service
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsoleApplication", "TestConsoleApplication\TestConsoleApplication.csproj", "{6A9FCC9D-F46C-45F5-8AC7-387C6562E4CD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VentsMaterials - DLL", "..\AirVentsCad\2. VentsMaterials - DLL\VentsMaterials - DLL\VentsMaterials - DLL.csproj", "{5BDD7CBB-5DED-4C1F-9CB2-432B9257FD07}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{6A9FCC9D-F46C-45F5-8AC7-387C6562E4CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A9FCC9D-F46C-45F5-8AC7-387C6562E4CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A9FCC9D-F46C-45F5-8AC7-387C6562E4CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BDD7CBB-5DED-4C1F-9CB2-432B9257FD07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BDD7CBB-5DED-4C1F-9CB2-432B9257FD07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BDD7CBB-5DED-4C1F-9CB2-432B9257FD07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BDD7CBB-5DED-4C1F-9CB2-432B9257FD07}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

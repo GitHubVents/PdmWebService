@@ -39,7 +39,7 @@ public enum TasksType
     /// <summary>
     /// Containe vibro insertion type and their values { from one to six }
     /// </summary>
-    public enum RoofTypes
+    public enum RoofType
     {
         One = 1,
         Two = 2,

@@ -6,22 +6,50 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ServiceConstants;
-namespace PDMWebService.Data.Solid.PartBuilders
+using SolidWorksLibrary.Builders.Parts;
+
+namespace PDMWebService.Data.Solid.Parts.PartBuilders
 {
-    class FlapBuilder
+   public class FlapBuilder : IFeedbackBuilder
     {
         /// <summary>
         /// Папка с исходной моделью "Регулятора расхода воздуха". 
         /// </summary>
-        private string DamperFolder = @"\Библиотека проектирования\DriveWorks\11 - Damper";
+        private string DamperFolder = @"\11 - Damper\";
         /// <summary>
         /// Папка для сохранения компонентов "Регулятора расхода воздуха". 
         /// </summary>
-        private string DamperDestinationFolder = @"\Проекты\Blauberg\11 - Регулятор расхода воздуха";
+        private string DamperDestinationFolder = @"\11 - Регулятор расхода воздуха\";
 
-        private string RootFolder;
+        private string RootFolder = @"C:\TestPDM\";
 
         private List<FileInfo> NewComponentsFull;
+
+        public CheckExistPartHandler CheckExistPart
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public FinishedBuildHandler FinishedBuild
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         public FlapBuilder()
         {
@@ -104,8 +132,8 @@ namespace PDMWebService.Data.Solid.PartBuilders
             if (modelName == "11-30")
             { drawingName = modelName; }
             var newDamperName = modelName + "-" + width + "-" + height + modelType + (isOutDoor ? "-O" : "");
-            var newDamperPath = $@"{RootFolder}\{DamperDestinationFolder}\{newDamperName}.SLDDRW";
-            var newDamperAsmPath = $@"{RootFolder}\{DamperDestinationFolder}\{newDamperName}.SLDASM";
+            var newDamperPath = $@"{RootFolder}{DamperDestinationFolder}{newDamperName}.SLDDRW";
+            var newDamperAsmPath = $@"{RootFolder}{DamperDestinationFolder}{newDamperName}.SLDASM";
 
 
             // if (OpenIfExist(newDamperPath, VaultSystem.VentsCadFile.Type.Drawing, lastChangedDate)) return null;
@@ -116,8 +144,8 @@ namespace PDMWebService.Data.Solid.PartBuilders
             //    VaultSystem.CheckInOutPdm(new List<FileInfo> { new FileInfo(newDamperPath), }, false);
             //}
 
-            var modelDamperDrw = $@"{RootFolder}{modelDamperPath}\{drawingName}.SLDDRW";
-            var modelLamel = $@"{RootFolder}{modelDamperPath}\{"11-100"}.SLDDRW";
+            var modelDamperDrw = $@"{RootFolder}{modelDamperPath}{drawingName}.SLDDRW";
+            var modelLamel = $@"{RootFolder}{modelDamperPath}{"11-100"}.SLDDRW";
 
             //foreach (string item in new[] { new FileInfo(modelDamperDrw).FullName, new FileInfo(modelLamel).FullName })
             //{
@@ -125,16 +153,12 @@ namespace PDMWebService.Data.Solid.PartBuilders
 
             //}
 
+           var swDocDrw = SolidWorksAdapter.OpenDocument(modelDamperDrw, swDocumentTypes_e.swDocDRAWING); 
 
-            var swDocDrw = SolidWorksAdapter.SldWoksAppExemplare.OpenDoc6(@modelDamperDrw, (int)swDocumentTypes_e.swDocDRAWING,   // TO DO
-                (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", 0, 0);
-
-            ModelDoc2 solidWorksDocument = SolidWorksAdapter.AcativeteDoc(nameAsm, false, 0);   // TO DO
+            ModelDoc2 solidWorksDocument = SolidWorksAdapter.AcativeteDoc(nameAsm);   // TO DO
             AssemblyDoc sldWorksAsm = (AssemblyDoc)solidWorksDocument;
             sldWorksAsm.ResolveAllLightWeightComponents(false);
-
-
-
+             
             // Габариты
             double widthD = width;
             double heightD = height;
@@ -150,7 +174,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
             double hC = Math.Truncate(7 + 5.02 + (heightD - countL / 10 - 10.04) / 2);
 
             // Коэффициенты и радиусы гибов   
-            var thiknessStr = material?[1].Replace(".", ",") ?? "0,8";
+         var thiknessStr =/* material?[1].Replace(".", ",") ?? */ "3";
             // //MessageBox.Show(thiknessStr);  // obs
 
             #region typeOfFlange = "20"
@@ -168,7 +192,8 @@ namespace PDMWebService.Data.Solid.PartBuilders
                 }
 
                 string newName;
-                string newPartPath; 
+                string newPartPath;
+                #region isOutDoor
                 if (isOutDoor)
                 {
                     solidWorksDocument.Extension.SelectByID2("Эскиз1", "SKETCH", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditSuppress2();
@@ -188,11 +213,11 @@ namespace PDMWebService.Data.Solid.PartBuilders
 
                     // 11-005 
                     newName = "11-05-" + height + modelType;
-                    newPartPath = $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
+                    newPartPath = $@"{RootFolder}{DamperDestinationFolder}{newName}.SLDPRT";
 
                     // TO DO change exists file...
                     //  if (VersionsFileInfo.Replaced.ExistLatestVersion(newPartPath, VaultSystem.VentsCadFile.Type.Part, lastChangedDate, Settings.Default.PdmBaseName))
-                    if (true)
+                    if (false)
                     {
                         solidWorksDocument =SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
                         solidWorksDocument.Extension.SelectByID2("11-005-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
@@ -203,24 +228,23 @@ namespace PDMWebService.Data.Solid.PartBuilders
                     {
 
                         SwPartParamsChangeWithNewName("11-005",
-                            $@"{RootFolder}\{DamperDestinationFolder}\{newName}",
+                            $@"{RootFolder}{DamperDestinationFolder}{newName}",
                             new[,]
                             {
                                 {"D3@Эскиз1", Convert.ToString(heightD)},
                                 {"D1@Кривая1", Convert.ToString(rivetH)},
                                 {"D3@Эскиз37", (Convert.ToInt32(countL / 1000) % 2 == 1) ? "0" : "50"},
                                 {"Толщина@Листовой металл", thiknessStr}
-                            },
-                            false,
-                            null);
+                            });
+                       
                         AddMaterial(material, newName);
                       //  NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(newPartPath).FullName });
                     }
 
                     // 11-006 
                     newName = "11-06-" + height + modelType;
-                    newPartPath = $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
-                    if (/*VersionsFileInfo.Replaced.ExistLatestVersion(newPartPath, VaultSystem.VentsCadFile.Type.Part, lastChangedDate, Settings.Default.PdmBaseName)*/ true)
+                    newPartPath = $@"{RootFolder}{DamperDestinationFolder}{newName}.SLDPRT";
+                    if (/*VersionsFileInfo.Replaced.ExistLatestVersion(newPartPath, VaultSystem.VentsCadFile.Type.Part, lastChangedDate, Settings.Default.PdmBaseName)*/ false)
                     {
                         solidWorksDocument = SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
                         solidWorksDocument.Extension.SelectByID2("11-006-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
@@ -230,20 +254,20 @@ namespace PDMWebService.Data.Solid.PartBuilders
                     else
                     {
                         SwPartParamsChangeWithNewName("11-006",
-                            $@"{RootFolder}\{DamperDestinationFolder}\{newName}",
+                            $@"{RootFolder}{DamperDestinationFolder}{newName}",
                             new[,]
                             {
                                 {"D3@Эскиз1", Convert.ToString(heightD)},
                                 {"D1@Кривая1", Convert.ToString(rivetH)},
                                 {"Толщина@Листовой металл", thiknessStr}
-                            },
-                            false,
-                            null);
+                            });
 
                         AddMaterial(material, newName);
                       //  NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(newPartPath).FullName });
                     }
                 }
+                # endregion
+
                 else
                 {
                     solidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть11@11-001-7@" + nameAsm, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
@@ -272,12 +296,12 @@ namespace PDMWebService.Data.Solid.PartBuilders
                     solidWorksDocument.Extension.SelectByID2("Rivet Bralo-198@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
                 }
 
-
+                
                 // 11-001 
                 newName = "11-01-" + height + modelType + (isOutDoor ? "-O" : "");
 
-                newPartPath = $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
-                if (/*VersionsFileInfo.Replaced.ExistLatestVersion(newPartPath, VaultSystem.VentsCadFile.Type.Part, lastChangedDate, Settings.Default.PdmBaseName)*/ true)
+                newPartPath = $@"{RootFolder}{DamperDestinationFolder}{newName}.SLDPRT";
+                if (/*VersionsFileInfo.Replaced.ExistLatestVersion(newPartPath, VaultSystem.VentsCadFile.Type.Part, lastChangedDate, Settings.Default.PdmBaseName)*/ false)
                 {
                     solidWorksDocument = SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
                     solidWorksDocument.Extension.SelectByID2("11-001-7@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
@@ -286,14 +310,15 @@ namespace PDMWebService.Data.Solid.PartBuilders
                 }
                 else
                 {
-                    SwPartParamsChangeWithNewName("11-001",
-                        $@"{RootFolder}\{DamperDestinationFolder}\{newName}",
+                    SwPartParamsChangeWithNewName("11-001", 
+                        $@"{RootFolder}{DamperDestinationFolder}{newName}",
                         new[,]
                         {
                             {"D2@Эскиз1", Convert.ToString(heightD + 7.94)}, {"D1@Эскиз27", Convert.ToString(countL/10 - 100)},
                             {"D2@Эскиз27", Convert.ToString(100*Math.Truncate(countL/2000))}, {"D1@Кривая1", Convert.ToString(countL)},
-                            {"D1@Кривая2", Convert.ToString(rivetH)},  {"Толщина@Листовой металл", thiknessStr}
-                        }, false, null);
+                            //{"D1@Кривая2", Convert.ToString(rivetH)},
+                            {"Толщина@Листовой металл", thiknessStr}
+                        });
                     AddMaterial(material, newName);
                   //  NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(newPartPath).FullName });
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName + ".SLDPRT");
@@ -320,11 +345,12 @@ namespace PDMWebService.Data.Solid.PartBuilders
 
                 // 11-002
                 newName = "11-03-" + width + modelType;
-                newPartPath = $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
+                newPartPath = $@"{RootFolder}{DamperDestinationFolder}{newName}.SLDPRT";
 
-                if (/*VersionsFileInfo.Replaced.ExistLatestVersion(newPartPath, VaultSystem.VentsCadFile.Type.Part, lastChangedDate, Settings.Default.PdmBaseName)*/true)
+                if (/*VersionsFileInfo.Replaced.ExistLatestVersion(newPartPath, VaultSystem.VentsCadFile.Type.Part, lastChangedDate, Settings.Default.PdmBaseName)*/false)
                 {
-                    solidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
+                    solidWorksDocument = SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
+                   
                     solidWorksDocument.Extension.SelectByID2("11-002-4@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
                     sldWorksAsm.ReplaceComponents(newPartPath, "", true, true);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-002.SLDPRT");
@@ -332,18 +358,14 @@ namespace PDMWebService.Data.Solid.PartBuilders
                 else
                 {
                     SwPartParamsChangeWithNewName("11-002",
-                        $@"{RootFolder}\{DamperDestinationFolder}\{newName}",
+                        $@"{RootFolder}{DamperDestinationFolder}{newName}",
                         new[,]
                         {
                             {"D2@Эскиз1", Convert.ToString(widthD - 0.96)},
                             {"D1@Кривая1", Convert.ToString(rivetW)},
-
-                            {"D1@Кривая3", Convert.ToString(rivetH)},
-
+                        //    {"D1@Кривая3", Convert.ToString(rivetH)},  удален эскиз, хз
                             {"Толщина@Листовой металл1", thiknessStr}
-                        },
-                        false,
-                        null);
+                        });
 
                     AddMaterial(material, newName);
                  //   NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(newPartPath).FullName });
@@ -354,9 +376,9 @@ namespace PDMWebService.Data.Solid.PartBuilders
                 {
                     // 11-003 
                     newName = "11-02-" + height + modelType + (isOutDoor ? "-O" : "");
-                    newPartPath = $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
+                    newPartPath = $@"{RootFolder}{DamperDestinationFolder}{newName}.SLDPRT";
 
-                    if (/*VersionsFileInfo.Replaced.ExistLatestVersion(newPartPath, VaultSystem.VentsCadFile.Type.Part, lastChangedDate, Settings.Default.PdmBaseName)*/ true)
+                    if (/*VersionsFileInfo.Replaced.ExistLatestVersion(newPartPath, VaultSystem.VentsCadFile.Type.Part, lastChangedDate, Settings.Default.PdmBaseName)*/ false)
                     {
                         solidWorksDocument =SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
                         solidWorksDocument.Extension.SelectByID2("11-003-6@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
@@ -366,17 +388,15 @@ namespace PDMWebService.Data.Solid.PartBuilders
                     else
                     {
                         SwPartParamsChangeWithNewName("11-003",
-                            $@"{RootFolder}\{DamperDestinationFolder}\{newName}",
+                            $@"{RootFolder}{DamperDestinationFolder}{newName}",
                             new[,]
                             {
                                 {"D2@Эскиз1", Convert.ToString(heightD + 7.94)},
                                 {"D1@Эскиз27", Convert.ToString(countL/10 - 100)},
                                 {"D1@Кривая1", Convert.ToString(countL)},
-                                {"D1@Кривая2", Convert.ToString(rivetH)},
+                                //{"D1@Кривая2", Convert.ToString(rivetH)},
                                 {"Толщина@Листовой металл", thiknessStr}
-                            },
-                            false,
-                            null);
+                            });
 
                         AddMaterial(material, newName);
                         //NewComponentsFull.Add(new VaultSystem.VentsCadFile
@@ -388,9 +408,9 @@ namespace PDMWebService.Data.Solid.PartBuilders
 
                 // 11-004
                 newName = "11-04-" + width + "-" + hC + modelType;
-                newPartPath = $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
+                newPartPath = $@"{RootFolder}{DamperDestinationFolder}{newName}.SLDPRT";
 
-                if (/*VersionsFileInfo.Replaced.ExistLatestVersion(newPartPath, VaultSystem.VentsCadFile.Type.Part, lastChangedDate, Settings.Default.PdmBaseName)*/true)
+                if (/*VersionsFileInfo.Replaced.ExistLatestVersion(newPartPath, VaultSystem.VentsCadFile.Type.Part, lastChangedDate, Settings.Default.PdmBaseName)*/false)
                 {
                     solidWorksDocument =SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
                     solidWorksDocument.Extension.SelectByID2("11-004-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
@@ -400,22 +420,17 @@ namespace PDMWebService.Data.Solid.PartBuilders
                 else
                 {
                     SwPartParamsChangeWithNewName("11-004",
-                        $@"{RootFolder}\{DamperDestinationFolder}\{newName}",
+                        $@"{RootFolder}{DamperDestinationFolder}{newName}",
                         new[,]
                         {
                             {"D2@Эскиз1", Convert.ToString(widthD - 24)},
                             {"D7@Ребро-кромка1", Convert.ToString(hC)},
                             {"D1@Кривая1", Convert.ToString(rivetW)},
-
                             {"D1@Эскиз8", Convert.ToString(18.5)},
                             {"D1@Эскиз9", Convert.ToString(18.5)},
-
-                            {"D1@Кривая5", Convert.ToString(rivetH)},
+                          //  {"D1@Кривая5", Convert.ToString(rivetH)}, удален эскиз, хз
                             {"Толщина@Листовой металл1", thiknessStr}
-                        },
-                        false,
-                        null);
-
+                        });
                     AddMaterial(material, newName);
                 //    NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(newPartPath).FullName });
                 }
@@ -423,7 +438,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
                 //11-100 Сборка лопасти
                 var newNameAsm = "11-" + width;
                 var newPartPathAsm =
-                    $@"{RootFolder}{DamperDestinationFolder}\{newNameAsm}.SLDASM";
+                    $@"{RootFolder}{DamperDestinationFolder}{newNameAsm}.SLDASM";
                 if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPathAsm), 0))
                 {
                     solidWorksDocument =SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
@@ -436,7 +451,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
                     #region  11-101  Профиль лопасти
 
                     newName = "11-" + (Math.Truncate(widthD - 23)) + "-01" + modelType;
-                    newPartPath = $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
+                    newPartPath = $@"{RootFolder}{DamperDestinationFolder}{newName}.SLDPRT";
                     if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
                     {
                         SolidWorksAdapter.SldWoksAppExemplare.IActivateDoc2("10-100", false, 0);
@@ -452,7 +467,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
                         solidWorksDocument.Extension.SelectByID2("D1@Вытянуть1@11-101-1@11-100", "DIMENSION", 0, 0, 0, false, 0, null, 0);
                         var myDimension = ((Dimension)(solidWorksDocument.Parameter("D1@Вытянуть1@11-101.Part")));
                         myDimension.SystemValue = (widthD - 23) / 1000;
-                        SolidWorksAdapter.AcativeteDoc("11-101", false, 0);
+                        SolidWorksAdapter.AcativeteDoc("11-101" );
                         solidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActiveDoc));
                         solidWorksDocument.SaveAs2(newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
 
@@ -462,7 +477,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
                       //  NewComponentsFull.Add(new VaultSystem.VentsCadFile
                         //{
                         //    LocalPartFileInfo = new FileInfo(
-                        //    $@"{RootFolder}\{DamperDestinationFolder}\{newName}.sldasm").FullName
+                        //    $@"{RootFolder}{DamperDestinationFolder}{newName}.sldasm").FullName
                         //});
                     }
 
@@ -482,12 +497,12 @@ namespace PDMWebService.Data.Solid.PartBuilders
                         docDrw100?.ForceRebuild3(true);
 
                         docDrw100.SaveAs2(
-                            $@"{RootFolder}\{DamperDestinationFolder}\{newNameAsm}.SLDDRW", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
+                            $@"{RootFolder}{DamperDestinationFolder}{newNameAsm}.SLDDRW", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
                         SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(Path.GetFileNameWithoutExtension(new FileInfo(
-                            $@"{RootFolder}\{DamperDestinationFolder}\{newNameAsm}.SLDDRW").FullName) + " - DRW1");
+                            $@"{RootFolder}{DamperDestinationFolder}{newNameAsm}.SLDDRW").FullName) + " - DRW1");
 
                       ///  NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(newPartPath).FullName });
-                      //  NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo($@"{RootFolder}\{DamperDestinationFolder}\{newNameAsm}.SLDDRW").FullName });
+                      //  NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo($@"{RootFolder}{DamperDestinationFolder}{newNameAsm}.SLDDRW").FullName });
 
                     }
                     catch (Exception e)
@@ -527,7 +542,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
 
                     // 11-005 
                     newName = "11-05-" + height + modelType;
-                    newPartPath = $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
+                    newPartPath = $@"{RootFolder}{DamperDestinationFolder}{newName}.SLDPRT";
                     if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
                     {
                         solidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM" )));
@@ -538,7 +553,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
                     else
                     {
                         SwPartParamsChangeWithNewName("11-005",
-                            $@"{RootFolder}\{DamperDestinationFolder}\{newName}",
+                            $@"{RootFolder}{DamperDestinationFolder}{newName}",
                             new[,]
                             {
                                 {"D3@Эскиз1", Convert.ToString(heightD)},
@@ -548,9 +563,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
                                 {"D3@Эскиз37", (Convert.ToInt32(countL / 1000) % 2 == 1) ? "0" : "50"},
 
                                 {"Толщина@Листовой металл", thiknessStr}
-                            },
-                            false,
-                            null);
+                            });
                         AddMaterial(material, newName);
 
                        // NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(newPartPath).FullName });
@@ -558,7 +571,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
 
                     // 11-006 
                     newName = "11-06-" + height + modelType;
-                    newPartPath = $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
+                    newPartPath = $@"{RootFolder}{DamperDestinationFolder}{newName}.SLDPRT";
                     if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
                     {
                         solidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM" )));
@@ -569,15 +582,13 @@ namespace PDMWebService.Data.Solid.PartBuilders
                     else
                     {
                         SwPartParamsChangeWithNewName("11-006",
-                            $@"{RootFolder}\{DamperDestinationFolder}\{newName}",
+                            $@"{RootFolder}{DamperDestinationFolder}{newName}",
                             new[,]
                             {
                                 {"D3@Эскиз1", Convert.ToString(heightD)},
                                 {"D1@Кривая1", Convert.ToString(rivetH)},
                                 {"Толщина@Листовой металл", thiknessStr}
-                            },
-                            false,
-                            null);
+                            });
                         AddMaterial(material, newName);
                         //NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(newPartPath).FullName });
                     }
@@ -688,7 +699,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
 
                 // 11-30-001 
                 newName = "11-30-03-" + width + modelType;
-                newPartPath = $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
+                newPartPath = $@"{RootFolder}{DamperDestinationFolder}{newName}.SLDPRT";
                 if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
                 {
                     solidWorksDocument = SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
@@ -719,16 +730,14 @@ namespace PDMWebService.Data.Solid.PartBuilders
                     }
 
                     SwPartParamsChangeWithNewName("11-30-001",
-                        $@"{RootFolder}\{DamperDestinationFolder}\{newName}",
+                        $@"{RootFolder}{DamperDestinationFolder}{newName}",
                         new[,]
                         {
                             {"D2@Эскиз1", Convert.ToString(widthD/2 - 0.8)},
                             {"D3@Эскиз18", Convert.ToString(lp2)},
                             {"D1@Кривая1", Convert.ToString((Math.Truncate(lp2/step) + 1)*1000)},
                             {"Толщина@Листовой металл", thiknessStr}
-                        },
-                        false,
-                        null);
+                        });
                     AddMaterial(material, newName);
 
                   //  NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(newPartPath).FullName });
@@ -736,7 +745,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
 
                 // 11-30-002 
                 newName = "11-30-01-" + height + modelType + (isOutDoor ? "-O" : "");
-                newPartPath = $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
+                newPartPath = $@"{RootFolder}{DamperDestinationFolder}{newName}.SLDPRT";
                 if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
                 {
                     solidWorksDocument = SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
@@ -747,7 +756,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
                 else
                 {
                     SwPartParamsChangeWithNewName("11-30-002",
-                        $@"{RootFolder}\{DamperDestinationFolder}\{newName}",
+                        $@"{RootFolder}{DamperDestinationFolder}{newName}",
                         new[,]
                         {
                             {"D2@Эскиз1", Convert.ToString(heightD + 10)},
@@ -755,12 +764,10 @@ namespace PDMWebService.Data.Solid.PartBuilders
                             {"D2@Эскиз23", Convert.ToString(100*Math.Truncate(countL/2000))},
 
                             {"D1@Кривая2", Convert.ToString(countL)},
-                            {"D1@Кривая3", Convert.ToString(rivetH)},
+                           // {"D1@Кривая3", Convert.ToString(rivetH)},
 
                             {"Толщина@Листовой металл", thiknessStr}
-                        },
-                        false,
-                        null);
+                        });
 
                     AddMaterial(material, newName);
 
@@ -769,7 +776,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
 
                 // 11-30-004 
                 newName = "11-30-02-" + height + modelType + (isOutDoor ? "-O" : "");
-                newPartPath = $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
+                newPartPath = $@"{RootFolder}{DamperDestinationFolder}{newName}.SLDPRT";
                 if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
                 {
                     solidWorksDocument = SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
@@ -780,20 +787,16 @@ namespace PDMWebService.Data.Solid.PartBuilders
                 else
                 {
                     SwPartParamsChangeWithNewName("11-30-004",
-                        $@"{RootFolder}\{DamperDestinationFolder}\{newName}",
+                        $@"{RootFolder}{DamperDestinationFolder}{newName}",
                         new[,]
                         {
                             {"D2@Эскиз1", Convert.ToString(heightD + 10)},
                             {"D3@Эскиз23", Convert.ToString(countL/10 - 100)},
                             {"D2@Эскиз23", Convert.ToString(100*Math.Truncate(countL/2000))},
                             {"D1@Кривая2", Convert.ToString(countL)},
-
-                            {"D1@Кривая5", Convert.ToString(rivetH)},
-
+                            // {"D1@Кривая5", Convert.ToString(rivetH)},
                             {"Толщина@Листовой металл", thiknessStr}
-                        },
-                        false,
-                        null);
+                        });
 
                     AddMaterial(material, newName);
 
@@ -802,10 +805,10 @@ namespace PDMWebService.Data.Solid.PartBuilders
 
                 // 11-30-003 
                 newName = "11-30-04-" + Math.Truncate(lp) + "-" + hC + modelType;
-                newPartPath = $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
+                newPartPath = $@"{RootFolder}{DamperDestinationFolder}{newName}.SLDPRT";
                 if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
                 {
-                    solidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
+                    solidWorksDocument =SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
                     solidWorksDocument.Extension.SelectByID2("11-30-003-2@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
                     sldWorksAsm.ReplaceComponents(newPartPath, "", true, true);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-30-003.SLDPRT");
@@ -813,20 +816,18 @@ namespace PDMWebService.Data.Solid.PartBuilders
                 else
                 {
                     SwPartParamsChangeWithNewName("11-30-003",
-                        $@"{RootFolder}\{DamperDestinationFolder}\{newName}",
+                        $@"{RootFolder}{DamperDestinationFolder}{newName}",
                         new[,]
                         {
                             {"D2@Эскиз1", Convert.ToString(lp)},
                             {"D7@Ребро-кромка1", Convert.ToString(hC)},
                             {"D1@Кривая1", Convert.ToString((Math.Truncate(lp2/step) + 1)*1000)},
                             {"Толщина@Листовой металл1", thiknessStr}
-                        },
-                        false,
-                        null);
+                        });
 
                     AddMaterial(material, newName);
 
-                    NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(newPartPath).FullName });
+                  //  NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(newPartPath).FullName });
                 }
 
                 #endregion
@@ -837,7 +838,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
 
                 var newNameAsm = "11-2-" + lProfName;
                 string newPartPathAsm =
-                    $@"{RootFolder}{DamperDestinationFolder}\{newNameAsm}.SLDASM";
+                    $@"{RootFolder}{DamperDestinationFolder}{newNameAsm}.SLDASM";
 
                 if (isdouble)
                 {
@@ -854,7 +855,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
 
                         newName = "11-" + (Math.Truncate(lProfNameLength * 1000)) + "-01";
                         newPartPath =
-                            $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
+                            $@"{RootFolder}{DamperDestinationFolder}{newName}.SLDPRT";
                         if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
                         {
                             SolidWorksAdapter.SldWoksAppExemplare.IActivateDoc2("10-100", false, 0);
@@ -886,10 +887,10 @@ namespace PDMWebService.Data.Solid.PartBuilders
                 {
                     newNameAsm = "11-" + lProfName;
                     newPartPathAsm =
-                        $@"{RootFolder}{DamperDestinationFolder}\{newNameAsm}.SLDASM";
+                        $@"{RootFolder}{DamperDestinationFolder}{newNameAsm}.SLDASM";
                     if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPathAsm), 0))
                     {
-                        solidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
+                        solidWorksDocument =SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
                         solidWorksDocument.Extension.SelectByID2("11-100-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
                         sldWorksAsm.ReplaceComponents(newPartPathAsm, "", true, true);
                         SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-100.SLDASM");
@@ -900,7 +901,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
 
                         newName = "11-" + (Math.Truncate(lProfNameLength * 1000)) + "-01";
                         newPartPath =
-                            $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
+                            $@"{RootFolder}{DamperDestinationFolder}{newName}.SLDPRT";
                         if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
                         {
                             SolidWorksAdapter.SldWoksAppExemplare.IActivateDoc2("10-100", false, 0);
@@ -937,7 +938,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
                     solidWorksDocument.Extension.SelectByID2("ВНС-47.91.101-2@11-100", "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
                 }
 
-                var docDrw100 = SolidWorksAdapter.SldWoksAppExemplare.OpenDoc6($@"{RootFolder}{modelDamperPath}\{"11-100"}.SLDDRW", (int)swDocumentTypes_e.swDocDRAWING, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", 0, 0);
+                var docDrw100 = SolidWorksAdapter.SldWoksAppExemplare.OpenDoc6($@"{RootFolder}{modelDamperPath}{"11-100"}.SLDDRW", (int)swDocumentTypes_e.swDocDRAWING, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", 0, 0);
 
                 SolidWorksAdapter.AcativeteDoc(Path.GetFileNameWithoutExtension(newPartPathAsm) );
                 solidWorksDocument.ForceRebuild3(false);
@@ -945,19 +946,19 @@ namespace PDMWebService.Data.Solid.PartBuilders
                 SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newNameAsm);
                 docDrw100.ForceRebuild3(false);
                 docDrw100.SaveAs2(
-                    $@"{RootFolder}\{DamperDestinationFolder}\{newNameAsm}.SLDDRW", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
+                    $@"{RootFolder}{DamperDestinationFolder}{newNameAsm}.SLDDRW", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
                 SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(Path.GetFileNameWithoutExtension(new FileInfo(
-                    $@"{RootFolder}\{DamperDestinationFolder}\{newNameAsm}.SLDDRW").FullName) + " - DRW1");
+                    $@"{RootFolder}{DamperDestinationFolder}{newNameAsm}.SLDDRW").FullName) + " - DRW1");
 
                // NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(newPartPathAsm).FullName });
-             //   NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo($@"{RootFolder}\{DamperDestinationFolder}\{newNameAsm}.SLDDRW").FullName });
+             //   NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo($@"{RootFolder}{DamperDestinationFolder}{newNameAsm}.SLDDRW").FullName });
 
                 #endregion
 
                 #region 11-30-100 Сборка Перемычки
 
                 newNameAsm = "11-30-100-" + height + modelType;
-                newPartPathAsm = $@"{RootFolder}{DamperDestinationFolder}\{newNameAsm}.SLDASM";
+                newPartPathAsm = $@"{RootFolder}{DamperDestinationFolder}{newNameAsm}.SLDASM";
 
                 if (isdouble)
                 {
@@ -974,7 +975,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
 
                         newName = "11-30-101-" + height + modelType;
                         newPartPath =
-                            $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
+                            $@"{RootFolder}{DamperDestinationFolder}{newName}.SLDPRT";
                         if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 0))
                         {
                             SolidWorksAdapter.SldWoksAppExemplare.IActivateDoc2("10-30-100", false, 0);
@@ -986,7 +987,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
                         else
                         {
                             SwPartParamsChangeWithNewName("11-30-101",
-                                $@"{RootFolder}\{DamperDestinationFolder}\{newName}",
+                                $@"{RootFolder}{DamperDestinationFolder}{newName}",
                                 new[,]
                                 {
                                     {"D2@Эскиз1", Convert.ToString(heightD + 10)},
@@ -994,13 +995,11 @@ namespace PDMWebService.Data.Solid.PartBuilders
                                     {"D1@Кривая1", Convert.ToString(countL)},
                                     {"D1@Кривая2", Convert.ToString(rivetH)},
                                     {"Толщина@Листовой металл", thiknessStr}
-                                },
-                                false,
-                                null);
+                                });
                             AddMaterial(material, newName);
 
                             SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
-                            //NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo($@"{RootFolder}\{DamperDestinationFolder}\{newNameAsm}").FullName });
+                            //NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo($@"{RootFolder}{DamperDestinationFolder}{newNameAsm}").FullName });
                         }
 
                         #endregion
@@ -1013,7 +1012,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
 
                         newName = "11-30-102-" + height + modelType;
                         newPartPath =
-                            $@"{RootFolder}\{DamperDestinationFolder}\{newName}.SLDPRT";
+                            $@"{RootFolder}{DamperDestinationFolder}{newName}.SLDPRT";
                         if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 0))
                         {
                             SolidWorksAdapter.SldWoksAppExemplare.IActivateDoc2("10-30-100", false, 0);
@@ -1024,8 +1023,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
                         }
                         else
                         {
-                            SwPartParamsChangeWithNewName("11-30-102",
-                                $@"{RootFolder}\{DamperDestinationFolder}\{newName}",
+                            SwPartParamsChangeWithNewName("11-30-102",                                $@"{RootFolder}{DamperDestinationFolder}{newName}",
                                 new[,]
                                 {
                                     {"D2@Эскиз1", Convert.ToString(heightD + 10)},
@@ -1033,9 +1031,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
                                     {"D1@Кривая2", Convert.ToString(countL)},
                                     {"D1@Кривая1", Convert.ToString(rivetH)},
                                     {"Толщина@Листовой металл", thiknessStr}
-                                },
-                                false,
-                                null);
+                                } );
                             try
                             {
                                // VentsMatdll(material, null, newName);
@@ -1046,7 +1042,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
                             }
 
                             SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
-                            NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo($@"{RootFolder}\{DamperDestinationFolder}\{newNameAsm}").FullName });
+                          //  NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo($@"{RootFolder}{DamperDestinationFolder}{newNameAsm}").FullName });
                         }
 
                         #endregion
@@ -1056,7 +1052,7 @@ namespace PDMWebService.Data.Solid.PartBuilders
                         solidWorksDocument.ForceRebuild3(false); solidWorksDocument.ForceRebuild3(true);
                         solidWorksDocument.SaveAs2(newPartPathAsm, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
                         SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newNameAsm);
-                      //  NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo($@"{RootFolder}\{DamperDestinationFolder}\{newNameAsm}").FullName });
+                      //  NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo($@"{RootFolder}{DamperDestinationFolder}{newNameAsm}").FullName });
 
                         #endregion
 
@@ -1068,12 +1064,12 @@ namespace PDMWebService.Data.Solid.PartBuilders
 
             #endregion
 
-            solidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.AcativeteDoc(nameAsm);
+            solidWorksDocument = SolidWorksAdapter.AcativeteDoc(nameAsm);
 
          //   GabaritsForPaintingCamera(solidWorksDocument);
             solidWorksDocument.EditRebuild3();
             solidWorksDocument.ForceRebuild3(true);
-            var name = $@"{RootFolder}\{DamperDestinationFolder}\{newDamperName}";
+            var name = $@"{RootFolder}{DamperDestinationFolder}{newDamperName}";
             solidWorksDocument.SaveAs2(name + ".SLDASM", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
             SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(Path.GetFileNameWithoutExtension(new FileInfo(name + ".SLDASM").FullName));
             swDocDrw.Extension.SelectByID2("DRW1", "SHEET", 0, 0, 0, false, 0, null, 0);
@@ -1100,21 +1096,21 @@ namespace PDMWebService.Data.Solid.PartBuilders
 
             string message = null;
 
-            for (int i = 0; i < NewComponentsFull.Count; i++)
-            {
-                if (repList.Exists(x => x.FilePath.ToLower() == NewComponentsFull[i].LocalPartFileInfo.ToLower()))
-                {
+            //for (int i = 0; i < NewComponentsFull.Count; i++)
+            //{
+            //    if (/*repList.Exists(x => x.FilePath.ToLower() == NewComponentsFull[i].LocalPartFileInfo.ToLower())*/ true)
+            //    {
 
-                //    NewComponentsFull[i].MessageForCheckOut = repList.Single(x => x.FilePath.ToLower().Contains((NewComponentsFull[i].LocalPartFileInfo.ToLower()))).MessageForCheckOut;
-                    //if (!string.IsNullOrEmpty(NewComponentsFull[i].MessageForCheckOut))
-                    //{
-                    //    if (string.IsNullOrEmpty(message))
-                    //    {
-                    //        message = NewComponentsFull[i].MessageForCheckOut;
-                    //    }
-                    //}
-                }
-            }
+            //    //    NewComponentsFull[i].MessageForCheckOut = repList.Single(x => x.FilePath.ToLower().Contains((NewComponentsFull[i].LocalPartFileInfo.ToLower()))).MessageForCheckOut;
+            //        //if (!string.IsNullOrEmpty(NewComponentsFull[i].MessageForCheckOut))
+            //        //{
+            //        //    if (string.IsNullOrEmpty(message))
+            //        //    {
+            //        //        message = NewComponentsFull[i].MessageForCheckOut;
+            //        //    }
+            //        //}
+            //    }
+            //}
 
             #region To Delete
 
@@ -1146,25 +1142,20 @@ namespace PDMWebService.Data.Solid.PartBuilders
         }
 
 
-        private void SwPartParamsChangeWithNewName(string partName, string newName, string[,] newParams, bool newFuncOfAdding, IReadOnlyList<string> copies)
+        private void SwPartParamsChangeWithNewName(string partName, string newName, string[,] newParams /*, bool newFuncOfAdding, IReadOnlyList<string> copies*/)
         {
             ModelDoc2 swDoc = null;
-
-            swDoc = SolidWorksAdapter.AcativeteDoc((partName + ".SLDPRT");
+            swDoc = SolidWorksAdapter.AcativeteDoc(partName + ".SLDPRT");
             var modName = swDoc.GetPathName();
             for (var i = 0; i < newParams.Length / 2; i++)
             {
-
-                var myDimension = ((Dimension)(swDoc.Parameter(newParams[i, 0] + "@" + partName + ".SLDPRT")));
+                Dimension myDimension = ((Dimension)(swDoc.Parameter(newParams[i, 0] + "@" + partName + ".SLDPRT")));
                 var param = Convert.ToDouble(newParams[i, 1]);
                 var swParametr = param;
-                myDimension.SystemValue = swParametr / 1000;
-                swDoc.EditRebuild3();
+                myDimension.SystemValue = swParametr/1000;
             }
-
             swDoc.EditRebuild3();
             swDoc.ForceRebuild3(false);
-
             //if (!newFuncOfAdding)
             //{
             //    //TO DO
@@ -1188,12 +1179,12 @@ namespace PDMWebService.Data.Solid.PartBuilders
             // to do
             swDoc.SaveAs2(new FileInfo(newName + ".SLDPRT").FullName, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
 
-            if (copies != null)
-            {
-                //MessageBox.Show("copies - " + copies + "  addingInName - " + addingInName);
-                swDoc.SaveAs2(new FileInfo(copies[0] + ".SLDPRT").FullName, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, true, true);
-                swDoc.SaveAs2(new FileInfo(copies[1] + ".SLDPRT").FullName, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, true, true);
-            }
+            //if (copies != null)
+            //{
+            //    //MessageBox.Show("copies - " + copies + "  addingInName - " + addingInName);
+            //    swDoc.SaveAs2(new FileInfo(copies[0] + ".SLDPRT").FullName, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, true, true);
+            //    swDoc.SaveAs2(new FileInfo(copies[1] + ".SLDPRT").FullName, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, true, true);
+            //}
             // _swApp.CloseDoc(newName + ".SLDPRT");
         }
 
@@ -1209,7 +1200,12 @@ namespace PDMWebService.Data.Solid.PartBuilders
             {
                 //MessageBox.Show($"{e}\n{material}\n{newName}{e.StackTrace}" , "Adding Material");
             }
+            
         }
     }
+
+
+  
+
 }
 

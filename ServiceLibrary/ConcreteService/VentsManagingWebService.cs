@@ -1,12 +1,11 @@
 ﻿using DataBaseDomian.XML;
 using Patterns.Observer;
 using PdmSolidWorksLibrary;
-using PDMWebService.Data.Solid.PartBuilders;
+using PDMWebService.Data.Solid.Parts.PartBuilders;
 using ServiceConstants;
 using ServiceLibrary.Models;
 using ServiceLibrary.Models.DataContracts;
 using ServiceLibrary.ServiceInterface;
-using SolidWorksLibrary.Builders.Roof;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -294,7 +293,7 @@ namespace ServiceLibrary.ConcreteService
             MessageObserver.Instance.SetMessage("Пришел запрос на генерацию вибровставки с параметрами { тип: " + type + ", ширина: " + width + ", высота: " + height);
             if (spigotBuilder == null) spigotBuilder = new SpigotBuilder();
          
-            var modelName = PDMWebService.Data.Solid.PartBuilders.SpigotBuilder.GetSpigotName(type, width, height, true);
+            var modelName = SpigotBuilder.GetSpigotName(type, width, height, true);
             if (!System.IO.File.Exists(@"C:\TestPDM\12 - Вибровставка\" + modelName))
             {
 

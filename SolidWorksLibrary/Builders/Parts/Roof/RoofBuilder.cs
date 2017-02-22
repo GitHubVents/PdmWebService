@@ -3,21 +3,28 @@ using SolidWorks.Interop.swconst;
 using System;
 using System.Collections.Generic;
 using System.IO;
-
-namespace SolidWorksLibrary.Builders.Roof
-{
-
+using ServiceConstants;
+namespace SolidWorksLibrary.Builders.Parts.Roof
+{ 
     //TO DO loock save as
-    [Serializable]
-        public delegate void CheckExistPartHandler(string partName, out bool isExesitPatrt, out string pathToPartt);
-  public  class RoofBuilder
-    {
+  
+  public  class RoofBuilder : IFeedbackBuilder    {
 
-     public   CheckExistPartHandler CheckExistPart;
+                                                                             // ========================= README about CheckExistPart delegate =====================================================================  
+                                                                             // When the event is fired, a check runs to find whether the part or assembly exists. It returnes the path to file if file exists 
+                                                                             // and boolean flag using out operators.it allows not to be bound to file format such as PDM, IPS,SQL, explorer etc
+
+        /// <summary>
+        /// Provides notification and feedback to check for part
+        /// </summary>
+        public CheckExistPartHandler CheckExistPart { get; set; } 
+
+        /// <summary>
+        /// Informing subscribers the completion of building 
+        /// </summary>
+        public FinishedBuildHandler FinishedBuild { get; set; }
+
         List<string> ComponentsPathList;
-
-
-
         /// <summary>
         /// Папка с исходной моделью "Крыши".
         /// </summary>
@@ -26,24 +33,26 @@ namespace SolidWorksLibrary.Builders.Roof
         /// Папка для сохранения компонентов "Крыши". 
         /// </summary>
         private string RoofDestinationFolder { get; set; } = @"\15 - Крыша";
-
+        /// <summary>
+        /// Root folder file system
+        /// </summary>
         private string RootFolder = @"D:\TestPDM"; 
         public  RoofBuilder() 
         {
             ComponentsPathList =     new List<string>();
         }
-        public string Build(int type, int width, int lenght, bool onlyPath)
+        public string Build(int type, int width, int lenght, bool onlyPath)  
         {
             string newPartPath = string.Empty;
             string modelName;
             switch (type)
             {
-                case 1:
-                case 2:
-                case 3:
-                case 4:
-                case 5:
-                case 6:
+                case 1: // RoofType.One:
+                case 2: // RoofType.Two:
+                case 3:// RoofType.Three:
+                case 4:// RoofType.Four:
+                case 5:// RoofType.Five:
+                case 6:// RoofType.Six:
                     modelName = "15-000";
                     break;
                 default:
@@ -56,13 +65,7 @@ namespace SolidWorksLibrary.Builders.Roof
             var newRoofName = "15-0" + type + "-" + width + "-" + lenght;
             var newRoofPath = $@"{RootFolder}{RoofDestinationFolder}\{newRoofName}.SLDASM";
             bool IsExistPart = false;
-            CheckExistPart(newRoofName+".SLDASM",out IsExistPart,out newRoofPath);
-            if (File.Exists(newRoofPath))
-            {
-                if (onlyPath) return newRoofPath;
-                //MessageBox.Show(newRoofPath, "Данная модель уже находится в базе");
-                return "";
-            }
+            CheckExistPart(newRoofName+".SLDASM",out IsExistPart,out newRoofPath);            
 
           //  PDM.SolidWorksPdmAdapter.Instance.GetLastVersionAsmPdm($@"{Settings.Default.SourceFolder}{SpigotFolder}\{"15-000.SLDASM"}");
 

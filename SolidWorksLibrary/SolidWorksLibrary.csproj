@@ -61,6 +61,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -75,10 +76,13 @@
     <Compile Include="Builders\Dxf\DataToExport.cs" />
     <Compile Include="Builders\Dxf\DxfBulder.cs" />
     <Compile Include="Builders\Dxf\DxfFile.cs" />
-    <Compile Include="Builders\Flap\FlapBuilder.cs" />
+    <Compile Include="Builders\Parts\AbstractBuilder.cs" />
+    <Compile Include="Builders\Parts\Flap\FlapBuilder.cs" />
+    <Compile Include="Builders\Parts\IFeedbackBuilder.cs" />
+    <Compile Include="Builders\Parts\MountingFrame\MountingFrameBuilder.cs" />
     <Compile Include="Builders\Pdf\PdfBuilder.cs" />
-    <Compile Include="Builders\Roof\RoofBuilder.cs" />
-    <Compile Include="Builders\Spigot\SpigotBuilder.cs" />
+    <Compile Include="Builders\Parts\Roof\RoofBuilder.cs" />
+    <Compile Include="Builders\Parts\Spigot\SpigotBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SolidWorksAdapter.cs" />
   </ItemGroup>
