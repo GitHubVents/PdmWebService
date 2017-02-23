@@ -87,7 +87,7 @@ public enum TasksType
         NotRemovableBlankPanel = 1,
         DualNotRemovablePanel = 2,
         PanelHinged = 3,
-        PanelRemovableWithHandles = 4,
+        PanelRemovable = 4,
         DualRemovablePpanel = 5,
         ThePanelHeatExchanger = 6,
         TheFrontPanel = 7

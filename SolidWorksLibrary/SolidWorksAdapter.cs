@@ -159,12 +159,15 @@ namespace SolidWorksLibrary
                 openDocOptions += (int)swOpenDocOptions_e.swOpenDocOptions_LoadModel;
             }
 
-            var swDocument = SolidWorksAdapter.SldWoksAppExemplare.OpenDoc6(path, (int)documentType, openDocOptions, configuration, errors, warnings);
+            var swDocument = SolidWorksAdapter.SldWoksAppExemplare.OpenDoc6(path, (int)documentType, openDocOptions, configuration, ref errors, ref warnings);
             SolidWorksAdapter.SldWoksAppExemplare.Visible = true;
+
+            
 
             if (errors != 0)
             {
                 MessageObserver.Instance.SetMessage("Error at open solid works document: code {" + errors + "}, description error {" + (swFileLoadError_e)errors + "}");
+                throw new Exception("Failed open document");
             }
             if (warnings != 0)
             {
@@ -188,6 +191,14 @@ namespace SolidWorksLibrary
             }
 
             return  SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc3(docTitle, true, (int) swOpenDocOptions_e.swOpenDocOptions_Silent, errors);
+        }
+
+
+        public static AssemblyDoc  GetAssembly(ModelDoc2 document)
+        {
+            AssemblyDoc swAsm =  (AssemblyDoc)document;
+            swAsm.ResolveAllLightWeightComponents(false);
+            return swAsm;
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using DataBaseDomian.XML;
 using Patterns.Observer;
 using PdmSolidWorksLibrary;
-using PDMWebService.Data.Solid.ElementsCase.PartBuilders;
+using PDMWebService.Data.Solid.ElementsCase;
 using ServiceConstants;
 using ServiceLibrary.Models;
 using ServiceLibrary.Models.DataContracts;

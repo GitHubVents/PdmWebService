@@ -2,14 +2,84 @@
 using SolidWorks.Interop.sldworks;
 using SolidWorks.Interop.swconst;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace SolidWorksLibrary.Builders.ElementsCase
 {
-    public abstract class AbstractBuilder
+    public abstract class AbstractBuilder : IFeedbackBuilder
     {
-        protected abstract void DeleteComponents(int type); 
-         
+        #region properties
+        /// <summary>
+        /// Path list to built files
+        /// </summary>
+        protected List<string> ComponentsPathList { get; set; }
+        /// <summary>
+        /// Sorce folder where there is the prototypes for the build
+        /// </summary>
+        protected string SourceFolder { get; set; }
+        /// <summary>
+        /// The folder containing files after they are built and save. 
+        /// </summary>
+        protected string SubjectDestinationFolder { get; set; }  
+        /// <summary>
+        /// Root folder file system
+        /// </summary>
+        protected string RootFolder { get; set; }
+        #endregion
+
+        public AbstractBuilder()
+        {
+            this.ComponentsPathList = new List<string>();
+        }
+
+        #region SetProperties
+
+        /// <summary>
+        /// Assigns necessary paths for build
+        /// </summary>
+        /// <param name="subjectDestinationFolder">The folder in which will be save the files after built</param>
+        /// <param name="sourceFolder">Sorce folder where there is the prototypes for the build</param>
+        protected void SetProperties(string subjectDestinationFolder, string sourceFolder)
+        {
+            this.RootFolder = @"C:\TestPDM"; // test default value
+            this.SubjectDestinationFolder = subjectDestinationFolder;
+            this.SourceFolder = sourceFolder;
+        }
+        /// <summary>
+        /// Assigns necessary paths for build
+        /// </summary>
+        /// <param name="subjectDestinationFolder">The folder in which will be save the files after built</param>
+        /// <param name="sourceFolder">Sorce folder where there is the prototypes for the build</param>
+        /// <param name="rootFolder">The root folder working file system</param>
+        protected void SetProperties(string subjectDestinationFolder, string sourceFolder, string rootFolder)
+        {
+            this.RootFolder = rootFolder;
+            this.SubjectDestinationFolder = subjectDestinationFolder;
+            this.SourceFolder = sourceFolder;
+        }
+        #endregion
+        // ========================= README about CheckExistPart delegate =====================================================================  
+        // When the event is fired, a check runs to find whether the part or assembly exists. It returnes the path to file if file exists 
+        // and boolean flag using out operators.it allows not to be bound to file format such as PDM, IPS,SQL, explorer etc
+
+        /// <summary>
+        /// Provides notification and feedback to check for part
+        /// </summary>
+        public CheckExistPartHandler CheckExistPart { get; set; }
+        // ==================================================================================================================================
+
+        /// <summary>
+        /// Informing subscribers the completion of building 
+        /// </summary>
+        public FinishedBuildHandler FinishedBuild { get; set; }
+
+
+        protected virtual void DeleteComponents(int type)
+        {
+            throw new NotImplementedException("Not implemented DeleteComponents method");
+        }
+
         protected virtual void InitiatorSaveExeption(int error, int warning, string path = "")
         {
             if (error != 0 || warning != 0)
@@ -22,8 +92,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
             }
         }
 
-
-        protected virtual void EditPartParameters(string partName, string newName, string[,] newParams  )
+        protected virtual void EditPartParameters(string partName, string newName, string[,] newParams)
         {
             ModelDoc2 swDoc = null;
             swDoc = SolidWorksAdapter.AcativeteDoc(partName + ".SLDPRT");
@@ -37,9 +106,9 @@ namespace SolidWorksLibrary.Builders.ElementsCase
             }
             swDoc.EditRebuild3();
             swDoc.ForceRebuild3(false);
-            
+
             swDoc.SaveAs2(new FileInfo(newName + ".SLDPRT").FullName, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
-     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
-        }
+            SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
+        }         
     }
 }

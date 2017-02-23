@@ -4,57 +4,30 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using ServiceConstants;
-using SolidWorksLibrary.Builders.Parts;
 
 namespace SolidWorksLibrary.Builders.ElementsCase
 { 
     //TO DO loock save as
   
-  public  class RoofBuilder : IFeedbackBuilder    {
-
-                                                                             // ========================= README about CheckExistPart delegate =====================================================================  
-                                                                             // When the event is fired, a check runs to find whether the part or assembly exists. It returnes the path to file if file exists 
-                                                                             // and boolean flag using out operators.it allows not to be bound to file format such as PDM, IPS,SQL, explorer etc
-
-        /// <summary>
-        /// Provides notification and feedback to check for part
-        /// </summary>
-        public CheckExistPartHandler CheckExistPart { get; set; } 
-
-        /// <summary>
-        /// Informing subscribers the completion of building 
-        /// </summary>
-        public FinishedBuildHandler FinishedBuild { get; set; }
-
-        List<string> ComponentsPathList;
-        /// <summary>
-        /// Папка с исходной моделью "Крыши".
-        /// </summary>
-        private string RoofFolder { get; set; } = @"\15 - Roof";
-        /// <summary>
-        /// Папка для сохранения компонентов "Крыши". 
-        /// </summary>
-        private string RoofDestinationFolder { get; set; } = @"\15 - Крыша";
-        /// <summary>
-        /// Root folder file system
-        /// </summary>
-        private string RootFolder = @"D:\TestPDM"; 
+  public  class RoofBuilder : AbstractBuilder    {
+        ModelDoc2 solidWorksDocument { get; set; }
         public  RoofBuilder() 
         {
             ComponentsPathList =     new List<string>();
+            SetProperties(@"\15 - Крыша", @"\15 - Roof");
         }
-        public string Build(int type, int width, int lenght, bool onlyPath)  
+        public string Build(RoofType type, int width, int lenght, bool onlyPath)  
         {
             string newPartPath = string.Empty;
             string modelName;
             switch (type)
             {
-                case 1: // RoofType.One:
-                case 2: // RoofType.Two:
-                case 3:// RoofType.Three:
-                case 4:// RoofType.Four:
-                case 5:// RoofType.Five:
-                case 6:// RoofType.Six:
+                case  RoofType.One:
+                case  RoofType.Two:
+                case  RoofType.Three:
+                case  RoofType.Four:
+                case  RoofType.Five:
+                case  RoofType.Six:
                     modelName = "15-000";
                     break;
                 default:
@@ -64,126 +37,32 @@ namespace SolidWorksLibrary.Builders.ElementsCase
 
 
 
-            var newRoofName = "15-0" + type + "-" + width + "-" + lenght;
-            var newRoofPath = $@"{RootFolder}{RoofDestinationFolder}\{newRoofName}.SLDASM";
+            string newRoofName = "15-0" + type + "-" + width + "-" + lenght;
+            string newRoofPath = $@"{RootFolder}{SubjectDestinationFolder}\{newRoofName}.SLDASM";
             bool IsExistPart = false;
-            CheckExistPart(newRoofName+".SLDASM",out IsExistPart,out newRoofPath);            
-
-          //  PDM.SolidWorksPdmAdapter.Instance.GetLastVersionAsmPdm($@"{Settings.Default.SourceFolder}{SpigotFolder}\{"15-000.SLDASM"}");
-
-            var modelRoofPath = $@"{RootFolder}{RoofFolder}\{modelName}.SLDASM";
-
-            //if (!Warning()) return "";
-            var swDoc = SolidWorksAdapter.SldWoksAppExemplare.OpenDoc6(modelRoofPath, (int)swDocumentTypes_e.swDocASSEMBLY,
+            CheckExistPart(newRoofName+".SLDASM",out IsExistPart,out newRoofPath);   
+            var modelRoofPath = $@"{RootFolder}{SourceFolder}\{modelName}.SLDASM";     
+              solidWorksDocument = SolidWorksAdapter.SldWoksAppExemplare.OpenDoc6(modelRoofPath, (int)swDocumentTypes_e.swDocASSEMBLY,
                 (int)swOpenDocOptions_e.swOpenDocOptions_LoadModel + (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "00", 0, 0);
 
-
-            var swAsm = (AssemblyDoc)swDoc;
-            swAsm.ResolveAllLightWeightComponents(false);
-
-            #region Удаление ненужного
-
-            if (type == 1 || type == 5)
-            {
-                const int deleteOption = (int)swDeleteSelectionOptions_e.swDelete_Absorbed +
-                                        (int)swDeleteSelectionOptions_e.swDelete_Children;
-                swDoc.Extension.SelectByID2("Вырез-Вытянуть3@15-001-1@15-000", "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                swDoc.Extension.DeleteSelection2(deleteOption);
-                swDoc.Extension.SelectByID2("Эскиз26@15-001-1@15-000", "SKETCH", 0, 0, 0, false, 0, null, 0);
-                swDoc.EditDelete();
-                swDoc.Extension.SelectByID2("Hole-M8@15-001-1@15-000", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
-                swDoc.EditDelete();
-                swDoc.Extension.SelectByID2("Вырез-Вытянуть4@15-001-1@15-000", "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
-                swDoc.Extension.DeleteSelection2(deleteOption);
-
-                swDoc.Extension.SelectByID2("Rivet Bralo-1@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                swDoc.Extension.SelectByID2("Rivet Bralo-2@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                swDoc.Extension.SelectByID2("Fasteners - M8", "FTRFOLDER", 0, 0, 0, true, 0, null, 0);
-                swDoc.Extension.SelectByID2("Fasteners - M8", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
-                swDoc.EditDelete();
-                swDoc.Extension.SelectByID2("Washer 11371_gost-1@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                swDoc.Extension.SelectByID2("Washer 6402_gost-1@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                swDoc.Extension.SelectByID2("Hex Bolt 7805_gost-1@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                swDoc.Extension.SelectByID2("Washer 11371_gost-2@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                swDoc.Extension.SelectByID2("Washer 6402_gost-2@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                swDoc.Extension.SelectByID2("Hex Bolt 7805_gost-2@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                swDoc.Extension.SelectByID2("Hex Bolt 7805_gost-2@15-000", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                swDoc.EditDelete();
-                swDoc.Extension.SelectByID2("ЗеркальныйКомпонент2", "COMPPATTERN", 0, 0, 0, false, 0, null, 0);
-                swDoc.EditDelete();
-            }
-            if (type == 2|| type == 6)
-            {
-                swDoc.Extension.SelectByID2("Rivet Bralo-1@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                swDoc.Extension.SelectByID2("Rivet Bralo-2@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                swDoc.EditUnsuppress2(); swDoc.ClearSelection2(true);
-                swDoc.Extension.SelectByID2("ЗеркальныйКомпонент2", "COMPPATTERN", 0, 0, 0, false, 0, null, 0);
-                swDoc.EditUnsuppress2(); swDoc.ClearSelection2(true);
-                swDoc.Extension.SelectByID2("DerivedCrvPattern2", "COMPPATTERN", 0, 0, 0, false, 0, null, 0);
-                swDoc.EditUnsuppress2(); swDoc.ClearSelection2(true);
-                swDoc.Extension.SelectByID2("Симметричный1", "MATE", 0, 0, 0, false, 0, null, 0);
-                swDoc.EditSuppress2(); swDoc.ClearSelection2(true);
-                swDoc.Extension.SelectByID2("Расстояние1", "MATE", 0, 0, 0, false, 0, null, 0);
-                swDoc.EditUnsuppress2();
-
-                swDoc.Extension.SelectByID2("Fasteners - M8", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
-                swDoc.EditDelete();
-                swDoc.Extension.SelectByID2("Washer 11371_gost-1@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                swDoc.Extension.SelectByID2("Washer 6402_gost-1@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                swDoc.Extension.SelectByID2("Hex Bolt 7805_gost-1@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                swDoc.Extension.SelectByID2("Washer 11371_gost-2@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                swDoc.Extension.SelectByID2("Washer 6402_gost-2@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                swDoc.Extension.SelectByID2("Hex Bolt 7805_gost-2@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                swDoc.EditDelete();
-                swDoc.Extension.SelectByID2("Зеркальное отражение1@15-001-1@15-000", "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                swDoc.EditDelete();
-                swDoc.Extension.SelectByID2("Зеркальное отражение1@15-002-1@15-000", "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                swDoc.EditDelete();
-            }
-            if (type == 3 || type == 4)
-            {
-                const int deleteOption = (int)swDeleteSelectionOptions_e.swDelete_Absorbed +
-                                        (int)swDeleteSelectionOptions_e.swDelete_Children;
-
-                swDoc.Extension.SelectByID2("Винт самосверл 6-гр.гол с шайбой-33@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0); swDoc.EditDelete();
-
-                swDoc.Extension.SelectByID2("Вырез-Вытянуть3@15-001-1@15-000", "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                swDoc.Extension.DeleteSelection2(deleteOption);
-                swDoc.Extension.SelectByID2("Эскиз26@15-001-1@15-000", "SKETCH", 0, 0, 0, false, 0, null, 0);
-                swDoc.EditDelete();
-                swDoc.Extension.SelectByID2("Hole-M8@15-001-1@15-000", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
-                swDoc.EditUnsuppress2();
-                swDoc.Extension.SelectByID2("Эскиз23@15-001-1@15-000", "SKETCH", 0, 0, 0, false, 0, null, 0);
-                swDoc.EditSuppress2();
-
-                swDoc.Extension.SelectByID2("Винт самосверл 6-гр.гол с шайбой-1@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                swDoc.Extension.SelectByID2("Rivet Bralo-1@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                swDoc.Extension.SelectByID2("Rivet Bralo-2@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                swDoc.EditDelete();
-                swDoc.Extension.SelectByID2("ЗеркальныйКомпонент2", "COMPPATTERN", 0, 0, 0, false, 0, null, 0);
-                swDoc.EditDelete();
-                swDoc.Extension.SelectByID2("Fasteners - M8", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
-                swDoc.EditUnsuppress2();
-                swDoc.ClearSelection2(true);
-                swDoc.Extension.SelectByID2("MirrorFasteners - M8", "COMPPATTERN", 0, 0, 0, false, 0, null, 0);
-                swDoc.EditUnsuppress2();
-            }
-            swDoc.ForceRebuild3(false);
-
-            #endregion
+            AssemblyDoc solidWorcsAssemvlyDocyment = (AssemblyDoc)solidWorksDocument;
+            solidWorcsAssemvlyDocyment.ResolveAllLightWeightComponents(false);
+             
+            DeleteComponents((int)type);
+             
 
             #region Сохранение и изменение элементов
 
-            var addwidth = 100;
+             var addwidth = 100;
             var addwidth2 = 75;
             var type4 = 0;
             var divwidth = 1;
-            if (type == 2 || type == 6)
+            if (type ==  RoofType.Two || type ==  RoofType.Six)
             {
                 addwidth = 75;
                 divwidth = 2;
             }
-            if (type == 4)
+            if (type ==  RoofType.Four)
             {
                 type4 = 170;
                 addwidth2 = 170 + 75;
@@ -204,32 +83,30 @@ namespace SolidWorksLibrary.Builders.ElementsCase
                 CheckExistPart(newPartName, out IsExistPart, out newPartPath);
                 if ( IsExistPart)
                 {
-                    swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2("15-000.SLDASM", true, 0)));
-                    swDoc.Extension.SelectByID2("15-001-1@15-000", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    swAsm.ReplaceComponents(newPartPath, "", true, true);
+                    solidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2("15-000.SLDASM", true, 0)));
+                    solidWorksDocument.Extension.SelectByID2("15-001-1@15-000", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    solidWorcsAssemvlyDocyment.ReplaceComponents(newPartPath, "", true, true);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("15-001.SLDPRT");
                 }
                 else
                 {
-                      newPartPath = $@"{RoofFolder}\{RoofDestinationFolder}\{newPartName}.SLDPRT";
+                      newPartPath = $@"{SourceFolder}\{SubjectDestinationFolder}\{newPartName}.SLDPRT";
 
-                    SwPartParamsChangeWithNewName("15-001",
-                        $@"{RootFolder}\{RoofDestinationFolder}\{newPartName}",
+                    EditPartParameters("15-001",
+                        $@"{RootFolder}\{SubjectDestinationFolder}\{newPartName}",
                         new[,]
                         {
-                            {"D1@Эскиз1",  type == 5 || type == 6 ? Convert.ToString(140 + lengthD + type4) : Convert.ToString(lengthD + type4)},
+                            {"D1@Эскиз1",  type ==  RoofType.Five || type == RoofType.Six ? Convert.ToString(140 + lengthD + type4) : Convert.ToString(lengthD + type4)},
                             {"D2@Эскиз1", Convert.ToString(widthD)},
                             {"D4@Эскиз27", Convert.ToString(addwidth2-4.62)},
                             {"D1@Эскиз27", Convert.ToString(90)},
                             {"D2@Эскиз27", Convert.ToString((75-4.62))},
 
-                            {"D1@Эскиз24", type == 5 || type == 6? Convert.ToString(149.53) : Convert.ToString(9.53)},
+                            {"D1@Эскиз24", type ==  RoofType.Five || type == RoofType.Six? Convert.ToString(149.53) : Convert.ToString(9.53)},
 
                             {"D1@Кривая2", Convert.ToString(weldW2*1000)},
                             {"D1@Кривая1", Convert.ToString(weldW*1000)}
-                        },
-                        false,
-                        null);
+                        } );
                     try
                     {
 
@@ -246,7 +123,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
 
       
             //15-002
-            if (type == 6)
+            if (type ==  RoofType.Six)
             {
                 try
                 {
@@ -257,32 +134,30 @@ namespace SolidWorksLibrary.Builders.ElementsCase
                     CheckExistPart(newPartName, out IsExistPart, out newPartPath);
                     if (IsExistPart)
                     {
-                        swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2("15-000.SLDASM", true, 0)));
-                        swDoc.Extension.SelectByID2("15-002-1@15-000", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                        swAsm.ReplaceComponents(newPartPath, "", true, true);
+                        solidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2("15-000.SLDASM", true, 0)));
+                        solidWorksDocument.Extension.SelectByID2("15-002-1@15-000", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                        solidWorcsAssemvlyDocyment.ReplaceComponents(newPartPath, "", true, true);
                         SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("15-002.SLDPRT");
                     }
                     else
                     {
                           newPartPath =
-                         $@"{RootFolder}\{RoofDestinationFolder}\{newPartName}.SLDPRT";
-                        SwPartParamsChangeWithNewName("15-002",
-                            $@"{RootFolder}\{RoofDestinationFolder}\{newPartName}",
+                         $@"{RootFolder}\{SubjectDestinationFolder}\{newPartName}.SLDPRT";
+                        EditPartParameters("15-002",
+                            $@"{RootFolder}\{SubjectDestinationFolder}\{newPartName}",
                             new[,]
                             {
-                                {"D1@Эскиз1",  type == 5 || type == 6 ? Convert.ToString(140 + lengthD + type4) : Convert.ToString(lengthD + type4)},
+                                {"D1@Эскиз1",  type ==  RoofType.Five || type ==  RoofType.Six ? Convert.ToString(140 + lengthD + type4) : Convert.ToString(lengthD + type4)},
                                 {"D2@Эскиз1", Convert.ToString(widthD)},
                                 {"D4@Эскиз27", Convert.ToString(addwidth2-4.62)},
                                 {"D1@Эскиз27", Convert.ToString(90)},
                                 {"D2@Эскиз27", Convert.ToString((75-4.62))},
 
-                                {"D2@Эскиз23", type == 5 || type == 6 ? Convert.ToString(165) : Convert.ToString(25)},
+                                {"D2@Эскиз23", type ==  RoofType.Five || type ==  RoofType.Six ? Convert.ToString(165) : Convert.ToString(25)},
 
                                 {"D1@Кривая2", Convert.ToString(weldW2*1000)},
                                 {"D1@Кривая1", Convert.ToString(weldW*1000)}
-                            },
-                            false,
-                        null);
+                            } );
                         try
                         {
                             VentsMatdll(new[] { "1700" }, new[] { "", "Шаргень", "2" }, newPartName);
@@ -294,33 +169,33 @@ namespace SolidWorksLibrary.Builders.ElementsCase
 
                         SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newPartName);
                     }
-                    swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2("15-000.SLDASM", true, 0)));
-                    swDoc.Extension.SelectByID2("15-001-3@15-000", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    swDoc.Extension.SelectByID2("ЗеркальныйКомпонент2@15-000", "COMPPATTERN", 0, 0, 0, false, 0, null, 0);
-                    swDoc.EditSuppress2();
+                    solidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2("15-000.SLDASM", true, 0)));
+                    solidWorksDocument.Extension.SelectByID2("15-001-3@15-000", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    solidWorksDocument.Extension.SelectByID2("ЗеркальныйКомпонент2@15-000", "COMPPATTERN", 0, 0, 0, false, 0, null, 0);
+                    solidWorksDocument.EditSuppress2();
                 }
                 catch (Exception e)
                 {
                     Patterns.Observer.MessageObserver.Instance.SetMessage(e.ToString());
                 }
             }
-            else if (type != 6)
+            else if (type != RoofType.Six)
             {
-                swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2("15-000.SLDASM", true, 0)));
-                swDoc.Extension.SelectByID2("15-002-1@15-000", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                swDoc.EditDelete();
+                solidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2("15-000.SLDASM", true, 0)));
+                solidWorksDocument.Extension.SelectByID2("15-002-1@15-000", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                solidWorksDocument.EditDelete();
             }
 
             switch (type)
             {
-                case 2:
-                case 6:
-                    swDoc.Extension.SelectByID2("Винт самосверл 6-гр.гол с шайбой-33@15-000", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    swDoc.EditDelete();
+                case  RoofType.Two:
+                case  RoofType.Six:
+                    solidWorksDocument.Extension.SelectByID2("Винт самосверл 6-гр.гол с шайбой-33@15-000", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    solidWorksDocument.EditDelete();
                     break;
                 default:
-                    swDoc.Extension.SelectByID2("Винт самосверл 6-гр.гол с шайбой-26@15-000", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    swDoc.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Винт самосверл 6-гр.гол с шайбой-26@15-000", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    solidWorksDocument.EditDelete();
                     break;
             }
 
@@ -329,9 +204,9 @@ namespace SolidWorksLibrary.Builders.ElementsCase
             //  GabaritsForPaintingCamera(swDoc);
             try
             {
-                swDoc.ForceRebuild3(true);
+                solidWorksDocument.ForceRebuild3(true);
                 Console.WriteLine("newRoofPath " + newRoofPath);
-                swDoc.SaveAs2(newRoofPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
+                solidWorksDocument.SaveAs2(newRoofPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
                 newComponents.Add(new FileInfo(newRoofPath));
                 SolidWorksAdapter.CloseAllDocumentsAndExit();
                 //  PDMWebService.Data.PDM.SolidWorksPdmAdapter.Instance.CheckInOutPdm(newComponents, true);
@@ -352,87 +227,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
 
             return newRoofPath;
         }
-
-
-
-        protected void SwPartParamsChangeWithNewName(string partName, string newName, string[,] newParams,
-            bool newFuncOfAdding, IReadOnlyList<string> copies)
-        {
-
-            ModelDoc2 swDoc = null;
-            try
-            {
-                //Логгер.Отладка($"Начало изменения детали {partName}", "", "", "SwPartParamsChangeWithNewName");
-                int error = 0;
-                int warnings = 0;
-
-                swDoc = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2(partName + ".SLDPRT", true, 0)));
-                var modName = swDoc.GetPathName();
-                for (var i = 0; i < newParams.Length / 2; i++)
-                {
-
-                    var myDimension = ((Dimension)(swDoc.Parameter(newParams[i, 0] + "@" + partName + ".SLDPRT")));
-                    var param = Convert.ToDouble(newParams[i, 1]);
-                    var swParametr = param;
-                    myDimension.SystemValue = swParametr / 1000;
-                    swDoc.EditRebuild3();
-
-                    if (newName == "")
-                    {
-                        return;
-                    }
-                    swDoc.EditRebuild3();
-                    swDoc.ForceRebuild3(false);
-
-                    if (!newFuncOfAdding)
-                    {
-                        ComponentsPathList.Add(newName + ".SLDPRT");
-                    }
-
-                    if (newFuncOfAdding)
-                    {
-                        // todo проверить
-                        //if (!string.IsNullOrEmpty(copies)) return;
-                        //ComponentsPathListFull.Add(new VaultSystem.VentsCadFile
-                        //{
-                        //    LocalPartFileInfo = new FileInfo(newName + ".SLDPRT").FullName,
-                        //    PartIdSql = Convert.ToInt32(newName.Substring(newName.LastIndexOf('-') + 1))
-                        //});
-                    }
-
-
-                    swDoc.SaveAs2(new FileInfo(newName + ".SLDPRT").FullName, (int)swSaveAsVersion_e.swSaveAsCurrentVersion,
-                        false, true);
-
-                    if (copies != null)
-                    {
-                        // //MessageBox.Show("copies - " + copies + "  addingInName - " + addingInName);
-                        swDoc.SaveAs2(new FileInfo(copies[0] + ".SLDPRT").FullName,
-                            (int)swSaveAsVersion_e.swSaveAsCurrentVersion, true, true);
-                        swDoc.SaveAs2(new FileInfo(copies[1] + ".SLDPRT").FullName,
-                            (int)swSaveAsVersion_e.swSaveAsCurrentVersion, true, true);
-                    }
-
-
-                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName + ".SLDPRT");
-                    //Логгер.Отладка($"Деталь {partName} изменена и сохранена по пути {new FileInfo(newName).FullName}", "",
-                    //    "", "SwPartParamsChangeWithNewName");
-                    //  //MessageBox.Show("Все хорошо... же.");
-                }
-            }
-            catch (Exception e)
-            {
-
-                string param = "с параметрами ";
-                foreach (var item in newParams)
-                {
-                    param += item + ", ";
-                }
-                //MessageBox.Show(e.ToString() + isNullStr + " для детали " + partName + param);
-            }
-        }
-
-
+          
         protected void VentsMatdll(IList<string> materialP1, IList<string> покрытие, string newName)
         {
            // ModelDoc2 model = SolidWorksInstance.SldWoksApp.ActivateDoc2(newName, true, 0);
@@ -492,5 +287,95 @@ namespace SolidWorksLibrary.Builders.ElementsCase
            // model?.Save();
         }
 
+        protected override void DeleteComponents(int type)
+        {
+            RoofType etype = (RoofType)type;
+            if (etype ==  RoofType.One || etype == RoofType.Five)
+            {
+                const int deleteOption = (int)swDeleteSelectionOptions_e.swDelete_Absorbed +
+                                        (int)swDeleteSelectionOptions_e.swDelete_Children;
+                solidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть3@15-001-1@15-000", "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                solidWorksDocument.Extension.DeleteSelection2(deleteOption);
+                solidWorksDocument.Extension.SelectByID2("Эскиз26@15-001-1@15-000", "SKETCH", 0, 0, 0, false, 0, null, 0);
+                solidWorksDocument.EditDelete();
+                solidWorksDocument.Extension.SelectByID2("Hole-M8@15-001-1@15-000", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
+                solidWorksDocument.EditDelete();
+                solidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть4@15-001-1@15-000", "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                solidWorksDocument.Extension.DeleteSelection2(deleteOption);
+
+                solidWorksDocument.Extension.SelectByID2("Rivet Bralo-1@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                solidWorksDocument.Extension.SelectByID2("Rivet Bralo-2@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                solidWorksDocument.Extension.SelectByID2("Fasteners - M8", "FTRFOLDER", 0, 0, 0, true, 0, null, 0);
+                solidWorksDocument.Extension.SelectByID2("Fasteners - M8", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
+                solidWorksDocument.EditDelete();
+                solidWorksDocument.Extension.SelectByID2("Washer 11371_gost-1@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                solidWorksDocument.Extension.SelectByID2("Washer 6402_gost-1@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                solidWorksDocument.Extension.SelectByID2("Hex Bolt 7805_gost-1@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                solidWorksDocument.Extension.SelectByID2("Washer 11371_gost-2@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                solidWorksDocument.Extension.SelectByID2("Washer 6402_gost-2@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                solidWorksDocument.Extension.SelectByID2("Hex Bolt 7805_gost-2@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                solidWorksDocument.Extension.SelectByID2("Hex Bolt 7805_gost-2@15-000", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                solidWorksDocument.EditDelete();
+                solidWorksDocument.Extension.SelectByID2("ЗеркальныйКомпонент2", "COMPPATTERN", 0, 0, 0, false, 0, null, 0);
+                solidWorksDocument.EditDelete();
+            }
+            if (etype ==  RoofType.Two || etype ==  RoofType.Six)
+            {
+                solidWorksDocument.Extension.SelectByID2("Rivet Bralo-1@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                solidWorksDocument.Extension.SelectByID2("Rivet Bralo-2@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                solidWorksDocument.EditUnsuppress2(); solidWorksDocument.ClearSelection2(true);
+                solidWorksDocument.Extension.SelectByID2("ЗеркальныйКомпонент2", "COMPPATTERN", 0, 0, 0, false, 0, null, 0);
+                solidWorksDocument.EditUnsuppress2(); solidWorksDocument.ClearSelection2(true);
+                solidWorksDocument.Extension.SelectByID2("DerivedCrvPattern2", "COMPPATTERN", 0, 0, 0, false, 0, null, 0);
+                solidWorksDocument.EditUnsuppress2(); solidWorksDocument.ClearSelection2(true);
+                solidWorksDocument.Extension.SelectByID2("Симметричный1", "MATE", 0, 0, 0, false, 0, null, 0);
+                solidWorksDocument.EditSuppress2(); solidWorksDocument.ClearSelection2(true);
+                solidWorksDocument.Extension.SelectByID2("Расстояние1", "MATE", 0, 0, 0, false, 0, null, 0);
+                solidWorksDocument.EditUnsuppress2();
+
+                solidWorksDocument.Extension.SelectByID2("Fasteners - M8", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
+                solidWorksDocument.EditDelete();
+                solidWorksDocument.Extension.SelectByID2("Washer 11371_gost-1@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                solidWorksDocument.Extension.SelectByID2("Washer 6402_gost-1@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                solidWorksDocument.Extension.SelectByID2("Hex Bolt 7805_gost-1@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                solidWorksDocument.Extension.SelectByID2("Washer 11371_gost-2@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                solidWorksDocument.Extension.SelectByID2("Washer 6402_gost-2@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                solidWorksDocument.Extension.SelectByID2("Hex Bolt 7805_gost-2@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                solidWorksDocument.EditDelete();
+                solidWorksDocument.Extension.SelectByID2("Зеркальное отражение1@15-001-1@15-000", "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                solidWorksDocument.EditDelete();
+                solidWorksDocument.Extension.SelectByID2("Зеркальное отражение1@15-002-1@15-000", "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                solidWorksDocument.EditDelete();
+            }
+            if (etype ==  RoofType.Three || etype ==  RoofType.Four)
+            {
+                const int deleteOption = (int)swDeleteSelectionOptions_e.swDelete_Absorbed +
+                                        (int)swDeleteSelectionOptions_e.swDelete_Children;
+
+                solidWorksDocument.Extension.SelectByID2("Винт самосверл 6-гр.гол с шайбой-33@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0); solidWorksDocument.EditDelete();
+
+                solidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть3@15-001-1@15-000", "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                solidWorksDocument.Extension.DeleteSelection2(deleteOption);
+                solidWorksDocument.Extension.SelectByID2("Эскиз26@15-001-1@15-000", "SKETCH", 0, 0, 0, false, 0, null, 0);
+                solidWorksDocument.EditDelete();
+                solidWorksDocument.Extension.SelectByID2("Hole-M8@15-001-1@15-000", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
+                solidWorksDocument.EditUnsuppress2();
+                solidWorksDocument.Extension.SelectByID2("Эскиз23@15-001-1@15-000", "SKETCH", 0, 0, 0, false, 0, null, 0);
+                solidWorksDocument.EditSuppress2();
+
+                solidWorksDocument.Extension.SelectByID2("Винт самосверл 6-гр.гол с шайбой-1@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                solidWorksDocument.Extension.SelectByID2("Rivet Bralo-1@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                solidWorksDocument.Extension.SelectByID2("Rivet Bralo-2@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                solidWorksDocument.EditDelete();
+                solidWorksDocument.Extension.SelectByID2("ЗеркальныйКомпонент2", "COMPPATTERN", 0, 0, 0, false, 0, null, 0);
+                solidWorksDocument.EditDelete();
+                solidWorksDocument.Extension.SelectByID2("Fasteners - M8", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
+                solidWorksDocument.EditUnsuppress2();
+                solidWorksDocument.ClearSelection2(true);
+                solidWorksDocument.Extension.SelectByID2("MirrorFasteners - M8", "COMPPATTERN", 0, 0, 0, false, 0, null, 0);
+                solidWorksDocument.EditUnsuppress2();
+            }
+            solidWorksDocument.ForceRebuild3(false);
+        }
     }
 }

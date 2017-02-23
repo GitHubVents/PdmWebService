@@ -9,35 +9,39 @@ using System.Threading.Tasks;
 
 namespace SolidWorksLibrary.Builders.ElementsCase.Panels
 {
-  public  class FrameCaseBuilder
+   public enum ServiceSide
     {
-        /// <summary>
-        /// Destination folder to save spigot
-        /// </summary>
-        public string FrameDestinationFolder { get; set; } = @"01-Frame";
-        /// <summary>
-        ///  Spigot source folder
-        /// </summary>
-        public string FeametFolder { get; set; } = @"01 - Frame 50mm";
-        /// <summary>
-        /// Root folder file system
-        /// </summary>
-        public string RootFolder { get; set; } = @"C:\TestPDM";
+        Left = 1,
+        Right =2
+    }
 
-
-        enum ServiceSide { Left = 1, Right=2}
-
+    public  class FrameCaseBuilder : AbstractBuilder
+    {  
+        public FrameCaseBuilder():base()
+        {
+            base.SetProperties(@"01-Frame", @"01 - Frame 50mm");
+             
+        } 
         private const double step = 100;
         const string modelName = "01-001-50.SLDASM";
+
+        public   string GetFrameCasePath (string modelName)
+        {
+            string path = Path.Combine(RootFolder, SubjectDestinationFolder, modelName  );
+            Console.WriteLine("GetFrameCasePath " + path);
+            return path;
+        } 
+
         public   void Build(int width, int  height, int lenght , int profileType, ServiceSide serviceSide)
         {
+            Console.WriteLine("RootFolder " + RootFolder);
+            string caseAssemblyPath = Path.Combine( RootFolder, SourceFolder, modelName );
+            Console.WriteLine(caseAssemblyPath);
+           Patterns.Observer.MessageObserver.Instance.SetMessage("\n"+caseAssemblyPath+ "\n");
 
-
-
-            string caseAssemblyPath = Path.Combine(new string[] { RootFolder, FrameDestinationFolder, modelName });
             ModelDoc2 swDoc = SolidWorksAdapter.OpenDocument(caseAssemblyPath, swDocumentTypes_e.swDocASSEMBLY);
-
-            SolidWorksAdapter.SldWoksAppExemplare.Visible = true;
+            Patterns.Observer.MessageObserver.Instance.SetMessage("открылась сборка");
+        
             var swAsm = (AssemblyDoc)swDoc;
             swAsm.ResolveAllLightWeightComponents(false);          
           
@@ -47,7 +51,9 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
             //Lenght
 
             string newName = "01-P150-45-" + (lenght - 140);
-            var newPartPath = $@"{RootFolder}{FeametFolder}{newName}.SLDPRT";
+            string newPartPath = GetFrameCasePath(newName);
+
+
             if (File.Exists(new FileInfo(newPartPath).FullName))
             {
                 swDoc = SolidWorksAdapter.AcativeteDoc(modelName);
@@ -56,25 +62,22 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
                 swAsm.ReplaceComponents(newPartPath, "", true, true);
                 SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("01-P150-45-1640.SLDPRT");
             }
-            else if (File.Exists(newPartPath) != true)
+            else if (File.Exists(newPartPath) != true) // TO DO delegate
             {
                 rivetL = (Math.Truncate((lenght - 170) / step) + 1) * 1000;
-                SwPartParamsChangeWithNewName("01-P150-45-1640",
-                    $@"{RootFolder}{FeametFolder}{newName}",
+                EditPartParameters("01-P150-45-1640",
+                   newPartPath,
                     new[,]
                     {
                         {"D1@Вытянуть1", Convert.ToString(lenght - 140)},
                         {"D1@Кривая1", Convert.ToString(rivetL)}
-                    },
-                    false,
-                    null);
-                SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
+                    } ); 
             }
 
             //Width
 
             newName = "01-P150-45-" + (width - 140);
-            newPartPath = $@"{RootFolder}{FeametFolder}{newName}.SLDPRT";
+            newPartPath  = GetFrameCasePath(newName);
             if (File.Exists(new FileInfo(newPartPath).FullName))
             {
                 swDoc = SolidWorksAdapter.AcativeteDoc(modelName);
@@ -86,21 +89,18 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
             else if (File.Exists(newPartPath) != true)
             {
                 rivetL = (Math.Truncate((width - 170) / step) + 1) * 1000;
-                SwPartParamsChangeWithNewName("01-003-50",
-                    $@"{RootFolder}{FeametFolder}{newName}",
+                EditPartParameters("01-003-50",
+                   newPartPath,
                     new[,]
                     {
                         {"D1@Вытянуть1", Convert.ToString(width - 140)},
                         {"D1@Кривая1", Convert.ToString(rivetL)}
-                    },
-                    false,
-                    null);
-              SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName); 
+                    });
             }
 
             //01-P252-45-770
             newName = "01-P252-45-" + (width - 100);
-            newPartPath = $@"{RootFolder}{FeametFolder}{newName}.SLDPRT";
+            newPartPath = newPartPath = GetFrameCasePath(newName);
             if (File.Exists(new FileInfo(newPartPath).FullName))
             {
                 swDoc = SolidWorksAdapter.AcativeteDoc(modelName);
@@ -111,18 +111,15 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
             }
             else if (File.Exists(newPartPath) != true)
             {
-                SwPartParamsChangeWithNewName("01-P252-45-770",
-                    $@"{RootFolder}{FeametFolder}{newName}",
-                    new[,] { { "D1@Вытянуть1", Convert.ToString(width - 100) } },
-                    false,
-                    null);
-                SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
+                EditPartParameters("01-P252-45-770",
+                   newPartPath,
+                    new[,] { { "D1@Вытянуть1", Convert.ToString(width - 100) } });               
             }
 
             //Height
 
             newName = "01-P150-45-" + (height - 140);
-            newPartPath = $@"{RootFolder}{FeametFolder}{newName}.SLDPRT";
+            newPartPath = newPartPath = GetFrameCasePath(newName);
             if (File.Exists(new FileInfo(newPartPath).FullName))
             {
                 swDoc = SolidWorksAdapter.AcativeteDoc(modelName);
@@ -134,21 +131,19 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
             else if (File.Exists(newPartPath) != true)
             {
                 rivetL = (Math.Truncate((height - 170) / step) + 1) * 1000;
-                SwPartParamsChangeWithNewName("01-P150-45-510",
-                    $@"{RootFolder}{FeametFolder}{newName}",
+                EditPartParameters("01-P150-45-510",
+                   newPartPath,
                     new[,]
                     {
                         {"D1@Вытянуть1", Convert.ToString(height - 140)},
                         {"D1@Кривая1", Convert.ToString(rivetL)}
-                    },
-                    false,
-                    null);
-              SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
+                    } );
+             
             }
 
             //  01-P252-45-550
             newName = "01-P252-45-" + (height - 100);
-            newPartPath = $@"{RootFolder}{FeametFolder}{newName}.SLDPRT";
+            newPartPath = newPartPath = GetFrameCasePath(newName);
             if (File.Exists(new FileInfo(newPartPath).FullName))
             {
                 swDoc = SolidWorksAdapter.AcativeteDoc(modelName);
@@ -159,11 +154,9 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
             }
             else if (File.Exists(newPartPath) != true)
             {
-                SwPartParamsChangeWithNewName("01-P252-45-550",
-                    $@"{RootFolder}{FeametFolder}{newName}",
-                    new[,] { { "D1@Вытянуть1", Convert.ToString(height - 100) } },
-                    false,
-                    null);
+                EditPartParameters("01-P252-45-550",
+                   newPartPath,
+                    new[,] { { "D1@Вытянуть1", Convert.ToString(height - 100) } } );
               SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
             }
 
@@ -208,7 +201,6 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
                     "COMPONENT", 0, 0, 0, false, 0, null, 0);
                 swDoc.EditDelete();
             }
-
-        }
+        }         
     }
 }

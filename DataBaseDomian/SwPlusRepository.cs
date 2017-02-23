@@ -15,10 +15,17 @@ namespace DataBaseDomian
         {
 
         }
+
+
+
         /// <summary>
         /// Exemplar of an object oriented database model
         /// </summary>
         private SwPlusDataContext _dataContext;
+
+
+
+        public IEnumerable<BendTable> Bends { get { return _dataContext.BendTables; } }
 
         /// <summary>
         /// Property-getter for exemplar of an object oriented database model 

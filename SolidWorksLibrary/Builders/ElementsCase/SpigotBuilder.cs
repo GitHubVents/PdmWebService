@@ -10,47 +10,13 @@ using System.Collections.Generic;
 namespace PDMWebService.Data.Solid.ElementsCase
 {
      
-    public sealed class SpigotBuilder : AbstractBuilder, IFeedbackBuilder 
-    {
-        /// <summary>
-        /// Is path list
-        /// </summary>
-        private List<string> ComponentsPathList { get; set; }
-        /// <summary>
-        /// Destination folder to save spigot
-        /// </summary>
-        public string SpigotDestinationFolder { get; set; } = @"12 - Вибровставка";
-        /// <summary>
-        ///  Spigot source folder
-        /// </summary>
-        public string SpigotFolder { get; set; } = @"12 - Spigot";
-        /// <summary>
-        /// Root folder file system
-        /// </summary>
-        public string RootFolder { get; set; } = @"C:\TestPDM\";
-
+    public sealed class SpigotBuilder : AbstractBuilder
+    { 
         private string NewSpigotName { get; set; }
-
-        private ModelDoc2 solidWorksDocument { get; set; }
-
-        // ========================= README about CheckExistPart delegate =====================================================================  
-        // When the event is fired, a check runs to find whether the part or assembly exists. It returnes the path to file if file exists 
-        // and boolean flag using out operators.it allows not to be bound to file format such as PDM, IPS,SQL, explorer etc
-
-        /// <summary>
-        /// Provides notification and feedback to check for part
-        /// </summary>
-        public CheckExistPartHandler CheckExistPart { get; set; }
-        // ==================================================================================================================================
-
-        /// <summary>
-        /// Informing subscribers the completion of building 
-        /// </summary>
-        public FinishedBuildHandler FinishedBuild { get; set; }
-
+        private ModelDoc2 solidWorksDocument { get; set; }         
         public SpigotBuilder() : base()
         {
-            ComponentsPathList = new List<string>();
+            SetProperties(@"12 - Вибровставка", @"12 - Spigot");
         }
 
         private int warning = 0, error = 0;
@@ -69,11 +35,11 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
             int addDimH = modelName == "12-30" ? 10 : 1;
 
-            string newSpigotPath = $@"{RootFolder}{SpigotDestinationFolder}\{NewSpigotName}";
+            string newSpigotPath = $@"{RootFolder}{SubjectDestinationFolder}\{NewSpigotName}";
 
             string drawingName = modelName == "12-30" ? modelName : "12-00";
 
-            var modelSpigotDrw = $@"{RootFolder}{SpigotFolder}\{drawingName}.SLDDRW";
+            var modelSpigotDrw = $@"{RootFolder}{SourceFolder}\{drawingName}.SLDDRW";
 
             ModelDoc2 swDrawingSpigot = SolidWorksAdapter.OpenDocument(modelSpigotDrw, swDocumentTypes_e.swDocDRAWING);
             solidWorksDocument = SolidWorksAdapter.AcativeteDoc("12-00");
@@ -91,7 +57,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
             var weldHeight = Convert.ToDouble((Math.Truncate(Convert.ToDouble(height) / step) + 1));  // ????????????
             #endregion
 
-            DeleteComponents(type);
+            DeleteComponents((int)type);
             if (modelName == "12-20")
             {
                 MessageObserver.Instance.SetMessage("12-20-001");
@@ -118,7 +84,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 }
                 else
                 {
-                    newPartPath = $@"{RootFolder}\{SpigotDestinationFolder}\{newPartName}";
+                    newPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newPartName}";
                     solidWorksDocument.Extension.SelectByID2("D1@Вытянуть1@12-20-001-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
                     myDimension = ((Dimension)(solidWorksDocument.Parameter("D1@Вытянуть1@12-20-001.Part")));
                     myDimension.SystemValue = h - 0.031;
@@ -156,7 +122,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 }
                 else
                 {
-                    newPartPath = $@"{RootFolder}\{SpigotDestinationFolder}\{newPartName}";
+                    newPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newPartName}";
                     solidWorksDocument.Extension.SelectByID2("D1@Вытянуть1@12-20-002-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
                     myDimension = ((Dimension)(solidWorksDocument.Parameter("D1@Вытянуть1@12-20-002.Part")));
                     myDimension.SystemValue = w - 0.031;
@@ -192,7 +158,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 }
                 else
                 {
-                    newPartPath = $@"{RootFolder}\{SpigotDestinationFolder}\{newPartName}";
+                    newPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newPartName}";
                     solidWorksDocument.Extension.SelectByID2("D3@Эскиз1@12-003-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
                     myDimension = ((Dimension)(solidWorksDocument.Parameter("D3@Эскиз1@12-003.Part")));
                     myDimension.SystemValue = w;
@@ -232,7 +198,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 }
                 else
                 {
-                    newPartPath = $@"{RootFolder}\{SpigotDestinationFolder}\{newPartName}";
+                    newPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newPartName}";
                     solidWorksDocument.Extension.SelectByID2("D1@Вытянуть1@12-30-001-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
                     myDimension = ((Dimension)(solidWorksDocument.Parameter("D1@Вытянуть1@12-30-001.Part")));
                     myDimension.SystemValue = h - 0.031;
@@ -267,7 +233,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 }
                 else
                 {
-                    newPartPath = $@"{RootFolder}\{SpigotDestinationFolder}\{newPartName}";
+                    newPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newPartName}";
                     solidWorksDocument.Extension.SelectByID2("D1@Вытянуть1@12-30-002-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
                     myDimension = ((Dimension)(solidWorksDocument.Parameter("D1@Вытянуть1@12-30-002.Part")));
                     myDimension.SystemValue = w - 0.031;
@@ -301,7 +267,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 }
                 else
                 {
-                    newPartPath = $@"{RootFolder}\{SpigotDestinationFolder}\{newPartName}";
+                    newPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newPartName}";
                     solidWorksDocument.Extension.SelectByID2("D3@Эскиз1@12-003-2@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
                     myDimension = ((Dimension)(solidWorksDocument.Parameter("D3@Эскиз1@12-003.Part")));
                     myDimension.SystemValue = w;

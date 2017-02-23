@@ -16,6 +16,14 @@
       <Column Name="DXF" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
+  <Table Name="Materials.BendTable" Member="BendTables">
+    <Type Name="BendTable">
+      <Column Name="BendID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Thickness" Type="System.Decimal" DbType="Decimal(2,1) NOT NULL" CanBeNull="false" />
+      <Column Name="[K-Factor]" Member="K_Factor" Type="System.Decimal" DbType="Decimal(5,3) NOT NULL" CanBeNull="false" />
+      <Column Name="BendRadius" Type="System.Decimal" DbType="Decimal(4,2) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
   <Function Name="dbo.DXFCheck" Method="DXFCheck">
     <Parameter Name="IDPDM" Parameter="iDPDM" Type="System.Int32" DbType="Int" />
     <Parameter Name="Configuration" Parameter="configuration" Type="System.String" DbType="NVarChar(255)" />

@@ -30,6 +30,9 @@ namespace DataBaseDomian.Orm
 		
     #region Extensibility Method Definitions
     partial void OnCreated();
+    partial void InsertBendTable(BendTable instance);
+    partial void UpdateBendTable(BendTable instance);
+    partial void DeleteBendTable(BendTable instance);
     #endregion
 		
 		public SwPlusDataContext() : 
@@ -67,6 +70,14 @@ namespace DataBaseDomian.Orm
 			get
 			{
 				return this.GetTable<View_Part>();
+			}
+		}
+		
+		public System.Data.Linq.Table<BendTable> BendTables
+		{
+			get
+			{
+				return this.GetTable<BendTable>();
 			}
 		}
 		
@@ -299,6 +310,140 @@ namespace DataBaseDomian.Orm
 				{
 					this._DXF = value;
 				}
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="Materials.BendTable")]
+	public partial class BendTable : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _BendID;
+		
+		private decimal _Thickness;
+		
+		private decimal _K_Factor;
+		
+		private decimal _BendRadius;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnBendIDChanging(int value);
+    partial void OnBendIDChanged();
+    partial void OnThicknessChanging(decimal value);
+    partial void OnThicknessChanged();
+    partial void OnK_FactorChanging(decimal value);
+    partial void OnK_FactorChanged();
+    partial void OnBendRadiusChanging(decimal value);
+    partial void OnBendRadiusChanged();
+    #endregion
+		
+		public BendTable()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BendID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int BendID
+		{
+			get
+			{
+				return this._BendID;
+			}
+			set
+			{
+				if ((this._BendID != value))
+				{
+					this.OnBendIDChanging(value);
+					this.SendPropertyChanging();
+					this._BendID = value;
+					this.SendPropertyChanged("BendID");
+					this.OnBendIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Thickness", DbType="Decimal(2,1) NOT NULL")]
+		public decimal Thickness
+		{
+			get
+			{
+				return this._Thickness;
+			}
+			set
+			{
+				if ((this._Thickness != value))
+				{
+					this.OnThicknessChanging(value);
+					this.SendPropertyChanging();
+					this._Thickness = value;
+					this.SendPropertyChanged("Thickness");
+					this.OnThicknessChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="[K-Factor]", Storage="_K_Factor", DbType="Decimal(5,3) NOT NULL")]
+		public decimal K_Factor
+		{
+			get
+			{
+				return this._K_Factor;
+			}
+			set
+			{
+				if ((this._K_Factor != value))
+				{
+					this.OnK_FactorChanging(value);
+					this.SendPropertyChanging();
+					this._K_Factor = value;
+					this.SendPropertyChanged("K_Factor");
+					this.OnK_FactorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BendRadius", DbType="Decimal(4,2) NOT NULL")]
+		public decimal BendRadius
+		{
+			get
+			{
+				return this._BendRadius;
+			}
+			set
+			{
+				if ((this._BendRadius != value))
+				{
+					this.OnBendRadiusChanging(value);
+					this.SendPropertyChanging();
+					this._BendRadius = value;
+					this.SendPropertyChanged("BendRadius");
+					this.OnBendRadiusChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
 		}
 	}
