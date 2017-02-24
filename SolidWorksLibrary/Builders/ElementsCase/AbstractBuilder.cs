@@ -9,6 +9,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase
 {
     public abstract class AbstractBuilder : IFeedbackBuilder
     {
+        protected Dictionary<string, double> parameters { get; set; }
+
         #region properties
         /// <summary>
         /// Path list to built files
@@ -31,6 +33,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
         public AbstractBuilder()
         {
             this.ComponentsPathList = new List<string>();
+            parameters = new Dictionary<string, double>();
         }
 
         #region SetProperties
@@ -91,24 +94,47 @@ namespace SolidWorksLibrary.Builders.ElementsCase
                 MessageObserver.Instance.SetMessage(exeption.ToString(), MessageType.Error);
             }
         }
+        protected int errors   = 0;
 
-        protected virtual void EditPartParameters(string partName, string newName, string[,] newParams)
+        protected int warnings   = 0;
+        protected virtual void EditPartParameters(string partName, string newPath )
         {
-            ModelDoc2 swDoc = null;
-            swDoc = SolidWorksAdapter.AcativeteDoc(partName + ".SLDPRT");
-            var modName = swDoc.GetPathName();
-            for (var i = 0; i < newParams.Length / 2; i++)
-            {
-                Dimension myDimension = ((Dimension)(swDoc.Parameter(newParams[i, 0] + "@" + partName + ".SLDPRT")));
-                var param = Convert.ToDouble(newParams[i, 1]);
-                var swParametr = param;
-                myDimension.SystemValue = swParametr / 1000;
-            }
-            swDoc.EditRebuild3();
-            swDoc.ForceRebuild3(false);
+            
+            ModelDoc2 solidWorksDocument = null;
+            solidWorksDocument = SolidWorksAdapter.AcativeteDoc(partName + ".SLDPRT");
+            
 
-            swDoc.SaveAs2(new FileInfo(newName + ".SLDPRT").FullName, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
-            SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
+            foreach (var item in parameters)
+            {
+                Dimension myDimension = ((Dimension)(solidWorksDocument.Parameter(item.Key + "@" + partName + ".SLDPRT")));
+                myDimension.SystemValue = item.Value / 1000;
+            }
+            solidWorksDocument.EditRebuild3();
+            solidWorksDocument.ForceRebuild3(false);
+            Console.WriteLine(newPath);
+  
+            
+            solidWorksDocument.Extension.SaveAs( newPath  + ".SLDPRT"  , (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent + (int)swSaveAsOptions_e.swSaveAsOptions_UpdateInactiveViews,null,  ref errors,  warnings);
+
+            InitiatorSaveExeption(errors, warnings, newPath);
+
+            SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newPath);
+          //  Console.WriteLine("Press any key");
+          //  Console.ReadKey();
+            this.parameters.Clear();
+
+            //for (var i = 0; i < newParams.Length / 2; i++)
+            //{
+            //    Dimension myDimension = ((Dimension)(swDoc.Parameter(newParams[i, 0] + "@" + partName + ".SLDPRT")));
+            //    var param = Convert.ToDouble(newParams[i, 1]);
+            //    var swParametr = param;
+            //    myDimension.SystemValue = swParametr / 1000;
+            //}
+            //swDoc.EditRebuild3();
+            //swDoc.ForceRebuild3(false);
+
+            //swDoc.SaveAs2(new FileInfo(newName + ".SLDPRT").FullName, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
+            //SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
         }         
     }
 }

@@ -193,8 +193,12 @@ namespace SolidWorksLibrary
             return  SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc3(docTitle, true, (int) swOpenDocOptions_e.swOpenDocOptions_Silent, errors);
         }
 
-
-        public static AssemblyDoc  GetAssembly(ModelDoc2 document)
+        /// <summary>
+        /// Convert  ModelDoc2 to AssemblyDoc and resolve all light weight components
+        /// </summary>
+        /// <param name="document"></param>
+        /// <returns></returns>
+        public static AssemblyDoc  ToAssemblyDocument(ModelDoc2 document)
         {
             AssemblyDoc swAsm =  (AssemblyDoc)document;
             swAsm.ResolveAllLightWeightComponents(false);

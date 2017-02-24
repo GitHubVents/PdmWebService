@@ -92,21 +92,21 @@ namespace SolidWorksLibrary.Builders.ElementsCase
                 {
                       newPartPath = $@"{SourceFolder}\{SubjectDestinationFolder}\{newPartName}.SLDPRT";
 
-                    EditPartParameters("15-001",
-                        $@"{RootFolder}\{SubjectDestinationFolder}\{newPartName}",
-                        new[,]
-                        {
-                            {"D1@Эскиз1",  type ==  RoofType.Five || type == RoofType.Six ? Convert.ToString(140 + lengthD + type4) : Convert.ToString(lengthD + type4)},
-                            {"D2@Эскиз1", Convert.ToString(widthD)},
-                            {"D4@Эскиз27", Convert.ToString(addwidth2-4.62)},
-                            {"D1@Эскиз27", Convert.ToString(90)},
-                            {"D2@Эскиз27", Convert.ToString((75-4.62))},
+                    //EditPartParameters("15-001",
+                    //    $@"{RootFolder}\{SubjectDestinationFolder}\{newPartName}",
+                    //    new[,]
+                    //    {
+                    //        {"D1@Эскиз1",  type ==  RoofType.Five || type == RoofType.Six ? Convert.ToString(140 + lengthD + type4) : Convert.ToString(lengthD + type4)},
+                    //        {"D2@Эскиз1", Convert.ToString(widthD)},
+                    //        {"D4@Эскиз27", Convert.ToString(addwidth2-4.62)},
+                    //        {"D1@Эскиз27", Convert.ToString(90)},
+                    //        {"D2@Эскиз27", Convert.ToString((75-4.62))},
 
-                            {"D1@Эскиз24", type ==  RoofType.Five || type == RoofType.Six? Convert.ToString(149.53) : Convert.ToString(9.53)},
+                    //        {"D1@Эскиз24", type ==  RoofType.Five || type == RoofType.Six? Convert.ToString(149.53) : Convert.ToString(9.53)},
 
-                            {"D1@Кривая2", Convert.ToString(weldW2*1000)},
-                            {"D1@Кривая1", Convert.ToString(weldW*1000)}
-                        } );
+                    //        {"D1@Кривая2", Convert.ToString(weldW2*1000)},
+                    //        {"D1@Кривая1", Convert.ToString(weldW*1000)}
+                    //    } );
                     try
                     {
 
@@ -143,21 +143,21 @@ namespace SolidWorksLibrary.Builders.ElementsCase
                     {
                           newPartPath =
                          $@"{RootFolder}\{SubjectDestinationFolder}\{newPartName}.SLDPRT";
-                        EditPartParameters("15-002",
-                            $@"{RootFolder}\{SubjectDestinationFolder}\{newPartName}",
-                            new[,]
-                            {
-                                {"D1@Эскиз1",  type ==  RoofType.Five || type ==  RoofType.Six ? Convert.ToString(140 + lengthD + type4) : Convert.ToString(lengthD + type4)},
-                                {"D2@Эскиз1", Convert.ToString(widthD)},
-                                {"D4@Эскиз27", Convert.ToString(addwidth2-4.62)},
-                                {"D1@Эскиз27", Convert.ToString(90)},
-                                {"D2@Эскиз27", Convert.ToString((75-4.62))},
+                        //EditPartParameters("15-002",
+                        //    $@"{RootFolder}\{SubjectDestinationFolder}\{newPartName}",
+                        //    new[,]
+                        //    {
+                        //        {"D1@Эскиз1",  type ==  RoofType.Five || type ==  RoofType.Six ? Convert.ToString(140 + lengthD + type4) : Convert.ToString(lengthD + type4)},
+                        //        {"D2@Эскиз1", Convert.ToString(widthD)},
+                        //        {"D4@Эскиз27", Convert.ToString(addwidth2-4.62)},
+                        //        {"D1@Эскиз27", Convert.ToString(90)},
+                        //        {"D2@Эскиз27", Convert.ToString((75-4.62))},
 
-                                {"D2@Эскиз23", type ==  RoofType.Five || type ==  RoofType.Six ? Convert.ToString(165) : Convert.ToString(25)},
+                        //        {"D2@Эскиз23", type ==  RoofType.Five || type ==  RoofType.Six ? Convert.ToString(165) : Convert.ToString(25)},
 
-                                {"D1@Кривая2", Convert.ToString(weldW2*1000)},
-                                {"D1@Кривая1", Convert.ToString(weldW*1000)}
-                            } );
+                        //        {"D1@Кривая2", Convert.ToString(weldW2*1000)},
+                        //        {"D1@Кривая1", Convert.ToString(weldW*1000)}
+                        //    } );
                         try
                         {
                             VentsMatdll(new[] { "1700" }, new[] { "", "Шаргень", "2" }, newPartName);

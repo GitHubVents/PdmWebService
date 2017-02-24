@@ -61,7 +61,7 @@ public enum TasksType
     /// <summary>
     /// Containe Flape types ant their id [customize]
     /// </summary>
-    public enum Meterials
+    public enum Materials
     {
         Aluzinc_Az_150_07 = 1,
         Sheet_Galvanized_Zinc = 2,
@@ -75,21 +75,21 @@ public enum TasksType
     }
 
 
-    public enum PanelProfiles
+    public enum PanelProfile
     {
         Profile_3_0 = 30,
         Profile_5_0 = 50,
         Profile_7_0 = 70
     }
 
-    public enum PanelTypes
+    public enum PanelType
     {
-        NotRemovableBlankPanel = 1,
-        DualNotRemovablePanel = 2,
-        PanelHinged = 3,
-        PanelRemovable = 4,
-        DualRemovablePpanel = 5,
-        ThePanelHeatExchanger = 6,
+        BlankPanel = 1,
+        DualBlankPanel = 2,
+      //  PanelHinged = 3,
+        RemovablePanel = 4,
+        DualRemovablePanel = 5,
+       // ThePanelHeatExchanger = 6,
         TheFrontPanel = 7
     }
 

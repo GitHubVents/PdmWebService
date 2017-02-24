@@ -11,7 +11,7 @@ namespace DataBaseDomian
 {
     public class SwPlusRepository : Singeton<SwPlusRepository> , IUpdater
     {
-        protected SwPlusRepository()
+        protected SwPlusRepository():base()
         {
 
         }
@@ -25,7 +25,7 @@ namespace DataBaseDomian
 
 
 
-        public IEnumerable<BendTable> Bends { get { return _dataContext.BendTables; } }
+        public IEnumerable<BendTable> Bends { get { return DataContext.BendTables; } }
 
         /// <summary>
         /// Property-getter for exemplar of an object oriented database model 

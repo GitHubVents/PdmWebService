@@ -11,55 +11,10 @@ using SolidWorksLibrary.Builders.ElementsCase;
 namespace PDMWebService.Data.Solid.ElementsCase
 {
    public class FlapBuilder : AbstractBuilder
-    {
-        
-        private List<FileInfo> ComponentsPathList;
-  
+    { 
         public FlapBuilder()
-        {
-            ComponentsPathList = new List<FileInfo>();
+        { 
             base.SetProperties(@"\11 - Регулятор расхода воздуха\", @"\11 - Damper\" );
-        }
-
-
-        // change on check exists delegate
-        protected bool GetExistingFile(string fileName, int type)
-        {
-            //if (new FileInfo(fileName).Exists)
-            //{
-            //    fileName = Path.GetFileNameWithoutExtension(fileName);
-            //}
-
-            //List<VaultSystem.SearchInVault.FindedDocuments> найденныеФайлы;
-            //switch (type)
-
-            //{
-            //    case 0:
-            //        VaultSystem.SearchInVault.SearchDoc(fileName, VaultSystem.SearchInVault.SwDocType.SwDocAssembly, out найденныеФайлы, Settings.Default.PdmBaseName);
-            //        if (найденныеФайлы?.Count > 0) goto m1;
-            //        break;
-            //    case 1:
-            //        VaultSystem.SearchInVault.SearchDoc(fileName, VaultSystem.SearchInVault.SwDocType.SwDocPart, out найденныеФайлы, Settings.Default.PdmBaseName);
-            //        if (найденныеФайлы?.Count > 0) goto m1;
-            //        break;
-            //}
-
-            //goto m2;
-            //m1:
-            //try
-            //{
-            //    //// PDMWebService.Data.PDM.SolidWorksPdmAdapter.Instance.GetLastVersionAsmPdm(найденныеФайлы[0].Path);
-            //    var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(найденныеФайлы[0].Path);
-            //    return fileNameWithoutExtension != null && string.Equals(fileNameWithoutExtension, fileName, StringComparison.CurrentCultureIgnoreCase);
-            //}
-            //catch (Exception e)
-            //{
-            //    //MessageBox.Show(e.ToString());return false;
-            //}
-            //m2:
-            //return false;
-
-            return false;
         }
 
         /// <summary>
@@ -96,29 +51,12 @@ namespace PDMWebService.Data.Solid.ElementsCase
             string drawingName = "11-20";
             if (modelName == "11-30")
             { drawingName = modelName; }
-            var newDamperName = modelName + "-" + width + "-" + height + modelType + (isOutDoor ? "-O" : "");
-            var newDamperPath = $@"{RootFolder}{SubjectDestinationFolder}{newDamperName}.SLDDRW";
-            var newDamperAsmPath = $@"{RootFolder}{SubjectDestinationFolder}{newDamperName}.SLDASM";
-
-
-            // if (OpenIfExist(newDamperPath, VaultSystem.VentsCadFile.Type.Drawing, lastChangedDate)) return null;
-            //  VersionsFileInfo.Replaced.ExistLatestVersion(newDamperAsmPath, VaultSystem.VentsCadFile.Type.Assembly, lastChangedDate, Settings.Default.PdmBaseName);
-
-            //if (replaced.List.Count > 0)
-            //{
-            //    VaultSystem.CheckInOutPdm(new List<FileInfo> { new FileInfo(newDamperPath), }, false);
-            //}
-
-            var modelDamperDrw = $@"{RootFolder}{modelDamperPath}{drawingName}.SLDDRW";
-            var modelLamel = $@"{RootFolder}{modelDamperPath}{"11-100"}.SLDDRW";
-
-            //foreach (string item in new[] { new FileInfo(modelDamperDrw).FullName, new FileInfo(modelLamel).FullName })
-            //{
-            // //   PDMWebService.Data.PDM.SolidWorksPdmAdapter.Instance.GetLastVersionAsmPdm(item);
-
-            //}
-
-           var swDocDrw = SolidWorksAdapter.OpenDocument(modelDamperDrw, swDocumentTypes_e.swDocDRAWING); 
+            string newDamperName = modelName + "-" + width + "-" + height + modelType + (isOutDoor ? "-O" : "");
+            string newDamperPath = $@"{RootFolder}{SubjectDestinationFolder}{newDamperName}.SLDDRW";
+            string newDamperAsmPath = $@"{RootFolder}{SubjectDestinationFolder}{newDamperName}.SLDASM";
+            string modelDamperDrw = $@"{RootFolder}{modelDamperPath}{drawingName}.SLDDRW";
+            string modelLamel = $@"{RootFolder}{modelDamperPath}{"11-100"}.SLDDRW";
+           ModelDoc2 swDocDrw = SolidWorksAdapter.OpenDocument(modelDamperDrw, swDocumentTypes_e.swDocDRAWING); 
 
             ModelDoc2 solidWorksDocument = SolidWorksAdapter.AcativeteDoc(nameAsm);   // TO DO
             AssemblyDoc sldWorksAsm = (AssemblyDoc)solidWorksDocument;
@@ -146,7 +84,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
             if (flapType == FlapTypes.Twenty_mm)
             {
-                if (Convert.ToInt32(countL / 1000) % 2 == 1) //нечетное
+                if ((countL / 1000) % 2 == 1) //нечетное
                 {
                     solidWorksDocument.Extension.SelectByID2("Совпадение5918344", "MATE", 0, 0, 0, true, 0, null, 0);
                     solidWorksDocument.Extension.SelectByID2("Совпадение5918345", "MATE", 0, 0, 0, true, 0, null, 0);
@@ -404,7 +342,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 var newNameAsm = "11-" + width;
                 var newPartPathAsm =
                     $@"{RootFolder}{SubjectDestinationFolder}{newNameAsm}.SLDASM";
-                if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPathAsm), 0))
+                if (false)
                 {
                     solidWorksDocument =SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
                     solidWorksDocument.Extension.SelectByID2("11-100-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
@@ -417,7 +355,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
                     newName = "11-" + (Math.Truncate(widthD - 23)) + "-01" + modelType;
                     newPartPath = $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
-                    if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
+                    if (false)
                     {
                         SolidWorksAdapter.SldWoksAppExemplare.IActivateDoc2("10-100", false, 0);
                         solidWorksDocument = (ModelDoc2)((IModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActiveDoc));
@@ -508,7 +446,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     // 11-005 
                     newName = "11-05-" + height + modelType;
                     newPartPath = $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
-                    if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
+                    if (false)
                     {
                         solidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM" )));
                         solidWorksDocument.Extension.SelectByID2("11-005-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
@@ -537,7 +475,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     // 11-006 
                     newName = "11-06-" + height + modelType;
                     newPartPath = $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
-                    if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
+                    if (false)
                     {
                         solidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM" )));
                         solidWorksDocument.Extension.SelectByID2("11-006-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
@@ -665,7 +603,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 // 11-30-001 
                 newName = "11-30-03-" + width + modelType;
                 newPartPath = $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
-                if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
+                if (false)
                 {
                     solidWorksDocument = SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
                     solidWorksDocument.Extension.SelectByID2("11-30-001-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
@@ -711,7 +649,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 // 11-30-002 
                 newName = "11-30-01-" + height + modelType + (isOutDoor ? "-O" : "");
                 newPartPath = $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
-                if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
+                if (false)
                 {
                     solidWorksDocument = SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
                     solidWorksDocument.Extension.SelectByID2("11-30-002-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
@@ -742,7 +680,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 // 11-30-004 
                 newName = "11-30-02-" + height + modelType + (isOutDoor ? "-O" : "");
                 newPartPath = $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
-                if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
+                if (false)
                 {
                     solidWorksDocument = SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
                     solidWorksDocument.Extension.SelectByID2("11-30-004-2@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
@@ -771,7 +709,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 // 11-30-003 
                 newName = "11-30-04-" + Math.Truncate(lp) + "-" + hC + modelType;
                 newPartPath = $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
-                if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
+                if (false)
                 {
                     solidWorksDocument =SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
                     solidWorksDocument.Extension.SelectByID2("11-30-003-2@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
@@ -807,7 +745,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
                 if (isdouble)
                 {
-                    if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPathAsm), 0))
+                    if (false)
                     {
                         solidWorksDocument = SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
                         solidWorksDocument.Extension.SelectByID2("11-100-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
@@ -821,7 +759,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                         newName = "11-" + (Math.Truncate(lProfNameLength * 1000)) + "-01";
                         newPartPath =
                             $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
-                        if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
+                        if (false)
                         {
                             SolidWorksAdapter.SldWoksAppExemplare.IActivateDoc2("10-100", false, 0);
                             solidWorksDocument =  SolidWorksAdapter.SldWoksAppExemplare.ActiveDoc;
@@ -853,7 +791,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     newNameAsm = "11-" + lProfName;
                     newPartPathAsm =
                         $@"{RootFolder}{SubjectDestinationFolder}{newNameAsm}.SLDASM";
-                    if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPathAsm), 0))
+                    if (false)
                     {
                         solidWorksDocument =SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
                         solidWorksDocument.Extension.SelectByID2("11-100-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
@@ -867,7 +805,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                         newName = "11-" + (Math.Truncate(lProfNameLength * 1000)) + "-01";
                         newPartPath =
                             $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
-                        if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
+                        if (false)
                         {
                             SolidWorksAdapter.SldWoksAppExemplare.IActivateDoc2("10-100", false, 0);
                             solidWorksDocument = (ModelDoc2)((IModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActiveDoc));
@@ -927,7 +865,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
                 if (isdouble)
                 {
-                    if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPathAsm), 0))
+                    if (false)
                     {
                         solidWorksDocument = SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
                         solidWorksDocument.Extension.SelectByID2("11-30-100-4@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
@@ -941,7 +879,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                         newName = "11-30-101-" + height + modelType;
                         newPartPath =
                             $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
-                        if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 0))
+                        if (false)
                         {
                             SolidWorksAdapter.SldWoksAppExemplare.IActivateDoc2("10-30-100", false, 0);
                             solidWorksDocument = (ModelDoc2)((IModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActiveDoc));
@@ -978,7 +916,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                         newName = "11-30-102-" + height + modelType;
                         newPartPath =
                             $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
-                        if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 0))
+                        if (false)
                         {
                             SolidWorksAdapter.SldWoksAppExemplare.IActivateDoc2("10-30-100", false, 0);
                             solidWorksDocument = (ModelDoc2)((IModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActiveDoc));
@@ -1169,10 +1107,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
             }
             
         }
-    }
-
-
-  
+    } 
 
 }
 

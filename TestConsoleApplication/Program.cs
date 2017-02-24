@@ -1,5 +1,5 @@
 ﻿using Patterns;
-using PDMWebService.Data.Solid.PartBuilders;
+//using PDMWebService.Data.Solid.PartBuilders;
 using SolidWorksLibrary.Builders.Dxf;
 using System;
 using System.Collections.Generic;
@@ -17,9 +17,9 @@ namespace TestConsoleApplication
             //DxfBulder.Instance.FinishedBuilding += Instance_FinishedBuilding;
             //DxfBulder.Instance.Build(@"C:\Users\Antonyk\Desktop\test documents\ВНС-900.00.9001.SLDPRT", 33, 1);
 
-            SpigotBuilder sp = new SpigotBuilder();
-
-            sp.Build(20, 300, 666);
+         //   SpigotBuilder sp = new SpigotBuilder();
+         //
+          //  sp.Build(20, 300, 666);
 ///
 
             Console.ReadLine();
