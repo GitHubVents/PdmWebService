@@ -84,6 +84,7 @@
     <Compile Include="Builders\ElementsCase\MountingFrameBuilder.cs" />
     <Compile Include="Builders\ElementsCase\Panels\FrameCaseBuilder.cs" />
     <Compile Include="Builders\ElementsCase\Panels\PanelBuilder.cs" />
+    <Compile Include="Builders\ElementsCase\Vector.cs" />
     <Compile Include="Builders\Pdf\PdfBuilder.cs" />
     <Compile Include="Builders\ElementsCase\RoofBuilder.cs" />
     <Compile Include="Builders\ElementsCase\SpigotBuilder.cs" />

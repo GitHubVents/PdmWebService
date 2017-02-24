@@ -9,7 +9,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
 { 
     //TO DO loock save as
   
-  public  class RoofBuilder : AbstractBuilder    {
+  public  class RoofBuilder : ProductBuilderBehavior    {
         ModelDoc2 solidWorksDocument { get; set; }
         public  RoofBuilder() 
         {

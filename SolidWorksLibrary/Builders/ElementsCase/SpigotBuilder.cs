@@ -10,7 +10,7 @@ using System.Collections.Generic;
 namespace PDMWebService.Data.Solid.ElementsCase
 {
      
-    public sealed class SpigotBuilder : AbstractBuilder
+    public sealed class SpigotBuilder : ProductBuilderBehavior
     { 
         private string NewSpigotName { get; set; }
         private ModelDoc2 solidWorksDocument { get; set; }         

@@ -15,7 +15,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
         Right = 2
     }
 
-    public class FrameCaseBuilder : AbstractBuilder
+    public class FrameCaseBuilder : ProductBuilderBehavior
     {
         public FrameCaseBuilder() : base()
         {

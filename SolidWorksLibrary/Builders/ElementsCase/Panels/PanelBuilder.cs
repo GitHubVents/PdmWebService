@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+ 
 
 namespace SolidWorksLibrary.Builders.ElementsCase.Panels
 {
@@ -17,32 +18,36 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
     /// <param name="kFactor"></param>
     /// <param name="bendRadius"></param>
     public delegate void SetBendsHandler(decimal thickness, out decimal kFactor, out decimal bendRadius);
+  
 
-
-    public class Vector2
+    public class PanelBuilder : ProductBuilderBehavior
     {
-        public double X { get; set; }
-        public double Y { get; set; } 
-    }
-
-    public class Vector3 : Vector2
-    {
-        public double Z { get; set; }
-    }
-
-
-
-    public class PanelBuilder : AbstractBuilder
-    {
-        public event SetBendsHandler SetBends;
-        ModelDoc2 solidWorksDocument;
-
-        Vector2 sizePanel { get; set; }
+        /// <summary>
+        /// Provides notification and feedback to set bends for part
+        /// </summary>
+        public event SetBendsHandler SetBends;        
+        private Vector2 sizePanel { get; set; }   
+        private decimal bendRadius = 1;
+        private decimal kFactor = 1;
+        private double innerHeight = 0;
+        private double innerWeidht = 0;
+        private double leght = 0;
+        private double deepInsulation = 0;  
+        
         public PanelBuilder() : base()
         {
-
             base.SetProperties("panel", "source panel");
         }
+     
+        private void OpenPrototype ()
+        {
+            string pathToPrototype = System.IO.Path.Combine(RootFolder, SourceFolder, documentlName + ".SLDASM");
+            Console.WriteLine("pathToPrototype  " + pathToPrototype);
+            SolidWorksAdapter.OpenDocument(pathToPrototype, swDocumentTypes_e.swDocASSEMBLY);
+            SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(documentlName + ".SLDASM");
+              AssemblyDocument = SolidWorksAdapter.ToAssemblyDocument(SolidWorksDocument);
+        }
+
         public void Build(
             PanelType panelType, PanelProfile profile, Vector2 sizePanel,
             Materials OuterMaterial, Materials InnerMaterial,
@@ -50,25 +55,9 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
             )
         {
             this.sizePanel = sizePanel;
-            string pathToPrototype;
-            string modelName;
-            decimal bendRadius = 1;
-            decimal kFactor = 1;
-
-            if (panelType == PanelType.DualBlankPanel || panelType == PanelType.DualRemovablePanel)
-            {
-                modelName = "02-104-50";
-            }
-            else
-            {
-                modelName = "02-01";
-            }
-
+           
             #region calculate panel dimention by profile
-            double innerHeight = 0;
-            double innerWeidht = 0;
-            double leght = 0;
-            double deepInsulation = 0;
+
             switch (profile)
             {
                 case PanelProfile.Profile_3_0:
@@ -94,12 +83,22 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
             }
             #endregion
 
-            pathToPrototype = System.IO.Path.Combine(RootFolder, SourceFolder, modelName + ".SLDASM");
-            Console.WriteLine("pathToPrototype  " + pathToPrototype);
-            SolidWorksAdapter.OpenDocument(pathToPrototype, swDocumentTypes_e.swDocASSEMBLY);
-            solidWorksDocument = SolidWorksAdapter.AcativeteDoc(modelName + ".SLDASM");
-            AssemblyDoc assemblyDocument = SolidWorksAdapter.ToAssemblyDocument(solidWorksDocument);
-            
+            if (panelType == PanelType.DualBlankPanel || panelType == PanelType.DualRemovablePanel)
+            {
+
+                DoublePanel(panelType);
+            }
+            else
+            {
+
+                SinglePanel(panelType);
+            }
+
+            // ============================
+            // Уплотнитель
+            // шумотепло изоляция
+            // сохранить сборку 
+            // ===========================
             #region calculate step by  rivet
             double halfWidthPanel = Convert.ToDouble(sizePanel.X / 2);
             // Шаг заклепок
@@ -137,16 +136,16 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
            
             DeleteComponents((int)panelType);
              
-            modelName = "02-01-001"; // имя детали для внешней панели
+            documentlName = "02-01-001"; // имя детали для внешней панели
 
-            string newPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, modelName  );
+            string newPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, documentlName  );
             Console.WriteLine(newPartPath);
             //return;
             if (false)
             {
-                solidWorksDocument = SolidWorksAdapter.AcativeteDoc(modelName + ".SLDPRT");
-                solidWorksDocument.Extension.SelectByID2("02-01-001-1@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                assemblyDocument.ReplaceComponents(newPartPath, "", false, true);
+                SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(documentlName + ".SLDPRT");
+                SolidWorksDocument.Extension.SelectByID2("02-01-001-1@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                AssemblyDocument.ReplaceComponents(newPartPath, "", false, true);
                 SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("02-01-001.SLDPRT");
             }
             else
@@ -167,14 +166,14 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
                 EditPartParameters("02-01-001", newPartPath);
 
 
-                modelName = "02-01-002"; // имя детали для внутреней панели
+                documentlName = "02-01-002"; // имя детали для внутреней панели
 
-                newPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, modelName  );
+                newPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, documentlName  );
                 if (false)
                 {
-                    solidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2("02-01.SLDASM", true, 0)));
-                    solidWorksDocument.Extension.SelectByID2("02-01-002-1@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    assemblyDocument.ReplaceComponents(newPartPath, "", false, true);
+                    SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2("02-01.SLDASM", true, 0)));
+                    SolidWorksDocument.Extension.SelectByID2("02-01-002-1@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    AssemblyDocument.ReplaceComponents(newPartPath, "", false, true);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("02-01-002.SLDPRT");
                 }
                 else
@@ -192,15 +191,15 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
 
                 }
 
-                modelName = "02-01-003"; // имя элемент - теплошумоизоляции 
+                documentlName = "02-01-003"; // имя элемент - теплошумоизоляции 
 
-                newPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, modelName  );
+                newPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, documentlName  );
 
                 if (false)
                 {
-                    solidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2("02-01.SLDASM", true, 0)));
-                    solidWorksDocument.Extension.SelectByID2("02-01-003-1@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    assemblyDocument.ReplaceComponents(newPartPath, "", false, true);
+                    SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2("02-01.SLDASM", true, 0)));
+                    SolidWorksDocument.Extension.SelectByID2("02-01-003-1@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    AssemblyDocument.ReplaceComponents(newPartPath, "", false, true);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("02-01-003.SLDPRT");
                 }
                 else
@@ -213,14 +212,14 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
                 }
 
                 //Уплотнитель
-                modelName = "02-01-004";
+                documentlName = "02-01-004";
                 // TO DO properties
-                newPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, modelName );
+                newPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, documentlName );
                 if (false)
                 {
-                    solidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2("02-01.SLDASM", true, 0)));
-                    solidWorksDocument.Extension.SelectByID2("02-01-004-1@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    assemblyDocument.ReplaceComponents(newPartPath, "", false, true);
+                    SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2("02-01.SLDASM", true, 0)));
+                    SolidWorksDocument.Extension.SelectByID2("02-01-004-1@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    AssemblyDocument.ReplaceComponents(newPartPath, "", false, true);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("02-01-004.SLDPRT");
                 }
                 else
@@ -230,14 +229,168 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
                     EditPartParameters("02-01-004", newPartPath);
 
                 }
-                modelName = "sborka";
-                ModelDoc2 asm = assemblyDocument as ModelDoc2;
-                newPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, modelName + ".SLDASM");
+                documentlName = "sborka";
+                ModelDoc2 asm = AssemblyDocument as ModelDoc2;
+                newPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, documentlName + ".SLDASM");
                 asm.Extension.SaveAs( newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent + (int)swSaveAsOptions_e.swSaveAsOptions_UpdateInactiveViews, null, ref errors, warnings);
 
                 InitiatorSaveExeption(errors, warnings, newPartPath); 
                  
             }
+        }
+
+        private void SinglePanel (PanelType panelType)
+        {
+            documentlName = "02-01";
+            OpenPrototype();
+        }
+        private void DoublePanel(PanelType panelType)
+        {
+            documentlName = "02-104-50";
+            OpenPrototype();
+
+
+           
+
+            //    var currDestPath = typeOfPanel[1].Contains("несъемная") ? _destinationFolder : Panels0204;
+             //   var curNumber = typeOfPanel[1].Contains("несъемная") ? "01" : "04";
+
+                
+                if (panelType == PanelType.DualBlankPanel)
+                {
+                    
+                    
+                    SolidWorksDocument.Extension.SelectByID2("Ручка MLA 120-1@02-104-50", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("SC GOST 17475_gost-1@02-104-50", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("SC GOST 17475_gost-2@02-104-50", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Threaded Rivets-1@02-104-50", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Threaded Rivets-2@02-104-50", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    // Удаление ненужных элементов панели
+                    const int deleteOption = (int)swDeleteSelectionOptions_e.swDelete_Absorbed +
+                                             (int)swDeleteSelectionOptions_e.swDelete_Children;
+                    SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть11@02-01-101-50-1@02-104-50", "BODYFEATURE", 0, 0, 0,
+                        false, 0, null, 0);
+                    SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
+                 
+                }
+
+
+              //  var newName =                    $"{modelName}-{curNumber}-{width}-{height}-{thicknessOfPanel}-{materialP1[3]}{(materialP1[3] == "AZ" ? "" : materialP1[1])}";
+
+               var newPartPath =         $@"{RootFolder}{SubjectDestinationFolder}\{documentlName}.SLDPRT";
+
+                 
+
+                if (File.Exists(newPartPath))
+                {
+                    SolidWorksDocument = ((ModelDoc2)(_swApp.ActivateDoc2("02-104-50.SLDASM", true, 0)));
+                    SolidWorksDocument.Extension.SelectByID2("02-01-101-50-1@02-104-50", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    swAsm.ReplaceComponents(newPartPath, "", false, true);
+                    _swApp.CloseDoc("02-01-101-50.SLDPRT");
+                }
+                else  
+                {
+                    SwPartParamsChangeWithNewName("02-01-101-50",
+                        $@"{Settings.Default.DestinationFolder}{currDestPath}\{newName}",
+                        new[,]
+                        {
+                            {"D1@Эскиз1", (heightD).ToString()},
+                            {"D2@Эскиз1", (widthD/2).ToString()},
+                            {"D1@Кривая4", (rivetH).ToString()},
+                            {"D1@Кривая3", (rivetWd).ToString()},
+                            {"D1@Кривая5", (rivetH).ToString()},
+
+
+                            {"D7@Ребро-кромка2", thicknessOfPanel == "50" ? "48" : "50"},
+
+
+                            {"D2@Эскиз47", (wR/2).ToString()},
+
+                            {"Толщина@Листовой металл", materialP1[1].Replace('.', ',')},
+                            {"D1@Листовой металл", (bendRadius).ToString()},
+                            {"D2@Листовой металл", (kFactor*1000).ToString()}
+                        },
+                        false,
+                        null);
+                  
+                   SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(documentlName);
+                }
+ 
+
+              //  modelName =                    $"{modelName}-02-{width}-{height}-50-{materialP2[3]}{(materialP2[3] == "AZ" ? "" : materialP2[1])}";
+
+                newPartPath = $@"{Settings.Default.DestinationFolder}{_destinationFolder}\{newName}.SLDPRT";
+                if (File.Exists(newPartPath))
+                {
+                    SolidWorksDocument = ((ModelDoc2)(_swApp.ActivateDoc2("02-104-50.SLDASM", true, 0)));
+                    SolidWorksDocument.Extension.SelectByID2("02-01-102-50-1@02-104-50", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    swAsm.ReplaceComponents(newPartPath, "", false, true);
+                    _swApp.CloseDoc("02-01-102-50.SLDPRT");
+                }
+                else if (File.Exists(newPartPath) != true)
+                {
+                    SwPartParamsChangeWithNewName("02-01-102-50",
+                        $@"{Settings.Default.DestinationFolder}{_destinationFolder}\{newName}",
+                        new[,]
+                        {
+                            {"D1@Эскиз1", (heightD - 10).ToString()},
+                            {"D2@Эскиз1", ((widthD - 10)/2).ToString()},
+                            {"D1@Кривая3", (rivetH).ToString()},
+                            {"D1@Кривая2", (rivetH).ToString()},
+                            {"D1@Кривая1", (rivetWd).ToString()},
+                            {"Толщина@Листовой металл", materialP2[1].Replace('.', ',')},
+                            {"D1@Листовой металл", (bendRadius).ToString()},
+                            {"D2@Листовой металл", (kFactor*1000).ToString()}
+                        },
+                        false,
+                        null);
+
+                    
+                  
+                    _swApp.CloseDoc(newName);
+                }
+
+              
+                newName =
+                    $"{documentlName}-03-{width}-{height}-{thicknessOfPanel}-{materialP2[3]}{(materialP2[3] == "AZ" ? "" : materialP2[1])}";
+
+                newPartPath = $@"{Settings.Default.DestinationFolder}{_destinationFolder}\{newName}.SLDPRT";
+                if (File.Exists(newPartPath))
+                {
+                    SolidWorksDocument = ((ModelDoc2)(_swApp.ActivateDoc2("02-104-50.SLDASM", true, 0)));
+                    SolidWorksDocument.Extension.SelectByID2("02-01-103-50-1@02-104-50", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    swAsm.ReplaceComponents(newPartPath, "", false, true);
+                    _swApp.CloseDoc("02-01-103-50.SLDPRT");
+                }
+                else if (File.Exists(newPartPath) != true)
+                {
+                    SwPartParamsChangeWithNewName("02-01-103-50",
+                        $@"{Settings.Default.DestinationFolder}{_destinationFolder}\{newName}",
+                        new[,]
+                        {
+                            {"D1@Эскиз1", (heightD - 15).ToString()},
+                            {"D1@Кривая1", (rivetH).ToString()},
+
+                            {"D2@Эскиз1", thicknessOfPanel == "50" ? "46" : "48"},
+
+                            {"Толщина@Листовой металл", thiknessStr},
+                            {"D1@Листовой металл", (bendRadius).ToString()},
+                            {"D2@Листовой металл", (kFactor*1000).ToString()}
+                        },
+                        false,
+                        null);
+                    _swApp.CloseDoc(newName);
+                }
+
+                
+
+               
+             
         }
         protected override void DeleteComponents(int type)
         {
@@ -246,37 +399,37 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
 
                 if (eType == PanelType.BlankPanel)
                 {
-                    solidWorksDocument.Extension.SelectByID2("Ручка MLA 120-1@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("SC GOST 17475_gost-1@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("SC GOST 17475_gost-2@02-01", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Threaded Rivets-5@02-01", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Threaded Rivets-6@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    solidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Ручка MLA 120-1@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("SC GOST 17475_gost-1@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("SC GOST 17475_gost-2@02-01", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Threaded Rivets-5@02-01", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Threaded Rivets-6@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
 
                     // Удаление ненужных элементов панели
 
-                    solidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть7@02-01-001-1@02-01", "BODYFEATURE", 0, 0, 0, false, 0, null,
+                    SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть7@02-01-001-1@02-01", "BODYFEATURE", 0, 0, 0, false, 0, null,
                         0);
-                    solidWorksDocument.Extension.DeleteSelection2(deleteOption);
+                    SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
 
-                    solidWorksDocument.Extension.SelectByID2("Ручка MLA 120-5@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("SC GOST 17475_gost-9@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("SC GOST 17475_gost-10@02-01", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Threaded Rivets-13@02-01", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Threaded Rivets-14@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    solidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Ручка MLA 120-5@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("SC GOST 17475_gost-9@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("SC GOST 17475_gost-10@02-01", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Threaded Rivets-13@02-01", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Threaded Rivets-14@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
                     // Удаление ненужных элементов панели
-                    solidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть8@02-01-001-1@02-01", "BODYFEATURE", 0, 0, 0, false, 0, null,
+                    SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть8@02-01-001-1@02-01", "BODYFEATURE", 0, 0, 0, false, 0, null,
                         0);
-                    solidWorksDocument.Extension.DeleteSelection2(deleteOption);
+                    SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
                 }
 
 
@@ -284,39 +437,39 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
             {
                 if (sizePanel.X > 750)
                 {
-                    solidWorksDocument.Extension.SelectByID2("Ручка MLA 120-1@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("SC GOST 17475_gost-1@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("SC GOST 17475_gost-2@02-01", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Threaded Rivets-5@02-01", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Threaded Rivets-6@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    solidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Ручка MLA 120-1@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("SC GOST 17475_gost-1@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("SC GOST 17475_gost-2@02-01", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Threaded Rivets-5@02-01", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Threaded Rivets-6@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
                     // Удаление ненужных элементов панели
                      
-                    solidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть7@02-01-001-1@02-01", "BODYFEATURE", 0, 0, 0, false, 0,
+                    SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть7@02-01-001-1@02-01", "BODYFEATURE", 0, 0, 0, false, 0,
                         null, 0);
-                    solidWorksDocument.Extension.DeleteSelection2(deleteOption);
+                    SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
                 }
                 else
                 {
-                    solidWorksDocument.Extension.SelectByID2("Ручка MLA 120-5@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("SC GOST 17475_gost-9@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("SC GOST 17475_gost-10@02-01", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Threaded Rivets-13@02-01", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Threaded Rivets-14@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    solidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Ручка MLA 120-5@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("SC GOST 17475_gost-9@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("SC GOST 17475_gost-10@02-01", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Threaded Rivets-13@02-01", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Threaded Rivets-14@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
                     // Удаление ненужных элементов панели
                     
-                    solidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть8@02-01-001-1@02-01", "BODYFEATURE", 0, 0, 0, false, 0,
+                    SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть8@02-01-001-1@02-01", "BODYFEATURE", 0, 0, 0, false, 0,
                         null, 0);
-                    solidWorksDocument.Extension.DeleteSelection2(deleteOption);
+                    SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
                 }
             }
         }

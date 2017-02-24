@@ -10,7 +10,7 @@ using SolidWorksLibrary.Builders.ElementsCase;
 
 namespace PDMWebService.Data.Solid.ElementsCase
 {
-   public class FlapBuilder : AbstractBuilder
+   public class FlapBuilder : ProductBuilderBehavior
     { 
         public FlapBuilder()
         { 

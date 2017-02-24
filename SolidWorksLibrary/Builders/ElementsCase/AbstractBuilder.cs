@@ -7,7 +7,10 @@ using System.IO;
 
 namespace SolidWorksLibrary.Builders.ElementsCase
 {
-    public abstract class AbstractBuilder : IFeedbackBuilder
+    /// <summary>
+    /// It abstract class describes the basic behavior of the builder
+    /// </summary>
+    public abstract class ProductBuilderBehavior : IFeedbackBuilder
     {
         protected Dictionary<string, double> parameters { get; set; }
 
@@ -28,9 +31,21 @@ namespace SolidWorksLibrary.Builders.ElementsCase
         /// Root folder file system
         /// </summary>
         protected string RootFolder { get; set; }
+        /// <summary>
+        /// Working assembly document
+        /// </summary>
+        protected AssemblyDoc AssemblyDocument { get; set; }
+        /// <summary>
+        /// Working SolidWork document { asm, prt }
+        /// </summary>
+        protected ModelDoc2 SolidWorksDocument { get; set; }
+        /// <summary>
+        /// Working document name
+        /// </summary>
+        protected string documentlName { get; set; }
         #endregion
 
-        public AbstractBuilder()
+        public ProductBuilderBehavior()
         {
             this.ComponentsPathList = new List<string>();
             parameters = new Dictionary<string, double>();
@@ -69,8 +84,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
         /// <summary>
         /// Provides notification and feedback to check for part
         /// </summary>
-        public CheckExistPartHandler CheckExistPart { get; set; }
-        // ==================================================================================================================================
+        public CheckExistPartHandler CheckExistPart { get; set; }        
 
         /// <summary>
         /// Informing subscribers the completion of building 
@@ -98,12 +112,9 @@ namespace SolidWorksLibrary.Builders.ElementsCase
 
         protected int warnings   = 0;
         protected virtual void EditPartParameters(string partName, string newPath )
-        {
-            
+        {            
             ModelDoc2 solidWorksDocument = null;
-            solidWorksDocument = SolidWorksAdapter.AcativeteDoc(partName + ".SLDPRT");
-            
-
+            solidWorksDocument = SolidWorksAdapter.AcativeteDoc(partName + ".SLDPRT");        
             foreach (var item in parameters)
             {
                 Dimension myDimension = ((Dimension)(solidWorksDocument.Parameter(item.Key + "@" + partName + ".SLDPRT")));
@@ -111,30 +122,18 @@ namespace SolidWorksLibrary.Builders.ElementsCase
             }
             solidWorksDocument.EditRebuild3();
             solidWorksDocument.ForceRebuild3(false);
-            Console.WriteLine(newPath);
-  
-            
+            Console.WriteLine(newPath);            
             solidWorksDocument.Extension.SaveAs( newPath  + ".SLDPRT"  , (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent + (int)swSaveAsOptions_e.swSaveAsOptions_UpdateInactiveViews,null,  ref errors,  warnings);
-
             InitiatorSaveExeption(errors, warnings, newPath);
-
-            SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newPath);
-          //  Console.WriteLine("Press any key");
-          //  Console.ReadKey();
+            SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newPath); 
             this.parameters.Clear();
+             
+        }
 
-            //for (var i = 0; i < newParams.Length / 2; i++)
-            //{
-            //    Dimension myDimension = ((Dimension)(swDoc.Parameter(newParams[i, 0] + "@" + partName + ".SLDPRT")));
-            //    var param = Convert.ToDouble(newParams[i, 1]);
-            //    var swParametr = param;
-            //    myDimension.SystemValue = swParametr / 1000;
-            //}
-            //swDoc.EditRebuild3();
-            //swDoc.ForceRebuild3(false);
-
-            //swDoc.SaveAs2(new FileInfo(newName + ".SLDPRT").FullName, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
-            //SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
-        }         
+                       // if u will be use abstract build method, u must override constructor in all product_builder[s]
+        // /// <summary>
+        //   /// Build prduct
+        //   /// </summary>
+        //public abstract Build();  
     }
 }
