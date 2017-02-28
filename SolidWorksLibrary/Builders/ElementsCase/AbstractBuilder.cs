@@ -8,12 +8,22 @@ using System.IO;
 namespace SolidWorksLibrary.Builders.ElementsCase
 {
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="thickness"></param>
+    /// <param name="kFactor"></param>
+    /// <param name="bendRadius"></param>
+    public delegate void SetBendsHandler(decimal thickness, out decimal kFactor, out decimal bendRadius);
+
+
+    /// <summary>
     /// It abstract class describes the basic behavior of the builder
     /// </summary>
     public abstract class ProductBuilderBehavior : IFeedbackBuilder
     {
         protected Dictionary<string, double> parameters { get; set; }
 
+        protected string NewPartPath {get;set;}
         #region properties
         /// <summary>
         /// Path list to built files
@@ -26,7 +36,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
         /// <summary>
         /// The folder containing files after they are built and save. 
         /// </summary>
-        protected string SubjectDestinationFolder { get; set; }  
+        protected string SubjectDestinationFolder { get; set; }
         /// <summary>
         /// Root folder file system
         /// </summary>
@@ -43,6 +53,19 @@ namespace SolidWorksLibrary.Builders.ElementsCase
         /// Working document name
         /// </summary>
         protected string documentlName { get; set; }
+        /// <summary>
+        /// Sheetmetal bend radius 
+        /// </summary>
+        protected decimal BendRadius   = 5; // default value
+        /// <summary>
+        /// Gets or sets the K-factor
+        /// </summary>
+        protected decimal KFactor  = 5; // default value
+        /// <summary>
+        /// Provides notification and feedback to set bends for part
+        /// </summary>
+        public virtual event SetBendsHandler SetBends;
+
         #endregion
 
         public ProductBuilderBehavior()
@@ -111,23 +134,22 @@ namespace SolidWorksLibrary.Builders.ElementsCase
         protected int errors   = 0;
 
         protected int warnings   = 0;
-        protected virtual void EditPartParameters(string partName, string newPath )
-        {            
+        protected virtual void EditPartParameters(string partName, string newPath)
+        {
             ModelDoc2 solidWorksDocument = null;
-            solidWorksDocument = SolidWorksAdapter.AcativeteDoc(partName + ".SLDPRT");        
+            solidWorksDocument = SolidWorksAdapter.AcativeteDoc(partName + ".SLDPRT");
             foreach (var item in parameters)
             {
+                //boolstatus = Part.Extension.SelectByID2("D2@Ýñêèç1@02-01-101-50-1@02-104-50", "DIMENSION", 0, 0, 0, False, 0, Nothing, 0)
                 Dimension myDimension = ((Dimension)(solidWorksDocument.Parameter(item.Key + "@" + partName + ".SLDPRT")));
                 myDimension.SystemValue = item.Value / 1000;
             }
             solidWorksDocument.EditRebuild3();
             solidWorksDocument.ForceRebuild3(false);
-            Console.WriteLine(newPath);            
-            solidWorksDocument.Extension.SaveAs( newPath  + ".SLDPRT"  , (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent + (int)swSaveAsOptions_e.swSaveAsOptions_UpdateInactiveViews,null,  ref errors,  warnings);
+            solidWorksDocument.Extension.SaveAs(newPath + ".SLDPRT", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent + (int)swSaveAsOptions_e.swSaveAsOptions_UpdateInactiveViews, null, ref errors, warnings);
             InitiatorSaveExeption(errors, warnings, newPath);
-            SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newPath); 
+            SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newPath);
             this.parameters.Clear();
-             
         }
 
                        // if u will be use abstract build method, u must override constructor in all product_builder[s]

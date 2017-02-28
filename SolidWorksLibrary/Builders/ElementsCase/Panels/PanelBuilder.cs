@@ -11,41 +11,39 @@ using System.Threading.Tasks;
 
 namespace SolidWorksLibrary.Builders.ElementsCase.Panels
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="thickness"></param>
-    /// <param name="kFactor"></param>
-    /// <param name="bendRadius"></param>
-    public delegate void SetBendsHandler(decimal thickness, out decimal kFactor, out decimal bendRadius);
-  
+
 
     public class PanelBuilder : ProductBuilderBehavior
     {
-        /// <summary>
-        /// Provides notification and feedback to set bends for part
-        /// </summary>
-        public event SetBendsHandler SetBends;        
-        private Vector2 sizePanel { get; set; }   
-        private decimal bendRadius = 1;
-        private decimal kFactor = 1;
+        public override event SetBendsHandler SetBends;
+
+        private Vector2 sizePanel { get; set; }
         private double innerHeight = 0;
         private double innerWeidht = 0;
         private double leght = 0;
-        private double deepInsulation = 0;  
-        
+        private double deepInsulation = 0;
+
         public PanelBuilder() : base()
         {
             base.SetProperties("panel", "source panel");
         }
-     
-        private void OpenPrototype ()
+
+        private void OpenTemplate(PanelType panelType)
         {
+            if (panelType == PanelType.DualBlankPanel || panelType == PanelType.DualRemovablePanel)
+            {
+                documentlName = "02-01";
+            }
+            else
+            {
+                documentlName = "02-104-50";
+            }
+
             string pathToPrototype = System.IO.Path.Combine(RootFolder, SourceFolder, documentlName + ".SLDASM");
             Console.WriteLine("pathToPrototype  " + pathToPrototype);
             SolidWorksAdapter.OpenDocument(pathToPrototype, swDocumentTypes_e.swDocASSEMBLY);
             SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(documentlName + ".SLDASM");
-              AssemblyDocument = SolidWorksAdapter.ToAssemblyDocument(SolidWorksDocument);
+            AssemblyDocument = SolidWorksAdapter.ToAssemblyDocument(SolidWorksDocument);
         }
 
         public void Build(
@@ -55,7 +53,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
             )
         {
             this.sizePanel = sizePanel;
-           
+
             #region calculate panel dimention by profile
 
             switch (profile)
@@ -83,22 +81,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
             }
             #endregion
 
-            if (panelType == PanelType.DualBlankPanel || panelType == PanelType.DualRemovablePanel)
-            {
 
-                DoublePanel(panelType);
-            }
-            else
-            {
-
-                SinglePanel(panelType);
-            }
-
-            // ============================
-            // Уплотнитель
-            // шумотепло изоляция
-            // сохранить сборку 
-            // ===========================
             #region calculate step by  rivet
             double halfWidthPanel = Convert.ToDouble(sizePanel.X / 2);
             // Шаг заклепок
@@ -110,6 +93,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
             {
                 rivetW = 2000;
             }
+
 
 
             #endregion
@@ -133,19 +117,41 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
                 widthHandle = sizePanel.X * 0.35;
             }
             #endregion
-           
+
+
+            OpenTemplate();
             DeleteComponents((int)panelType);
-             
+
+
+            if (panelType == PanelType.DualBlankPanel || panelType == PanelType.DualRemovablePanel)
+            {
+
+                DoublePanel(panelType);
+            }
+            else
+            {
+                SinglePanel(panelType);
+            }
+            Insulation();
+            // ============================
+            // Уплотнитель
+            // шумотепло изоляция
+            // сохранить сборку 
+            // ===========================
+
+
+
+
             documentlName = "02-01-001"; // имя детали для внешней панели
 
-            string newPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, documentlName  );
-            Console.WriteLine(newPartPath);
+            NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, documentlName);
+            Console.WriteLine(NewPartPath);
             //return;
             if (false)
             {
                 SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(documentlName + ".SLDPRT");
                 SolidWorksDocument.Extension.SelectByID2("02-01-001-1@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                AssemblyDocument.ReplaceComponents(newPartPath, "", false, true);
+                AssemblyDocument.ReplaceComponents(NewPartPath, "", false, true);
                 SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("02-01-001.SLDPRT");
             }
             else
@@ -153,7 +159,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
 
                 // outer panel
                 if (SetBends != null)
-                    SetBends((decimal)outThickness, out kFactor, out bendRadius);
+                    SetBends((decimal)outThickness, out KFactor, out BendRadius);
                 base.parameters.Add("D1@Эскиз1", sizePanel.Y);
                 base.parameters.Add("D2@Эскиз1", sizePanel.X);
                 base.parameters.Add("D1@Кривая2", rivetH);
@@ -161,93 +167,101 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
                 base.parameters.Add("D4@Эскиз30", widthHandle);
                 base.parameters.Add("D7@Ребро-кромка1", leght);
                 base.parameters.Add("Толщина@Листовой металл", outThickness);
-                base.parameters.Add("D1@Листовой металл", (double)bendRadius);
-                base.parameters.Add("D2@Листовой металл", (double)kFactor * 1000);
-                EditPartParameters("02-01-001", newPartPath);
+                base.parameters.Add("D1@Листовой металл", (double)BendRadius);
+                base.parameters.Add("D2@Листовой металл", (double)KFactor * 1000);
+                EditPartParameters("02-01-001", NewPartPath);
 
 
                 documentlName = "02-01-002"; // имя детали для внутреней панели
 
-                newPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, documentlName  );
+                NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, documentlName);
                 if (false)
                 {
                     SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2("02-01.SLDASM", true, 0)));
                     SolidWorksDocument.Extension.SelectByID2("02-01-002-1@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    AssemblyDocument.ReplaceComponents(newPartPath, "", false, true);
+                    AssemblyDocument.ReplaceComponents(NewPartPath, "", false, true);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("02-01-002.SLDPRT");
                 }
                 else
                 {
                     if (SetBends != null)
-                    SetBends((decimal)innerThickness, out kFactor, out bendRadius);
-                    base.parameters.Add("D1@Эскиз1", innerWeidht );
+                        SetBends((decimal)innerThickness, out KFactor, out BendRadius);
+                    base.parameters.Add("D1@Эскиз1", innerWeidht);
                     base.parameters.Add("D2@Эскиз1", innerHeight);
-                    base.parameters.Add("D1@Кривая2", rivetW );
+                    base.parameters.Add("D1@Кривая2", rivetW);
                     base.parameters.Add("D1@Кривая1", rivetH);
                     base.parameters.Add("Толщина@Листовой металл", innerThickness);
-                    base.parameters.Add("D1@Листовой металл", (double)bendRadius);
-                    base.parameters.Add("D2@Листовой металл", (double)kFactor * 1000);
-                    EditPartParameters("02-01-002", newPartPath);
+                    base.parameters.Add("D1@Листовой металл", (double)BendRadius);
+                    base.parameters.Add("D2@Листовой металл", (double)KFactor * 1000);
+                    EditPartParameters("02-01-002", NewPartPath);
 
                 }
 
-                documentlName = "02-01-003"; // имя элемент - теплошумоизоляции 
 
-                newPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, documentlName  );
 
-                if (false)
-                {
-                    SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2("02-01.SLDASM", true, 0)));
-                    SolidWorksDocument.Extension.SelectByID2("02-01-003-1@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    AssemblyDocument.ReplaceComponents(newPartPath, "", false, true);
-                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("02-01-003.SLDPRT");
-                }
-                else
-                {
-                    base.parameters.Add("D1@Эскиз1", innerWeidht);
-                    base.parameters.Add("D2@Эскиз1", innerHeight );
-                    base.parameters.Add("D1@Бобышка-Вытянуть1", deepInsulation);
-                    // TO DO change lenght by profile, propertis
-                    EditPartParameters("02-01-003", newPartPath);
-                }
-
-                //Уплотнитель
-                documentlName = "02-01-004";
-                // TO DO properties
-                newPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, documentlName );
-                if (false)
-                {
-                    SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2("02-01.SLDASM", true, 0)));
-                    SolidWorksDocument.Extension.SelectByID2("02-01-004-1@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    AssemblyDocument.ReplaceComponents(newPartPath, "", false, true);
-                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("02-01-004.SLDPRT");
-                }
-                else
-                {
-                    base.parameters.Add("D6@Эскиз1", innerWeidht );
-                    base.parameters.Add("D3@Эскиз1", innerHeight);
-                    EditPartParameters("02-01-004", newPartPath);
-
-                }
                 documentlName = "sborka";
                 ModelDoc2 asm = AssemblyDocument as ModelDoc2;
-                newPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, documentlName + ".SLDASM");
-                asm.Extension.SaveAs( newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent + (int)swSaveAsOptions_e.swSaveAsOptions_UpdateInactiveViews, null, ref errors, warnings);
+                NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, documentlName + ".SLDASM");
+                asm.Extension.SaveAs(NewPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent + (int)swSaveAsOptions_e.swSaveAsOptions_UpdateInactiveViews, null, ref errors, warnings);
 
-                InitiatorSaveExeption(errors, warnings, newPartPath); 
-                 
+                InitiatorSaveExeption(errors, warnings, NewPartPath);
+
             }
         }
+        /// <summary>
+        /// Build Insulation
+        /// </summary>
+        private void Insulation()
+        {
+            documentlName = "02-01-003"; // имя элемент - теплошумоизоляции 
+
+            NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, documentlName);
+
+            if (false)
+            {
+                SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2("02-01.SLDASM", true, 0)));
+                SolidWorksDocument.Extension.SelectByID2("02-01-003-1@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                AssemblyDocument.ReplaceComponents(NewPartPath, "", false, true);
+                SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("02-01-003.SLDPRT");
+            }
+            else
+            {
+                base.parameters.Add("D1@Эскиз1", innerWeidht);
+                base.parameters.Add("D2@Эскиз1", innerHeight);
+                base.parameters.Add("D1@Бобышка-Вытянуть1", deepInsulation);
+                // TO DO change lenght by profile, propertis
+                EditPartParameters("02-01-003", NewPartPath);
+            }
+
+            documentlName = "02-01-004";
+            // TO DO properties
+            NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, documentlName);
+            if (false)
+            {
+                SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2("02-01.SLDASM", true, 0)));
+                SolidWorksDocument.Extension.SelectByID2("02-01-004-1@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                AssemblyDocument.ReplaceComponents(NewPartPath, "", false, true);
+                SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("02-01-004.SLDPRT");
+            }
+            else
+            {
+                base.parameters.Add("D6@Эскиз1", innerWeidht);
+                base.parameters.Add("D3@Эскиз1", innerHeight);
+                EditPartParameters("02-01-004", NewPartPath);
+
+            }
+        }
+ 
 
         private void SinglePanel (PanelType panelType)
         {
             documentlName = "02-01";
-            OpenPrototype();
+            
         }
         private void DoublePanel(PanelType panelType)
         {
             documentlName = "02-104-50";
-            OpenPrototype();
+          
 
 
            
@@ -312,8 +326,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
                             {"D2@Эскиз47", (wR/2).ToString()},
 
                             {"Толщина@Листовой металл", materialP1[1].Replace('.', ',')},
-                            {"D1@Листовой металл", (bendRadius).ToString()},
-                            {"D2@Листовой металл", (kFactor*1000).ToString()}
+                            {"D1@Листовой металл", (BendRadius).ToString()},
+                            {"D2@Листовой металл", (KFactor*1000).ToString()}
                         },
                         false,
                         null);
@@ -344,8 +358,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
                             {"D1@Кривая2", (rivetH).ToString()},
                             {"D1@Кривая1", (rivetWd).ToString()},
                             {"Толщина@Листовой металл", materialP2[1].Replace('.', ',')},
-                            {"D1@Листовой металл", (bendRadius).ToString()},
-                            {"D2@Листовой металл", (kFactor*1000).ToString()}
+                            {"D1@Листовой металл", (BendRadius).ToString()},
+                            {"D2@Листовой металл", (KFactor*1000).ToString()}
                         },
                         false,
                         null);
@@ -379,8 +393,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
                             {"D2@Эскиз1", thicknessOfPanel == "50" ? "46" : "48"},
 
                             {"Толщина@Листовой металл", thiknessStr},
-                            {"D1@Листовой металл", (bendRadius).ToString()},
-                            {"D2@Листовой металл", (kFactor*1000).ToString()}
+                            {"D1@Листовой металл", (BendRadius).ToString()},
+                            {"D2@Листовой металл", (KFactor*1000).ToString()}
                         },
                         false,
                         null);
@@ -575,9 +589,9 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
 //            if (Math.Abs(rivetW - 1000) < 1) rivetW = 2000;
 //            // Коэффициенты и радиусы гибов   
 //            const decimal thiknessStr = 0.8m;
-//            decimal bendRadius;
-//            decimal kFactor;
-//            SetBends(thiknessStr, out kFactor, out bendRadius);
+//            decimal BendRadius;
+//            decimal KFactor;
+//            SetBends(thiknessStr, out KFactor, out BendRadius);
 //            #endregion
 
 //            // Переменные панели с ручками
@@ -754,8 +768,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
 //                            {"D1@Кривая2", (rivetH).ToString()},
 //                            {"D1@Кривая1", (rivetW).ToString()},
 //                            {"Толщина@Листовой металл", materialP2[1].Replace('.', ',')},
-//                            {"D1@Листовой металл", (bendRadius).ToString()},
-//                            {"D2@Листовой металл", (kFactor*1000).ToString()}
+//                            {"D1@Листовой металл", (BendRadius).ToString()},
+//                            {"D2@Листовой металл", (KFactor*1000).ToString()}
 //                        });
 
 //                    }
@@ -884,8 +898,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
 //                            {"D2@Эскиз47", (widthHandle/2).ToString()},
 
 //                            {"Толщина@Листовой металл", materialP1[1].Replace('.', ',')},
-//                            {"D1@Листовой металл", (bendRadius).ToString()},
-//                            {"D2@Листовой металл", (kFactor*1000).ToString()}
+//                            {"D1@Листовой металл", (BendRadius).ToString()},
+//                            {"D2@Листовой металл", (KFactor*1000).ToString()}
 //                            });
 
 
@@ -916,8 +930,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
 //                            {"D1@Кривая2", (rivetH).ToString()},
 //                            {"D1@Кривая1", (rivetWd).ToString()},
 //                            {"Толщина@Листовой металл", materialP2[1].Replace('.', ',')},
-//                            {"D1@Листовой металл", (bendRadius).ToString()},
-//                            {"D2@Листовой металл", (kFactor*1000).ToString()}
+//                            {"D1@Листовой металл", (BendRadius).ToString()},
+//                            {"D2@Листовой металл", (KFactor*1000).ToString()}
 //                            });
 
 
@@ -947,8 +961,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
 //                            {"D2@Эскиз1", thicknessOfPanel == "50" ? "46" : "48"},
 
 //                            {"Толщина@Листовой металл", thiknessStr},
-//                            {"D1@Листовой металл", (bendRadius).ToString()},
-//                            {"D2@Листовой металл", (kFactor*1000).ToString()}
+//                            {"D1@Листовой металл", (BendRadius).ToString()},
+//                            {"D2@Листовой металл", (KFactor*1000).ToString()}
 //                            });
 //                    }
 
