@@ -15,7 +15,6 @@ namespace SolidWorksLibrary.Builders.ElementsCase
     /// <param name="bendRadius"></param>
     public delegate void SetBendsHandler(decimal thickness, out decimal kFactor, out decimal bendRadius);
 
-
     /// <summary>
     /// It abstract class describes the basic behavior of the builder
     /// </summary>
@@ -70,6 +69,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
         /// </summary>
         public virtual event SetBendsHandler SetBends;
 
+        protected bool IsPartExist { get; set; } = false;
         #endregion
 
         public ProductBuilderBehavior()
@@ -140,38 +140,20 @@ namespace SolidWorksLibrary.Builders.ElementsCase
         protected int warnings   = 0;
         protected virtual void EditPartParameters(string partName, string newPath  )
         {
-
-          //  ModelDoc2 solidWorksDocument = null;
-          //  solidWorksDocument = SolidWorksAdapter.AcativeteDoc(partName + ".SLDPRT");
+          
+            Console.WriteLine(newPath);
             foreach (var item in parameters)
             {
-                try
-                {
-                    //Console.WriteLine("Press any key");
-                    //Console.ReadKey();
-                 //  path to scach              type
-                   // SolidWorksDocument.Extension.SelectByID2(item.Key + "@02-01-001@02-01", "DIMENSION", 0, 0, 0, false, 0, null, 0);
-
-                    // var selManager = SolidWorksDocument.ISelectionManager;
-                    //Dimension dimension = selManager.GetSelectedObject6(1, -1) as Dimension;
-                    Dimension myDimension = (SolidWorksDocument.Parameter(item.Key + "@" + partName + ".SLDPRT" )) as Dimension;
-                    Console.WriteLine(item.Key);
+                    Dimension myDimension = (SolidWorksDocument.Parameter(item.Key + "@" + partName + ".SLDPRT" )) as Dimension;                   
                     myDimension.SystemValue = item.Value / 1000;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                }
-
-                // Dimension myDimension = ((Dimension)(solidWorksDocument.Parameter(item.Key + "@" + partName + ".SLDPRT")));
-                // myDimension.SystemValue = item.Value / 1000;
             }
-            SolidWorksDocument.EditRebuild3();
-            SolidWorksDocument.ForceRebuild3(false);
-            SolidWorksDocument.Extension.SaveAs(newPath + ".SLDPRT", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent + (int)swSaveAsOptions_e.swSaveAsOptions_UpdateInactiveViews, null, ref errors, warnings);
+            SolidWorksDocument.ForceRebuild3(true);
+            SolidWorksDocument =  SolidWorksAdapter.AcativeteDoc(partName);
+            SolidWorksDocument.Extension.SaveAs(newPath + ".SLDPRT", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent
+            + (int )swSaveAsOptions_e.swSaveAsOptions_SaveReferenced + (int)swSaveAsOptions_e.swSaveAsOptions_UpdateInactiveViews, null, ref errors, warnings);
             InitiatorSaveExeption(errors, warnings, newPath);
-           // SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newPath);
             this.parameters.Clear();
+            SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(partName );
         }
 
                        // if u will be use abstract build method, u must override constructor in all product_builder[s]

@@ -30,7 +30,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
             string newPartPath = string.Empty;
 
             IModelDoc2 partModeltDocument;
-            bool isPartExist = false;
+           
             Dimension myDimension;
 
             int addDimH = modelName == "12-30" ? 10 : 1;

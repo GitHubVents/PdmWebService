@@ -180,17 +180,14 @@ namespace SolidWorksLibrary
 
         public static ModelDoc2 AcativeteDoc(string docTitle)
         {
-
             int errors = 0;
-        
-
-
+            ModelDoc2 modelDoc = SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc3(docTitle, true, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, errors);
+       
             if (errors != 0)
             {
                 MessageObserver.Instance.SetMessage("Exeption at activate solid works document: code {" + errors+"}, description error {" + (swActivateDocError_e) errors + "}");
             }
-
-            return  SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc3(docTitle, true, (int) swOpenDocOptions_e.swOpenDocOptions_Silent, errors);
+            return modelDoc;
         }
 
         /// <summary>

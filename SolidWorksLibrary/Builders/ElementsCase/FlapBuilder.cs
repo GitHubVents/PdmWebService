@@ -16,7 +16,6 @@ namespace PDMWebService.Data.Solid.ElementsCase
         { 
             base.SetProperties(@"\11 - Регулятор расхода воздуха\", @"\11 - Damper\" );
         }
-
         /// <summary>
         /// Dumpers the s.
         /// </summary>
@@ -27,38 +26,35 @@ namespace PDMWebService.Data.Solid.ElementsCase
         /// <param name="material"></param>
         /// <returns></returns>
         public string Build(FlapTypes flapType, int width, int height, bool isOutDoor, string[] material)
-        {
-            string modelName = null;
-            string modelDamperPath = null;
-            string nameAsm = null;
+        {  
 
             switch (flapType)
             {
                 case FlapTypes.Twenty_mm:
-                    modelName = "11-20";
-                    modelDamperPath = SourceFolder;
-                    nameAsm = "11 - Damper";
+                    PartName = "11-20";
+                    NewPartPath = SourceFolder;
+                    AssemblyName = "11 - Damper";
                     break;
                 case FlapTypes.Thirty_mm:
-                    modelName = "11-30";
-                    modelDamperPath = SourceFolder;
-                    nameAsm = "11-30";
+                    PartName = "11-30";
+                    NewPartPath = SourceFolder;
+                    AssemblyName = "11-30";
                     break;
             }
 
             var modelType = $"{(material[3] == "AZ" ? "" : "-" + material[3])}{(material[3] == "AZ" ? "" : material[1])}";
 
             string drawingName = "11-20";
-            if (modelName == "11-30")
-            { drawingName = modelName; }
-            string newDamperName = modelName + "-" + width + "-" + height + modelType + (isOutDoor ? "-O" : "");
+            if (PartName == "11-30")
+            { drawingName = PartName; }
+            string newDamperName = PartName + "-" + width + "-" + height + modelType + (isOutDoor ? "-O" : "");
             string newDamperPath = $@"{RootFolder}{SubjectDestinationFolder}{newDamperName}.SLDDRW";
             string newDamperAsmPath = $@"{RootFolder}{SubjectDestinationFolder}{newDamperName}.SLDASM";
-            string modelDamperDrw = $@"{RootFolder}{modelDamperPath}{drawingName}.SLDDRW";
-            string modelLamel = $@"{RootFolder}{modelDamperPath}{"11-100"}.SLDDRW";
+            string modelDamperDrw = $@"{RootFolder}{NewPartPath}{drawingName}.SLDDRW";
+            string modelLamel = $@"{RootFolder}{NewPartPath}{"11-100"}.SLDDRW";
            ModelDoc2 swDocDrw = SolidWorksAdapter.OpenDocument(modelDamperDrw, swDocumentTypes_e.swDocDRAWING); 
 
-            ModelDoc2 solidWorksDocument = SolidWorksAdapter.AcativeteDoc(nameAsm);   // TO DO
+            ModelDoc2 solidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName);   // TO DO
             AssemblyDoc sldWorksAsm = (AssemblyDoc)solidWorksDocument;
             sldWorksAsm.ResolveAllLightWeightComponents(false);
              
@@ -101,17 +97,17 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 {
                     solidWorksDocument.Extension.SelectByID2("Эскиз1", "SKETCH", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditSuppress2();
 
-                    solidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть10@11-001-7@" + nameAsm, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Эскиз34@11-001-7@" + nameAsm, "SKETCH", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть10@11-001-7@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Эскиз34@11-001-7@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
 
-                    solidWorksDocument.Extension.SelectByID2("ВНС-901.41.302-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("ВНС-901.41.302-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
 
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-130@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-131@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-129@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-128@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-127@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-126@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-130@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-131@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-129@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-128@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-127@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-126@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
 
 
                     // 11-005 
@@ -122,8 +118,8 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     //  if (VersionsFileInfo.Replaced.ExistLatestVersion(newPartPath, VaultSystem.VentsCadFile.Type.Part, lastChangedDate, Settings.Default.PdmBaseName))
                     if (false)
                     {
-                        solidWorksDocument =SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
-                        solidWorksDocument.Extension.SelectByID2("11-005-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                        solidWorksDocument =SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
+                        solidWorksDocument.Extension.SelectByID2("11-005-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
                         sldWorksAsm.ReplaceComponents(newPartPath, "", false, true);
                         SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-005.SLDPRT");
                     }
@@ -149,8 +145,8 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     newPartPath = $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
                     if (/*VersionsFileInfo.Replaced.ExistLatestVersion(newPartPath, VaultSystem.VentsCadFile.Type.Part, lastChangedDate, Settings.Default.PdmBaseName)*/ false)
                     {
-                        solidWorksDocument = SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
-                        solidWorksDocument.Extension.SelectByID2("11-006-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                        solidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
+                        solidWorksDocument.Extension.SelectByID2("11-006-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
                         sldWorksAsm.ReplaceComponents(newPartPath, "", false, true);
                         SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-006.SLDPRT");
                     }
@@ -173,30 +169,30 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
                 else
                 {
-                    solidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть11@11-001-7@" + nameAsm, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть12@11-001-7@" + nameAsm, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Эскиз35@11-001-7@" + nameAsm, "SKETCH", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Эскиз36@11-001-7@" + nameAsm, "SKETCH", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть10@11-003-6@" + nameAsm, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть11@11-003-6@" + nameAsm, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Эскиз34@11-003-6@" + nameAsm, "SKETCH", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Эскиз35@11-003-6@" + nameAsm, "SKETCH", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("11-005-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("11-006-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть11@11-001-7@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть12@11-001-7@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Эскиз35@11-001-7@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Эскиз36@11-001-7@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть10@11-003-6@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть11@11-003-6@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Эскиз34@11-003-6@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Эскиз35@11-003-6@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("11-005-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("11-006-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
 
 
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-187@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-188@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-189@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-190@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-191@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-192@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-193@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-194@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-195@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-196@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-197@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-198@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-187@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-188@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-189@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-190@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-191@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-192@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-193@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-194@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-195@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-196@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-197@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-198@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
                 }
 
                 
@@ -206,8 +202,8 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 newPartPath = $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
                 if (/*VersionsFileInfo.Replaced.ExistLatestVersion(newPartPath, VaultSystem.VentsCadFile.Type.Part, lastChangedDate, Settings.Default.PdmBaseName)*/ false)
                 {
-                    solidWorksDocument = SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
-                    solidWorksDocument.Extension.SelectByID2("11-001-7@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    solidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
+                    solidWorksDocument.Extension.SelectByID2("11-001-7@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
                     sldWorksAsm.ReplaceComponents(newPartPath, "", false, true);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-001.SLDPRT");
                 }
@@ -233,8 +229,8 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 {
                     try
                     {
-                        solidWorksDocument = SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM" );
-                        solidWorksDocument.Extension.SelectByID2("11-003-6@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                        solidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM" );
+                        solidWorksDocument.Extension.SelectByID2("11-003-6@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
                         sldWorksAsm.ReplaceComponents(newPartPath, "", false, true);
                         SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-003.SLDPRT");
                     }
@@ -252,9 +248,9 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
                 if (/*VersionsFileInfo.Replaced.ExistLatestVersion(newPartPath, VaultSystem.VentsCadFile.Type.Part, lastChangedDate, Settings.Default.PdmBaseName)*/false)
                 {
-                    solidWorksDocument = SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
+                    solidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
                    
-                    solidWorksDocument.Extension.SelectByID2("11-002-4@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    solidWorksDocument.Extension.SelectByID2("11-002-4@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
                     sldWorksAsm.ReplaceComponents(newPartPath, "", true, true);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-002.SLDPRT");
                 }
@@ -283,8 +279,8 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
                     if (/*VersionsFileInfo.Replaced.ExistLatestVersion(newPartPath, VaultSystem.VentsCadFile.Type.Part, lastChangedDate, Settings.Default.PdmBaseName)*/ false)
                     {
-                        solidWorksDocument =SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
-                        solidWorksDocument.Extension.SelectByID2("11-003-6@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                        solidWorksDocument =SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
+                        solidWorksDocument.Extension.SelectByID2("11-003-6@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
                         sldWorksAsm.ReplaceComponents(newPartPath, "", false, true);
                         SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-003.SLDPRT");
                     }
@@ -315,8 +311,8 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
                 if (/*VersionsFileInfo.Replaced.ExistLatestVersion(newPartPath, VaultSystem.VentsCadFile.Type.Part, lastChangedDate, Settings.Default.PdmBaseName)*/false)
                 {
-                    solidWorksDocument =SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
-                    solidWorksDocument.Extension.SelectByID2("11-004-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    solidWorksDocument =SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
+                    solidWorksDocument.Extension.SelectByID2("11-004-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
                     sldWorksAsm.ReplaceComponents(newPartPath, "", true, true);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-004.SLDPRT");
                 }
@@ -344,8 +340,8 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     $@"{RootFolder}{SubjectDestinationFolder}{newNameAsm}.SLDASM";
                 if (false)
                 {
-                    solidWorksDocument =SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
-                    solidWorksDocument.Extension.SelectByID2("11-100-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    solidWorksDocument =SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
+                    solidWorksDocument.Extension.SelectByID2("11-100-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
                     sldWorksAsm.ReplaceComponents(newPartPathAsm, "", true, true);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-100.SLDASM");
                 }
@@ -426,30 +422,30 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
                 if (isOutDoor)
                 {
-                    solidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть7@11-30-002-1@" + nameAsm, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Эскиз27@11-30-002-1@" + nameAsm, "SKETCH", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть7@11-30-002-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Эскиз27@11-30-002-1@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
 
-                    solidWorksDocument.Extension.SelectByID2("ВНС-902.49.283-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("ВНС-902.49.283-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
 
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-314@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-323@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-322@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-321@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-320@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-314@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-323@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-322@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-321@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-320@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
 
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-315@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-316@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-317@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-318@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-319@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-315@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-316@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-317@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-318@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-319@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
 
                     // 11-005 
                     newName = "11-05-" + height + modelType;
                     newPartPath = $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
                     if (false)
                     {
-                        solidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM" )));
-                        solidWorksDocument.Extension.SelectByID2("11-005-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                        solidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM" )));
+                        solidWorksDocument.Extension.SelectByID2("11-005-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
                         sldWorksAsm.ReplaceComponents(newPartPath, "", false, true);
                         SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-005.SLDPRT");
                     }
@@ -477,8 +473,8 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     newPartPath = $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
                     if (false)
                     {
-                        solidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM" )));
-                        solidWorksDocument.Extension.SelectByID2("11-006-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                        solidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM" )));
+                        solidWorksDocument.Extension.SelectByID2("11-006-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
                         sldWorksAsm.ReplaceComponents(newPartPath, "", false, true);
                         SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-006.SLDPRT");
                     }
@@ -498,33 +494,33 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 }
                 else
                 {
-                    solidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть8@11-30-002-1@" + nameAsm, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть9@11-30-002-1@" + nameAsm, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Эскиз28@11-30-002-1@" + nameAsm, "SKETCH", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Эскиз29@11-30-002-1@" + nameAsm, "SKETCH", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть8@11-30-002-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть9@11-30-002-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Эскиз28@11-30-002-1@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Эскиз29@11-30-002-1@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
 
 
-                    solidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть7@11-30-004-2@" + nameAsm, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть8@11-30-004-2@" + nameAsm, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Эскиз27@11-30-004-2@" + nameAsm, "SKETCH", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Эскиз28@11-30-004-2@" + nameAsm, "SKETCH", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть7@11-30-004-2@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть8@11-30-004-2@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Эскиз27@11-30-004-2@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Эскиз28@11-30-004-2@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
 
-                    solidWorksDocument.Extension.SelectByID2("11-005-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("11-006-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("11-005-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("11-006-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
 
 
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-346@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-347@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-348@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-349@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-350@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-351@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-356@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-357@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-358@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-359@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-360@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
-                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-361@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-346@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-347@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-348@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-349@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-350@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-351@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-356@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-357@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-358@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-359@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-360@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
+                    solidWorksDocument.Extension.SelectByID2("Rivet Bralo-361@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
                 }
 
 
@@ -605,8 +601,8 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 newPartPath = $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
                 if (false)
                 {
-                    solidWorksDocument = SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
-                    solidWorksDocument.Extension.SelectByID2("11-30-001-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    solidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
+                    solidWorksDocument.Extension.SelectByID2("11-30-001-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
                     sldWorksAsm.ReplaceComponents(newPartPath, "", true, true);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-30-001.SLDPRT");
                 }
@@ -651,8 +647,8 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 newPartPath = $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
                 if (false)
                 {
-                    solidWorksDocument = SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
-                    solidWorksDocument.Extension.SelectByID2("11-30-002-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    solidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
+                    solidWorksDocument.Extension.SelectByID2("11-30-002-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
                     sldWorksAsm.ReplaceComponents(newPartPath, "", false, true);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-30-002.SLDPRT");
                 }
@@ -682,8 +678,8 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 newPartPath = $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
                 if (false)
                 {
-                    solidWorksDocument = SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
-                    solidWorksDocument.Extension.SelectByID2("11-30-004-2@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    solidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
+                    solidWorksDocument.Extension.SelectByID2("11-30-004-2@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
                     sldWorksAsm.ReplaceComponents(newPartPath, "", false, true);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-30-004.SLDPRT");
                 }
@@ -711,8 +707,8 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 newPartPath = $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
                 if (false)
                 {
-                    solidWorksDocument =SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
-                    solidWorksDocument.Extension.SelectByID2("11-30-003-2@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    solidWorksDocument =SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
+                    solidWorksDocument.Extension.SelectByID2("11-30-003-2@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
                     sldWorksAsm.ReplaceComponents(newPartPath, "", true, true);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-30-003.SLDPRT");
                 }
@@ -747,8 +743,8 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 {
                     if (false)
                     {
-                        solidWorksDocument = SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
-                        solidWorksDocument.Extension.SelectByID2("11-100-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                        solidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
+                        solidWorksDocument.Extension.SelectByID2("11-100-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
                         sldWorksAsm.ReplaceComponents(newPartPathAsm, "", true, true);
                         SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-100.SLDASM");
                     }
@@ -793,8 +789,8 @@ namespace PDMWebService.Data.Solid.ElementsCase
                         $@"{RootFolder}{SubjectDestinationFolder}{newNameAsm}.SLDASM";
                     if (false)
                     {
-                        solidWorksDocument =SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
-                        solidWorksDocument.Extension.SelectByID2("11-100-1@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                        solidWorksDocument =SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
+                        solidWorksDocument.Extension.SelectByID2("11-100-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
                         sldWorksAsm.ReplaceComponents(newPartPathAsm, "", true, true);
                         SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-100.SLDASM");
                     }
@@ -841,7 +837,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     solidWorksDocument.Extension.SelectByID2("ВНС-47.91.101-2@11-100", "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
                 }
 
-                var docDrw100 = SolidWorksAdapter.SldWoksAppExemplare.OpenDoc6($@"{RootFolder}{modelDamperPath}{"11-100"}.SLDDRW", (int)swDocumentTypes_e.swDocDRAWING, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", 0, 0);
+                var docDrw100 = SolidWorksAdapter.SldWoksAppExemplare.OpenDoc6($@"{RootFolder}{NewPartPath}{"11-100"}.SLDDRW", (int)swDocumentTypes_e.swDocDRAWING, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", 0, 0);
 
                 SolidWorksAdapter.AcativeteDoc(Path.GetFileNameWithoutExtension(newPartPathAsm) );
                 solidWorksDocument.ForceRebuild3(false);
@@ -867,8 +863,8 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 {
                     if (false)
                     {
-                        solidWorksDocument = SolidWorksAdapter.AcativeteDoc(nameAsm + ".SLDASM");
-                        solidWorksDocument.Extension.SelectByID2("11-30-100-4@" + nameAsm, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                        solidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
+                        solidWorksDocument.Extension.SelectByID2("11-30-100-4@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
                         sldWorksAsm.ReplaceComponents(newPartPathAsm, "", true, true);
                         SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-30-100.SLDASM");
                     }
@@ -967,7 +963,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
             #endregion
 
-            solidWorksDocument = SolidWorksAdapter.AcativeteDoc(nameAsm);
+            solidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName);
 
          //   GabaritsForPaintingCamera(solidWorksDocument);
             solidWorksDocument.EditRebuild3();
