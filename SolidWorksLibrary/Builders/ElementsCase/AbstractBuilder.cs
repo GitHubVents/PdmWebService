@@ -50,9 +50,13 @@ namespace SolidWorksLibrary.Builders.ElementsCase
         /// </summary>
         protected ModelDoc2 SolidWorksDocument { get; set; }
         /// <summary>
-        /// Working document name
+        /// Working assembly document name
         /// </summary>
-        protected string documentlName { get; set; }
+        protected string AssemblyName { get; set; }
+        /// <summary>
+        /// Working part document name
+        /// </summary>
+        protected string PartName { get; set; }
         /// <summary>
         /// Sheetmetal bend radius 
         /// </summary>
@@ -134,21 +138,39 @@ namespace SolidWorksLibrary.Builders.ElementsCase
         protected int errors   = 0;
 
         protected int warnings   = 0;
-        protected virtual void EditPartParameters(string partName, string newPath)
+        protected virtual void EditPartParameters(string partName, string newPath  )
         {
-            ModelDoc2 solidWorksDocument = null;
-            solidWorksDocument = SolidWorksAdapter.AcativeteDoc(partName + ".SLDPRT");
+
+          //  ModelDoc2 solidWorksDocument = null;
+          //  solidWorksDocument = SolidWorksAdapter.AcativeteDoc(partName + ".SLDPRT");
             foreach (var item in parameters)
             {
-                //boolstatus = Part.Extension.SelectByID2("D2@Ýñêèç1@02-01-101-50-1@02-104-50", "DIMENSION", 0, 0, 0, False, 0, Nothing, 0)
-                Dimension myDimension = ((Dimension)(solidWorksDocument.Parameter(item.Key + "@" + partName + ".SLDPRT")));
-                myDimension.SystemValue = item.Value / 1000;
+                try
+                {
+                    //Console.WriteLine("Press any key");
+                    //Console.ReadKey();
+                 //  path to scach              type
+                   // SolidWorksDocument.Extension.SelectByID2(item.Key + "@02-01-001@02-01", "DIMENSION", 0, 0, 0, false, 0, null, 0);
+
+                    // var selManager = SolidWorksDocument.ISelectionManager;
+                    //Dimension dimension = selManager.GetSelectedObject6(1, -1) as Dimension;
+                    Dimension myDimension = (SolidWorksDocument.Parameter(item.Key + "@" + partName + ".SLDPRT" )) as Dimension;
+                    Console.WriteLine(item.Key);
+                    myDimension.SystemValue = item.Value / 1000;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
+
+                // Dimension myDimension = ((Dimension)(solidWorksDocument.Parameter(item.Key + "@" + partName + ".SLDPRT")));
+                // myDimension.SystemValue = item.Value / 1000;
             }
-            solidWorksDocument.EditRebuild3();
-            solidWorksDocument.ForceRebuild3(false);
-            solidWorksDocument.Extension.SaveAs(newPath + ".SLDPRT", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent + (int)swSaveAsOptions_e.swSaveAsOptions_UpdateInactiveViews, null, ref errors, warnings);
+            SolidWorksDocument.EditRebuild3();
+            SolidWorksDocument.ForceRebuild3(false);
+            SolidWorksDocument.Extension.SaveAs(newPath + ".SLDPRT", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent + (int)swSaveAsOptions_e.swSaveAsOptions_UpdateInactiveViews, null, ref errors, warnings);
             InitiatorSaveExeption(errors, warnings, newPath);
-            SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newPath);
+           // SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newPath);
             this.parameters.Clear();
         }
 
