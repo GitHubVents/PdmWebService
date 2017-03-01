@@ -14,7 +14,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
     { 
         public FlapBuilder()
         { 
-            base.SetProperties(@"\11 - Регулятор расхода воздуха\", @"\11 - Damper\" );
+            base.SetProperties("11 - Регулятор расхода воздуха", "11 - Damper" );
         }
         /// <summary>
         /// Dumpers the s.
@@ -27,17 +27,14 @@ namespace PDMWebService.Data.Solid.ElementsCase
         /// <returns></returns>
         public string Build(FlapTypes flapType, int width, int height, bool isOutDoor, string[] material)
         {  
-
             switch (flapType)
             {
                 case FlapTypes.Twenty_mm:
                     PartName = "11-20";
-                    NewPartPath = SourceFolder;
                     AssemblyName = "11 - Damper";
                     break;
                 case FlapTypes.Thirty_mm:
                     PartName = "11-30";
-                    NewPartPath = SourceFolder;
                     AssemblyName = "11-30";
                     break;
             }

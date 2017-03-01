@@ -22,7 +22,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
     {
         protected Dictionary<string, double> parameters { get; set; }
 
-        protected string NewPartPath {get;set;}
+        protected string NewPartPath;
         #region properties
         /// <summary>
         /// Path list to built files
@@ -69,7 +69,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
         /// </summary>
         public virtual event SetBendsHandler SetBends;
 
-        protected bool IsPartExist { get; set; } = false;
+        protected bool IsPartExist;
         #endregion
 
         public ProductBuilderBehavior()
