@@ -54,11 +54,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
             AssemblyDocument = SolidWorksAdapter.ToAssemblyDocument(SolidWorksDocument);
         }
 
-        public void Build(
-            PanelType panelType, PanelProfile profile, Vector2 sizePanel,
-            Materials OuterMaterial, Materials InnerMaterial,
-            double outThickness, double innerThickness
-            )
+        public void Build(  PanelType panelType, PanelProfile profile, Vector2 sizePanel, Materials OuterMaterial, Materials InnerMaterial, double outThickness, double innerThickness  )
         {
             this.sizePanel = sizePanel;
             this.innerThickness = innerThickness;
@@ -117,21 +113,19 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
             CalculateRivetStep();
             if (panelType == PanelType.DualBlankPanel || panelType == PanelType.DualRemovablePanel)
             {
-                DoublePanel(panelType);
+                DoublePanel(panelType, OuterMaterial, InnerMaterial, profile);
             }
             else
             {
-                SinglePanel(panelType);
+                SinglePanel(panelType,OuterMaterial,InnerMaterial,profile);
             }
             Insulation(profile);
-            AssemblyName = "02-" + (int)panelType + sizePanel.X + "-" + sizePanel.Y + "-" + OuterMaterial + "-" + InnerMaterial + "-" + (int)profile ;
+            AssemblyName = "02-" + (int)panelType + sizePanel.X + "-" + sizePanel.Y + "-" + OuterMaterial + "-" + InnerMaterial + "-" + (int)profile;
             ModelDoc2 asm = AssemblyDocument as ModelDoc2;
             base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, AssemblyName + ".SLDASM");
             asm.ForceRebuild3(false);
             asm.Extension.SaveAs(base.NewPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion,/* (int)swSaveAsOptions_e.swSaveAsOptions_Silent +*/ (int)swSaveAsOptions_e.swSaveAsOptions_SaveReferenced + (int)swSaveAsOptions_e.swSaveAsOptions_UpdateInactiveViews, null, ref errors, warnings);
             InitiatorSaveExeption(errors, warnings, base.NewPartPath);
-    
-
         }
 
         private void CalculateRivetStep()
@@ -148,19 +142,21 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
 
         }
 
-        private void SinglePanel(PanelType panelType)
+        private void SinglePanel(PanelType panelType, Materials OuterMaterial, Materials InnerMaterial, PanelProfile profile)
         {
-            base.PartName = "02-01-001"; // имя детали для внешней панели
+            base.PartName  = "02-" + (int)panelType + "-01-"+ sizePanel.X + "-" + sizePanel.Y + "-" + OuterMaterial + "-" + InnerMaterial + "-" + (int)profile;
+
             if (CheckExistPart != null)
-            CheckExistPart(base.PartName , out IsPartExist, out NewPartPath);
+                CheckExistPart(base.PartName, out IsPartExist, out NewPartPath);
+
             if (IsPartExist)
             {
                 SolidWorksDocument.Extension.SelectByID2("02-01-001-1@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
                 AssemblyDocument.ReplaceComponents(base.NewPartPath, "", false, true);
-             
             }
             else
             {
+                
                 base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, base.PartName);
                 // outer panel
                 if (SetBends != null)
@@ -169,7 +165,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
                 base.parameters.Add("D2@Эскиз1", sizePanel.X);
                 base.parameters.Add("D1@Кривая2", rivetH);
                 base.parameters.Add("D1@Кривая1", rivetW);
-               
+
                 base.parameters.Add("D7@Ребро-кромка1", lenght);
                 base.parameters.Add("Толщина@Листовой металл", outThickness);
                 base.parameters.Add("D1@Листовой металл", (double)BendRadius);
@@ -180,37 +176,37 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
                 }
                 EditPartParameters("02-01-001", base.NewPartPath);
 
+            }
+            base.PartName = "02-" + (int)panelType + "-02-" + sizePanel.X + "-" + sizePanel.Y + "-" + OuterMaterial + "-" + InnerMaterial + "-" + (int)profile;
+            if (CheckExistPart != null)
+                CheckExistPart(base.PartName, out IsPartExist, out NewPartPath);
 
-                base.PartName = "02-01-002"; // имя детали для внутреней панели
-                if (CheckExistPart != null)
-                    CheckExistPart(base.PartName, out IsPartExist, out NewPartPath);
-             
-                if (false)
-                {                   
-                    SolidWorksDocument.Extension.SelectByID2("02-01-002-1@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    AssemblyDocument.ReplaceComponents(base.NewPartPath, "", false, true);
-        
-                }
-                else
-                {
-                    base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, base.PartName);
-                    if (SetBends != null)
-                        SetBends((decimal)innerThickness, out KFactor, out BendRadius);
-                    base.parameters.Add("D1@Эскиз1", innerWeidht);
-                    base.parameters.Add("D2@Эскиз1", innerHeight);
-                    base.parameters.Add("D1@Кривая2", rivetW);
-                    base.parameters.Add("D1@Кривая1", rivetH);
-                    base.parameters.Add("Толщина@Листовой металл", innerThickness);
-                    base.parameters.Add("D1@Листовой металл", (double)BendRadius);
-                    base.parameters.Add("D2@Листовой металл", (double)KFactor * 1000);
-                    EditPartParameters("02-01-002", base.NewPartPath);
-                }
+            if (IsPartExist)
+            {
+                SolidWorksDocument.Extension.SelectByID2("02-01-002-1@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                AssemblyDocument.ReplaceComponents(base.NewPartPath, "", false, true);
+
+            }
+            else
+            {
+                base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, base.PartName);
+                if (SetBends != null)
+                    SetBends((decimal)innerThickness, out KFactor, out BendRadius);
+                base.parameters.Add("D1@Эскиз1", innerWeidht);
+                base.parameters.Add("D2@Эскиз1", innerHeight);
+                base.parameters.Add("D1@Кривая2", rivetW);
+                base.parameters.Add("D1@Кривая1", rivetH);
+                base.parameters.Add("Толщина@Листовой металл", innerThickness);
+                base.parameters.Add("D1@Листовой металл", (double)BendRadius);
+                base.parameters.Add("D2@Листовой металл", (double)KFactor * 1000);
+                EditPartParameters("02-01-002", base.NewPartPath);
             }
         }
+        
 
-        private void DoublePanel(PanelType panelType)
+        private void DoublePanel(PanelType panelType, Materials OuterMaterial, Materials InnerMaterial, PanelProfile profile)
         {
-            base.PartName = "02-01-101-50";
+            base.PartName = "02-" + (int)panelType + "-01-" + sizePanel.X + "-" + sizePanel.Y + "-" + OuterMaterial + "-" + InnerMaterial + "-" + (int)profile;
             if (CheckExistPart != null)
                 CheckExistPart(PartName, out IsPartExist, out NewPartPath);        
             if (IsPartExist)
@@ -236,8 +232,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
                 EditPartParameters("02-01-101-50", base.NewPartPath); 
             }
 
-
-            base.PartName = "02-01-102-50";
+            base.PartName = "02-" + (int)panelType + "-02-" + sizePanel.X + "-" + sizePanel.Y + "-" + OuterMaterial + "-" + InnerMaterial + "-" + (int)profile;
 
             if (CheckExistPart != null)
                 CheckExistPart(PartName, out IsPartExist, out NewPartPath);
@@ -260,10 +255,10 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
                 base.parameters.Add("D1@Листовой металл", (double)BendRadius);
                 base.parameters.Add("D2@Листовой металл", (double)KFactor * 1000);
                 EditPartParameters("02-01-102-50", base.NewPartPath);
-            }             
+            }
 
-            base.PartName = "02-01-103-50";
-        
+            base.PartName = "02-" + (int)panelType + "-03-" + sizePanel.X + "-" + sizePanel.Y + "-" + OuterMaterial + "-" + InnerMaterial + "-" + (int)profile;
+
 
             if (CheckExistPart != null)
                 CheckExistPart(PartName, out IsPartExist, out NewPartPath);
@@ -288,7 +283,6 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
                 base.parameters.Add("D2@Листовой металл", (double)KFactor * 1000);
                 EditPartParameters("02-01-103-50", base.NewPartPath);
             }
-
         }
 
         /// <summary>
@@ -297,7 +291,22 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
         private void Insulation(PanelProfile profile)
         {
             string MaterialsFolder = "Materials";
-            PartName = "02-03-"  + (int)profile + sizePanel.X + "-" + sizePanel.Y;
+            PartName = "02-03-" + (profile == PanelProfile.Profile_5_0 ? string.Empty : ((int)profile).ToString()) + sizePanel.X + "-" + sizePanel.Y;
+
+            string tapeMaterialName = string.Empty, insulationMaterialName = string.Empty;
+            switch (profile)
+            {
+                case PanelProfile.Profile_3_0:
+                    tapeMaterialName = "Лента 30"; 
+                    break;
+                case PanelProfile.Profile_5_0:
+                    tapeMaterialName = "Лента 50";
+                    break;
+                case PanelProfile.Profile_7_0:
+                    tapeMaterialName = "Лента 50";
+                    break;
+            }
+
             if (CheckExistPart != null)
                 CheckExistPart(PartName, out IsPartExist, out NewPartPath);
             if (IsPartExist)
@@ -315,7 +324,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
                 EditPartParameters("02-01-003", base.NewPartPath);
             }
 
-            PartName = "02-04-" + (int)profile + sizePanel.X + "-" + sizePanel.Y;
+            PartName = "02-04-" + (profile == PanelProfile.Profile_5_0 ? string.Empty : ((int)profile).ToString()) + sizePanel.X + "-" + sizePanel.Y;
             if (CheckExistPart != null)
                 CheckExistPart(PartName, out IsPartExist, out NewPartPath);
             if (IsPartExist)

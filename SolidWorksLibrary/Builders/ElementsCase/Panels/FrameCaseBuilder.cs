@@ -27,30 +27,19 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
 
         public string GetFrameCasePath(string modelName)
         {
-            string path = Path.Combine(RootFolder, SubjectDestinationFolder, modelName);
-            Console.WriteLine("GetFrameCasePath " + path);
+            string path = Path.Combine(RootFolder, SubjectDestinationFolder, modelName); 
             return path;
         }
 
-        public void Build(int width, int height, int lenght, int profileType, ServiceSide serviceSide)
+        public void Build(Vector3 frameSize, int profileType, ServiceSide serviceSide)
         {
-            Console.WriteLine("RootFolder " + RootFolder);
             string caseAssemblyPath = Path.Combine(RootFolder, SourceFolder, modelName);
-            Console.WriteLine(caseAssemblyPath);
             Patterns.Observer.MessageObserver.Instance.SetMessage("\n" + caseAssemblyPath + "\n");
-
             ModelDoc2 swDoc = SolidWorksAdapter.OpenDocument(caseAssemblyPath, swDocumentTypes_e.swDocASSEMBLY);
             Patterns.Observer.MessageObserver.Instance.SetMessage("открылась сборка");
-
-            var swAsm = (AssemblyDoc)swDoc;
-            swAsm.ResolveAllLightWeightComponents(false);
-
-
+             AssemblyDocument = SolidWorksAdapter.ToAssemblyDocument( swDoc); 
             double rivetL;
-
-            //Lenght
-
-            string newName = "01-P150-45-" + (lenght - 140);
+            string newName = "01-P150-45-" + (frameSize.Z - 140);
             string newPartPath = GetFrameCasePath(newName);
 
 
@@ -59,95 +48,95 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
                 swDoc = SolidWorksAdapter.AcativeteDoc(modelName);
                 swDoc.Extension.SelectByID2("01-P150-45-1640-27@" + modelName.Replace(".SLDASM", ""), "COMPONENT", 0, 0,
                     0, false, 0, null, 0);
-                swAsm.ReplaceComponents(newPartPath, "", true, true);
+                AssemblyDocument.ReplaceComponents(newPartPath, "", true, true);
                 SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("01-P150-45-1640.SLDPRT");
             }
             else if (File.Exists(newPartPath) != true) // TO DO delegate
             {
-                rivetL = (Math.Truncate((lenght - 170) / step) + 1) * 1000;
-                parameters.Add("D1@Вытянуть1", lenght - 140);
+                rivetL = (Math.Truncate((frameSize.Z - 170) / step) + 1) * 1000;
+                parameters.Add("D1@Вытянуть1", frameSize.Z - 140);
                 parameters.Add("D1@Кривая1", rivetL);
                 EditPartParameters("01-P150-45-1640", newPartPath);
 
-                //Width
+                //frameSize.X
 
-                newName = "01-P150-45-" + (width - 140);
+                newName = "01-P150-45-" + (frameSize.X - 140);
                 newPartPath = GetFrameCasePath(newName);
                 if (File.Exists(new FileInfo(newPartPath).FullName))
                 {
                     swDoc = SolidWorksAdapter.AcativeteDoc(modelName);
                     swDoc.Extension.SelectByID2("01-003-50-22@" + modelName.Replace(".SLDASM", ""), "COMPONENT", 0, 0, 0,
                         false, 0, null, 0);
-                    swAsm.ReplaceComponents(newPartPath, "", true, true);
+                    AssemblyDocument.ReplaceComponents(newPartPath, "", true, true);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("01-003-50.SLDPRT");
                 }
                 else
                 {
-                    rivetL = (Math.Truncate((width - 170) / step) + 1) * 1000;
-                    parameters.Add("D1@Вытянуть1", width - 140);
+                    rivetL = (Math.Truncate((frameSize.X - 170) / step) + 1) * 1000;
+                    parameters.Add("D1@Вытянуть1", frameSize.X - 140);
                     parameters.Add("D1@Кривая1", rivetL);
                     EditPartParameters("01-P150-45-1640", newPartPath);
                 }
 
                 //01-P252-45-770
-                newName = "01-P252-45-" + (width - 100);
+                newName = "01-P252-45-" + (frameSize.X - 100);
                 newPartPath = newPartPath = GetFrameCasePath(newName);
                 if (File.Exists(new FileInfo(newPartPath).FullName))
                 {
                     swDoc = SolidWorksAdapter.AcativeteDoc(modelName);
                     swDoc.Extension.SelectByID2("01-P252-45-770-6@" + modelName.Replace(".SLDASM", ""), "COMPONENT", 0, 0, 0,
                         false, 0, null, 0);
-                    swAsm.ReplaceComponents(newPartPath, "", true, true);
+                    AssemblyDocument.ReplaceComponents(newPartPath, "", true, true);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("01-P252-45-770.SLDPRT");
                 }
                 else
                 {
-                    parameters.Add("D1@Вытянуть1", width - 100);
+                    parameters.Add("D1@Вытянуть1", frameSize.X - 100);
                     EditPartParameters("01-P150-45-1640", newPartPath);
                 }
 
-                //Height
+                //frameSize.Y
 
-                newName = "01-P150-45-" + (height - 140);
+                newName = "01-P150-45-" + (frameSize.Y - 140);
                 newPartPath = newPartPath = GetFrameCasePath(newName);
                 if (File.Exists(new FileInfo(newPartPath).FullName))
                 {
                     swDoc = SolidWorksAdapter.AcativeteDoc(modelName);
                     swDoc.Extension.SelectByID2("01-P150-45-510-23@" + modelName.Replace(".SLDASM", ""), "COMPONENT", 0, 0,
                         0, false, 0, null, 0);
-                    swAsm.ReplaceComponents(newPartPath, "", true, true);
+                    AssemblyDocument.ReplaceComponents(newPartPath, "", true, true);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("01-P150-45-510.SLDPRT");
                 }
                 else  
                 {
-                    rivetL = (Math.Truncate((height - 170) / step) + 1) * 1000;
+                    rivetL = (Math.Truncate((frameSize.Y - 170) / step) + 1) * 1000;
 
-                    parameters.Add("D1@Вытянуть1", (height - 140));
+                    parameters.Add("D1@Вытянуть1", (frameSize.Y - 140));
                     parameters.Add("D1@Кривая1", rivetL);
                     EditPartParameters("01-P150-45-1640", newPartPath);
                 }
 
                 //  01-P252-45-550
-                newName = "01-P252-45-" + (height - 100);
+                newName = "01-P252-45-" + (frameSize.Y - 100);
                 newPartPath = newPartPath = GetFrameCasePath(newName);
                 if (File.Exists(new FileInfo(newPartPath).FullName))
                 {
                     swDoc = SolidWorksAdapter.AcativeteDoc(modelName);
                     swDoc.Extension.SelectByID2("01-P252-45-550-10@" + modelName.Replace(".SLDASM", ""), "COMPONENT", 0, 0,
                         0, false, 0, null, 0);
-                    swAsm.ReplaceComponents(newPartPath, "", true, true);
+                    AssemblyDocument.ReplaceComponents(newPartPath, "", true, true);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("01-P252-45-550.SLDPRT");
                 }
                 else
                 {
-                    parameters.Add("D1@Вытянуть1", height - 100);
+                    parameters.Add("D1@Вытянуть1", frameSize.Y - 100);
                     EditPartParameters("01-P252-45-550", newPartPath);
                 }
 
                 swDoc = SolidWorksAdapter.AcativeteDoc(modelName);
                 swDoc.EditRebuild3();
                 swDoc.ForceRebuild3(true);
-                swAsm = (AssemblyDoc)swDoc;
+                AssemblyDocument = (AssemblyDoc)swDoc;
 
                 if (serviceSide == ServiceSide.Left)
                 {
