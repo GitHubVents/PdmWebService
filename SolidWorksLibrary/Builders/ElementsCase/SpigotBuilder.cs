@@ -24,11 +24,8 @@ namespace PDMWebService.Data.Solid.ElementsCase
         public string Build(SpigotType type, int width, int height)
         {
             string modelName = GetModelName(type);
-            NewSpigotName = GetSpigotName(type, width, height);
-        
-            string newPartPath = string.Empty;
-
-           
+            NewSpigotName = GetSpigotName(type, width, height);        
+            
            
             Dimension dimension;
 
@@ -59,15 +56,10 @@ namespace PDMWebService.Data.Solid.ElementsCase
             DeleteComponents((int)type);
             if (modelName == "12-20")
             {
-                MessageObserver.Instance.SetMessage("12-20-001");
-                //12-20-001
-                SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("12-20-001");
-                NewPartPath = $"12-20-{height}.SLDPRT";
-                MessageObserver.Instance.SetMessage("Check exist part. " + NewPartPath);
+                PartName = $"12-20-{height}.SLDPRT";               
                 if (CheckExistPart != null)
                 {
-                    MessageObserver.Instance.SetMessage("\tCheckExistPartEvent");
-                    CheckExistPart(NewPartPath, out IsPartExist, out newPartPath);
+                    CheckExistPart(PartName, out IsPartExist, out NewPartPath);
                 }
                 else
                 {
@@ -76,36 +68,34 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
                 if (IsPartExist)
                 {
-                    solidWorksDocument = SolidWorksAdapter.AcativeteDoc("12-00.SLDASM");
+                 
                     solidWorksDocument.Extension.SelectByID2("12-20-001-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    assemblyDocument.ReplaceComponents(newPartPath, "", true, true);
-                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("12-20-001.SLDPRT");
+                    assemblyDocument.ReplaceComponents(NewPartPath, "", true, true);
                 }
                 else
                 {
-                    newPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{NewPartPath}";
+                    NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{NewPartPath}";
                     solidWorksDocument.Extension.SelectByID2("D1@Вытянуть1@12-20-001-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
                     dimension = ((Dimension)(solidWorksDocument.Parameter("D1@Вытянуть1@12-20-001.Part")));
                     dimension.SystemValue = h - 0.031;
                     solidWorksDocument.Extension.SelectByID2("D1@Кривая1@12-20-001-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
                     dimension = ((Dimension)(solidWorksDocument.Parameter("D1@Кривая1@12-20-001.Part")));
                     dimension.SystemValue = weldHeight;
-                    SolidWorksDocument.Extension.SaveAs(newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
-                    InitiatorSaveExeption(error, warning, newPartPath);
-                    ComponentsPathList.Add(newPartPath);
+                    SolidWorksDocument.Extension.SaveAs(NewPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
+                    InitiatorSaveExeption(error, warning, NewPartPath);
+                    ComponentsPathList.Add(NewPartPath);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(NewPartPath);
                 }
 
                 //12-20-002
-                MessageObserver.Instance.SetMessage("12-20-002");
-                SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("12-20-002");
-                NewPartPath = $"12-20-{width}.SLDPRT";
+          
+                PartName = $"12-20-{width}.SLDPRT";
 
                 MessageObserver.Instance.SetMessage("Check exist part. " + NewPartPath);
                 if (CheckExistPart != null)
                 {
                     MessageObserver.Instance.SetMessage("\tCheckExistPartEvent");
-                    CheckExistPart(NewPartPath, out IsPartExist, out newPartPath);
+                    CheckExistPart(PartName, out IsPartExist, out NewPartPath);
                 }
                 else
                 {
@@ -113,51 +103,42 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 }
 
                 if (IsPartExist)
-                {
-                    solidWorksDocument = SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc("12-00.SLDASM");
+                {                    
                     solidWorksDocument.Extension.SelectByID2("12-20-002-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    assemblyDocument.ReplaceComponents(newPartPath, "", true, true);
-                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("12-20-002.SLDPRT");
+                    assemblyDocument.ReplaceComponents(PartName, "", true, true);                 
                 }
                 else
                 {
-                    newPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{NewPartPath}";
+                    NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{NewPartPath}";
                     solidWorksDocument.Extension.SelectByID2("D1@Вытянуть1@12-20-002-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
                     dimension = ((Dimension)(solidWorksDocument.Parameter("D1@Вытянуть1@12-20-002.Part")));
                     dimension.SystemValue = w - 0.031;
                     solidWorksDocument.Extension.SelectByID2("D1@Кривая1@12-20-002-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
                     dimension = ((Dimension)(solidWorksDocument.Parameter("D1@Кривая1@12-20-002.Part")));
                     dimension.SystemValue = weldWidth;
-                    SolidWorksDocument.Extension.SaveAs(newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
-                    InitiatorSaveExeption(error, warning, newPartPath);
-                    ComponentsPathList.Add(newPartPath);
-                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(NewPartPath);
+                    SolidWorksDocument.Extension.SaveAs(NewPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
+                    InitiatorSaveExeption(error, warning, NewPartPath);
+                    ComponentsPathList.Add(NewPartPath);
                 }
 
-                //12-003
-                MessageObserver.Instance.SetMessage("12-20-003");
-                SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("12-003");
-                NewPartPath = $"12-03-{width}-{height}.SLDPRT";
-                MessageObserver.Instance.SetMessage("Check exist part. " + NewPartPath);
+                //12-003 
+                PartName = $"12-03-{width}-{height}.SLDPRT";               
                 if (CheckExistPart != null)
                 {
-                    CheckExistPart(NewPartPath, out IsPartExist, out newPartPath);
-                    MessageObserver.Instance.SetMessage("\tCheckExistPartEvent");
+                    CheckExistPart(PartName, out IsPartExist, out NewPartPath); 
                 }
                 else
                 {
                     MessageObserver.Instance.SetMessage("CheckExistPartEvent can not be null", MessageType.Warning);
                 }
                 if (IsPartExist)
-                {
-                    solidWorksDocument = SolidWorksAdapter.AcativeteDoc("12-00.SLDASM");
+                { 
                     solidWorksDocument.Extension.SelectByID2("12-003-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    assemblyDocument.ReplaceComponents(newPartPath, "", true, true);
-                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("12-003.SLDPRT");
+                    assemblyDocument.ReplaceComponents(PartName, "", true, true); 
                 }
                 else
                 {
-                    newPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{NewPartPath}";
+                    NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{NewPartPath}";
                     solidWorksDocument.Extension.SelectByID2("D3@Эскиз1@12-003-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
                     dimension = ((Dimension)(solidWorksDocument.Parameter("D3@Эскиз1@12-003.Part")));
                     dimension.SystemValue = w;
@@ -165,9 +146,9 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     dimension = ((Dimension)(solidWorksDocument.Parameter("D2@Эскиз1@12-003.Part")));
                     dimension.SystemValue = h;
                     solidWorksDocument.EditRebuild3();
-                    SolidWorksDocument.Extension.SaveAs(newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
-                    InitiatorSaveExeption(error, warning, newPartPath);
-                    ComponentsPathList.Add(newPartPath);
+                    SolidWorksDocument.Extension.SaveAs(NewPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
+                    InitiatorSaveExeption(error, warning, NewPartPath);
+                    ComponentsPathList.Add(NewPartPath);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(NewPartPath);
                 }
             }
@@ -175,13 +156,12 @@ namespace PDMWebService.Data.Solid.ElementsCase
             {
                 //12-30-001
 
-                SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("12-30-001");
-                NewPartPath = $"12-30-{height}.SLDPRT";
+                PartName = $"12-30-{height}.SLDPRT";
 
                 MessageObserver.Instance.SetMessage("Check exist part. " + NewPartPath);
                 if (CheckExistPart != null)
                 {
-                    CheckExistPart(NewPartPath, out IsPartExist, out newPartPath);
+                    CheckExistPart(PartName, out IsPartExist, out NewPartPath);
                 }
                 else
                 {
@@ -189,34 +169,30 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 }
 
                 if (IsPartExist)
-                {
-                    solidWorksDocument = SolidWorksAdapter.AcativeteDoc("12-00.SLDASM");
+                {                    
                     solidWorksDocument.Extension.SelectByID2("12-30-001-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    assemblyDocument.ReplaceComponents(newPartPath, "", true, true);
-                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("12-30-001.SLDPRT");
+                    assemblyDocument.ReplaceComponents(PartName, "", true, true);               
                 }
                 else
                 {
-                    newPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{NewPartPath}";
+                    NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{NewPartPath}";
                     solidWorksDocument.Extension.SelectByID2("D1@Вытянуть1@12-30-001-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
                     dimension = ((Dimension)(solidWorksDocument.Parameter("D1@Вытянуть1@12-30-001.Part")));
                     dimension.SystemValue = h - 0.031;
                     solidWorksDocument.Extension.SelectByID2("D1@Кривая1@12-30-001-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
                     dimension = ((Dimension)(solidWorksDocument.Parameter("D1@Кривая1@12-30-001.Part")));
                     dimension.SystemValue = weldHeight;
-                    SolidWorksDocument.Extension.SaveAs(newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
-                    InitiatorSaveExeption(error, warning, newPartPath);
-                    ComponentsPathList.Add(newPartPath);
-                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(NewPartPath);
+                    SolidWorksDocument.Extension.SaveAs(NewPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
+                    InitiatorSaveExeption(error, warning, NewPartPath);
+                    ComponentsPathList.Add(NewPartPath);
                 }
-                //12-30-002
-                SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("12-30-002");
-                NewPartPath = $"12-30-{width}.SLDPRT";
+                //12-30-002           
+                PartName = $"12-30-{width}.SLDPRT";
 
-                MessageObserver.Instance.SetMessage("Check exist part. " + NewPartPath);
+           
                 if (CheckExistPart != null)
                 {
-                    CheckExistPart(NewPartPath, out IsPartExist, out newPartPath);
+                    CheckExistPart(PartName, out IsPartExist, out NewPartPath);
                 }
                 else
                 {
@@ -224,33 +200,29 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 }
 
                 if (IsPartExist)
-                {
-                    solidWorksDocument = SolidWorksAdapter.AcativeteDoc("12-00.SLDASM");
+                {                   
                     solidWorksDocument.Extension.SelectByID2("12-30-002-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    assemblyDocument.ReplaceComponents(newPartPath, "", true, true);
-                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("12-30-002.SLDPRT");
+                    assemblyDocument.ReplaceComponents(PartName, "", true, true);           
                 }
                 else
                 {
-                    newPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{NewPartPath}";
+                    NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{NewPartPath}";
                     solidWorksDocument.Extension.SelectByID2("D1@Вытянуть1@12-30-002-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
                     dimension = ((Dimension)(solidWorksDocument.Parameter("D1@Вытянуть1@12-30-002.Part")));
                     dimension.SystemValue = w - 0.031;
                     solidWorksDocument.Extension.SelectByID2("D1@Кривая1@12-30-002-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
                     dimension = ((Dimension)(solidWorksDocument.Parameter("D1@Кривая1@12-30-002.Part")));
                     dimension.SystemValue = weldHeight;
-                    SolidWorksDocument.Extension.SaveAs(newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
-                    InitiatorSaveExeption(error, warning, newPartPath);
-                    ComponentsPathList.Add(newPartPath);
-                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(NewPartPath);
+                    SolidWorksDocument.Extension.SaveAs(NewPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
+                    InitiatorSaveExeption(error, warning, NewPartPath);
+                    ComponentsPathList.Add(NewPartPath);
                 }
                 //12-003
 
-                SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("12-003");
-                NewPartPath = $"12-03-{width}-{height}.SLDPRT";
+                PartName = $"12-03-{width}-{height}.SLDPRT";
                 if (CheckExistPart != null)
                 {
-                    CheckExistPart(NewPartPath, out IsPartExist, out newPartPath);
+                    CheckExistPart(PartName, out IsPartExist, out NewPartPath);
                 }
                 else
                 {
@@ -258,15 +230,13 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 }
 
                 if (IsPartExist)
-                {
-                    solidWorksDocument = SolidWorksAdapter.AcativeteDoc("12-00.SLDASM");
+                { 
                     solidWorksDocument.Extension.SelectByID2("12-003-2@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    assemblyDocument.ReplaceComponents(newPartPath, "", true, true);
-                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("12-003.SLDPRT");
+                    assemblyDocument.ReplaceComponents(PartName, "", true, true); 
                 }
                 else
                 {
-                    newPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{NewPartPath}";
+                    NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{NewPartPath}";
                     solidWorksDocument.Extension.SelectByID2("D3@Эскиз1@12-003-2@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
                     dimension = ((Dimension)(solidWorksDocument.Parameter("D3@Эскиз1@12-003.Part")));
                     dimension.SystemValue = w;
@@ -274,10 +244,9 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     dimension = ((Dimension)(solidWorksDocument.Parameter("D2@Эскиз1@12-003.Part")));
                     dimension.SystemValue = h;
                     solidWorksDocument.EditRebuild3();
-                    SolidWorksDocument.Extension.SaveAs(newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
-                    InitiatorSaveExeption(error, warning, newPartPath);
-                    ComponentsPathList.Add(newPartPath);
-                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(NewPartPath);
+                    SolidWorksDocument.Extension.SaveAs(NewPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
+                    InitiatorSaveExeption(error, warning, NewPartPath);
+                    ComponentsPathList.Add(NewPartPath); 
                 }
             }
 
@@ -347,9 +316,11 @@ namespace PDMWebService.Data.Solid.ElementsCase
         protected override void DeleteComponents(int type)
         {
             SpigotType e_type = (SpigotType)type;
+
+            const int deleteOption = (int)swDeleteSelectionOptions_e.swDelete_Absorbed + (int)swDeleteSelectionOptions_e.swDelete_Children;
+
             if (e_type == SpigotType.Twenty_mm)
-            {
-                const int deleteOption = (int)swDeleteSelectionOptions_e.swDelete_Absorbed + (int)swDeleteSelectionOptions_e.swDelete_Children;
+            {              
 
                 solidWorksDocument.Extension.SelectByID2("12-30-001-1@12-00", "COMPONENT", 0, 0, 0, true, 0, null, 0);
                 solidWorksDocument.Extension.SelectByID2("12-30-001-2@12-00", "COMPONENT", 0, 0, 0, true, 0, null, 0);
@@ -374,7 +345,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
             }
             if (e_type == SpigotType.Thirty_mm)
             {
-                const int deleteOption = (int)swDeleteSelectionOptions_e.swDelete_Absorbed + (int)swDeleteSelectionOptions_e.swDelete_Children;
+                 
                 solidWorksDocument.Extension.SelectByID2("12-20-001-1@12-00", "COMPONENT", 0, 0, 0, true, 0, null, 0);
                 solidWorksDocument.Extension.SelectByID2("12-20-001-2@12-00", "COMPONENT", 0, 0, 0, true, 0, null, 0);
                 solidWorksDocument.Extension.SelectByID2("12-20-002-1@12-00", "COMPONENT", 0, 0, 0, true, 0, null, 0);
@@ -419,7 +390,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
             // a check the availability in the data base
             var spigotName = GetModelName(spigotType) + "-" + width + "-" + height;
             if (isShowExtension)
-                spigotName += ".ASMSLD";
+                spigotName += ".SLDASM";
             return spigotName;
         }
         /// <summary>
@@ -433,7 +404,6 @@ namespace PDMWebService.Data.Solid.ElementsCase
             {
                 case SpigotType.Twenty_mm:
                     return "12-20";
-
                 case SpigotType.Thirty_mm:
                     return "12-30";
 

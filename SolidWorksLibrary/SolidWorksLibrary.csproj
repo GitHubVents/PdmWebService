@@ -70,6 +70,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Builders\Case\OneUnit.cs" />
     <Compile Include="Builders\Dxf\Bends.cs" />
     <Compile Include="Builders\Dxf\DXF.cs" />
     <Compile Include="Builders\Dxf\CutList.cs" />
@@ -81,8 +82,10 @@
     <Compile Include="Builders\ElementsCase\FramelessPanelsBuilder.cs" />
     <Compile Include="Builders\ElementsCase\FramePanelsBuilder.cs" />
     <Compile Include="Builders\ElementsCase\IFeedbackBuilder.cs" />
+    <Compile Include="Builders\Case\MonoBlockBuilder.cs" />
     <Compile Include="Builders\ElementsCase\MountingFrameBuilder.cs" />
     <Compile Include="Builders\ElementsCase\Panels\FrameCaseBuilder.cs" />
+    <Compile Include="Builders\ElementsCase\Panels\FramelessPartBuilder.cs" />
     <Compile Include="Builders\ElementsCase\Panels\PanelBuilder.cs" />
     <Compile Include="Builders\ElementsCase\Vector.cs" />
     <Compile Include="Builders\Pdf\PdfBuilder.cs" />
@@ -101,7 +104,9 @@
       <Name>ServiceConstants</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Builders\ElementsCase\MonoBlocks\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

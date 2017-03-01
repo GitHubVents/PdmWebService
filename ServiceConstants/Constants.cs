@@ -86,11 +86,38 @@ public enum TasksType
     {
         BlankPanel = 1,
         DualBlankPanel = 2,
-      //  PanelHinged = 3,
+        //  PanelHinged = 3,
         RemovablePanel = 4,
         DualRemovablePanel = 5,
-       // ThePanelHeatExchanger = 6,
-        TheFrontPanel = 7
+        // ThePanelHeatExchanger = 6,
+      
+
+        безКрыши = 21,
+        односкат = 22,
+        безОпор = 30,
+        РамаМонтажная = 31,
+        НожкиОпорные = 32,
+        //Панель  теплообменника                                  02-05-ХХХХ
+
+        FrontPanel = 35,
+        ПростаяУсилПанель = 24,
+        ПодДвериНаПетлях = 25,
+        ПоДвериНаЗажимах = 26,
+        ПодТорцевую = 27,
+        ПодТорцевуюИДвериНаЗажимах = 28,
+        ПодТорцевуюИДвериНаПетлях = 29
+
+    }
+
+   public enum  ThermoStrip
+    {
+        ThermoScotch  = 1,
+        Rivet = 2
+    } 
+
+    public enum FramelessPanelType
+    {
+        wtf = 1
     }
 
 

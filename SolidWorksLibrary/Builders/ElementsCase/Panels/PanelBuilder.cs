@@ -48,8 +48,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
                  AssemblyName = "02-01";
             }
 
-            string pathToPrototype = System.IO.Path.Combine(RootFolder, SourceFolder, AssemblyName + ".SLDASM");
-            SolidWorksAdapter.OpenDocument(pathToPrototype, swDocumentTypes_e.swDocASSEMBLY);
+            NewPartPath = System.IO.Path.Combine(RootFolder, SourceFolder, AssemblyName + ".SLDASM");
+            SolidWorksAdapter.OpenDocument(NewPartPath, swDocumentTypes_e.swDocASSEMBLY);
             SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
             AssemblyDocument = SolidWorksAdapter.ToAssemblyDocument(SolidWorksDocument);
         }
@@ -297,15 +297,21 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
             switch (profile)
             {
                 case PanelProfile.Profile_3_0:
-                    tapeMaterialName = "Лента 30"; 
+                    tapeMaterialName = "Лента 30";
+                    insulationMaterialName = "";
                     break;
                 case PanelProfile.Profile_5_0:
                     tapeMaterialName = "Лента 50";
+                    insulationMaterialName = "";
                     break;
                 case PanelProfile.Profile_7_0:
                     tapeMaterialName = "Лента 50";
+                    insulationMaterialName = "";
                     break;
             }
+
+            SolidWorksDocument.Extension.CustomPropertyManager["00"].Add3("Наименование", (int)swCustomInfoType_e.swCustomInfoText, tapeMaterialName,(int)swCustomPropertyAddOption_e.swCustomPropertyReplaceValue);
+            SolidWorksDocument.Extension.CustomPropertyManager["00"].Add3("Наименование", (int)swCustomInfoType_e.swCustomInfoText, insulationMaterialName, (int)swCustomPropertyAddOption_e.swCustomPropertyReplaceValue);
 
             if (CheckExistPart != null)
                 CheckExistPart(PartName, out IsPartExist, out NewPartPath);
