@@ -23,7 +23,7 @@
             {
                 this.Z = z;
             }
-
-        public static Vector3 Zero { get { return new Vector2(0, 0); } }
+     
+        public static Vector3 Zero { get { return new Vector3(0, 0,0); } }
     }     
 }

@@ -84,10 +84,12 @@
     <Compile Include="Builders\ElementsCase\IFeedbackBuilder.cs" />
     <Compile Include="Builders\Case\MonoBlockBuilder.cs" />
     <Compile Include="Builders\ElementsCase\MountingFrameBuilder.cs" />
+    <Compile Include="Builders\ElementsCase\Panels\DeterminateCut.cs" />
     <Compile Include="Builders\ElementsCase\Panels\FrameCaseBuilder.cs" />
     <Compile Include="Builders\ElementsCase\Panels\Frameless\FramelessPartBuilder.cs" />
     <Compile Include="Builders\ElementsCase\Panels\Frameless\InputHolesWrapper.cs" />
     <Compile Include="Builders\ElementsCase\Panels\Frameless\OutputHolesWrapper.cs" />
+    <Compile Include="Builders\ElementsCase\Panels\Frameless\Screws.cs" />
     <Compile Include="Builders\ElementsCase\Panels\Frameless\ValProfils.cs" />
     <Compile Include="Builders\ElementsCase\Panels\PanelBuilder.cs" />
     <Compile Include="Builders\ElementsCase\Vector.cs" />

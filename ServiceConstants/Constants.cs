@@ -85,10 +85,9 @@ public enum TasksType
     public enum PanelType
     {
         BlankPanel = 1,
-        DualBlankPanel = 2,
+        
         //  PanelHinged = 3,
-        RemovablePanel = 4,
-        DualRemovablePanel = 5,
+        RemovablePanel = 4,      
         // ThePanelHeatExchanger = 6,
       
 
@@ -106,7 +105,6 @@ public enum TasksType
         ПодТорцевую = 27,
         ПодТорцевуюИДвериНаЗажимах = 28,
         ПодТорцевуюИДвериНаПетлях = 29
-
     }
 
    public enum  ThermoStrip

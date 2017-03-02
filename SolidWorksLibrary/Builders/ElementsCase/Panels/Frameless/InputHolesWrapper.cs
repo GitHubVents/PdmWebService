@@ -1,70 +1,83 @@
 ﻿using System;
-/// <summary>
-/// Входящие параметры для определения отверстий верхней и нижней панелей
-/// </summary>
-struct InputHolesWrapper
+namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
 {
-    //Зазоры
-    static public double G0;
-    static public double G1;
-    static public double G2;
-
-    //Панели
-    static public double B1;
-    static public double B2;
-    static public double B3;
-
     /// <summary>
-    /// Преобразование строки расположение панелей в значения необходимые для построения
+    /// Входящие параметры для определения отверстий верхней и нижней панелей
     /// </summary>
-    /// <param name="values">The values.</param>
-    public static void StringValue(string values)
+    struct InputHolesWrapper
     {
-        G0 = 0;
-        G1 = 0;
-        G2 = 0;
-        B1 = 0;
-        B2 = 0;
-        B3 = 0;
+        //Зазоры
+        static public double G0;
+        static public double G1;
+        static public double G2;
 
-        try
+        //Панели
+        static public double B1;
+        static public double B2;
+        static public double B3;
+
+        /// <summary>
+        /// Преобразование строки расположение панелей в значения необходимые для построения
+        /// </summary>
+        /// <param name="values">The values.</param>
+        public static void StringValue(string values)
         {
-            var val = values.Split(';');
-            var lenght = val.Length;
+            G0 = 0;
+            G1 = 0;
+            G2 = 0;
+            B1 = 0;
+            B2 = 0;
+            B3 = 0;
 
-            if (lenght < 1) return;
-            if (val[0] == "") return;
-            G0 = Convert.ToDouble(val[0]);
+            try
+            {
+                var val = values.Split(';');
+                var lenght = val.Length;
 
-            if (lenght < 2) return;
-            if (val[1] == "") return;
-            B1 = Convert.ToDouble(val[1]);
+                if (lenght < 1) return;
+                if (val[0] == "") return;
+                G0 = Convert.ToDouble(val[0]);
 
-            if (lenght < 3) return;
-            if (val[2] == "") return;
-            G1 = Convert.ToDouble(val[2]);
+                if (lenght < 2) return;
+                if (val[1] == "") return;
+                B1 = Convert.ToDouble(val[1]);
 
-            if (lenght < 4) return;
-            if (val[3] == "") return;
-            B2 = Convert.ToDouble(val[3]);
+                if (lenght < 3) return;
+                if (val[2] == "") return;
+                G1 = Convert.ToDouble(val[2]);
 
-            if (lenght < 5) return;
-            if (val[4] == "") return;
-            G2 = Convert.ToDouble(val[4]);
+                if (lenght < 4) return;
+                if (val[3] == "") return;
+                B2 = Convert.ToDouble(val[3]);
 
-            if (lenght < 6) return;
-            if (val[5] == "") return;
-            B3 = Convert.ToDouble(val[5]);
+                if (lenght < 5) return;
+                if (val[4] == "") return;
+                G2 = Convert.ToDouble(val[4]);
+
+                if (lenght < 6) return;
+                if (val[5] == "") return;
+                B3 = Convert.ToDouble(val[5]);
+            }
+            catch (Exception ex)
+            {
+                Patterns.Observer.MessageObserver.Instance.SetMessage(ex.ToString() + "\n" + ex.StackTrace, Patterns.Observer.MessageType.Error);
+            }
+            finally
+            {
+                CalculateHolesAtRemovablePanel();
+            }
         }
-        catch (Exception ex)
+        public static string InValUpDown()
         {
-            Patterns.Observer.MessageObserver.Instance.SetMessage(ex.ToString() + "\n" + ex.StackTrace, Patterns.Observer.MessageType.Error);
+            return
+                $"_({(Convert.ToInt32(G0) != 0 ? Convert.ToString(G0) : "")}" +
+                $"{(Convert.ToInt32(B1) != 0 ? "-" + Convert.ToString(B1) : "")}" +
+                $"{(Convert.ToInt32(G1) != 0 ? "_" + Convert.ToString(G1) : "")}" +
+                $"{(Convert.ToInt32(B2) != 0 ? "-" + Convert.ToString(B2) : "")}" +
+                $"{(Convert.ToInt32(G2) != 0 ? "_" + Convert.ToString(G2) : "")}" +
+                $"{(Convert.ToInt32(B3) != 0 ? "-" + Convert.ToString(B3) : "")})";
         }
-        finally
-        { 
-            CalculateHolesAtRemovablePanel(); 
-        }
-    }
+
         static void CalculateHolesAtRemovablePanel()
         {
             #region Зазоры
@@ -74,49 +87,74 @@ struct InputHolesWrapper
             OutputHolesWrapper.G1 = 132;
             OutputHolesWrapper.G2 = 132;
 
-            if (Math.Abs(InValPanels.G0) > 0)
+            if (Math.Abs(G0) > 0)
             {
-                OutputHolesWrapper.G0 = InValPanels.G0;
+                OutputHolesWrapper.G0 = G0;
             }
-            if (Math.Abs(InValPanels.G1) > 0)
+            if (Math.Abs(G1) > 0)
             {
-                OutputHolesWrapper.G1 = InValPanels.G1;
+                OutputHolesWrapper.G1 = G1;
             }
-            if (Math.Abs(InValPanels.G2) > 0)
+            if (Math.Abs(G2) > 0)
             {
-                OutputHolesWrapper.G2 = InValPanels.G2;
+                OutputHolesWrapper.G2 = G2;
             }
 
             #endregion
 
             #region Отверстия под панель
 
-            double ширина;
-            double высота;
-            double расстояниеL;
-            double количествоВинтов;
+            double widht;
+            double height;
+            double distance;
+            double helixCount;
 
-            СъемнаяПанель(InValPanels.B1, 0, out ширина, out высота, out расстояниеL, out количествоВинтов);
-            OutputHolesWrapper.L1 = расстояниеL;
-            OutputHolesWrapper.D1 = количествоВинтов;
+            СъемнаяПанель(B1, 0, out widht, out height, out distance, out helixCount);
+            OutputHolesWrapper.L1 = distance;
+            OutputHolesWrapper.D1 = helixCount;
 
             OutputHolesWrapper.L2 = 28;
             OutputHolesWrapper.D2 = 2000;
             OutputHolesWrapper.L3 = 28;
             OutputHolesWrapper.D3 = 2000;
 
-            if (Math.Abs(InValPanels.B2) > 0)
+            if (Math.Abs(InputHolesWrapper.B2) > 0)
             {
-                СъемнаяПанель(InValPanels.B2, 0, out ширина, out высота, out расстояниеL, out количествоВинтов);
-                OutputHolesWrapper.L2 = расстояниеL;
-                OutputHolesWrapper.D2 = количествоВинтов;
+                СъемнаяПанель(B2, 0, out widht, out height, out distance, out helixCount);
+                OutputHolesWrapper.L2 = distance;
+                OutputHolesWrapper.D2 = helixCount;
             }
 
-            if (!(Math.Abs(InValPanels.B3) > 0)) return;
-            СъемнаяПанель(InValPanels.B3, 0, out ширина, out высота, out расстояниеL, out количествоВинтов);
-            OutputHolesWrapper.L3 = расстояниеL;
-            OutputHolesWrapper.D3 = количествоВинтов;
+            if (!(Math.Abs( B3) > 0)) return;
+            СъемнаяПанель(InputHolesWrapper.B3, 0, out widht, out height, out distance, out helixCount);
+            OutputHolesWrapper.L3 = distance;
+            OutputHolesWrapper.D3 = helixCount;
 
             #endregion
         }
+
+        static void СъемнаяПанель(double landingWidht, double landingHeight,
+                                  out double widht, out double height,
+                                  out double distance, out double screwsCount)
+        {
+            widht = landingWidht - 2;
+            height = landingHeight - 2;
+            distance = landingWidht - 132;
+
+            screwsCount = 5000;
+
+            if (landingWidht < 1100)
+            {
+                screwsCount = 4000;
+            }
+            if (landingWidht < 700)
+            {
+                screwsCount = 3000;
+            }
+            if (landingWidht < 365)
+            {
+                screwsCount = 2000;
+            }
+        }
     }
+}
