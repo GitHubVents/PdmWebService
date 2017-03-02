@@ -86,6 +86,9 @@
     <Compile Include="Builders\ElementsCase\MountingFrameBuilder.cs" />
     <Compile Include="Builders\ElementsCase\Panels\DeterminateCut.cs" />
     <Compile Include="Builders\ElementsCase\Panels\FrameCaseBuilder.cs" />
+    <Compile Include="Builders\ElementsCase\Panels\Frameless\BackProfils.cs" />
+    <Compile Include="Builders\ElementsCase\Panels\Frameless\CompType_e.cs" />
+    <Compile Include="Builders\ElementsCase\Panels\Frameless\FramelessPanel.cs" />
     <Compile Include="Builders\ElementsCase\Panels\Frameless\FramelessPartBuilder.cs" />
     <Compile Include="Builders\ElementsCase\Panels\Frameless\InputHolesWrapper.cs" />
     <Compile Include="Builders\ElementsCase\Panels\Frameless\OutputHolesWrapper.cs" />

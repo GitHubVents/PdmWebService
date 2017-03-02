@@ -144,7 +144,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase
             Console.WriteLine(newPath);
             foreach (var item in parameters)
             {
-                    Dimension myDimension = (SolidWorksDocument.Parameter(item.Key + "@" + partName + ".SLDPRT" )) as Dimension;                   
+                Console.WriteLine(item.Key + "@" + partName );
+                Dimension myDimension = (SolidWorksDocument.Parameter(item.Key + "@" + partName + ".SLDPRT" )) as Dimension;                   
                     myDimension.SystemValue = item.Value / 1000;
             }
             SolidWorksDocument.ForceRebuild3(true);

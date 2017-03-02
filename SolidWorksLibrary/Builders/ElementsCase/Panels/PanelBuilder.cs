@@ -38,7 +38,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
             base.SetProperties("panel", "source panel");
         }
 
-        private void OpenTemplate(PanelType panelType)
+        private void OpenTemplate(PanelType_e panelType)
         {
 
             if (isDoublePanal)
@@ -57,7 +57,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
             AssemblyDocument = SolidWorksAdapter.ToAssemblyDocument(SolidWorksDocument);
         }
 
-        public void Build(PanelType panelType, PanelProfile profile, Vector2 sizePanel, Materials OuterMaterial, Materials InnerMaterial, double outThickness, double innerThickness)
+        public void Build(PanelType_e panelType, PanelProfile profile, Vector2 sizePanel, Materials OuterMaterial, Materials InnerMaterial, double outThickness, double innerThickness)
         {
             this.sizePanel = sizePanel;
             this.innerThickness = innerThickness;
@@ -147,7 +147,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
 
         }
 
-        private void SinglePanel(PanelType panelType, Materials OuterMaterial, Materials InnerMaterial, PanelProfile profile)
+        private void SinglePanel(PanelType_e panelType, Materials OuterMaterial, Materials InnerMaterial, PanelProfile profile)
         {
             base.PartName = "02-" + (int)panelType + "-01-" + sizePanel.X + "-" + sizePanel.Y + "-" + OuterMaterial + "-" + InnerMaterial + "-" + (int)profile;
 
@@ -175,7 +175,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
                 base.parameters.Add("Толщина@Листовой металл", outThickness);
                 base.parameters.Add("D1@Листовой металл", (double)BendRadius);
                 base.parameters.Add("D2@Листовой металл", (double)KFactor * 1000);
-                if (panelType == PanelType.RemovablePanel && !isOneHandle)
+                if (panelType == PanelType_e.RemovablePanel && !isOneHandle)
                 {
                     base.parameters.Add("D4@Эскиз30", widthHandle);
                 }
@@ -209,7 +209,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
         }
 
 
-        private void DoublePanel(PanelType panelType, Materials OuterMaterial, Materials InnerMaterial, PanelProfile profile)
+        private void DoublePanel(PanelType_e panelType, Materials OuterMaterial, Materials InnerMaterial, PanelProfile profile)
         {
             base.PartName = "02-" + (int)panelType + "-01-" + sizePanel.X + "-" + sizePanel.Y + "-" + OuterMaterial + "-" + InnerMaterial + "-" + (int)profile;
             if (CheckExistPart != null)
@@ -354,10 +354,10 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
 
         protected override void DeleteComponents(int type)
         {
-            PanelType eType = (PanelType)type;
+            PanelType_e eType = (PanelType_e)type;
             int deleteOption = (int)swDeleteSelectionOptions_e.swDelete_Absorbed + (int)swDeleteSelectionOptions_e.swDelete_Children;
 
-            if (eType == PanelType.BlankPanel)
+            if (eType == PanelType_e.BlankPanel)
             {
                 SolidWorksDocument.Extension.SelectByID2("Ручка MLA 120-1@02-01", "COMPONENT", 0, 0, 0, false, 0, null, 0);
                 SolidWorksDocument.EditDelete();
@@ -386,7 +386,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
             }
 
 
-            if (eType == PanelType.RemovablePanel)
+            if (eType == PanelType_e.RemovablePanel)
             {
                 if (!isOneHandle)
                 {

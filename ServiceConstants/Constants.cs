@@ -82,7 +82,7 @@ public enum TasksType
         Profile_7_0 = 70
     }
 
-    public enum PanelType
+    public enum PanelType_e
     {
         BlankPanel = 1,
         
