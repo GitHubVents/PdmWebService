@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolidWorksLibrary.Builders.ElementsCase.Panels
+namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
 {
 
     public class FramelessPanel
@@ -33,6 +33,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
             this.SizePanel = sizePanel;
             this.WindowSize = windowSize;
             this.WindowsOffset = windowsOffset;
+          
         }
 
     }
@@ -57,9 +58,32 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
             SolidWorksAdapter.OpenDocument(NewPartPath, SolidWorks.Interop.swconst.swDocumentTypes_e.swDocASSEMBLY);
             SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
             AssemblyDocument = SolidWorksAdapter.ToAssemblyDocument(SolidWorksDocument);
+
+
+            CalculateHandle();
         }
 
+        void CalculateHandle ()
+        {
+            framelessPanel.widthHandle = framelessPanel.SizePanel.X / 4;
 
+            if (framelessPanel.SizePanel.X < 1000)
+            {
+                framelessPanel.widthHandle = framelessPanel.SizePanel.X * 0.5 * 0.5;
+            }
+            if (framelessPanel.SizePanel.X >= 1000)
+            {
+                framelessPanel.widthHandle = framelessPanel.SizePanel.X * 0.45 * 0.5;
+            }
+            if (framelessPanel.SizePanel.X >= 1300)
+            {
+                framelessPanel.widthHandle = framelessPanel.SizePanel.X * 0.4 * 0.5;
+            }
+            if (framelessPanel.SizePanel.X >= 1700)
+            {
+                framelessPanel.widthHandle = framelessPanel.SizePanel.X * 0.35 * 0.5;
+            }
+        }
 
         private void SetSize()
         {
@@ -78,30 +102,76 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
                 if (SetBends != null)
                     SetBends((decimal)framelessPanel.outThickness, out KFactor, out BendRadius);
 
-                Vector2 dimensions;
+                Vector2 dimensions; // габариты
                 if (framelessPanel.PanelType.Equals(PanelType.RemovablePanel))
                 {
-                    dimensions = new Vector2(framelessPanel.SizePanel.X - 42, framelessPanel.SizePanel.Y);
+                    dimensions = new Vector2(framelessPanel.SizePanel.X - 42, framelessPanel.SizePanel.Y-42);
 
+                    base.parameters.Add("D3@2-1-1", 54.0);
+                    base.parameters.Add("D2@Эскиз29", 84.0);
+                    base.parameters.Add("D2@Эскиз43", 12.0);
+                    base.parameters.Add("D1@Эскиз29", 11.3);
+                    base.parameters.Add("D1@2-1-1", 11.3);
+                    base.parameters.Add("D2@Эскиз39", 11.3);
+                    base.parameters.Add("D1@Эскиз39", 5.0);
                 }
                 else
                 {
-                    dimensions = new Vector2(framelessPanel.SizePanel.X, framelessPanel.SizePanel.Y);
+                    dimensions = new Vector2(framelessPanel.SizePanel.X-40, framelessPanel.SizePanel.Y-40);
+                    base.parameters.Add("D3@2-1-1", 55.0);
+                    base.parameters.Add("D2@Эскиз29", 85.0);
+                    base.parameters.Add("D2@Эскиз43", 11.0);
+                   base.parameters.Add("D1@Эскиз29", 10.3);
+                    base.parameters.Add("D1@2-1-1", 10.3);
+                    base.parameters.Add("D2@Эскиз39", 10.3);
+                    base.parameters.Add("D1@Эскиз39", 4.0);
                 }
 
-                base.parameters.Add("D1@Эскиз1", dimensions.Y);
-                base.parameters.Add("D2@Эскиз1", dimensions.X);
-      
-          
+                base.parameters.Add("D1@Эскиз1", dimensions.X);
+                base.parameters.Add("D2@Эскиз1", dimensions.Y);
+                if (framelessPanel.PanelType == PanelType.RemovablePanel && !framelessPanel.isOneHandle)
+                {
+                    base.parameters.Add("D4@Эскиз47", framelessPanel.widthHandle);
+
+                }
+
+                //Размеры для отверсти под клепальные гайки под съемные панели
+
+                base.parameters.Add("D3@2-1-1", 55.0);
+                //{"G0@Эскиз49", Convert.ToString(OutValPanels.G0)},
+                //{"G1@Эскиз49", Convert.ToString(OutValPanels.G1)},
+                //{"G2@Эскиз49", Convert.ToString(OutValPanels.G2)},
+                //{"G3@Эскиз49", Convert.ToString(OutValPanels.G0)},
+
+                ////Convert.ToString(количествоВинтов)
+                //{"L1@Эскиз49", Convert.ToString(OutValPanels.L1)},
+                //{"D1@Кривая10", Convert.ToString(OutValPanels.D1)},
+                //{"L2@Эскиз49", Convert.ToString(OutValPanels.L2)},
+                //{"D1@Кривая11", Convert.ToString(OutValPanels.D2)},
+                //{"L3@Эскиз49", Convert.ToString(OutValPanels.L3)},
+                //{"D1@Кривая12", Convert.ToString(OutValPanels.D3)},
+
+                ////Размеры промежуточных профилей
+                //{"Wp1@Эскиз59", Math.Abs(ValProfils.Wp1) < 1 ? "10" : Convert.ToString(ValProfils.Wp1)},
+                //{"Wp2@Эскиз59", Math.Abs(ValProfils.Wp2) < 1 ? "10" : Convert.ToString(ValProfils.Wp2)},
+                //{"Wp3@Эскиз59", Math.Abs(ValProfils.Wp3) < 1 ? "10" : Convert.ToString(ValProfils.Wp3)},
+                //{"Wp4@Эскиз59", Math.Abs(ValProfils.Wp4) < 1 ? "10" : Convert.ToString(ValProfils.Wp4)},
+
+                ////todo Для промежуточной панели отверстия
+                //{"D1@Кривая14", Convert.ToString(колЗаклепокВысота*2)},
+
+                //{"Толщина@Листовой металл", materialP2[1].Replace('.', ',')},
+
+                //// Кол-во отверстий под заклепки сшивочных кронштейнов
+                //{"D1@CrvPatternW", Convert.ToString(колЗаклепокКронштейнаДвойнойПанели)},
+                //{"D1@CrvPatternH", Convert.ToString(колЗаклепокКронштейнаДвойнойПанели)}
+
 
                 base.parameters.Add("D7@Ребро-кромка1", framelessPanel.lenght);
                 base.parameters.Add("Толщина@Листовой металл", framelessPanel.outThickness);
                 base.parameters.Add("D1@Листовой металл", (double)BendRadius);
                 base.parameters.Add("D2@Листовой металл", (double)KFactor * 1000);
-                if (framelessPanel.PanelType == PanelType.RemovablePanel && !framelessPanel.isOneHandle)
-                {
-                    base.parameters.Add("D4@Эскиз30", framelessPanel.widthHandle);
-                }
+             
                 EditPartParameters(PartName, base.NewPartPath);
 
             }
