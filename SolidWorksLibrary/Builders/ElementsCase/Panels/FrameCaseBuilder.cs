@@ -35,9 +35,9 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
         {
             string caseAssemblyPath = Path.Combine(RootFolder, SourceFolder, modelName);
             Patterns.Observer.MessageObserver.Instance.SetMessage("\n" + caseAssemblyPath + "\n");
-            ModelDoc2 swDoc = SolidWorksAdapter.OpenDocument(caseAssemblyPath, swDocumentTypes_e.swDocASSEMBLY);
+            ModelDoc2 SolidWorksDocument = SolidWorksAdapter.OpenDocument(caseAssemblyPath, SolidWorksDocumentumentTypes_e.SolidWorksDocumentASSEMBLY);
             Patterns.Observer.MessageObserver.Instance.SetMessage("открылась сборка");
-             AssemblyDocument = SolidWorksAdapter.ToAssemblyDocument( swDoc); 
+             AssemblyDocument = SolidWorksAdapter.ToAssemblyDocument( SolidWorksDocument); 
             double rivetL;
             string newName = "01-P150-45-" + (frameSize.Z - 140);
             string newPartPath = GetFrameCasePath(newName);
@@ -45,8 +45,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
 
             if (File.Exists(new FileInfo(newPartPath).FullName))
             {
-                swDoc = SolidWorksAdapter.AcativeteDoc(modelName);
-                swDoc.Extension.SelectByID2("01-P150-45-1640-27@" + modelName.Replace(".SLDASM", ""), "COMPONENT", 0, 0,
+                SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(modelName);
+                SolidWorksDocument.Extension.SelectByID2("01-P150-45-1640-27@" + modelName.Replace(".SLDASM", ""), "COMPONENT", 0, 0,
                     0, false, 0, null, 0);
                 AssemblyDocument.ReplaceComponents(newPartPath, "", true, true);
                 SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("01-P150-45-1640.SLDPRT");
@@ -64,8 +64,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
                 newPartPath = GetFrameCasePath(newName);
                 if (File.Exists(new FileInfo(newPartPath).FullName))
                 {
-                    swDoc = SolidWorksAdapter.AcativeteDoc(modelName);
-                    swDoc.Extension.SelectByID2("01-003-50-22@" + modelName.Replace(".SLDASM", ""), "COMPONENT", 0, 0, 0,
+                    SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(modelName);
+                    SolidWorksDocument.Extension.SelectByID2("01-003-50-22@" + modelName.Replace(".SLDASM", ""), "COMPONENT", 0, 0, 0,
                         false, 0, null, 0);
                     AssemblyDocument.ReplaceComponents(newPartPath, "", true, true);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("01-003-50.SLDPRT");
@@ -83,8 +83,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
                 newPartPath = newPartPath = GetFrameCasePath(newName);
                 if (File.Exists(new FileInfo(newPartPath).FullName))
                 {
-                    swDoc = SolidWorksAdapter.AcativeteDoc(modelName);
-                    swDoc.Extension.SelectByID2("01-P252-45-770-6@" + modelName.Replace(".SLDASM", ""), "COMPONENT", 0, 0, 0,
+                    SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(modelName);
+                    SolidWorksDocument.Extension.SelectByID2("01-P252-45-770-6@" + modelName.Replace(".SLDASM", ""), "COMPONENT", 0, 0, 0,
                         false, 0, null, 0);
                     AssemblyDocument.ReplaceComponents(newPartPath, "", true, true);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("01-P252-45-770.SLDPRT");
@@ -101,8 +101,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
                 newPartPath = newPartPath = GetFrameCasePath(newName);
                 if (File.Exists(new FileInfo(newPartPath).FullName))
                 {
-                    swDoc = SolidWorksAdapter.AcativeteDoc(modelName);
-                    swDoc.Extension.SelectByID2("01-P150-45-510-23@" + modelName.Replace(".SLDASM", ""), "COMPONENT", 0, 0,
+                    SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(modelName);
+                    SolidWorksDocument.Extension.SelectByID2("01-P150-45-510-23@" + modelName.Replace(".SLDASM", ""), "COMPONENT", 0, 0,
                         0, false, 0, null, 0);
                     AssemblyDocument.ReplaceComponents(newPartPath, "", true, true);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("01-P150-45-510.SLDPRT");
@@ -121,8 +121,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
                 newPartPath = newPartPath = GetFrameCasePath(newName);
                 if (File.Exists(new FileInfo(newPartPath).FullName))
                 {
-                    swDoc = SolidWorksAdapter.AcativeteDoc(modelName);
-                    swDoc.Extension.SelectByID2("01-P252-45-550-10@" + modelName.Replace(".SLDASM", ""), "COMPONENT", 0, 0,
+                    SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(modelName);
+                    SolidWorksDocument.Extension.SelectByID2("01-P252-45-550-10@" + modelName.Replace(".SLDASM", ""), "COMPONENT", 0, 0,
                         0, false, 0, null, 0);
                     AssemblyDocument.ReplaceComponents(newPartPath, "", true, true);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("01-P252-45-550.SLDPRT");
@@ -133,46 +133,46 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
                     EditPartParameters("01-P252-45-550", newPartPath);
                 }
 
-                swDoc = SolidWorksAdapter.AcativeteDoc(modelName);
-                swDoc.EditRebuild3();
-                swDoc.ForceRebuild3(true);
-                AssemblyDocument = (AssemblyDoc)swDoc;
+                SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(modelName);
+                SolidWorksDocument.EditRebuild3();
+                SolidWorksDocument.ForceRebuild3(true);
+                AssemblyDocument = (AssemblyDoc)SolidWorksDocument;
 
                 if (serviceSide == ServiceSide.Left)
                 {
-                    swDoc.Extension.SelectByID2("M8-Panel block-one side-1@" + modelName.Replace(".SLDASM", ""), "COMPONENT",
+                    SolidWorksDocument.Extension.SelectByID2("M8-Panel block-one side-1@" + modelName.Replace(".SLDASM", ""), "COMPONENT",
                         0, 0, 0, true, 0, null, 0);
-                    swDoc.Extension.SelectByID2("M8-Panel block-one side-6@" + modelName.Replace(".SLDASM", ""), "COMPONENT",
+                    SolidWorksDocument.Extension.SelectByID2("M8-Panel block-one side-6@" + modelName.Replace(".SLDASM", ""), "COMPONENT",
                         0, 0, 0, true, 0, null, 0);
-                    swDoc.Extension.SelectByID2("M8-Panel block-one side-7@" + modelName.Replace(".SLDASM", ""), "COMPONENT",
+                    SolidWorksDocument.Extension.SelectByID2("M8-Panel block-one side-7@" + modelName.Replace(".SLDASM", ""), "COMPONENT",
                         0, 0, 0, true, 0, null, 0);
-                    swDoc.Extension.SelectByID2("Threaded Rivets с насечкой-10@" + modelName.Replace(".SLDASM", ""),
+                    SolidWorksDocument.Extension.SelectByID2("Threaded Rivets с насечкой-10@" + modelName.Replace(".SLDASM", ""),
                         "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    swDoc.Extension.SelectByID2("Threaded Rivets с насечкой-4@" + modelName.Replace(".SLDASM", ""),
+                    SolidWorksDocument.Extension.SelectByID2("Threaded Rivets с насечкой-4@" + modelName.Replace(".SLDASM", ""),
                         "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    swDoc.Extension.SelectByID2("Threaded Rivets с насечкой-12@" + modelName.Replace(".SLDASM", ""),
+                    SolidWorksDocument.Extension.SelectByID2("Threaded Rivets с насечкой-12@" + modelName.Replace(".SLDASM", ""),
                         "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    swDoc.Extension.SelectByID2("Threaded Rivets с насечкой-12@" + modelName.Replace(".SLDASM", ""),
+                    SolidWorksDocument.Extension.SelectByID2("Threaded Rivets с насечкой-12@" + modelName.Replace(".SLDASM", ""),
                         "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    swDoc.EditDelete();
+                    SolidWorksDocument.EditDelete();
                 }
                 else if (serviceSide == ServiceSide.Right)
                 {
-                    swDoc.Extension.SelectByID2("M8-Panel block-one side-16@" + modelName.Replace(".SLDASM", ""),
+                    SolidWorksDocument.Extension.SelectByID2("M8-Panel block-one side-16@" + modelName.Replace(".SLDASM", ""),
                         "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    swDoc.Extension.SelectByID2("Threaded Rivets с насечкой-21@" + modelName.Replace(".SLDASM", ""),
+                    SolidWorksDocument.Extension.SelectByID2("Threaded Rivets с насечкой-21@" + modelName.Replace(".SLDASM", ""),
                         "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    swDoc.Extension.SelectByID2("Threaded Rivets с насечкой-22@" + modelName.Replace(".SLDASM", ""),
+                    SolidWorksDocument.Extension.SelectByID2("Threaded Rivets с насечкой-22@" + modelName.Replace(".SLDASM", ""),
                         "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    swDoc.Extension.SelectByID2("M8-Panel block-one side-17@" + modelName.Replace(".SLDASM", ""),
+                    SolidWorksDocument.Extension.SelectByID2("M8-Panel block-one side-17@" + modelName.Replace(".SLDASM", ""),
                         "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    swDoc.Extension.SelectByID2("Threaded Rivets с насечкой-23@" + modelName.Replace(".SLDASM", ""),
+                    SolidWorksDocument.Extension.SelectByID2("Threaded Rivets с насечкой-23@" + modelName.Replace(".SLDASM", ""),
                         "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    swDoc.Extension.SelectByID2("M8-Panel block-one side-18@" + modelName.Replace(".SLDASM", ""),
+                    SolidWorksDocument.Extension.SelectByID2("M8-Panel block-one side-18@" + modelName.Replace(".SLDASM", ""),
                         "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    swDoc.Extension.SelectByID2("M8-Panel block-one side-18@" + modelName.Replace(".SLDASM", ""),
+                    SolidWorksDocument.Extension.SelectByID2("M8-Panel block-one side-18@" + modelName.Replace(".SLDASM", ""),
                         "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    swDoc.EditDelete();
+                    SolidWorksDocument.EditDelete();
                 }
             }
         }       

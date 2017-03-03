@@ -83,10 +83,10 @@
 //        GetLastVersionAsmPdm(modelMontageFramePath, VaultName);
 //        GetLastVersionAsmPdm($@"{sourceRootFolder}{TemplateFolder}\10-02-01-4.SLDPRT", VaultName);
 
-//        var swDocMontageFrame = _swApp.OpenDoc6(modelMontageFramePath, (int)swDocumentTypes_e.swDocASSEMBLY,
+//        var SolidWorksDocumentMontageFrame = _swApp.OpenDoc6(modelMontageFramePath, (int)SolidWorksDocumentumentTypes_e.SolidWorksDocumentASSEMBLY,
 //            (int)swOpenDocOptions_e.swOpenDocOptions_LoadModel, "00", 0, 0);
 //        _swApp.Visible = true;
-//        var swAsm = (AssemblyDoc)swDocMontageFrame;
+//        var swAsm = (AssemblyDoc)SolidWorksDocumentMontageFrame;
 //        swAsm.ResolveAllLightWeightComponents(false);
 
 //        #endregion
@@ -132,42 +132,42 @@
 
 //        if (Type == "3")
 //        {
-//            swDocMontageFrame.Extension.SelectByID2("10-01-01-4-1@10-4", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-//            swAsm = ((AssemblyDoc)(swDocMontageFrame));
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("10-01-01-4-1@10-4", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+//            swAsm = ((AssemblyDoc)(SolidWorksDocumentMontageFrame));
 //            swAsm.ReplaceComponents(sourceRootFolder + TemplateFolder + "\\10-02-01-4.SLDPRT", "", false, true);
 //            swAsm.ResolveAllLightWeightComponents(false);
 
 //            //Продольная зеркальная балка (Длина установки)
-//            swDocMontageFrame.Extension.SelectByID2("D1@Эскиз1@10-02-01-4-1@10-4", "DIMENSION", 0, 0, 00, false, 0, null, 0);
-//            ((Dimension)(swDocMontageFrame.Parameter("D1@Эскиз1@10-02-01-4.Part"))).SystemValue = l;
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("D1@Эскиз1@10-02-01-4-1@10-4", "DIMENSION", 0, 0, 00, false, 0, null, 0);
+//            ((Dimension)(SolidWorksDocumentMontageFrame.Parameter("D1@Эскиз1@10-02-01-4.Part"))).SystemValue = l;
 //            //  Длина установки  0.8;
 
-//            swDocMontageFrame.Extension.SelectByID2("D3@Эскиз25@10-02-01-4-1@10-4", "DIMENSION", 0, 0, 0, false, 0, null, 0);
-//            ((Dimension)(swDocMontageFrame.Parameter("D3@Эскиз25@10-02-01-4.Part"))).SystemValue = offsetMirror;
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("D3@Эскиз25@10-02-01-4-1@10-4", "DIMENSION", 0, 0, 0, false, 0, null, 0);
+//            ((Dimension)(SolidWorksDocumentMontageFrame.Parameter("D3@Эскиз25@10-02-01-4.Part"))).SystemValue = offsetMirror;
 //            //Смещение поперечной балки от края;
-//            swDocMontageFrame.EditRebuild3();
-//            swDocMontageFrame.Extension.SelectByID2("Листовой металл@10-02-01-4-1@10-4", "BODYFEATURE", 0, 0, 0,
+//            SolidWorksDocumentMontageFrame.EditRebuild3();
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("Листовой металл@10-02-01-4-1@10-4", "BODYFEATURE", 0, 0, 0,
 //                false, 0, null, 0);
-//            swDocMontageFrame.ActivateSelectedFeature();
-//            swDocMontageFrame.Extension.SelectByID2("D1@Листовой металл@10-02-01-4-1@10-4", "DIMENSION", 0, 0, 0,
+//            SolidWorksDocumentMontageFrame.ActivateSelectedFeature();
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("D1@Листовой металл@10-02-01-4-1@10-4", "DIMENSION", 0, 0, 0,
 //                false, 0, null, 0);
-//            ((Dimension)(swDocMontageFrame.Parameter("D1@Листовой металл@10-02-01-4.Part"))).SystemValue =
+//            ((Dimension)(SolidWorksDocumentMontageFrame.Parameter("D1@Листовой металл@10-02-01-4.Part"))).SystemValue =
 //                bendRadius; // Радиус гиба  0.005;
-//            swDocMontageFrame.EditRebuild3();
-//            swDocMontageFrame.Extension.SelectByID2("Листовой металл@10-02-01-4-1@10-4", "BODYFEATURE", 0, 0, 0,
+//            SolidWorksDocumentMontageFrame.EditRebuild3();
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("Листовой металл@10-02-01-4-1@10-4", "BODYFEATURE", 0, 0, 0,
 //                false, 0, null, 0);
-//            swDocMontageFrame.ActivateSelectedFeature();
-//            swDocMontageFrame.Extension.SelectByID2("D2@Листовой металл@10-02-01-4-1@10-4", "DIMENSION", 0, 0, 0,
+//            SolidWorksDocumentMontageFrame.ActivateSelectedFeature();
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("D2@Листовой металл@10-02-01-4-1@10-4", "DIMENSION", 0, 0, 0,
 //                false, 0, null, 0);
-//            ((Dimension)(swDocMontageFrame.Parameter("D2@Листовой металл@10-01-01-4.Part"))).SystemValue = kFactor;
+//            ((Dimension)(SolidWorksDocumentMontageFrame.Parameter("D2@Листовой металл@10-01-01-4.Part"))).SystemValue = kFactor;
 //            // K-Factor  0.55;
-//            swDocMontageFrame.EditRebuild3();
-//            swDocMontageFrame.Extension.SelectByID2("Толщина@Листовой металл@10-02-01-4-1@10-4", "DIMENSION", 0, 0,
+//            SolidWorksDocumentMontageFrame.EditRebuild3();
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("Толщина@Листовой металл@10-02-01-4-1@10-4", "DIMENSION", 0, 0,
 //                0, false, 0, null, 0);
-//            ((Dimension)(swDocMontageFrame.Parameter("Толщина@Листовой металл@10-02-01-4.Part"))).SystemValue =
+//            ((Dimension)(SolidWorksDocumentMontageFrame.Parameter("Толщина@Листовой металл@10-02-01-4.Part"))).SystemValue =
 //                thikness; // Толщина Листового металла 0.006;
-//            swDocMontageFrame.EditRebuild3();
-//            swDocMontageFrame.ClearSelection2(true);
+//            SolidWorksDocumentMontageFrame.EditRebuild3();
+//            SolidWorksDocumentMontageFrame.ClearSelection2(true);
 //        }
 
 
@@ -179,69 +179,69 @@
 
 //        #region 10-01-4
 
-//        swDocMontageFrame.Extension.SelectByID2("D1@Эскиз1@10-01-01-4-2@10-4", "DIMENSION", 0, 0, 0, false, 0, null,
+//        SolidWorksDocumentMontageFrame.Extension.SelectByID2("D1@Эскиз1@10-01-01-4-2@10-4", "DIMENSION", 0, 0, 0, false, 0, null,
 //            0);
-//        ((Dimension)(swDocMontageFrame.Parameter("D1@Эскиз1@10-01-01-4.Part"))).SystemValue = l;
+//        ((Dimension)(SolidWorksDocumentMontageFrame.Parameter("D1@Эскиз1@10-01-01-4.Part"))).SystemValue = l;
 //        //  Длина установки  0.8;
-//        swDocMontageFrame.Extension.SelectByID2("D3@Эскиз25@10-01-01-4-2@10-4", "DIMENSION", 0, 0, 0, false, 0, null,
+//        SolidWorksDocumentMontageFrame.Extension.SelectByID2("D3@Эскиз25@10-01-01-4-2@10-4", "DIMENSION", 0, 0, 0, false, 0, null,
 //            0);
-//        ((Dimension)(swDocMontageFrame.Parameter("D3@Эскиз25@10-01-01-4.Part"))).SystemValue = offset;
+//        ((Dimension)(SolidWorksDocumentMontageFrame.Parameter("D3@Эскиз25@10-01-01-4.Part"))).SystemValue = offset;
 //        //Смещение поперечной балки от края;
-//        swDocMontageFrame.EditRebuild3();
+//        SolidWorksDocumentMontageFrame.EditRebuild3();
 //        //swApp.SendMsgToUser(Offset.ToString());
-//        swDocMontageFrame.Extension.SelectByID2("Листовой металл@10-01-01-4-2@10-4", "BODYFEATURE", 0, 0, 0, false,
+//        SolidWorksDocumentMontageFrame.Extension.SelectByID2("Листовой металл@10-01-01-4-2@10-4", "BODYFEATURE", 0, 0, 0, false,
 //            0, null, 0);
-//        swDocMontageFrame.ActivateSelectedFeature();
-//        swDocMontageFrame.Extension.SelectByID2("D1@Листовой металл@10-01-01-4-2@10-4", "DIMENSION", 0, 0, 0, false,
+//        SolidWorksDocumentMontageFrame.ActivateSelectedFeature();
+//        SolidWorksDocumentMontageFrame.Extension.SelectByID2("D1@Листовой металл@10-01-01-4-2@10-4", "DIMENSION", 0, 0, 0, false,
 //            0, null, 0);
-//        ((Dimension)(swDocMontageFrame.Parameter("D1@Листовой металл@10-01-01-4.Part"))).SystemValue = bendRadius;
+//        ((Dimension)(SolidWorksDocumentMontageFrame.Parameter("D1@Листовой металл@10-01-01-4.Part"))).SystemValue = bendRadius;
 //        // Радиус гиба  0.005;
-//        swDocMontageFrame.EditRebuild3();
-//        swDocMontageFrame.Extension.SelectByID2("Листовой металл@10-01-01-4-2@10-4", "BODYFEATURE", 0, 0, 0, false,
+//        SolidWorksDocumentMontageFrame.EditRebuild3();
+//        SolidWorksDocumentMontageFrame.Extension.SelectByID2("Листовой металл@10-01-01-4-2@10-4", "BODYFEATURE", 0, 0, 0, false,
 //            0, null, 0);
-//        swDocMontageFrame.ActivateSelectedFeature();
-//        swDocMontageFrame.Extension.SelectByID2("D2@Листовой металл@10-01-01-4-2@10-4", "DIMENSION", 0, 0, 0, false,
+//        SolidWorksDocumentMontageFrame.ActivateSelectedFeature();
+//        SolidWorksDocumentMontageFrame.Extension.SelectByID2("D2@Листовой металл@10-01-01-4-2@10-4", "DIMENSION", 0, 0, 0, false,
 //            0, null, 0);
-//        ((Dimension)(swDocMontageFrame.Parameter("D2@Листовой металл@10-01-01-4.Part"))).SystemValue = kFactor;
+//        ((Dimension)(SolidWorksDocumentMontageFrame.Parameter("D2@Листовой металл@10-01-01-4.Part"))).SystemValue = kFactor;
 //        // K-Factor  0.55;
-//        swDocMontageFrame.EditRebuild3();
-//        swDocMontageFrame.Extension.SelectByID2("Толщина@Листовой металл@10-01-01-4-2@10-4", "DIMENSION", 0, 0, 0,
+//        SolidWorksDocumentMontageFrame.EditRebuild3();
+//        SolidWorksDocumentMontageFrame.Extension.SelectByID2("Толщина@Листовой металл@10-01-01-4-2@10-4", "DIMENSION", 0, 0, 0,
 //            false, 0, null, 0);
-//        ((Dimension)(swDocMontageFrame.Parameter("Толщина@Листовой металл@10-01-01-4.Part"))).SystemValue =
+//        ((Dimension)(SolidWorksDocumentMontageFrame.Parameter("Толщина@Листовой металл@10-01-01-4.Part"))).SystemValue =
 //            thikness; // Толщина Листового металла 0.006;
-//        swDocMontageFrame.EditRebuild3();
-//        swDocMontageFrame.ClearSelection2(true);
+//        SolidWorksDocumentMontageFrame.EditRebuild3();
+//        SolidWorksDocumentMontageFrame.ClearSelection2(true);
 
 //        #endregion
 
 //        #region 10-04-4-2
 
-//        swDocMontageFrame.Extension.SelectByID2("D1@Эскиз1@10-04-4-2@10-4", "DIMENSION", 0, 0, 0, false, 0, null, 0);
-//        ((Dimension)(swDocMontageFrame.Parameter("D1@Эскиз1@10-04-4.Part"))).SystemValue = (l - 0.14);
+//        SolidWorksDocumentMontageFrame.Extension.SelectByID2("D1@Эскиз1@10-04-4-2@10-4", "DIMENSION", 0, 0, 0, false, 0, null, 0);
+//        ((Dimension)(SolidWorksDocumentMontageFrame.Parameter("D1@Эскиз1@10-04-4.Part"))).SystemValue = (l - 0.14);
 //        // Длина установки - 140  0.66;
-//        swDocMontageFrame.EditRebuild3();
-//        swDocMontageFrame.Extension.SelectByID2("Листовой металл@10-04-4-2@10-4", "BODYFEATURE", 0, 0, 0, false, 0,
+//        SolidWorksDocumentMontageFrame.EditRebuild3();
+//        SolidWorksDocumentMontageFrame.Extension.SelectByID2("Листовой металл@10-04-4-2@10-4", "BODYFEATURE", 0, 0, 0, false, 0,
 //            null, 0);
-//        swDocMontageFrame.ActivateSelectedFeature();
-//        swDocMontageFrame.Extension.SelectByID2("D1@Листовой металл@10-04-4-2@10-4", "DIMENSION", 0, 0, 0, false, 0,
+//        SolidWorksDocumentMontageFrame.ActivateSelectedFeature();
+//        SolidWorksDocumentMontageFrame.Extension.SelectByID2("D1@Листовой металл@10-04-4-2@10-4", "DIMENSION", 0, 0, 0, false, 0,
 //            null, 0);
-//        ((Dimension)(swDocMontageFrame.Parameter("D1@Листовой металл@10-04-4.Part"))).SystemValue = bendRadius;
+//        ((Dimension)(SolidWorksDocumentMontageFrame.Parameter("D1@Листовой металл@10-04-4.Part"))).SystemValue = bendRadius;
 //        // Радиус гиба  0.005;
-//        swDocMontageFrame.EditRebuild3();
-//        swDocMontageFrame.Extension.SelectByID2("Листовой металл@10-04-4-2@10-4", "BODYFEATURE", 0, 0, 0, false, 0,
+//        SolidWorksDocumentMontageFrame.EditRebuild3();
+//        SolidWorksDocumentMontageFrame.Extension.SelectByID2("Листовой металл@10-04-4-2@10-4", "BODYFEATURE", 0, 0, 0, false, 0,
 //            null, 0);
-//        swDocMontageFrame.ActivateSelectedFeature();
-//        swDocMontageFrame.Extension.SelectByID2("D2@Листовой металл@10-04-4-2@10-4", "DIMENSION", 0, 0, 0, false, 0,
+//        SolidWorksDocumentMontageFrame.ActivateSelectedFeature();
+//        SolidWorksDocumentMontageFrame.Extension.SelectByID2("D2@Листовой металл@10-04-4-2@10-4", "DIMENSION", 0, 0, 0, false, 0,
 //            null, 0);
-//        ((Dimension)(swDocMontageFrame.Parameter("D2@Листовой металл@10-04-4.Part"))).SystemValue = kFactor;
+//        ((Dimension)(SolidWorksDocumentMontageFrame.Parameter("D2@Листовой металл@10-04-4.Part"))).SystemValue = kFactor;
 //        // K-Factor  0.55;
-//        swDocMontageFrame.EditRebuild3();
-//        swDocMontageFrame.Extension.SelectByID2("Толщина@Листовой металл@10-04-4-2@10-4", "DIMENSION", 0, 0, 0,
+//        SolidWorksDocumentMontageFrame.EditRebuild3();
+//        SolidWorksDocumentMontageFrame.Extension.SelectByID2("Толщина@Листовой металл@10-04-4-2@10-4", "DIMENSION", 0, 0, 0,
 //            false, 0, null, 0);
-//        ((Dimension)(swDocMontageFrame.Parameter("Толщина@Листовой металл@10-04-4.Part"))).SystemValue = thikness;
+//        ((Dimension)(SolidWorksDocumentMontageFrame.Parameter("Толщина@Листовой металл@10-04-4.Part"))).SystemValue = thikness;
 //        // Толщина Листового металла 0.006;
-//        swDocMontageFrame.EditRebuild3();
-//        swDocMontageFrame.ClearSelection2(true);
+//        SolidWorksDocumentMontageFrame.EditRebuild3();
+//        SolidWorksDocumentMontageFrame.ClearSelection2(true);
 
 //        #endregion
 
@@ -249,28 +249,28 @@
 
 //        #region 10-03-4
 
-//        swDocMontageFrame.Extension.SelectByID2("D2@Эскиз1@10-03-01-4-2@10-4", "DIMENSION", 0, 0, 0, false, 0, null, 0);
-//        ((Dimension)(swDocMontageFrame.Parameter("D2@Эскиз1@10-03-01-4.Part"))).SystemValue = (w - 0.12);
+//        SolidWorksDocumentMontageFrame.Extension.SelectByID2("D2@Эскиз1@10-03-01-4-2@10-4", "DIMENSION", 0, 0, 0, false, 0, null, 0);
+//        ((Dimension)(SolidWorksDocumentMontageFrame.Parameter("D2@Эскиз1@10-03-01-4.Part"))).SystemValue = (w - 0.12);
 //        //  Ширина установки - 20 - 100  0.88;
-//        swDocMontageFrame.EditRebuild3();
-//        swDocMontageFrame.Extension.SelectByID2("Листовой металл@10-03-01-4-2@10-4", "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-//        swDocMontageFrame.ActivateSelectedFeature();
-//        swDocMontageFrame.Extension.SelectByID2("D1@Листовой металл@10-03-01-4-2@10-4", "DIMENSION", 0, 0, 0, false, 0, null, 0);
-//        ((Dimension)(swDocMontageFrame.Parameter("D1@Листовой металл@10-03-01-4.Part"))).SystemValue = bendRadius;
+//        SolidWorksDocumentMontageFrame.EditRebuild3();
+//        SolidWorksDocumentMontageFrame.Extension.SelectByID2("Листовой металл@10-03-01-4-2@10-4", "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+//        SolidWorksDocumentMontageFrame.ActivateSelectedFeature();
+//        SolidWorksDocumentMontageFrame.Extension.SelectByID2("D1@Листовой металл@10-03-01-4-2@10-4", "DIMENSION", 0, 0, 0, false, 0, null, 0);
+//        ((Dimension)(SolidWorksDocumentMontageFrame.Parameter("D1@Листовой металл@10-03-01-4.Part"))).SystemValue = bendRadius;
 //        // Радиус гиба  0.005;
-//        swDocMontageFrame.EditRebuild3();
-//        swDocMontageFrame.Extension.SelectByID2("Листовой металл@10-03-01-4-2@10-4", "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-//        swDocMontageFrame.ActivateSelectedFeature();
-//        swDocMontageFrame.Extension.SelectByID2("D2@Листовой металл@10-03-01-4-2@10-4", "DIMENSION", 0, 0, 0, false, 0, null, 0);
-//        ((Dimension)(swDocMontageFrame.Parameter("D2@Листовой металл@10-03-01-4.Part"))).SystemValue = kFactor;
+//        SolidWorksDocumentMontageFrame.EditRebuild3();
+//        SolidWorksDocumentMontageFrame.Extension.SelectByID2("Листовой металл@10-03-01-4-2@10-4", "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+//        SolidWorksDocumentMontageFrame.ActivateSelectedFeature();
+//        SolidWorksDocumentMontageFrame.Extension.SelectByID2("D2@Листовой металл@10-03-01-4-2@10-4", "DIMENSION", 0, 0, 0, false, 0, null, 0);
+//        ((Dimension)(SolidWorksDocumentMontageFrame.Parameter("D2@Листовой металл@10-03-01-4.Part"))).SystemValue = kFactor;
 //        // K-Factor  0.55;
-//        swDocMontageFrame.EditRebuild3();
-//        swDocMontageFrame.Extension.SelectByID2("Толщина@Листовой металл@10-03-01-4-2@10-4", "DIMENSION", 0, 0, 0,
+//        SolidWorksDocumentMontageFrame.EditRebuild3();
+//        SolidWorksDocumentMontageFrame.Extension.SelectByID2("Толщина@Листовой металл@10-03-01-4-2@10-4", "DIMENSION", 0, 0, 0,
 //            false, 0, null, 0);
-//        ((Dimension)(swDocMontageFrame.Parameter("Толщина@Листовой металл@10-03-01-4.Part"))).SystemValue =
+//        ((Dimension)(SolidWorksDocumentMontageFrame.Parameter("Толщина@Листовой металл@10-03-01-4.Part"))).SystemValue =
 //            thikness; // Толщина Листового металла 0.006;
-//        swDocMontageFrame.EditRebuild3();
-//        swDocMontageFrame.ClearSelection2(true);
+//        SolidWorksDocumentMontageFrame.EditRebuild3();
+//        SolidWorksDocumentMontageFrame.ClearSelection2(true);
 
 //        #endregion
 
@@ -280,37 +280,37 @@
 
 //        if (internalCrossbeam == false)
 //        {
-//            swDocMontageFrame.Extension.SelectByID2("10-03-01-4-1@10-4", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-//            swDocMontageFrame.Extension.SelectByID2("Washer 11371_gost-39@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-//            swDocMontageFrame.Extension.SelectByID2("Washer 11371_gost-40@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-//            swDocMontageFrame.Extension.SelectByID2("Washer 6402_gost-23@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-//            swDocMontageFrame.Extension.SelectByID2("Hex Nut 5915_gost-19@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-//            swDocMontageFrame.Extension.SelectByID2("Hex Bolt 7805_gost-22@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-//            swDocMontageFrame.Extension.SelectByID2("Washer 11371_gost-41@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-//            swDocMontageFrame.Extension.SelectByID2("Washer 11371_gost-42@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-//            swDocMontageFrame.Extension.SelectByID2("Washer 6402_gost-24@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-//            swDocMontageFrame.Extension.SelectByID2("Hex Nut 5915_gost-20@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-//            swDocMontageFrame.Extension.SelectByID2("Hex Bolt 7805_gost-23@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-//            swDocMontageFrame.Extension.SelectByID2("Washer 11371_gost-43@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-//            swDocMontageFrame.Extension.SelectByID2("Washer 11371_gost-44@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-//            swDocMontageFrame.Extension.SelectByID2("Washer 6402_gost-25@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-//            swDocMontageFrame.Extension.SelectByID2("Hex Nut 5915_gost-21@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-//            swDocMontageFrame.Extension.SelectByID2("Hex Bolt 7805_gost-24@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-//            swDocMontageFrame.Extension.SelectByID2("Washer 11371_gost-45@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-//            swDocMontageFrame.Extension.SelectByID2("Washer 11371_gost-46@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-//            swDocMontageFrame.Extension.SelectByID2("Washer 6402_gost-26@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-//            swDocMontageFrame.Extension.SelectByID2("Hex Nut 5915_gost-22@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-//            swDocMontageFrame.Extension.SelectByID2("Hex Bolt 7805_gost-25@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-//            swDocMontageFrame.Extension.SelectByID2("Hex Bolt 7805_gost-25@10-4", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-//            swDocMontageFrame.EditDelete();
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("10-03-01-4-1@10-4", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("Washer 11371_gost-39@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("Washer 11371_gost-40@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("Washer 6402_gost-23@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("Hex Nut 5915_gost-19@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("Hex Bolt 7805_gost-22@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("Washer 11371_gost-41@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("Washer 11371_gost-42@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("Washer 6402_gost-24@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("Hex Nut 5915_gost-20@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("Hex Bolt 7805_gost-23@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("Washer 11371_gost-43@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("Washer 11371_gost-44@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("Washer 6402_gost-25@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("Hex Nut 5915_gost-21@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("Hex Bolt 7805_gost-24@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("Washer 11371_gost-45@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("Washer 11371_gost-46@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("Washer 6402_gost-26@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("Hex Nut 5915_gost-22@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("Hex Bolt 7805_gost-25@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("Hex Bolt 7805_gost-25@10-4", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+//            SolidWorksDocumentMontageFrame.EditDelete();
 
 //            // Удаление ненужных элементов продольной балки
 //            const int deleteOption =
 //                (int)swDeleteSelectionOptions_e.swDelete_Absorbed +
 //                (int)swDeleteSelectionOptions_e.swDelete_Children;
-//            swDocMontageFrame.Extension.SelectByID2("Вырез-Вытянуть8@10-01-01-4-2@10-4", "BODYFEATURE", 0, 0, 0,
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("Вырез-Вытянуть8@10-01-01-4-2@10-4", "BODYFEATURE", 0, 0, 0,
 //                false, 0, null, 0);
-//            swDocMontageFrame.Extension.DeleteSelection2(deleteOption);
+//            SolidWorksDocumentMontageFrame.Extension.DeleteSelection2(deleteOption);
 //        }
 
 //        #endregion
@@ -322,45 +322,45 @@
 //        {
 //            foreach (var s in new[] { "5", "6", "7", "8", "13" })
 //            {
-//                swDocMontageFrame.Extension.SelectByID2("Hex Bolt 7805_gost-" + s + "@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-//                swDocMontageFrame.EditDelete();
+//                SolidWorksDocumentMontageFrame.Extension.SelectByID2("Hex Bolt 7805_gost-" + s + "@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+//                SolidWorksDocumentMontageFrame.EditDelete();
 //            }
 //            foreach (var s in new[] { "6", "7", "8", "9", "37", "38", "39", "40" })
 //            {
-//                swDocMontageFrame.Extension.SelectByID2("Washer 6402_gost-" + s + "@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-//                swDocMontageFrame.EditDelete();
+//                SolidWorksDocumentMontageFrame.Extension.SelectByID2("Washer 6402_gost-" + s + "@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+//                SolidWorksDocumentMontageFrame.EditDelete();
 //            }
 //            foreach (var s in new[] { "17", "18", "19", "20", "21", "22", "23", "24", "57", "58", "59", "60" })
 //            {
-//                swDocMontageFrame.Extension.SelectByID2("Washer 11371_gost-" + s + "@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-//                swDocMontageFrame.EditDelete();
+//                SolidWorksDocumentMontageFrame.Extension.SelectByID2("Washer 11371_gost-" + s + "@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+//                SolidWorksDocumentMontageFrame.EditDelete();
 //            }
 
-//            swDocMontageFrame.Extension.SelectByID2("10-04-4-2@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-//            swDocMontageFrame.EditDelete();
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("10-04-4-2@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+//            SolidWorksDocumentMontageFrame.EditDelete();
 
 
 //            // Удаление ненужных элементов поперечной балки
-//            swDocMontageFrame.Extension.SelectByID2("Регулируемая ножка-10@10-4", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-//            swDocMontageFrame.EditDelete();
-//            swDocMontageFrame.Extension.SelectByID2("Регулируемая ножка-11@10-4", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-//            swDocMontageFrame.EditDelete();
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("Регулируемая ножка-10@10-4", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+//            SolidWorksDocumentMontageFrame.EditDelete();
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("Регулируемая ножка-11@10-4", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+//            SolidWorksDocumentMontageFrame.EditDelete();
 
 //            foreach (var s in new[] { "10", "11", "40", "41", "42", "43" })
 //            {
-//                swDocMontageFrame.Extension.SelectByID2("Hex Nut 5915_gost-" + s + "@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-//                swDocMontageFrame.EditDelete();
+//                SolidWorksDocumentMontageFrame.Extension.SelectByID2("Hex Nut 5915_gost-" + s + "@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+//                SolidWorksDocumentMontageFrame.EditDelete();
 //            }
 
 //            const int deleteOption =
 //               (int)swDeleteSelectionOptions_e.swDelete_Absorbed +
 //               (int)swDeleteSelectionOptions_e.swDelete_Children;
-//            swDocMontageFrame.Extension.SelectByID2("Вырез-Вытянуть5@10-03-01-4-2@10-4", "BODYFEATURE", 0, 0, 0,
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("Вырез-Вытянуть5@10-03-01-4-2@10-4", "BODYFEATURE", 0, 0, 0,
 //                false, 0, null, 0);
-//            swDocMontageFrame.Extension.DeleteSelection2(deleteOption);
-//            swDocMontageFrame.Extension.SelectByID2("Вырез-Вытянуть4@10-03-01-4-2@10-4", "BODYFEATURE", 0, 0, 0,
+//            SolidWorksDocumentMontageFrame.Extension.DeleteSelection2(deleteOption);
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("Вырез-Вытянуть4@10-03-01-4-2@10-4", "BODYFEATURE", 0, 0, 0,
 //                false, 0, null, 0);
-//            swDocMontageFrame.Extension.DeleteSelection2(deleteOption);
+//            SolidWorksDocumentMontageFrame.Extension.DeleteSelection2(deleteOption);
 //        }
 
 //        #endregion
@@ -395,8 +395,8 @@
 //        var newPartPath = $@"{destRootFolder}\{DestinationFolder}\{newPartName}";
 //        if (File.Exists(newPartPath))
 //        {
-//            swDocMontageFrame = ((ModelDoc2)(_swApp.ActivateDoc2("10-4.SLDASM", true, 0)));
-//            swDocMontageFrame.Extension.SelectByID2("10-01-01-4-2@10-4", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+//            SolidWorksDocumentMontageFrame = ((ModelDoc2)(_swApp.ActivateDoc2("10-4.SLDASM", true, 0)));
+//            SolidWorksDocumentMontageFrame.Extension.SelectByID2("10-01-01-4-2@10-4", "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //            swAsm.ReplaceComponents(newPartPath, "", true, true);
 //            _swApp.CloseDoc("10-01-01-4.SLDPRT");
 //        }
@@ -438,8 +438,8 @@
 //            newPartPath = $@"{destRootFolder}\{DestinationFolder}\{newPartName}";
 //            if (File.Exists(newPartPath))
 //            {
-//                swDocMontageFrame = ((ModelDoc2)(_swApp.ActivateDoc2("10-4.SLDASM", true, 0)));
-//                swDocMontageFrame.Extension.SelectByID2("10-02-01-4-1@10-4", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+//                SolidWorksDocumentMontageFrame = ((ModelDoc2)(_swApp.ActivateDoc2("10-4.SLDASM", true, 0)));
+//                SolidWorksDocumentMontageFrame.Extension.SelectByID2("10-02-01-4-1@10-4", "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //                swAsm.ReplaceComponents(newPartPath, "", false, true);
 //                _swApp.CloseDoc("10-02-01-4.SLDPRT");
 //            }
@@ -465,8 +465,8 @@
 //                newPartPath = $@"{destRootFolder}\{DestinationFolder}\{newPartName}";
 //                if (File.Exists(newPartPath))
 //                {
-//                    swDocMontageFrame = ((ModelDoc2)(_swApp.ActivateDoc2("10-4.SLDASM", true, 0)));
-//                    swDocMontageFrame.Extension.SelectByID2("10-04-4-2@10-4", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+//                    SolidWorksDocumentMontageFrame = ((ModelDoc2)(_swApp.ActivateDoc2("10-4.SLDASM", true, 0)));
+//                    SolidWorksDocumentMontageFrame.Extension.SelectByID2("10-04-4-2@10-4", "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //                    swAsm.ReplaceComponents(newPartPath, "", true, true);
 //                    _swApp.CloseDoc("10-04-4.SLDPRT");
 //                }
@@ -514,8 +514,8 @@
 
 //            if (File.Exists(newPartPath))
 //            {
-//                swDocMontageFrame = ((ModelDoc2)(_swApp.ActivateDoc2("10-4.SLDASM", true, 0)));
-//                swDocMontageFrame.Extension.SelectByID2("10-03-01-4-2@10-4", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+//                SolidWorksDocumentMontageFrame = ((ModelDoc2)(_swApp.ActivateDoc2("10-4.SLDASM", true, 0)));
+//                SolidWorksDocumentMontageFrame.Extension.SelectByID2("10-03-01-4-2@10-4", "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //                swAsm.ReplaceComponents(newPartPath, "", true, true);
 //                _swApp.CloseDoc("10-03-01-4.SLDPRT");
 //            }
@@ -543,13 +543,13 @@
 //            #endregion
 
 //            _swApp.IActivateDoc2("10-4.SLDASM", false, 0);
-//            swDocMontageFrame = ((ModelDoc2)(_swApp.ActiveDoc));
+//            SolidWorksDocumentMontageFrame = ((ModelDoc2)(_swApp.ActiveDoc));
 
-//            //GabaritsForPaintingCamera(swDocMontageFrame);
+//            //GabaritsForPaintingCamera(SolidWorksDocumentMontageFrame);
 
-//            swDocMontageFrame.ForceRebuild3(true);
+//            SolidWorksDocumentMontageFrame.ForceRebuild3(true);
 
-//            swDocMontageFrame.SaveAs2(ModelPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
+//            SolidWorksDocumentMontageFrame.SaveAs2(ModelPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
 
 //            ComponentToAdd(ModelPath);
 
@@ -586,29 +586,29 @@
 
 //            //if (!InitializeSw(true)) return;
 
-//            //var swDrwSpigot = _swApp.OpenDoc6(modelSpigotDrw, (int)swDocumentTypes_e.swDocDRAWING,
+//            //var swDrwSpigot = _swApp.OpenDoc6(modelSpigotDrw, (int)SolidWorksDocumentumentTypes_e.SolidWorksDocumentDRAWING,
 //            //    (int)swOpenDocOptions_e.swOpenDocOptions_LoadModel, "", 0, 0);
 
 //            //if (swDrwSpigot == null) return;
 
-//            //ModelDoc2 swDoc = _swApp.ActivateDoc2("12-00", false, 0);
-//            //var swAsm = (AssemblyDoc)swDoc;
+//            //ModelDoc2 SolidWorksDocument = _swApp.ActivateDoc2("12-00", false, 0);
+//            //var swAsm = (AssemblyDoc)SolidWorksDocument;
 //            //swAsm.ResolveAllLightWeightComponents(false);
 
 //            //switch (modelName)
 //            //{
 //            //    case "12-20":
-//            //        DelEquations(5, swDoc);
-//            //        DelEquations(4, swDoc);
-//            //        DelEquations(3, swDoc);
+//            //        DelEquations(5, SolidWorksDocument);
+//            //        DelEquations(4, SolidWorksDocument);
+//            //        DelEquations(3, SolidWorksDocument);
 //            //        break;
 //            //    case "12-30":
-//            //        DelEquations(0, swDoc);
-//            //        DelEquations(0, swDoc);
-//            //        DelEquations(0, swDoc);
+//            //        DelEquations(0, SolidWorksDocument);
+//            //        DelEquations(0, SolidWorksDocument);
+//            //        DelEquations(0, SolidWorksDocument);
 //            //        break;
 //            //}
-//            //swDoc.ForceRebuild3(true);
+//            //SolidWorksDocument.ForceRebuild3(true);
 
 //            //string newPartName;
 //            //string newPartPath;
@@ -638,11 +638,11 @@
 
 //            //foreach (var item in itemsToDelete)
 //            //{
-//            //    DoWithSwDoc(_swApp, CompType.COMPONENT, item, Act.DeletWithOption);
+//            //    DoWithSolidWorksDocument(_swApp, CompType.COMPONENT, item, Act.DeletWithOption);
 //            //}
 
-//            //DoWithSwDoc(_swApp, CompType.FTRFOLDER, "30", Act.Delete);
-//            //DoWithSwDoc(_swApp, CompType.FTRFOLDER, "20", Act.Delete);
+//            //DoWithSolidWorksDocument(_swApp, CompType.FTRFOLDER, "30", Act.Delete);
+//            //DoWithSolidWorksDocument(_swApp, CompType.FTRFOLDER, "20", Act.Delete);
 //            //#endregion
 
 //            //#region Сохранение и изменение элементов
@@ -673,18 +673,18 @@
 
 //            //    if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), out path, out fileId, out projectId))
 //            //    {
-//            //        swDoc = ((ModelDoc2)(VentsCad._swApp.ActivateDoc2("12-00.SLDASM", true, 0)));
-//            //        swDoc.Extension.SelectByID2("12-20-001-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+//            //        SolidWorksDocument = ((ModelDoc2)(VentsCad._swApp.ActivateDoc2("12-00.SLDASM", true, 0)));
+//            //        SolidWorksDocument.Extension.SelectByID2("12-20-001-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //            //        swAsm.ReplaceComponents(newPartPath, "", true, true);
 //            //        _swApp.CloseDoc("12-20-001.SLDPRT");
 //            //    }
 //            //    else
 //            //    {
-//            //        swDoc.Extension.SelectByID2("D1@Вытянуть1@12-20-001-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
-//            //        myDimension = ((Dimension)(swDoc.Parameter("D1@Вытянуть1@12-20-001.Part")));
+//            //        SolidWorksDocument.Extension.SelectByID2("D1@Вытянуть1@12-20-001-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
+//            //        myDimension = ((Dimension)(SolidWorksDocument.Parameter("D1@Вытянуть1@12-20-001.Part")));
 //            //        myDimension.SystemValue = h - 0.031;
-//            //        swDoc.Extension.SelectByID2("D1@Кривая1@12-20-001-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
-//            //        myDimension = ((Dimension)(swDoc.Parameter("D1@Кривая1@12-20-001.Part")));
+//            //        SolidWorksDocument.Extension.SelectByID2("D1@Кривая1@12-20-001-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
+//            //        myDimension = ((Dimension)(SolidWorksDocument.Parameter("D1@Кривая1@12-20-001.Part")));
 //            //        myDimension.SystemValue = weldH;
 //            //        swPartDoc.SaveAs2(newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
 //            //        ComponentToAdd(newPartPath);
@@ -698,18 +698,18 @@
 //            //    newPartPath = $@"{destRootFolder}\{DestinationFolder}\{newPartName}";
 //            //    if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), out path, out fileId, out projectId))
 //            //    {
-//            //        swDoc = ((ModelDoc2)(VentsCad._swApp.ActivateDoc2("12-00.SLDASM", true, 0)));
-//            //        swDoc.Extension.SelectByID2("12-20-002-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+//            //        SolidWorksDocument = ((ModelDoc2)(VentsCad._swApp.ActivateDoc2("12-00.SLDASM", true, 0)));
+//            //        SolidWorksDocument.Extension.SelectByID2("12-20-002-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //            //        swAsm.ReplaceComponents(newPartPath, "", true, true);
 //            //        _swApp.CloseDoc("12-20-002.SLDPRT");
 //            //    }
 //            //    else
 //            //    {
-//            //        swDoc.Extension.SelectByID2("D1@Вытянуть1@12-20-002-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
-//            //        myDimension = ((Dimension)(swDoc.Parameter("D1@Вытянуть1@12-20-002.Part")));
+//            //        SolidWorksDocument.Extension.SelectByID2("D1@Вытянуть1@12-20-002-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
+//            //        myDimension = ((Dimension)(SolidWorksDocument.Parameter("D1@Вытянуть1@12-20-002.Part")));
 //            //        myDimension.SystemValue = w - 0.031;
-//            //        swDoc.Extension.SelectByID2("D1@Кривая1@12-20-002-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
-//            //        myDimension = ((Dimension)(swDoc.Parameter("D1@Кривая1@12-20-002.Part")));
+//            //        SolidWorksDocument.Extension.SelectByID2("D1@Кривая1@12-20-002-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
+//            //        myDimension = ((Dimension)(SolidWorksDocument.Parameter("D1@Кривая1@12-20-002.Part")));
 //            //        myDimension.SystemValue = weldW;
 //            //        swPartDoc.SaveAs2(newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
 //            //        ComponentToAdd(newPartPath);
@@ -723,20 +723,20 @@
 //            //    newPartPath = $@"{destRootFolder}\{DestinationFolder}\{newPartName}";
 //            //    if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), out path, out fileId, out projectId))
 //            //    {
-//            //        swDoc = ((ModelDoc2)(VentsCad._swApp.ActivateDoc2("12-00.SLDASM", true, 0)));
-//            //        swDoc.Extension.SelectByID2("12-003-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+//            //        SolidWorksDocument = ((ModelDoc2)(VentsCad._swApp.ActivateDoc2("12-00.SLDASM", true, 0)));
+//            //        SolidWorksDocument.Extension.SelectByID2("12-003-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //            //        swAsm.ReplaceComponents(newPartPath, "", true, true);
 //            //        _swApp.CloseDoc("12-003.SLDPRT");
 //            //    }
 //            //    else
 //            //    {
-//            //        swDoc.Extension.SelectByID2("D3@Эскиз1@12-003-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
-//            //        myDimension = ((Dimension)(swDoc.Parameter("D3@Эскиз1@12-003.Part")));
+//            //        SolidWorksDocument.Extension.SelectByID2("D3@Эскиз1@12-003-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
+//            //        myDimension = ((Dimension)(SolidWorksDocument.Parameter("D3@Эскиз1@12-003.Part")));
 //            //        myDimension.SystemValue = w;
-//            //        swDoc.Extension.SelectByID2("D2@Эскиз1@12-003-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
-//            //        myDimension = ((Dimension)(swDoc.Parameter("D2@Эскиз1@12-003.Part")));
+//            //        SolidWorksDocument.Extension.SelectByID2("D2@Эскиз1@12-003-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
+//            //        myDimension = ((Dimension)(SolidWorksDocument.Parameter("D2@Эскиз1@12-003.Part")));
 //            //        myDimension.SystemValue = h;
-//            //        swDoc.EditRebuild3();
+//            //        SolidWorksDocument.EditRebuild3();
 //            //        swPartDoc.SaveAs2(newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
 //            //        ComponentToAdd(newPartPath);
 //            //        _swApp.CloseDoc(newPartName);
@@ -752,18 +752,18 @@
 //            //    newPartPath = $@"{destRootFolder}\{DestinationFolder}\{newPartName}";
 //            //    if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), out path, out fileId, out projectId))
 //            //    {
-//            //        swDoc = ((ModelDoc2)(VentsCad._swApp.ActivateDoc2("12-00.SLDASM", true, 0)));
-//            //        swDoc.Extension.SelectByID2("12-30-001-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+//            //        SolidWorksDocument = ((ModelDoc2)(VentsCad._swApp.ActivateDoc2("12-00.SLDASM", true, 0)));
+//            //        SolidWorksDocument.Extension.SelectByID2("12-30-001-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //            //        swAsm.ReplaceComponents(newPartPath, "", true, true);
 //            //        _swApp.CloseDoc("12-30-001.SLDPRT");
 //            //    }
 //            //    else
 //            //    {
-//            //        swDoc.Extension.SelectByID2("D1@Вытянуть1@12-30-001-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
-//            //        myDimension = ((Dimension)(swDoc.Parameter("D1@Вытянуть1@12-30-001.Part")));
+//            //        SolidWorksDocument.Extension.SelectByID2("D1@Вытянуть1@12-30-001-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
+//            //        myDimension = ((Dimension)(SolidWorksDocument.Parameter("D1@Вытянуть1@12-30-001.Part")));
 //            //        myDimension.SystemValue = h - 0.031;
-//            //        swDoc.Extension.SelectByID2("D1@Кривая1@12-30-001-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
-//            //        myDimension = ((Dimension)(swDoc.Parameter("D1@Кривая1@12-30-001.Part")));
+//            //        SolidWorksDocument.Extension.SelectByID2("D1@Кривая1@12-30-001-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
+//            //        myDimension = ((Dimension)(SolidWorksDocument.Parameter("D1@Кривая1@12-30-001.Part")));
 //            //        myDimension.SystemValue = weldH;
 //            //        swPartDoc.SaveAs2(newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
 //            //        ComponentToAdd(newPartPath);
@@ -778,18 +778,18 @@
 //            //    newPartPath = $@"{destRootFolder}\{DestinationFolder}\{newPartName}";
 //            //    if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), out path, out fileId, out projectId))
 //            //    {
-//            //        swDoc = ((ModelDoc2)(VentsCad._swApp.ActivateDoc2("12-00.SLDASM", true, 0)));
-//            //        swDoc.Extension.SelectByID2("12-30-002-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+//            //        SolidWorksDocument = ((ModelDoc2)(VentsCad._swApp.ActivateDoc2("12-00.SLDASM", true, 0)));
+//            //        SolidWorksDocument.Extension.SelectByID2("12-30-002-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //            //        swAsm.ReplaceComponents(newPartPath, "", true, true);
 //            //        _swApp.CloseDoc("12-30-002.SLDPRT");
 //            //    }
 //            //    else
 //            //    {
-//            //        swDoc.Extension.SelectByID2("D1@Вытянуть1@12-30-002-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
-//            //        myDimension = ((Dimension)(swDoc.Parameter("D1@Вытянуть1@12-30-002.Part")));
+//            //        SolidWorksDocument.Extension.SelectByID2("D1@Вытянуть1@12-30-002-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
+//            //        myDimension = ((Dimension)(SolidWorksDocument.Parameter("D1@Вытянуть1@12-30-002.Part")));
 //            //        myDimension.SystemValue = w - 0.031;
-//            //        swDoc.Extension.SelectByID2("D1@Кривая1@12-30-002-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
-//            //        myDimension = ((Dimension)(swDoc.Parameter("D1@Кривая1@12-30-002.Part")));
+//            //        SolidWorksDocument.Extension.SelectByID2("D1@Кривая1@12-30-002-1@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
+//            //        myDimension = ((Dimension)(SolidWorksDocument.Parameter("D1@Кривая1@12-30-002.Part")));
 //            //        myDimension.SystemValue = weldH;
 //            //        swPartDoc.SaveAs2(newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
 //            //        ComponentToAdd(newPartPath);
@@ -804,20 +804,20 @@
 //            //    newPartPath = $@"{destRootFolder}\{DestinationFolder}\{newPartName}";
 //            //    if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), out path, out fileId, out projectId))
 //            //    {
-//            //        swDoc = ((ModelDoc2)(VentsCad._swApp.ActivateDoc2("12-00.SLDASM", true, 0)));
-//            //        swDoc.Extension.SelectByID2("12-003-2@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+//            //        SolidWorksDocument = ((ModelDoc2)(VentsCad._swApp.ActivateDoc2("12-00.SLDASM", true, 0)));
+//            //        SolidWorksDocument.Extension.SelectByID2("12-003-2@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
 //            //        swAsm.ReplaceComponents(newPartPath, "", true, true);
 //            //        _swApp.CloseDoc("12-003.SLDPRT");
 //            //    }
 //            //    else
 //            //    {
-//            //        swDoc.Extension.SelectByID2("D3@Эскиз1@12-003-2@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
-//            //        myDimension = ((Dimension)(swDoc.Parameter("D3@Эскиз1@12-003.Part")));
+//            //        SolidWorksDocument.Extension.SelectByID2("D3@Эскиз1@12-003-2@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
+//            //        myDimension = ((Dimension)(SolidWorksDocument.Parameter("D3@Эскиз1@12-003.Part")));
 //            //        myDimension.SystemValue = w;
-//            //        swDoc.Extension.SelectByID2("D2@Эскиз1@12-003-2@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
-//            //        myDimension = ((Dimension)(swDoc.Parameter("D2@Эскиз1@12-003.Part")));
+//            //        SolidWorksDocument.Extension.SelectByID2("D2@Эскиз1@12-003-2@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
+//            //        myDimension = ((Dimension)(SolidWorksDocument.Parameter("D2@Эскиз1@12-003.Part")));
 //            //        myDimension.SystemValue = h;
-//            //        swDoc.EditRebuild3();
+//            //        SolidWorksDocument.EditRebuild3();
 //            //        swPartDoc.SaveAs2(newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
 //            //        ComponentToAdd(newPartPath);
 //            //        _swApp.CloseDoc(newPartName);
@@ -826,10 +826,10 @@
 
 //            //#endregion
 
-//            //GabaritsForPaintingCamera(swDoc);
+//            //GabaritsForPaintingCamera(SolidWorksDocument);
 
-//            //swDoc.ForceRebuild3(true);
-//            //swDoc.SaveAs2(ModelPath + ".SLDASM", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
+//            //SolidWorksDocument.ForceRebuild3(true);
+//            //SolidWorksDocument.SaveAs2(ModelPath + ".SLDASM", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
 //            //_swApp.CloseDoc(ModelName + ".SLDASM");                
 //            //swDrwSpigot.Extension.SelectByID2("DRW1", "SHEET", 0, 0, 0, false, 0, null, 0);
 //            //var drw = (DrawingDoc)(_swApp.IActivateDoc3(drawing + ".SLDDRW", true, 0));

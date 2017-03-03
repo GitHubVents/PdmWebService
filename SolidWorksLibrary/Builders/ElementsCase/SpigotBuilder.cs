@@ -37,7 +37,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
             var modelSpigotDrw = $@"{RootFolder}{SourceFolder}\{drawingName}.SLDDRW";
 
-            ModelDoc2 swDrawingSpigot = SolidWorksAdapter.OpenDocument(modelSpigotDrw, swDocumentTypes_e.swDocDRAWING);
+            ModelDoc2 swDrawingSpigot = SolidWorksAdapter.OpenDocument(modelSpigotDrw, SolidWorksDocumentumentTypes_e.SolidWorksDocumentDRAWING);
             solidWorksDocument = SolidWorksAdapter.AcativeteDoc("12-00");
             AssemblyDoc assemblyDocument = (AssemblyDoc)solidWorksDocument;
             assemblyDocument.ResolveAllLightWeightComponents(false);

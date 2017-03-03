@@ -33,27 +33,28 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
 
 
         public void Buid()
-        { Patterns.Observer.MessageObserver.Instance.SetMessage("Opened solid works");
+        {
+            Patterns.Observer.MessageObserver.Instance.SetMessage("Opened solid works");
             AssemblyName = "02-11-40-1";
             NewPartPath = System.IO.Path.Combine(RootFolder, SourceFolder, AssemblyName + ".SLDASM");
             Patterns.Observer.MessageObserver.Instance.SetMessage(NewPartPath);
-            
 
-           SolidWorksDocument =  SolidWorksAdapter.OpenDocument(NewPartPath, SolidWorks.Interop.swconst.swDocumentTypes_e.swDocASSEMBLY);
-           
-          //  SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
+
+            SolidWorksDocument = SolidWorksAdapter.OpenDocument(NewPartPath, SolidWorks.Interop.swconst.SolidWorksDocumentumentTypes_e.SolidWorksDocumentASSEMBLY);
+
+            //  SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
             AssemblyDocument = SolidWorksAdapter.ToAssemblyDocument(SolidWorksDocument);
 
             Patterns.Observer.MessageObserver.Instance.SetMessage("calc data. press any key");
             CalculateHandle();
 
             Patterns.Observer.MessageObserver.Instance.SetMessage("delete data.");// press any key");
-          //  //Console.ReadKey();
+                                                                                  //  //Console.ReadKey();
             DeleteComponents();
-            Patterns.Observer.MessageObserver.Instance.SetMessage("set data. ");// press any key");
+            //Patterns.Observer.MessageObserver.Instance.SetMessage("set data. ");// press any key");
 
             //   //Console.ReadKey();
-           // SetSize();
+             SetSize();
         }
 
         void CalculateHandle()
@@ -105,11 +106,13 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
                 количествоВинтов = 2000;
             }
         }
-        private void CalculateRivetCount() {
+        private void CalculateRivetCount()
+        {
             double колЗаклепокВысота;
 
 
-            if (framelessPanel.PanelType == PanelType_e.RemovablePanel) {
+            if (framelessPanel.PanelType == PanelType_e.RemovablePanel)
+            {
                 Vector2 removebalePanelSize;
                 double distanceL;
                 int countScrews;
@@ -308,7 +311,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
                     base.parameters.Add("D2@Эскиз39", 11.3);
                     base.parameters.Add("D1@Эскиз39", 5.0);
 
-                    
+
                 }
                 else // others
                 {
@@ -323,7 +326,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
                     //Console.WriteLine("1");
                     base.parameters.Add("D2@Эскиз29", 85.0);
                     //Console.WriteLine("2");
-                  //  base.parameters.Add("D2@Эскиз43", 11.0);
+                    //  base.parameters.Add("D2@Эскиз43", 11.0);
                     //Console.WriteLine("3");
                     base.parameters.Add("D1@Эскиз29", 10.3);
                     //Console.WriteLine("4");
@@ -340,14 +343,15 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
                 base.parameters.Add("D2@Эскиз1", dimensions.Y);
                 //Console.WriteLine("9");
                 if (framelessPanel.PanelType == PanelType_e.RemovablePanel && !framelessPanel.isOneHandle)
-                {  base.parameters.Add("D4@Эскиз47", framelessPanel.widthHandle);
+                {
+                    base.parameters.Add("D4@Эскиз47", framelessPanel.widthHandle);
                     //Console.WriteLine("10");
 
                 }
 
                 //Размеры для отверсти под клепальные гайки под съемные панели
 
-             //   base.parameters.Add("D3@2-1-1", 55.0);
+                //   base.parameters.Add("D3@2-1-1", 55.0);
                 //Console.WriteLine("11");
                 base.parameters.Add("G0@Эскиз49", OutputHolesWrapper.G0);
                 //Console.WriteLine("12");
@@ -355,7 +359,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
                 //Console.WriteLine("13");
                 base.parameters.Add("G2@Эскиз49", OutputHolesWrapper.G2);
                 //Console.WriteLine("14");
-             // base.parameters.Add("G3@Эскиз49", OutputHolesWrapper.G0);
+                // base.parameters.Add("G3@Эскиз49", OutputHolesWrapper.G0);
                 //Console.WriteLine("15");
                 base.parameters.Add("L1@Эскиз49", OutputHolesWrapper.L1);
                 //Console.WriteLine("16");
@@ -406,16 +410,54 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
             }
         }
 
-        protected override void DeleteComponents(int type=0)
+
+        //private void DeleteFeatures (IEnumerable<FeatureBox> featureBoxList)
+        // {
+        //     FeatureManager featureManager = SolidWorksDocument.FeatureManager;
+        //     var selMgr = (SelectionMgr)SolidWorksDocument.SelectionManager;
+
+        //     var selData = (SelectData)selMgr.CreateSelectData();
+
+
+        //     var features = featureManager.GetFeatures(true);
+        //     int count = featureManager.GetFeatureCount(false);
+
+
+        //     foreach (var eachFeatureBox in featureBoxList.Distinct())
+        //     {
+        //         SolidWorksAdapter.AcativeteDoc(eachFeatureBox.FileName);
+
+        //         foreach (var item in featureBoxList.Where(each=> each.FileName == eachFeatureBox.FileName))
+        //         {
+        //             foreach (var feature in features)
+        //             {
+
+        //                 if (featureBoxList.Contains(item.feature))
+        //                 {
+
+        //                     selMgr.AddSelectionListObject(item, selData);
+        //                 }
+        //             }
+        //         }
+        //     }
+
+
+
+
+        //     model.EditDelete();
+        // }
+
+        protected override void DeleteComponents(int type = 0)
         {
             const int deleteOption = (int)swDeleteSelectionOptions_e.swDelete_Absorbed + (int)swDeleteSelectionOptions_e.swDelete_Children;
-
-
             ModelDocExtension solidWorksDocumentExtension = SolidWorksDocument.Extension;
             double HeightOfWindow = WindowProfils.Flange30 ? WindowProfils.Width : (WindowProfils.Width + 2);
             double WidthOfWindow = WindowProfils.Height;
             CompType_e bodyfeat = CompType_e.BODYFEATURE;
             CompType_e sketch = CompType_e.SKETCH;
+
+
+            //   List<FeatureBox> FeatureBoxList = new List<FeatureBox>();
 
 
             //var ftrfolder = VentsCad.CompType.FTRFOLDER;
@@ -437,67 +479,46 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
             if (framelessPanel.PanelType != PanelType_e.FrontPanel)
             {
 
-                Console.WriteLine("framelessPanel.PanelType != PanelType_e.FrontPanel");
-                //Удаление компонентов из сборки
-                //solidWorksDocumentExtension.SelectByID2("Рамка", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
-                //SolidWorksDocument.EditDelete();
+                // FeatureBoxList.Add(new FeatureBox {ComponentName = "Рамка", FileName = AssemblyName, IsOptions = false });
 
-                //foreach (var component in new List<string>
-                //{
-                //    "02-11-11-40--1", "02-11-11-40--2", "02-11-11-40--3","02-11-11-40--4",
-                //    "Threaded Rivets Increased-1", "Threaded Rivets Increased-2", "Threaded Rivets Increased-3", "Threaded Rivets Increased-4",
-                //    "Rivet Bralo-71", "Rivet Bralo-72", "Rivet Bralo-73", "Rivet Bralo-74", "Rivet Bralo-75", "Rivet Bralo-76",
-                //    "Rivet Bralo-83", "Rivet Bralo-84", "Rivet Bralo-91", "Rivet Bralo-92", "Rivet Bralo-93", "Rivet Bralo-94"
-                //})
-                //{
-                //    solidWorksDocumentExtension.SelectByID2(component + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                //    SolidWorksDocument.EditDelete();
-                //}
-
-                //List<System.Runtime.InteropServices.DispatchWrapper> arrObjIn = new List<System.Runtime.InteropServices.DispatchWrapper>();
-
-                //List<Feature> selObjs = new List<Feature>();
-                //     SelectionMgr selectionMgr = (SelectionMgr)SolidWorksDocument.SelectionManager;
-                //SelectData selectData = (SelectData)selectionMgr.CreateSelectData();
-
-            //    SolidWorksAdapter.AcativeteDoc(NameUpPanel);
-
-                FeatureManager featureManager = SolidWorksDocument.FeatureManager;
-
-
-
-              var features =  featureManager.GetFeatures(false);
-
-                foreach (var item in features)
-                {
-                  if (item.GetTypeName2().ToLower() == "cut")
-                    {
-                        Console.WriteLine(item.Name + " - "  + item.GetTypeName2().ToLower());
-                   }
-                }
-                return;
-
-             // var feature =  features.First(eachFeature => eachFeature.Name == "Вырез-Вытянуть21");
-
-              ///  Console.WriteLine();
-
-                solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть21@" + NameUpPanel +"-1@" +AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                //  Удаление компонентов из сборки
+                solidWorksDocumentExtension.SelectByID2("Рамка", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
                 SolidWorksDocument.EditDelete();
+
+                foreach (var component in new List<string>
+                {
+                    "02-11-11-40--1", "02-11-11-40--2", "02-11-11-40--3","02-11-11-40--4",
+                    "Threaded Rivets Increased-1", "Threaded Rivets Increased-2", "Threaded Rivets Increased-3", "Threaded Rivets Increased-4",
+                    "Rivet Bralo-71", "Rivet Bralo-72", "Rivet Bralo-73", "Rivet Bralo-74", "Rivet Bralo-75", "Rivet Bralo-76",
+                    "Rivet Bralo-83", "Rivet Bralo-84", "Rivet Bralo-91", "Rivet Bralo-92", "Rivet Bralo-93", "Rivet Bralo-94"
+                })
+                {
+                    solidWorksDocumentExtension.SelectByID2(component + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    // FeatureBoxList.Add(new FeatureBox { ComponentName = component, FileName = AssemblyName, IsOptions = false });
+                }
+
+
+
+                solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть21@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+
                 solidWorksDocumentExtension.SelectByID2("Рамка@" + NameUpPanel + "-1@" + AssemblyName, "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
                 SolidWorksDocument.EditDelete();
+
                 solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть26@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
                 SolidWorksDocument.EditDelete();
 
-                solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть22@"+NameDownPanel+"-1@"+AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть22@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
                 SolidWorksDocument.EditDelete();
+
                 solidWorksDocumentExtension.SelectByID2("Рамка@" + NameDownPanel + "-1@" + AssemblyName, "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
                 SolidWorksDocument.EditDelete();
 
                 solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть1@02-11-03-40-@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-               
-               
+                SolidWorksDocument.EditDelete();
+
                 solidWorksDocumentExtension.SelectByID2("Рамка@02-11-03-40-@" + AssemblyName, "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
-               
                 SolidWorksDocument.EditDelete();
 
                 solidWorksDocumentExtension.SelectByID2("Hole72", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
@@ -610,224 +631,482 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
                     SolidWorksDocument.EditDelete();
                 }
 
+            }
+            switch (framelessPanel.PanelType)
+            {
+                #region 04 05 - Съемные панели
 
-                switch (framelessPanel.PanelType)
-                {
-                    #region 04 05 - Съемные панели
-
-                    case PanelType_e.RemovablePanel:
-
-
-                        if (framelessPanel.SizePanel.X > 750)
-                        {
-
-                            solidWorksDocumentExtension.SelectByID2("Handel-1", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
-                            solidWorksDocumentExtension.SelectByID2("Threaded Rivets-25@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                            solidWorksDocumentExtension.SelectByID2("Ручка MLA 120-3@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                            solidWorksDocumentExtension.SelectByID2("SC GOST 17475_gost-5@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                            solidWorksDocumentExtension.SelectByID2("SC GOST 17475_gost-6@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                            solidWorksDocumentExtension.SelectByID2("Threaded Rivets-26@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                            solidWorksDocumentExtension.SelectByID2("Threaded Rivets-26@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                            SolidWorksDocument.EditDelete();
-
-                            SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть14@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                            SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
-                        }
-                        else
-                        {
-                            solidWorksDocumentExtension.SelectByID2("Handel-2", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
-                            solidWorksDocumentExtension.SelectByID2("Threaded Rivets-21@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                            solidWorksDocumentExtension.SelectByID2("Threaded Rivets-22@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                            solidWorksDocumentExtension.SelectByID2("Ручка MLA 120-1@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                            solidWorksDocumentExtension.SelectByID2("SC GOST 17475_gost-1@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                            solidWorksDocumentExtension.SelectByID2("SC GOST 17475_gost-2@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                            SolidWorksDocument.EditDelete();
-
-                            solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть15@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                            solidWorksDocumentExtension.DeleteSelection2(deleteOption);
-                        }
-
-                        solidWorksDocumentExtension.SelectByID2("Threaded Rivets-60@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("Threaded Rivets-61@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("1-1@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("1-2@" + NameUpPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("1-3@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("1-4@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("1-4@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("3-1@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("3-2@" + NameUpPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("3-3@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("3-4@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("3-4@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("1-1-1@" + NameUpPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("3-1-1@" + NameUpPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("Hole1", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("Hole2", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
-                        SolidWorksDocument.EditDelete();
-
-                        SolidWorksDocument.Extension.SelectByID2("D1@2-2@" + NameUpPanel + "-1@" + AssemblyName, "DIMENSION", 0, 0, 0, false, 0, null, 0);
-                        ((Dimension)(SolidWorksDocument.Parameter("D1@2-2@" + NameUpPanel + ".Part"))).SystemValue = 0.065;
+                case PanelType_e.RemovablePanel:
 
 
-                        solidWorksDocumentExtension.SelectByID2("D1@1-2@" + NameDownPanel + "-1@" + AssemblyName, "DIMENSION", 0, 0, 0, false, 0, null, 0);
-                        ((Dimension)(SolidWorksDocument.Parameter("D1@1-2@" + NameDownPanel + ".Part"))).SystemValue = framelessPanel.PanelType == PanelType_e.RemovablePanel ? 0.044 : 0.045;
+                    if (framelessPanel.SizePanel.X > 750)
+                    {
 
-
-                        solidWorksDocumentExtension.SelectByID2("Hole2", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть1@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("Эскиз27@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("Кривая1@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("Кривая1@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("Эскиз26@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0);
-                        SolidWorksDocument.EditDelete();
-
-                        solidWorksDocumentExtension.SelectByID2("Hole3", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть3@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("Эскиз31@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("Кривая3@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("Кривая3@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("Эскиз30@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("Эскиз30@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0);
-                        SolidWorksDocument.EditDelete();
-
-                        // Удаление торцевых отверстий под саморезы
-                        solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть6@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть7@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
-                        solidWorksDocumentExtension.DeleteSelection2(deleteOption);
-
-                        // Удаление торцевых отверстий под клепальные гайки
-                        SolidWorksDocument.Extension.SelectByID2("Под клепальные гайки", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
-                        SolidWorksDocument.Extension.SelectByID2("Эскиз49@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
-                        SolidWorksDocument.Extension.SelectByID2("Панель1", "FTRFOLDER", 0, 0, 0, true, 0, null, 0);
-                        SolidWorksDocument.Extension.SelectByID2("Панель2", "FTRFOLDER", 0, 0, 0, true, 0, null, 0);
-                        SolidWorksDocument.Extension.SelectByID2("Панель3", "FTRFOLDER", 0, 0, 0, true, 0, null, 0);
-                        SolidWorksDocument.Extension.SelectByID2("Панель3", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
-                        SolidWorksDocument.Extension.SelectByID2("Эскиз32@" + "02-11-06-40-" + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
-                        SolidWorksDocument.Extension.SelectByID2("Эскиз32@" + "02-11-06_2-40-" + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
-                        SolidWorksDocument.EditDelete();
-
-
-                        // Удаление отверстий под монтажную рамку
-                        solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть9@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть10@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть12@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть4@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть5@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть6@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
-                        solidWorksDocumentExtension.DeleteSelection2(deleteOption);
-
-                        // Одна ручка
-                        if (framelessPanel.SizePanel.Y < 825)
-                        {
-                            solidWorksDocumentExtension.SelectByID2("SC GOST 17473_gost-12@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                            solidWorksDocumentExtension.SelectByID2("SC GOST 17473_gost-13@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                            SolidWorksDocument.EditDelete();
-
-                            SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть19@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                            SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть11@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                            SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
-                        }
-                        SolidWorksDocument.EditRebuild3();
-                        break;
-
-                    #endregion
-
-
-                    #region Удаление элементов съемной панели
-
-                    case PanelType_e.BlankPanel:
-                    case PanelType_e.безКрыши:
-                    case PanelType_e.односкат:
-
-                    case PanelType_e.безОпор:
-                    case PanelType_e.РамаМонтажная:
-                    case PanelType_e.НожкиОпорные:
-                    case PanelType_e.FrontPanel:
-
-                        solidWorksDocumentExtension.SelectByID2("Handel-1", "FTRFOLDER", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                        solidWorksDocumentExtension.SelectByID2("Handel-1", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
                         solidWorksDocumentExtension.SelectByID2("Threaded Rivets-25@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
                         solidWorksDocumentExtension.SelectByID2("Ручка MLA 120-3@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
                         solidWorksDocumentExtension.SelectByID2("SC GOST 17475_gost-5@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
                         solidWorksDocumentExtension.SelectByID2("SC GOST 17475_gost-6@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
                         solidWorksDocumentExtension.SelectByID2("Threaded Rivets-26@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                        solidWorksDocumentExtension.SelectByID2("Threaded Rivets-26@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                        SolidWorksDocument.EditDelete();
+
+                        SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть14@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                        SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
+                    }
+                    else
+                    {
                         solidWorksDocumentExtension.SelectByID2("Handel-2", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
                         solidWorksDocumentExtension.SelectByID2("Threaded Rivets-21@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
                         solidWorksDocumentExtension.SelectByID2("Threaded Rivets-22@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
                         solidWorksDocumentExtension.SelectByID2("Ручка MLA 120-1@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
                         solidWorksDocumentExtension.SelectByID2("SC GOST 17475_gost-1@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
                         solidWorksDocumentExtension.SelectByID2("SC GOST 17475_gost-2@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                        SolidWorksDocument.EditDelete();
+
+                        solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть15@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                        solidWorksDocumentExtension.DeleteSelection2(deleteOption);
+                    }
+
+                    solidWorksDocumentExtension.SelectByID2("Threaded Rivets-60@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    solidWorksDocumentExtension.SelectByID2("Threaded Rivets-61@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    solidWorksDocumentExtension.SelectByID2("1-1@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                    solidWorksDocumentExtension.SelectByID2("1-2@" + NameUpPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
+                    solidWorksDocumentExtension.SelectByID2("1-3@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                    solidWorksDocumentExtension.SelectByID2("1-4@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                    solidWorksDocumentExtension.SelectByID2("1-4@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                    solidWorksDocumentExtension.SelectByID2("3-1@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                    solidWorksDocumentExtension.SelectByID2("3-2@" + NameUpPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
+                    solidWorksDocumentExtension.SelectByID2("3-3@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                    solidWorksDocumentExtension.SelectByID2("3-4@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                    solidWorksDocumentExtension.SelectByID2("3-4@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                    solidWorksDocumentExtension.SelectByID2("1-1-1@" + NameUpPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
+                    solidWorksDocumentExtension.SelectByID2("3-1-1@" + NameUpPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
+                    solidWorksDocumentExtension.SelectByID2("Hole1", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
+                    solidWorksDocumentExtension.SelectByID2("Hole2", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+
+                    SolidWorksDocument.Extension.SelectByID2("D1@2-2@" + NameUpPanel + "-1@" + AssemblyName, "DIMENSION", 0, 0, 0, false, 0, null, 0);
+                    ((Dimension)(SolidWorksDocument.Parameter("D1@2-2@" + NameUpPanel + ".Part"))).SystemValue = 0.065;
+
+
+                    solidWorksDocumentExtension.SelectByID2("D1@1-2@" + NameDownPanel + "-1@" + AssemblyName, "DIMENSION", 0, 0, 0, false, 0, null, 0);
+                    ((Dimension)(SolidWorksDocument.Parameter("D1@1-2@" + NameDownPanel + ".Part"))).SystemValue = framelessPanel.PanelType == PanelType_e.RemovablePanel ? 0.044 : 0.045;
+
+
+                    solidWorksDocumentExtension.SelectByID2("Hole2", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
+                    solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть1@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                    solidWorksDocumentExtension.SelectByID2("Эскиз27@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
+                    solidWorksDocumentExtension.SelectByID2("Кривая1@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                    solidWorksDocumentExtension.SelectByID2("Кривая1@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                    solidWorksDocumentExtension.SelectByID2("Эскиз26@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+
+                    solidWorksDocumentExtension.SelectByID2("Hole3", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
+                    solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть3@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                    solidWorksDocumentExtension.SelectByID2("Эскиз31@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
+                    solidWorksDocumentExtension.SelectByID2("Кривая3@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                    solidWorksDocumentExtension.SelectByID2("Кривая3@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                    solidWorksDocumentExtension.SelectByID2("Эскиз30@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0);
+                    solidWorksDocumentExtension.SelectByID2("Эскиз30@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+
+                    // Удаление торцевых отверстий под саморезы
+                    solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть6@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                    solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть7@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                    solidWorksDocumentExtension.DeleteSelection2(deleteOption);
+
+                    // Удаление торцевых отверстий под клепальные гайки
+                    SolidWorksDocument.Extension.SelectByID2("Под клепальные гайки", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.Extension.SelectByID2("Эскиз49@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.Extension.SelectByID2("Панель1", "FTRFOLDER", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.Extension.SelectByID2("Панель2", "FTRFOLDER", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.Extension.SelectByID2("Панель3", "FTRFOLDER", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.Extension.SelectByID2("Панель3", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.Extension.SelectByID2("Эскиз32@" + "02-11-06-40-" + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.Extension.SelectByID2("Эскиз32@" + "02-11-06_2-40-" + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+
+
+                    // Удаление отверстий под монтажную рамку
+                    solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть9@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                    solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть10@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                    solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть12@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                    solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть4@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                    solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть5@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                    solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть6@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                    solidWorksDocumentExtension.DeleteSelection2(deleteOption);
+
+                    // Одна ручка
+                    if (framelessPanel.SizePanel.Y < 825)
+                    {
                         solidWorksDocumentExtension.SelectByID2("SC GOST 17473_gost-12@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
                         solidWorksDocumentExtension.SelectByID2("SC GOST 17473_gost-13@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
                         SolidWorksDocument.EditDelete();
 
-                        solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть14@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                        solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть15@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
                         SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть19@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
                         SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть11@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
                         SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
+                    }
+                    SolidWorksDocument.EditRebuild3();
+                    break;
 
-                        #endregion
+                #endregion
 
-                        if (framelessPanel.PanelType == PanelType_e.BlankPanel || framelessPanel.PanelType == PanelType_e.FrontPanel)
+
+                #region Удаление элементов съемной панели
+
+                case PanelType_e.BlankPanel:
+                case PanelType_e.безКрыши:
+                case PanelType_e.односкат:
+
+                case PanelType_e.безОпор:
+                case PanelType_e.РамаМонтажная:
+                case PanelType_e.НожкиОпорные:
+                case PanelType_e.FrontPanel:
+
+                    solidWorksDocumentExtension.SelectByID2("Handel-1", "FTRFOLDER", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.EditDelete();
+
+                    solidWorksDocumentExtension.SelectByID2("Threaded Rivets-25@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+
+                    solidWorksDocumentExtension.SelectByID2("Ручка MLA 120-3@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+
+                    solidWorksDocumentExtension.SelectByID2("SC GOST 17475_gost-5@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+
+                    solidWorksDocumentExtension.SelectByID2("SC GOST 17475_gost-6@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+
+                    solidWorksDocumentExtension.SelectByID2("Threaded Rivets-26@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+
+                    solidWorksDocumentExtension.SelectByID2("Handel-2", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+
+                    solidWorksDocumentExtension.SelectByID2("Threaded Rivets-21@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+
+                    solidWorksDocumentExtension.SelectByID2("Threaded Rivets-22@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+
+                    solidWorksDocumentExtension.SelectByID2("Ручка MLA 120-1@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+
+                    solidWorksDocumentExtension.SelectByID2("SC GOST 17475_gost-1@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+
+                    solidWorksDocumentExtension.SelectByID2("SC GOST 17475_gost-2@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+
+                    solidWorksDocumentExtension.SelectByID2("SC GOST 17473_gost-12@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+
+                    solidWorksDocumentExtension.SelectByID2("SC GOST 17473_gost-13@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+
+                    solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть14@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
+
+                    solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть15@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
+
+                    SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть19@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
+
+                    SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть11@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
+
+                    #endregion
+
+                    if (framelessPanel.PanelType == PanelType_e.BlankPanel || framelessPanel.PanelType == PanelType_e.FrontPanel)
+                    {
+                        solidWorksDocumentExtension.SelectByID2("D1@1-2@" + NameDownPanel + "-1@" + AssemblyName, "DIMENSION", 0, 0, 0, false, 0, null, 0);
+                        ((Dimension)(SolidWorksDocument.Parameter("D1@1-2@" + NameDownPanel + ".Part"))).SystemValue = 0.047;
+                        SolidWorksDocument.EditRebuild3();
+
+                        solidWorksDocumentExtension.SelectByID2("D1@2-2@" + NameUpPanel + "-1@" + AssemblyName, "DIMENSION", 0, 0, 0, false, 0,    null, 0);
+                        ((Dimension)(SolidWorksDocument.Parameter("D1@2-2@" + NameUpPanel + ".Part"))).SystemValue = 0.067;
+                        SolidWorksDocument.EditRebuild3();
+
+                        if (framelessPanel.PanelType == PanelType_e.FrontPanel)
                         {
-                            solidWorksDocumentExtension.SelectByID2("D1@1-2@" + NameDownPanel + "-1@" + AssemblyName, "DIMENSION", 0, 0, 0, false, 0, null, 0);
-                            ((Dimension)(SolidWorksDocument.Parameter("D1@1-2@" + NameDownPanel + ".Part"))).SystemValue = 0.047;
-                            SolidWorksDocument.EditRebuild3();
-
-                            solidWorksDocumentExtension.SelectByID2("D1@2-2@" + NameUpPanel + "-1@" + AssemblyName, "DIMENSION", 0, 0, 0, false, 0,
-                                null, 0);
-                            ((Dimension)(SolidWorksDocument.Parameter("D1@2-2@" + NameUpPanel + ".Part"))).SystemValue = 0.067;
-                            SolidWorksDocument.EditRebuild3();
-
-                            if (framelessPanel.PanelType == PanelType_e.FrontPanel)
-                            {
-                                solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть12@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
-                                solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть4@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
-                                solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть5@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
-                                solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть6@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
-                                solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть7@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
-                                solidWorksDocumentExtension.DeleteSelection2(deleteOption);
-                            }
-
-                            //if (типУсиливающей != null)
-                            //{
-                            //    solidWorksDocumentExtension.SelectByID2("D1@2-2@" + NameUpPanel + "-1@" + AssemblyName, "DIMENSION", 0, 0, 0, false,
-                            //        0, null, 0);
-                            //    ((Dimension)(SolidWorksDocument.Parameter("D1@2-2@" + NameUpPanel + ".Part"))).SystemValue = 0.03;
-                            //    SolidWorksDocument.EditRebuild3();
-
-                            //    solidWorksDocumentExtension.SelectByID2("D1@1-2@" + NameDownPanel + "-1@" + AssemblyName, "DIMENSION", 0, 0, 0,
-                            //        false, 0, null, 0);
-                            //    ((Dimension)(SolidWorksDocument.Parameter("D1@1-2@" + NameDownPanel + ".Part"))).SystemValue = 0.01;
-                            //    SolidWorksDocument.EditRebuild3();
-                            //}
+                            solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть12@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                            solidWorksDocumentExtension.DeleteSelection2(deleteOption);
+                            solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть4@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                            solidWorksDocumentExtension.DeleteSelection2(deleteOption);
+                            solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть5@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                            solidWorksDocumentExtension.DeleteSelection2(deleteOption);
+                            solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть6@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                            solidWorksDocumentExtension.DeleteSelection2(deleteOption);
+                            solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть7@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                            solidWorksDocumentExtension.DeleteSelection2(deleteOption);
                         }
 
-                        break;
+                        if (ТипУсиливающей() != null) // TO DO
+                        {
+                            solidWorksDocumentExtension.SelectByID2("D1@2-2@" + NameUpPanel + "-1@" + AssemblyName, "DIMENSION", 0, 0, 0, false,
+                                0, null, 0);
+                            ((Dimension)(SolidWorksDocument.Parameter("D1@2-2@" + NameUpPanel + ".Part"))).SystemValue = 0.03;
+                            SolidWorksDocument.EditRebuild3();
+
+                            solidWorksDocumentExtension.SelectByID2("D1@1-2@" + NameDownPanel + "-1@" + AssemblyName, "DIMENSION", 0, 0, 0,
+                                false, 0, null, 0);
+                            ((Dimension)(SolidWorksDocument.Parameter("D1@1-2@" + NameDownPanel + ".Part"))).SystemValue = 0.01;
+                            SolidWorksDocument.EditRebuild3();
+                        }
+                    }
+
+                    break;
+            }
+
+
+            if (/*Тип торцевой*/ framelessPanel.PanelType != PanelType_e.BlankPanel)
+            {
+                solidWorksDocumentExtension.SelectByID2("D1@2-2@" + NameUpPanel + "-1@" + AssemblyName, "DIMENSION", 0, 0, 0, false, 0, null, 0);
+                ((Dimension)(SolidWorksDocument.Parameter("D1@2-2@" + NameUpPanel + ".Part"))).SystemValue = 0.0975;
+                SolidWorksDocument.EditRebuild3();
+
+                solidWorksDocumentExtension.SelectByID2("D1@1-2@" + NameDownPanel + "-1@" + AssemblyName, "DIMENSION", 0, 0, 0, false, 0, null, 0);
+                ((Dimension)(SolidWorksDocument.Parameter("D1@1-2@" + NameDownPanel + ".Part"))).SystemValue = 0.0775;
+                SolidWorksDocument.EditRebuild3();
+            }
+
+            if (framelessPanel.PanelType !=  PanelType_e.BlankPanel &&   framelessPanel.PanelType != PanelType_e.FrontPanel)
+            {
+                solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть18@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                solidWorksDocumentExtension.DeleteSelection2(deleteOption);
+                solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть25@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                solidWorksDocumentExtension.DeleteSelection2(deleteOption);
+            }
+
+            if (framelessPanel.PanelType ==  PanelType_e.BlankPanel || framelessPanel.PanelType ==  PanelType_e.FrontPanel)
+            {
+                //Удаление торцевых отверстий под клепальные гайки
+                SolidWorksDocument.Extension.SelectByID2("Под клепальные гайки", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+                SolidWorksDocument.Extension.SelectByID2("Эскиз49@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+                SolidWorksDocument.Extension.SelectByID2("Панель1", "FTRFOLDER", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+                SolidWorksDocument.Extension.SelectByID2("Панель2", "FTRFOLDER", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+                SolidWorksDocument.Extension.SelectByID2("Панель3", "FTRFOLDER", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+                SolidWorksDocument.Extension.SelectByID2("Панель3", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+
+                SolidWorksDocument.Extension.SelectByID2("Эскиз32@" + "02-11-06-40-" + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+                SolidWorksDocument.Extension.SelectByID2("Эскиз32@" + "02-11-06_2-40-" + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+            }
+
+            if (framelessPanel.PanelType !=  PanelType_e.НожкиОпорные)
+            {
+
+                for (var i = 5; i <= 20; i++)
+                {
+                    solidWorksDocumentExtension.SelectByID2("Threaded Rivets-" + i + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
                 }
 
+                solidWorksDocumentExtension.SelectByID2("Ножка", "FTRFOLDER", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть11@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+             
+                solidWorksDocumentExtension.DeleteSelection2(deleteOption);
+ 
+                solidWorksDocumentExtension.SelectByID2("Зеркальное отражение2@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+            }
+
+
+            if (framelessPanel.PanelType != PanelType_e.односкат && framelessPanel.PanelType !=  PanelType_e.РамаМонтажная)
+            {
+                solidWorksDocumentExtension.SelectByID2("Threaded Rivets-33@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("Threaded Rivets-34@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("Threaded Rivets-35@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("Threaded Rivets-36@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("Up", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть16@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                solidWorksDocumentExtension.DeleteSelection2(deleteOption);
+                SolidWorksDocument.ClearSelection2(true);
+            }
+
+            if (framelessPanel.PanelType !=  PanelType_e.RemovablePanel    )
+            {
+                solidWorksDocumentExtension.SelectByID2("SC GOST 17473_gost-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);     
+                SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("SC GOST 17473_gost-2@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+                   
+                solidWorksDocumentExtension.SelectByID2("Threaded Rivets-59@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+                
+                solidWorksDocumentExtension.SelectByID2("Threaded Rivets-60@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+                 
+                solidWorksDocumentExtension.SelectByID2("Threaded Rivets-61@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+                ;
+                solidWorksDocumentExtension.SelectByID2("Threaded Rivets-62@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+                SolidWorksDocument.ClearSelection2(true);
+            }
+            if (config.Contains("00"))
+            {
+                foreach (var i in new[] { 37, 38, 47, 48, 51, 52 })
+                {
+                    solidWorksDocumentExtension.SelectByID2("Threaded Rivets-" + i + "@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                }
+            }
+
+            if (config.Contains("01"))
+            {
+                solidWorksDocumentExtension.SelectByID2("Threaded Rivets-38@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("Threaded Rivets-48@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("Threaded Rivets-51@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+
+                solidWorksDocumentExtension.SelectByID2("4-1@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditSuppress2();
+                SolidWorksDocument.EditRebuild3();
+                solidWorksDocumentExtension.SelectByID2("1-0@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditSuppress2();
+                SolidWorksDocument.EditRebuild3();
+
+                // Погашение отверстий под клепальные гайки
+                SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть20@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                SolidWorksDocument.EditSuppress2();
+                SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть18@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditSuppress2();
+                SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть16@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditSuppress2();
+
+                SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть7@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                SolidWorksDocument.EditSuppress2();
+
+                // В усиливающих профилях
+                SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть15@" + "02-11-06_2-40-" + "-4@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                SolidWorksDocument.EditSuppress2();
+                SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть16@" + "02-11-06_2-40-" + "-4@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditSuppress2();
+                SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть17@" + "02-11-06_2-40-" + "-4@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditSuppress2();
+
+                SolidWorksDocument.ClearSelection2(true);
+            }
+
+
+            if (config.Contains("02"))
+            {
+                solidWorksDocumentExtension.SelectByID2("Threaded Rivets-37@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("Threaded Rivets-47@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("Threaded Rivets-52@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+
+                solidWorksDocumentExtension.SelectByID2("2-1@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditSuppress2();
+                SolidWorksDocument.EditRebuild3();
+                solidWorksDocumentExtension.SelectByID2("1-1@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditSuppress2();
+                SolidWorksDocument.EditRebuild3();
+
+                // Погашение отверстий под клепальные гайки
+                SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть19@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                SolidWorksDocument.EditSuppress2();
+                SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть17@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditSuppress2();
+                SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть15@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditSuppress2();
+
+                SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть6@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                SolidWorksDocument.EditSuppress2();
+
+                // В усиливающих профилях
+                SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть15@" + "02-11-06-40-" + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                SolidWorksDocument.EditSuppress2();
+                SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть16@" + "02-11-06-40-" + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditSuppress2();
+                SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть17@" + "02-11-06-40-" + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditSuppress2();
+
+                SolidWorksDocument.ClearSelection2(true);
 
             }
-        //    static string ТипУсиливающей()
-        //{
-        //        switch (framelessPanel.PanelType)
-        //        {
-        //            case "24":
-        //                return "EE";
-        //            case "25":
-        //                return "ED";
-        //            case "26":
-        //                return "EZ";
-        //            case "27":
-        //                return "TE";
-        //            case "28":
-        //                return "TZ";
-        //            case "29":
-        //                return "TD";
-        //            default:
-        //                return null;
-        //        }
-        //    }
+
+
+            #region Удаление усиления для типоразмера меньше AV09
+
+            if (!усиление)
+            {
+                foreach (var component in new[] { "02-11-06-40--1", "02-11-06_2-40--4", "02-11-07-40--1", "02-11-07-40--2" })
+                {
+                    solidWorksDocumentExtension.SelectByID2(component + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+                }
+
+                foreach (var number in new[]
+                {
+                    "37", "38", "39", "40",
+                    "41", "42", "43", "44",
+                    "45", "46", "47", "48",
+                    "49", "50", "51", "52",
+                    "53", "54", "55", "56"
+                })
+                {
+                    solidWorksDocumentExtension.SelectByID2("Rivet Bralo-" + number + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+                }
+
+                SolidWorksDocument.ShowConfiguration2("Вытяжная заклепка 3,0х6 (ст ст. с пл. гол.)");
+                solidWorksDocumentExtension.SelectByID2("Усиление", "FTRFOLDER", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+
+                solidWorksDocumentExtension.SelectByID2("Hole7@" + NameDownPanel + "-1@" + AssemblyName, "FTRFOLDER", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("Эскиз45@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть13@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("Кривая7@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("Hole8@" + NameDownPanel + "-1@" + AssemblyName, "FTRFOLDER", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("Эскиз47@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть14@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("Кривая9@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+
+                SolidWorksDocument.ClearSelection2(true);
+            }
+
+            #endregion
+        }
+        string ТипУсиливающей()
+        {
+            //switch (framelessPanel.PanelType)
+            //{
+            //    //case  "24":
+            //    //    return "EE";
+            //    //case "25":
+            //    //    return "ED";
+            //    //case "26":
+            //    //    return "EZ";
+            //    //case "27":
+            //    //    return "TE";
+            //    //case "28":
+            //    //    return "TZ";
+            //    //case "29":
+            //    //    return "TD";
+            //    //default:
+            //        return null;
+            //}
+            return null;
         }
     }
 }

@@ -78,6 +78,7 @@
     <Compile Include="Builders\Dxf\DxfBulder.cs" />
     <Compile Include="Builders\Dxf\DxfFile.cs" />
     <Compile Include="Builders\ElementsCase\AbstractBuilder.cs" />
+    <Compile Include="Builders\ElementsCase\FeatureBox.cs" />
     <Compile Include="Builders\ElementsCase\FlapBuilder.cs" />
     <Compile Include="Builders\ElementsCase\FramelessPanelsBuilder.cs" />
     <Compile Include="Builders\ElementsCase\FramePanelsBuilder.cs" />

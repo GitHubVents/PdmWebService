@@ -79,7 +79,7 @@ using System.Linq;
                     try
                     {
                         string emptyConfigyration = "";
-                        modelDoc = SolidWorksAdapter.SldWoksAppExemplare.OpenDoc6(partPath, (int)swDocumentTypes_e.swDocPART, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, emptyConfigyration, error, warnings);
+                        modelDoc = SolidWorksAdapter.SldWoksAppExemplare.OpenDoc6(partPath, (int)SolidWorksDocumentumentTypes_e.SolidWorksDocumentPART, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, emptyConfigyration, error, warnings);
                         modelDoc = SolidWorksAdapter.SldWoksAppExemplare.IActiveDoc2;
 
                         MessageObserver.Instance.SetMessage("\tOpened document " + Path.GetFileName(partPath), MessageType.System);

@@ -72,7 +72,6 @@ namespace SolidWorksLibrary.Builders.Dxf
                 case "CornerFeat":
                     return true;
                 default: return false;
-
             }
         }
 

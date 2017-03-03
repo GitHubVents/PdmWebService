@@ -52,7 +52,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
 
 
             NewPartPath = System.IO.Path.Combine(RootFolder, SourceFolder, AssemblyName + ".SLDASM");
-            SolidWorksAdapter.OpenDocument(NewPartPath, swDocumentTypes_e.swDocASSEMBLY);
+            SolidWorksAdapter.OpenDocument(NewPartPath, SolidWorksDocumentumentTypes_e.SolidWorksDocumentASSEMBLY);
             SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
             AssemblyDocument = SolidWorksAdapter.ToAssemblyDocument(SolidWorksDocument);
         }
