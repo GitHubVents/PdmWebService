@@ -375,7 +375,7 @@ namespace PdmSolidWorksLibrary
 
             //    catch (Exception exception)
             //    {
-            //        MessageBox.Show(exception.ToString() + "\n" + exception.StackTrace + "\n" + exception.Source);
+            //       //MessageBox.Show(exception.ToString() + "\n" + exception.StackTrace + "\n" + exception.Source);
             //    }
             //}
 
@@ -414,7 +414,7 @@ namespace PdmSolidWorksLibrary
 
             //    catch (Exception exception)
             //    {
-            //        MessageBox.Show(exception.ToString() + "\n" + exception.StackTrace + "\n" + exception.Source);
+            //       //MessageBox.Show(exception.ToString() + "\n" + exception.StackTrace + "\n" + exception.Source);
             //    }
             //}
 
@@ -471,7 +471,7 @@ namespace PdmSolidWorksLibrary
                         }
                         catch (Exception exception)
                         {
-                            // MessageBox.Show(exception.ToString());
+                            ////MessageBox.Show(exception.ToString());
                         }
                     }
                     m3:

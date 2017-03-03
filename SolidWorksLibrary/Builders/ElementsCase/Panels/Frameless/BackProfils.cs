@@ -34,7 +34,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
                 bool.TryParse(p1[4], out Flange30);
                 double.TryParse(p1[5], out _typeOfPanel);
 
-                // MessageBox.Show(p1[0] + "\n" + p1[1] + "\n" + p1[2] + "\n" + p1[3] + "\n" + p1[4] + " - " + Flange30 + "\n" + TypeOfPanel);
+                ////MessageBox.Show(p1[0] + "\n" + p1[1] + "\n" + p1[2] + "\n" + p1[3] + "\n" + p1[4] + " - " + Flange30 + "\n" + TypeOfPanel);
             }
             catch (Exception)
             {

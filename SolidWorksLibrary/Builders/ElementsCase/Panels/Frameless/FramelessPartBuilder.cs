@@ -1055,7 +1055,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
             {
                 foreach (var component in new[] { "02-11-06-40--1", "02-11-06_2-40--4", "02-11-07-40--1", "02-11-07-40--2" })
                 {
-                    solidWorksDocumentExtension.SelectByID2(component + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+                    solidWorksDocumentExtension.SelectByID2(component + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
                 }
 
                 foreach (var number in new[]
@@ -1067,23 +1068,1558 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
                     "53", "54", "55", "56"
                 })
                 {
-                    solidWorksDocumentExtension.SelectByID2("Rivet Bralo-" + number + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+                    solidWorksDocumentExtension.SelectByID2("Rivet Bralo-" + number + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
                 }
 
                 SolidWorksDocument.ShowConfiguration2("Вытяжная заклепка 3,0х6 (ст ст. с пл. гол.)");
                 solidWorksDocumentExtension.SelectByID2("Усиление", "FTRFOLDER", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
 
-                solidWorksDocumentExtension.SelectByID2("Hole7@" + NameDownPanel + "-1@" + AssemblyName, "FTRFOLDER", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
-                solidWorksDocumentExtension.SelectByID2("Эскиз45@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
-                solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть13@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
-                solidWorksDocumentExtension.SelectByID2("Кривая7@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
-                solidWorksDocumentExtension.SelectByID2("Hole8@" + NameDownPanel + "-1@" + AssemblyName, "FTRFOLDER", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
-                solidWorksDocumentExtension.SelectByID2("Эскиз47@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
-                solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть14@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
-                solidWorksDocumentExtension.SelectByID2("Кривая9@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("Hole7@" + NameDownPanel + "-1@" + AssemblyName, "FTRFOLDER", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("Эскиз45@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть13@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("Кривая7@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("Hole8@" + NameDownPanel + "-1@" + AssemblyName, "FTRFOLDER", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("Эскиз47@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть14@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("Кривая9@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditDelete();
 
                 SolidWorksDocument.ClearSelection2(true);
             }
+
+            #endregion
+
+
+            #region Отверстия под панели L2 L3
+
+            if (Convert.ToInt32(OutputHolesWrapper.L2) == 28)
+            {
+
+                solidWorksDocumentExtension.SelectByID2("Threaded Rivets-47@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("Threaded Rivets-48@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+
+                SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть17@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть18@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.Extension.SelectByID2("Кривая11@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.Extension.SelectByID2("Кривая11@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                SolidWorksDocument.EditSuppress(); SolidWorksDocument.ClearSelection2(true);
+
+                SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть16@" + "02-11-06-40-" + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.Extension.SelectByID2("Кривая5@" + "02-11-06-40-" + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditSuppress(); SolidWorksDocument.ClearSelection2(true);
+
+                SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть16@" + "02-11-06_2-40-" + "-4@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.Extension.SelectByID2("Кривая5@" + "02-11-06_2-40-" + "-4@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditSuppress(); SolidWorksDocument.ClearSelection2(true);
+            }
+
+
+            if (Convert.ToInt32(OutputHolesWrapper.L3) == 28)
+            {
+                solidWorksDocumentExtension.SelectByID2("Threaded Rivets-51@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("Threaded Rivets-52@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+                SolidWorksDocument.Extension.SelectByID2("Панель3", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
+                SolidWorksDocument.EditDelete();
+
+                SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть19@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть20@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.Extension.SelectByID2("Кривая12@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.Extension.SelectByID2("Кривая12@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                SolidWorksDocument.EditSuppress(); SolidWorksDocument.ClearSelection2(true);
+
+                SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть17@" + "02-11-06-40-" + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.Extension.SelectByID2("Кривая6@" + "02-11-06-40-" + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditSuppress(); SolidWorksDocument.ClearSelection2(true);
+
+                SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть17@" + "02-11-06_2-40-" + "-4@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.Extension.SelectByID2("Кривая6@" + "02-11-06_2-40-" + "-4@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditSuppress(); SolidWorksDocument.ClearSelection2(true);
+            }
+            #endregion
+
+
+            #region Панели усиливающие
+
+            string типКрепежнойЧастиУсиливающейПанели = null;
+            var типТорцевойЧастиУсиливающейПанели = "T";
+
+            if (!string.IsNullOrEmpty(типУсиливающей))
+            {
+                try
+                {
+                    типТорцевойЧастиУсиливающейПанели = типУсиливающей.Remove(1).Contains("T") ? "T" : "E";
+                    if (типУсиливающей.Remove(0, 1).Contains("E"))
+                    {
+                        типКрепежнойЧастиУсиливающейПанели = "E";
+                    }
+                    if (типУсиливающей.Remove(0, 1).Contains("D"))
+                    {
+                        типКрепежнойЧастиУсиливающейПанели = "D";
+                    }
+                    if (типУсиливающей.Remove(0, 1).Contains("E"))
+                    {
+                        типКрепежнойЧастиУсиливающейПанели = "E";
+                    }
+                    if (типУсиливающей.Remove(0, 1).Contains("Z"))
+                    {
+                        типКрепежнойЧастиУсиливающейПанели = "Z";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ////MessageBox.Show(ex.ToString() + "\n" + ex.StackTrace);
+                }
+            }
+
+
+            if (Convert.ToInt32(height) < 825)
+            {
+                SolidWorksDocument.Extension.SelectByID2("UpperAV09@02-11-09-40--1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditSuppress();
+            }
+
+            if (типТорцевойЧастиУсиливающейПанели == "E")
+            {
+                solidWorksDocumentExtension.SelectByID2("1-1@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("1-3@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("1-1-1@" + NameUpPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+
+                solidWorksDocumentExtension.SelectByID2("Эскиз42@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditSuppress();
+                solidWorksDocumentExtension.SelectByID2("Hole1@" + NameUpPanel + "-1@" + AssemblyName, "FTRFOLDER", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+            }
+
+            if (типКрепежнойЧастиУсиливающейПанели != "D")
+            {
+                foreach (var component in new[]
+                {
+                    "02-11-09-40--1",
+                    "Threaded Rivets с насечкой-1", "Threaded Rivets с насечкой-2",
+                    "Threaded Rivets с насечкой-3", "Threaded Rivets с насечкой-4"
+                })
+                {
+                    solidWorksDocumentExtension.SelectByID2(component + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+                }
+                solidWorksDocumentExtension.SelectByID2("Кронштейн", "FTRFOLDER", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("U10@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditSuppress();
+            }
+
+            if (типКрепежнойЧастиУсиливающейПанели != "Z")
+            {
+                solidWorksDocumentExtension.SelectByID2("U20@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditSuppress();
+
+                foreach (var component in new[]
+                {
+                    "Threaded Rivets с насечкой-5", "Threaded Rivets с насечкой-6"
+                })
+                {
+                    solidWorksDocumentExtension.SelectByID2(component + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+                }
+            }
+
+            if (типКрепежнойЧастиУсиливающейПанели == "Z" || типКрепежнойЧастиУсиливающейПанели == "D" || типКрепежнойЧастиУсиливающейПанели == "E")
+            {
+                solidWorksDocumentExtension.SelectByID2("3-2@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("3-1@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+                solidWorksDocumentExtension.SelectByID2("3-1-1@" + NameUpPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+
+                solidWorksDocumentExtension.SelectByID2("Эскиз41@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditSuppress();
+                solidWorksDocumentExtension.SelectByID2("Hole3@" + NameUpPanel + "-1@" + AssemblyName, "FTRFOLDER", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+
+                solidWorksDocumentExtension.SelectByID2("Эскиз56@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditSuppress();
+            }
+
+
+            #endregion
+
+            #region Вставки внутренние
+
+            if (ValProfils.Tp1 == "01" || ValProfils.Tp1 == "00")
+            {
+                if (config.Contains("01"))
+                {
+                    SolidWorksDocument.Extension.SelectByID2("Вырез-ВытянутьTp1R@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditSuppress();
+                    SolidWorksDocument.Extension.SelectByID2("Эскиз80@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditSuppress();
+                }
+                if (config.Contains("02"))
+                {
+                    SolidWorksDocument.Extension.SelectByID2("Вырез-ВытянутьTp1L@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditSuppress();
+                    SolidWorksDocument.Extension.SelectByID2("Эскиз81@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditSuppress();
+                }
+            }
+            else
+            {
+                VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, "Вырез-ВытянутьTp1R@" + NameDownPanel + "-1", supress);
+                VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, "Вырез-ВытянутьTp1L@" + NameDownPanel + "-1", supress);
+            }
+
+            if (ValProfils.Tp2 == "01" || ValProfils.Tp2 == "00")
+            {
+                if (config.Contains("01"))
+                {
+                    VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, "Вырез-ВытянутьTp2R@" + NameDownPanel + "-1", supress);
+                    VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, sketch, "Эскиз61@" + NameDownPanel + "-1", supress);
+                }
+                if (config.Contains("02"))
+                {
+                    VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, "Вырез-ВытянутьTp2L@" + NameDownPanel + "-1", supress);
+                    VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, sketch, "Эскиз62@" + NameDownPanel + "-1", supress);
+                }
+            }
+            else
+            {
+                VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, "Вырез-ВытянутьTp2R@" + NameDownPanel + "-1", supress);
+                VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, "Вырез-ВытянутьTp2L@" + NameDownPanel + "-1", supress);
+            }
+
+            if (ValProfils.Tp3 == "01" || ValProfils.Tp3 == "00")
+            {
+                if (config.Contains("01"))
+                {
+                    VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, "Вырез-ВытянутьTp3R@" + NameDownPanel + "-1", supress);
+                    VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, sketch, "Эскиз63@" + NameDownPanel + "-1", supress);
+                }
+                if (config.Contains("02"))
+                {
+                    VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, "Вырез-ВытянутьTp3L@" + NameDownPanel + "-1", supress);
+                    VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, sketch, "Эскиз64@" + NameDownPanel + "-1", supress);
+                }
+            }
+            else
+            {
+                VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, "Вырез-ВытянутьTp3R@" + NameDownPanel + "-1", supress);
+                VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, "Вырез-ВытянутьTp3L@" + NameDownPanel + "-1", supress);
+            }
+
+            if (ValProfils.Tp4 == "01" || ValProfils.Tp4 == "00")
+            {
+                if (config.Contains("01"))
+                {
+                    VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, "Вырез-ВытянутьTp4R@" + NameDownPanel + "-1", supress);
+                    VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, sketch, "Эскиз82@" + NameDownPanel + "-1", supress);
+                }
+                if (config.Contains("02"))
+                {
+                    VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, "Вырез-ВытянутьTp4L@" + NameDownPanel + "-1", supress);
+                    VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, sketch, "Эскиз83@" + NameDownPanel + "-1", supress);
+                }
+            }
+            else
+            {
+                VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, "Вырез-ВытянутьTp4R@" + NameDownPanel + "-1", supress);
+                VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, "Вырез-ВытянутьTp4L@" + NameDownPanel + "-1", supress);
+            }
+
+            if (ValProfils.Tp1 == "02")
+            {
+                //VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, $"Тип-02-{(isLeftSide ? "1R" : "1L")}@{NameDownPanel}-1", supress);
+
+                if (config.Contains("01"))
+                {
+                    VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, "Тип-02-1R@" + NameDownPanel + "-1", supress);
+                }
+                if (config.Contains("02"))
+                {
+                    VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, "Тип-02-1L@" + NameDownPanel + "-1", supress);
+                }
+            }
+            else
+            {
+                VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, "Тип-02-1R@" + NameDownPanel + "-1", supress);
+                VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, "Тип-02-1L@" + NameDownPanel + "-1", supress);
+            }
+
+            if (ValProfils.Tp2 == "02")
+            {
+                if (config.Contains("01"))
+                {
+                    SolidWorksDocument.Extension.SelectByID2("Тип-02-2R@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditSuppress();
+                }
+                if (config.Contains("02"))
+                {
+                    SolidWorksDocument.Extension.SelectByID2("Тип-02-2L@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditSuppress();
+                }
+                //VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat,   $"Тип-02-{(isLeftSide ? "2R" : "2L")}@{NameDownPanel}-1", supress);
+            }
+            else
+            {
+                VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, "Тип-02-2R@" + NameDownPanel + "-1", supress);
+                VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, "Тип-02-2L@" + NameDownPanel + "-1", supress);
+            }
+
+            if (ValProfils.Tp3 == "02")
+            {
+                // VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, $"Тип-02-{(isLeftSide ? "3R" : "3L")}@{NameDownPanel}-1", supress);
+                if (config.Contains("01"))
+                {
+                    VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, "Тип-02-3R@" + NameDownPanel + "-1", supress);
+                }
+                if (config.Contains("02"))
+                {
+                    VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, "Тип-02-3L@" + NameDownPanel + "-1", supress);
+                }
+            }
+            else
+            {
+                VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, "Тип-02-3R@" + NameDownPanel + "-1", supress);
+                VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, "Тип-02-3L@" + NameDownPanel + "-1", supress);
+            }
+
+
+            if (ValProfils.Tp4 == "02")
+            {
+                //VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, $"Тип-02-{(isLeftSide ? "4R" : "4L")}@{NameDownPanel}-1", supress);
+                if (config.Contains("01"))
+                {
+                    SolidWorksDocument.Extension.SelectByID2("Тип-02-4R@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditSuppress();
+                }
+                if (config.Contains("02"))
+                {
+                    SolidWorksDocument.Extension.SelectByID2("Тип-02-4L@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditSuppress();
+                }
+
+                //if (isLeftSide)
+                //{
+                //    VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, "Тип-02-4R@" + NameDownPanel + "-1", supress);
+                //}
+                //if (!isLeftSide)
+                //{
+                //    VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, "Тип-02-4L@" + NameDownPanel + "-1", supress);
+                //}
+            }
+            else
+            {
+                VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, "Тип-02-4R@" + NameDownPanel + "-1", supress);
+                VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, "Тип-02-4L@" + NameDownPanel + "-1", supress);
+            }
+
+            // Полупанель внутрення
+
+            //if (ValProfils.Tp1 != "05")             
+            //{
+            //    VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, "Тип-05-1@" + NameDownPanel + "-1", supress);
+            //    VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, sketch, "Эскиз88@" + NameDownPanel + "-1", supress);
+            //}
+
+            //if (ValProfils.Tp2 != "05") 
+            //{
+            //    VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, "Тип-05-2@" + NameDownPanel + "-1", supress);
+            //    VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, sketch, "Эскиз66@" + NameDownPanel + "-1", supress);
+            //}
+
+            //if (ValProfils.Tp3 != "05") 
+            //{
+            //    VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, "Тип-05-3@" + NameDownPanel + "-1", supress);
+            //    VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, sketch, "Эскиз67@" + NameDownPanel + "-1", supress);
+            //}
+
+            //if (ValProfils.Tp4 != "05")
+            //{
+            //    VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, "Тип-05-4@" + NameDownPanel + "-1", supress);
+            //    VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, sketch, "Эскиз89@" + NameDownPanel + "-1", supress);
+            //}
+
+            #region To Delete
+
+            if (ValProfils.Tp1 == "05") { }
+            else
+            {
+                VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, VentsCad.CompType.BODYFEATURE, "Тип-05-1@" + NameDownPanel + "-1", VentsCad.Act.Suppress);
+                VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, VentsCad.CompType.BODYFEATURE, "Эскиз88@" + NameDownPanel + "-1", VentsCad.Act.Suppress);
+            }
+
+            if (ValProfils.Tp2 == "05") { }
+            else
+            {
+                VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, VentsCad.CompType.BODYFEATURE, "Тип-05-2@" + NameDownPanel + "-1", VentsCad.Act.Suppress);
+                VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, VentsCad.CompType.BODYFEATURE, "Эскиз66@" + NameDownPanel + "-1", VentsCad.Act.Suppress);
+            }
+
+            if (ValProfils.Tp3 == "05") { }
+            else
+            {
+                VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, VentsCad.CompType.BODYFEATURE, "Тип-05-3@" + NameDownPanel + "-1", VentsCad.Act.Suppress);
+                VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, VentsCad.CompType.BODYFEATURE, "Эскиз67@" + NameDownPanel + "-1", VentsCad.Act.Suppress);
+            }
+
+            if (ValProfils.Tp4 == "05") { }
+            else
+            {
+                VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, VentsCad.CompType.BODYFEATURE, "Тип-05-4@" + NameDownPanel + "-1", VentsCad.Act.Suppress);
+                VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, VentsCad.CompType.BODYFEATURE, "Эскиз89@" + NameDownPanel + "-1", VentsCad.Act.Suppress);
+            }
+
+            #endregion
+
+            #endregion
+
+            #region Отверстия под усиливающие панели
+
+            if (pType == "21" || pType == "22" || pType == "23")
+            {
+
+                SolidWorksDocument.Extension.SelectByID2("Эскиз59@" + NameUpPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditUnsuppress2();
+                SolidWorksDocument.Extension.SelectByID2("Эскиз73@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditUnsuppress2();
+
+                if (ValProfils.Tp1 != "-")
+                {
+                    if (config.Contains("02"))
+                    {
+                        foreach (var name in new[] { "U32", "U31" })
+                        {
+                            solidWorksDocumentExtension.SelectByID2(name + "@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditUnsuppress2();
+                        }
+                        foreach (var name in new[] { "U33", "U34" })
+                        {
+                            solidWorksDocumentExtension.SelectByID2(name + "@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditUnsuppress2();
+                        }
+                    }
+                    if (config.Contains("01"))
+                    {
+                        foreach (var name in new[] { "U52", "U51" })
+                        {
+                            solidWorksDocumentExtension.SelectByID2(name + "@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditUnsuppress2();
+                        }
+                        foreach (var name in new[] { "U53", "U54" })
+                        {
+                            solidWorksDocumentExtension.SelectByID2(name + "@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditUnsuppress2();
+                        }
+                    }
+                }
+
+                if (ValProfils.Tp4 != "-")
+                {
+                    if (config.Contains("02"))
+                    {
+                        foreach (var name in new[] { "U42", "U41" })
+                        {
+                            solidWorksDocumentExtension.SelectByID2(name + "@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                            SolidWorksDocument.EditUnsuppress2();
+                        }
+                        foreach (var name in new[] { "U43", "U44" })
+                        {
+                            solidWorksDocumentExtension.SelectByID2(name + "@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                            SolidWorksDocument.EditUnsuppress2();
+                        }
+                    }
+                    if (config.Contains("01"))
+                    {
+                        foreach (var name in new[] { "U62", "U61" })
+                        {
+                            solidWorksDocumentExtension.SelectByID2(name + "@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                            SolidWorksDocument.EditUnsuppress2();
+                        }
+                        foreach (var name in new[] { "U63", "U64" })
+                        {
+                            solidWorksDocumentExtension.SelectByID2(name + "@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                            SolidWorksDocument.EditUnsuppress2();
+                        }
+                    }
+                }
+            }
+
+            #region TO delete
+
+            //if (pType == "21" || pType == "22" || pType == "23")
+            //{
+            //    VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, sketch, "Эскиз59@" + NameUpPanel + "-1", unSupress);
+            //    VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, sketch, "Эскиз73@" + NameUpPanel + "-1", unSupress);
+
+            //    //  Наличие первой усиливающей панели
+            //    if (string.IsNullOrEmpty(ValProfils.Tp1))//(!ValProfils.Tp1.Contains("-"))
+            //    {
+            //        foreach (var name in new[] { "U32", "U31" })
+            //        {
+            //            VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, name + "@" + NameUpPanel + "-1", !isLeftSide ? unSupress : doNothing);
+            //        }
+            //        foreach (var name in new[] { "U33", "U34" })
+            //        {
+            //            VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, name + "@" + NameDownPanel + "-1", !isLeftSide ? unSupress : doNothing);
+            //        }
+
+            //        foreach (var name in new[] { "U52", "U51" })
+            //        {
+            //            VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, name + "@" + NameUpPanel + "-1", isLeftSide ? unSupress : doNothing);
+            //        }
+            //        foreach (var name in new[] { "U53", "U54" })
+            //        {
+            //            VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, name + "@" + NameDownPanel + "-1", isLeftSide ? unSupress : doNothing);
+            //        }                    
+            //    }
+            //    if (string.IsNullOrEmpty(ValProfils.Tp4)) //(!ValProfils.Tp4.Contains("-"))
+            //    {
+            //        foreach (var name in new[] { "U42", "U41" })
+            //        {
+            //            VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, name + "@" + NameUpPanel + "-1", !isLeftSide ? unSupress : doNothing);
+            //        }
+            //        foreach (var name in new[] { "U43", "U44" })
+            //        {
+            //            VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, name + "@" + NameDownPanel + "-1", !isLeftSide ? unSupress : doNothing);
+            //        }
+
+            //        foreach (var name in new[] { "U62", "U61" })
+            //        {
+            //            VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, name + "@" + NameUpPanel + "-1", isLeftSide ? unSupress : doNothing);
+            //        }
+            //        foreach (var name in new[] { "U63", "U64" })
+            //        {
+            //            VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, bodyfeat, name + "@" + NameDownPanel + "-1", isLeftSide ? unSupress : doNothing);
+            //        }                    
+            //    }
+            //}
+
+            #endregion
+
+
+            if (pType == "30" || pType == "31")
+            {
+
+                SolidWorksDocument.Extension.SelectByID2("Эскиз59@" + NameUpPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditUnsuppress2();
+                SolidWorksDocument.Extension.SelectByID2("Эскиз73@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditUnsuppress2();
+
+                if (ValProfils.Tp1 != "-")
+                {
+                    if (config.Contains("02"))
+                    {
+                        foreach (var name in new[] { "U32", "U31" })
+                        {
+                            solidWorksDocumentExtension.SelectByID2(name + "@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                            SolidWorksDocument.EditUnsuppress2();
+                        }
+                        foreach (var name in new[] { "U33", "U34" })
+                        {
+                            solidWorksDocumentExtension.SelectByID2(name + "@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                            SolidWorksDocument.EditUnsuppress2();
+                        }
+                    }
+                    if (config.Contains("01"))
+                    {
+                        foreach (var name in new[] { "U52", "U51" })
+                        {
+                            solidWorksDocumentExtension.SelectByID2(name + "@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                            SolidWorksDocument.EditUnsuppress2();
+                        }
+                        foreach (var name in new[] { "U53", "U54" })
+                        {
+                            solidWorksDocumentExtension.SelectByID2(name + "@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                            SolidWorksDocument.EditUnsuppress2();
+                        }
+                    }
+                }
+                if (ValProfils.Tp4 != "-")
+                {
+                    if (config.Contains("02"))
+                    {
+                        foreach (var name in new[] { "U42", "U41" })
+                        {
+                            solidWorksDocumentExtension.SelectByID2(name + "@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                            SolidWorksDocument.EditUnsuppress2();
+                        }
+                        foreach (var name in new[] { "U43", "U44" })
+                        {
+                            solidWorksDocumentExtension.SelectByID2(name + "@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                            SolidWorksDocument.EditUnsuppress2();
+                        }
+                    }
+                    if (config.Contains("01"))
+                    {
+                        foreach (var name in new[] { "U62", "U61" })
+                        {
+                            solidWorksDocumentExtension.SelectByID2(name + "@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                            SolidWorksDocument.EditUnsuppress2();
+                        }
+                        foreach (var name in new[] { "U63", "U64" })
+                        {
+                            solidWorksDocumentExtension.SelectByID2(name + "@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                            SolidWorksDocument.EditUnsuppress2();
+                        }
+                    }
+                }
+            }
+
+            #endregion
+
+            #region Со скотчем "ребро-кромка"
+
+            if (!скотч)// != "Со скотчем")
+            {
+                //MessageBox.Show($"Со скотчем {скотч}");
+                VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, VentsCad.CompType.COMPONENT, "02-11-04-40--1", VentsCad.Act.Delete);
+                //MessageBox.Show("Со скотчем 2");
+                solidWorksDocumentExtension.SelectByID2("D1@Расстояние1@" + AssemblyName + ".SLDASM", "DIMENSION", 0, 0, 0, true, 0, null, 0);
+                ((Dimension)(SolidWorksDocument.Parameter("D1@Расстояние1"))).SystemValue = 0;
+            }
+
+            #endregion
+
+            #region Изменение деталей
+
+            #region Кронштейны двойной панели            
+
+            double колЗаклепокКронштейнаДвойнойПанели = 2000;
+
+            if (!string.IsNullOrEmpty(типДвойнойРазрез))
+            {
+                var idToDelete = "-2";
+                var idToChange = "-1";
+
+                var lenghtOfProfil = Convert.ToDouble(height);
+
+                var nameOfProfil = усиление ? "02-11-13-40-" : "02-11-14-40-";
+                var nameOfProfilToDelete = !усиление ? "02-11-13-40-" : "02-11-14-40-";
+
+                // todo учет толщины
+                var deltaForLenght = усиление ? 48.0 : 3.5;
+                var newNameP = nameOfProfil + height;
+
+                var cut = типДвойнойРазрез == "H" ? " по высоте H " : " по ширине W ";
+
+                if (типДвойнойРазрез == "H")
+                {
+                    idToDelete = "-1";
+                    idToChange = "-2";
+                    newNameP = nameOfProfil + width;
+                    lenghtOfProfil = Convert.ToDouble(width);
+                }
+
+                SolidWorksDocument.Extension.SelectByID2(nameOfProfil + idToDelete + "@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                SolidWorksDocument.Extension.SelectByID2(nameOfProfilToDelete + "-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                SolidWorksDocument.Extension.SelectByID2(nameOfProfilToDelete + "-2@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+
+                #region
+
+                switch (типДвойнойРазрез)
+                {
+                    case "H":
+                        foreach (var number in new[]
+                        { "105", "106", "113", "114", "137", "138", "139", "140", "141", "142", "143", "144", "145", "146"})
+                        {
+                            solidWorksDocumentExtension.SelectByID2("Rivet Bralo-" + number + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+                        }
+
+                        SolidWorksDocument.Extension.SelectByID2("Cut-ExtrudeWP1@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
+                        SolidWorksDocument.Extension.SelectByID2("Cut-ExtrudeW@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
+
+                        SolidWorksDocument.Extension.SelectByID2("Cut-ExtrudeWP1@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
+                        SolidWorksDocument.Extension.SelectByID2("Cut-ExtrudeW@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
+
+                        solidWorksDocumentExtension.SelectByID2("WP1@" + AssemblyName, "FTRFOLDER", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+
+                        SolidWorksDocument.Extension.SelectByID2("Cut-ExtrudeWC@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
+
+                        if (типДвойнойВерхней == "0")
+                        {
+                            foreach (var number in new[] { "123", "124", "160", "161", "157", "158", "159" })
+                            {
+                                solidWorksDocumentExtension.SelectByID2("Rivet Bralo-" + number + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+                            }
+                            SolidWorksDocument.Extension.SelectByID2("Cut-ExtrudeHP1@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
+                            SolidWorksDocument.Extension.SelectByID2("Cut-ExtrudeH@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
+                        }
+                        if (типДвойнойНижней == "0")
+                        {
+                            foreach (var number in new[] { "121", "122", "162", "163", "164", "165", "166" })
+                            {
+                                solidWorksDocumentExtension.SelectByID2("Rivet Bralo-" + number + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                                SolidWorksDocument.EditDelete();
+                            }
+
+                            SolidWorksDocument.Extension.SelectByID2("Cut-ExtrudeHP1@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
+                            SolidWorksDocument.Extension.SelectByID2("Cut-ExtrudeH@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
+                        }
+                        break;
+
+                    case "W":
+                        foreach (var number in new[]
+                        {
+                            "121", "122", "123", "124", "162", "163", "164", "165", "166",
+                            "157", "158", "159", "160", "161"
+                        })
+                        {
+                            solidWorksDocumentExtension.SelectByID2("Rivet Bralo-" + number + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+                        }
+
+                        solidWorksDocumentExtension.SelectByID2("HP1@" + AssemblyName, "FTRFOLDER", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+
+                        SolidWorksDocument.Extension.SelectByID2("Cut-ExtrudeHP1@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
+                        SolidWorksDocument.Extension.SelectByID2("Cut-ExtrudeH@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
+
+                        SolidWorksDocument.Extension.SelectByID2("Cut-ExtrudeHP1@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
+                        SolidWorksDocument.Extension.SelectByID2("Cut-ExtrudeH@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
+
+                        SolidWorksDocument.Extension.SelectByID2("Cut-ExtrudeHC@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
+
+                        if (типДвойнойВерхней == "0")
+                        {
+                            foreach (var number in new[] { "113", "114", "137", "138", "139", "140", "141" })
+                            {
+                                solidWorksDocumentExtension.SelectByID2("Rivet Bralo-" + number + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+                            }
+                            SolidWorksDocument.Extension.SelectByID2("Cut-ExtrudeWP1@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
+                            SolidWorksDocument.Extension.SelectByID2("Cut-ExtrudeW@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
+
+                            SolidWorksDocument.Extension.SelectByID2("Cut-ExtrudeWC@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
+                        }
+                        if (типДвойнойНижней == "0")
+                        {
+                            foreach (var number in new[] { "105", "106", "142", "143", "144", "145", "146" })
+                            {
+                                solidWorksDocumentExtension.SelectByID2("Rivet Bralo-" + number + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+                            }
+
+                            SolidWorksDocument.Extension.SelectByID2("Cut-ExtrudeWP1@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
+                            SolidWorksDocument.Extension.SelectByID2("Cut-ExtrudeW@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
+                        }
+                        break;
+                }
+
+                #endregion
+
+                var newPartPathP = $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newNameP}.SLDPRT";
+
+                колЗаклепокКронштейнаДвойнойПанели = (Math.Truncate((lenghtOfProfil - 45.0) / 125) + 1) * 1000;
+
+                try
+                {
+                    if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPathP), 1))
+                    {
+                        SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2(AssemblyName + ".SLDASM", true, 0)));
+                        SolidWorksDocument.Extension.SelectByID2(nameOfProfil + idToChange + "@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                        swAsm.ReplaceComponents(newPartPathP, "", false, true);
+                        SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(nameOfProfil + ".SLDPRT");
+                    }
+                    else
+                    {
+                        SwPartParamsChangeWithNewName(nameOfProfil,
+                            $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newNameP}",
+                            new[,]
+                            {
+                                {"D2@Эскиз1", Convert.ToString(lenghtOfProfil - deltaForLenght)},
+                                {"D1@CrvPattern1", Convert.ToString(колЗаклепокКронштейнаДвойнойПанели)}
+                            },
+                            false, null);
+                        SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newNameP);
+                    }
+                }
+                catch (Exception e)
+                {
+                   //MessageBox.Show(e.ToString());
+                }
+            }
+
+            #endregion
+
+            #region  Панель внешняя
+
+            var newName = панельВнешняя.NewName;
+            var newPartPath = $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}.SLDPRT";
+
+            var outerPanel = newPartPath;
+
+            //todo вынести кол-во в метод модели
+
+            var screwsByHeight =
+            string.IsNullOrEmpty(типТорцевой)
+                ? колСаморезВинтВысота
+                : колСаморезВинтВысота - 1000;
+
+            var zaklByHeight = pType == "01" || pType == "35" || pType == "04" || pType == "05"
+                ? колЗаклепокВысота
+                : колЗаклепокВысота + 1000;
+
+            if (типДвойнойРазрез == "H")
+            {
+                if ((screwsByHeight / 1000) % 2 != 0)
+                {
+                    screwsByHeight = screwsByHeight + 1000;
+                }
+
+                if ((zaklByHeight / 1000) % 2 != 0)
+                {
+                    zaklByHeight = zaklByHeight + 1000;
+                }
+            }
+
+            var screwsByWidth = pType == "01" || pType == "35" ? (колСаморезВинтШирина - 1000 < 2000 ? 2000 : колСаморезВинтШирина - 1000)
+                        : (колСаморезВинтШирина < 2000 ? 2000 : колСаморезВинтШирина);
+
+            var zaklByWidth = колЗаклепокШирина;
+
+            if (типДвойнойРазрез == "W")
+            {
+                if ((screwsByWidth / 1000) % 2 != 0)
+                {
+                    screwsByWidth = screwsByWidth + 1000;
+                }
+
+                if ((zaklByWidth / 1000) % 2 != 0)
+                {
+                    zaklByWidth = zaklByWidth + 1000;
+                }
+            }
+
+            if (screws.ByWidth > 0 & pType.Contains("3"))
+            {
+                screwsByWidth = screws.ByWidth;
+            }
+
+            try
+            {
+                if (screws?.ByHeight > 0)
+                {
+                    screwsByHeight = screws.ByHeight;
+                }
+                if (screws?.ByWidth > 0)
+                {
+                    screwsByWidth = screws.ByWidth;
+                }
+            }
+            catch (Exception) { }
+
+            var screwsByWidthInner =
+                pType != "01" || pType != "35"
+                    ? (колСаморезВинтШирина - 1000 < 2000 ? 2000 : колСаморезВинтШирина - 1000)
+                    : (колСаморезВинтШирина2 < 2000 ? 2000 : колСаморезВинтШирина);
+
+            var screwsByHeightInner = pType == "04" || pType == "05"
+                ? (колСаморезВинтВысота)
+                : (колСаморезВинтВысота - 1000);
+
+            try
+            {
+                if (screws?.ByHeightInner > 0)
+                {
+                    screwsByHeightInner = screws.ByHeightInner < 2000 ? 2000 : screws.ByHeightInner;
+                }
+                if (screws?.ByWidthInner > 0)
+                {
+                    screwsByWidthInner = screws.ByWidthInner < 2000 ? 2000 : screws.ByWidthInner;
+                }
+            }
+            catch (Exception ex)
+            {
+               //MessageBox.Show(ex.ToString() + "\n" + ex.StackTrace);
+            }
+
+            if (GetExistingFile(newPartPath, 1))//   (Path.GetFileNameWithoutExtension(newPartPath), 1))
+            {
+                SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2(AssemblyName + ".SLDASM", true, 0)));
+                SolidWorksDocument.Extension.SelectByID2(NameUpPanel + "-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                swAsm.ReplaceComponents(newPartPath, "", false, true);
+                SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(NameUpPanel + ".SLDPRT");
+            }
+            else
+            {
+                var d1Кривая3 = pType == "35"
+                    ? (колСаморезВинтШирина - 1000 < 2000 ? 2000 : колСаморезВинтШирина - 1000)
+                    : (колСаморезВинтШирина < 2000 ? 2000 : колСаморезВинтШирина);
+
+                var d1Эскиз52 = типКрепежнойЧастиУсиливающейПанели == null ? Convert.ToString(30) : Convert.ToString(20);
+
+                if (!string.IsNullOrEmpty(типТорцевой))
+                {
+                    d1Кривая3 = колСаморезВинтШирина < 2000 ? 2000 : колСаморезВинтШирина;
+                    d1Эскиз52 = Convert.ToString(35);
+                }
+
+                if (screws?.ByWidthInnerUp > 0)
+                {
+                    d1Кривая3 = screws.ByWidthInnerUp;
+                }
+
+                //типДвойнойРазрез
+
+                SwPartParamsChangeWithNewName(NameUpPanel,
+                    $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}",
+                    new[,]
+                    {
+                        // Габариты
+                        {"D1@Эскиз1", Convert.ToString(ширинаПанели)},
+                        {"D2@Эскиз1", Convert.ToString(высотаПанели)},
+
+                        {"D1@3-4", Convert.ToString(screwsByHeight)},
+                        {"D1@1-4", Convert.ToString(screwsByHeight)},
+
+                        {"D1@2-4",  Convert.ToString(screwsByWidth)},
+
+
+                        {"D2@2-2", Convert.ToString(осьСаморезВинт)},
+                        {"D4@Эскиз47", Convert.ToString(растояниеМеждуРучками)},
+
+                        {"D1@Эскиз50", Convert.ToString(диамСаморезВинт)},
+                        {"D1@2-3-1", Convert.ToString(диамСаморезВинт)},
+
+                        {"D1@Эскиз52", d1Эскиз52},
+                        {"D2@Эскиз52", Convert.ToString(осьПоперечныеОтверстия)},
+
+                        {"D1@Кривая3", Convert.ToString(d1Кривая3)},
+
+                        {"D3@1-1-1", string.IsNullOrEmpty(типТорцевой) || pType == "01" ?  Convert.ToString(35) : Convert.ToString(158.1)},
+                        {"D2@3-1-1", string.IsNullOrEmpty(типТорцевой) || pType == "01" ?  Convert.ToString(35) : Convert.ToString(158.1)},
+
+
+                        {"D3@2-1-1", Convert.ToString(диамЗаглушкаВинт)},
+                        {"D1@Эскиз49", Convert.ToString(диамЗаглушкаВинт)},
+
+                        {"D1@Кривая1", Convert.ToString(zaklByWidth)},
+
+
+                        {"D1@Кривая2", Convert.ToString(zaklByHeight)},
+
+
+                        {"D7@Ребро-кромка1", скотч ? Convert.ToString(17.7) : Convert.ToString(19.2)},
+
+
+                        {"Толщина@Листовой металл", materialP1[1].Replace('.', ',')},
+
+
+                        {"D1@CrvPatternW", Convert.ToString(колЗаклепокКронштейнаДвойнойПанели)},
+                        {"D1@CrvPatternH", Convert.ToString(колЗаклепокКронштейнаДвойнойПанели)}
+                    },
+                    true,
+                    типДвойнойВерхней != "0" ? new[]
+                    {
+                        $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{имяДвойнойВерхней1}",
+                        $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{имяДвойнойВерхней2}"
+                    } : null);
+                VentsMatdll(materialP1, new[] { покрытие[6], покрытие[1], покрытие[2] }, newName);
+                SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
+            }
+
+            #endregion
+
+            #region  Панель внутреняя
+
+            newName = панельВнутренняя.NewName;
+            //newName = modelname2 + "-02-" + width + "-" + lenght + "-" + "40-" + materialP2[0] + strenghtP + panelsUpDownConfigString;
+            newPartPath = $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}.SLDPRT";
+            var innerPanel = newPartPath;
+
+            if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
+            {
+                SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2(AssemblyName + ".SLDASM", true, 0)));
+                SolidWorksDocument.Extension.SelectByID2(NameDownPanel + "-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                swAsm.ReplaceComponents(newPartPath, "", false, true);
+                SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(NameDownPanel + ".SLDPRT");
+            }
+            else
+            {
+                SwPartParamsChangeWithNewName(NameDownPanel,
+                    $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}",
+                    new[,]
+                    {
+                        {"D1@Эскиз1", pType == "04" || pType == "05"
+                                ? Convert.ToString(ширинаПанели - 42)
+                                : Convert.ToString(ширинаПанели - 40)},
+
+                        {"D2@Эскиз1", pType == "04" || pType == "05"
+                                ? Convert.ToString(высотаПанели - 42)
+                                : Convert.ToString(высотаПанели - 40)},
+
+                        {"D1@1-3", Convert.ToString(screwsByWidth)},
+                        {"D1@Кривая6", Convert.ToString(screwsByHeight)},
+
+                        {"D1@1-4", Convert.ToString(колСаморезВинтВысота)},
+
+                        {"D1@Кривая5", Convert.ToString(screwsByWidthInner)},
+
+                        {"D1@Кривая4", Convert.ToString(screwsByHeightInner)},
+
+                        {"D2@Эскиз32", pType == "01" || pType == "35"
+                                ? Convert.ToString(77.5)
+                                : Convert.ToString(158.1)},
+
+                        {"D4@Эскиз47", Convert.ToString(растояниеМеждуРучками)},
+
+                        {"D1@Эскиз38", Convert.ToString(диамСаморезВинт)},
+                        {"D3@1-1-1", Convert.ToString(диамСаморезВинт)},
+
+                        {"D1@Эскиз40", string.IsNullOrEmpty(типТорцевой) || pType == "01"
+                                ? Convert.ToString(15)
+                                : Convert.ToString(138.1)},
+
+                        {"D2@1-2", Convert.ToString(осьОтверстийСаморезВинт)},
+
+                        {"D1@2-3", Convert.ToString(zaklByWidth)},
+                        {"D1@Кривая1", Convert.ToString(zaklByWidth)},
+
+                        {"D1@Кривая2", Convert.ToString(zaklByHeight)},
+
+                        {"D3@2-1-1", pType == "04" || pType == "05"
+                                ? Convert.ToString(54.0)
+                                : Convert.ToString(55.0)},
+
+                        {"D2@Эскиз29", pType == "04" || pType == "05"
+                                ? Convert.ToString(84.0)
+                                : Convert.ToString(85.0)},
+
+                        {"D2@Эскиз43", pType == "04" || pType == "05"
+                                ? Convert.ToString(12.0)
+                                : Convert.ToString(11.0)},
+
+                        {"D1@Эскиз29", pType == "04" || pType == "05"
+                                ? Convert.ToString(11.3)
+                                : Convert.ToString(10.3)},
+
+                        {"D1@2-1-1", pType == "04" || pType == "05"
+                                ? Convert.ToString(11.3)
+                                : Convert.ToString(10.3)},
+
+                        {"D2@Эскиз39", pType == "04" || pType == "05"
+                                ? Convert.ToString(11.3)
+                                : Convert.ToString(10.3)},
+
+                        {"D1@Эскиз39", pType == "04" || pType == "05"
+                                ? Convert.ToString(5.0)
+                                : Convert.ToString(4.0)},
+
+                        //Рамка усиливающая
+                        {"D1@Кривая9", pType == "01" || pType == "35"
+                                ? Convert.ToString(колСаморезВинтШирина - 1000)
+                                : Convert.ToString(колСаморезВинтШирина)},
+
+                        {"D1@Кривая7", Convert.ToString(колЗаклепокВысота)},
+
+                        {"D3@Эскиз56", Convert.ToString(отступОтветныхОтверстийШирина)},
+
+                        //Размеры для отверсти под клепальные гайки под съемные панели
+                        {"G0@Эскиз49", Convert.ToString(OutputHolesWrapper.G0)},
+                        {"G1@Эскиз49", Convert.ToString(OutputHolesWrapper.G1)},
+                        {"G2@Эскиз49", Convert.ToString(OutputHolesWrapper.G2)},
+                        {"G3@Эскиз49", Convert.ToString(OutputHolesWrapper.G0)},
+
+                        //Convert.ToString(количествоВинтов)
+                        {"L1@Эскиз49", Convert.ToString(OutputHolesWrapper.L1)},
+                        {"D1@Кривая10", Convert.ToString(OutputHolesWrapper.D1)},
+                        {"L2@Эскиз49", Convert.ToString(OutputHolesWrapper.L2)},
+                        {"D1@Кривая11", Convert.ToString(OutputHolesWrapper.D2)},
+                        {"L3@Эскиз49", Convert.ToString(OutputHolesWrapper.L3)},
+                        {"D1@Кривая12", Convert.ToString(OutputHolesWrapper.D3)},
+
+                        //Размеры промежуточных профилей
+                        {"Wp1@Эскиз59", Math.Abs(ValProfils.Wp1) < 1 ? "10" : Convert.ToString(ValProfils.Wp1)},
+                        {"Wp2@Эскиз59", Math.Abs(ValProfils.Wp2) < 1 ? "10" : Convert.ToString(ValProfils.Wp2)},
+                        {"Wp3@Эскиз59", Math.Abs(ValProfils.Wp3) < 1 ? "10" : Convert.ToString(ValProfils.Wp3)},
+                        {"Wp4@Эскиз59", Math.Abs(ValProfils.Wp4) < 1 ? "10" : Convert.ToString(ValProfils.Wp4)},
+
+                        //todo Для промежуточной панели отверстия
+                        {"D1@Кривая14", Convert.ToString(колЗаклепокВысота*2)},
+
+                        {"Толщина@Листовой металл", materialP2[1].Replace('.', ',')},
+
+                        // Кол-во отверстий под заклепки сшивочных кронштейнов
+                        {"D1@CrvPatternW", Convert.ToString(колЗаклепокКронштейнаДвойнойПанели)},
+                        {"D1@CrvPatternH", Convert.ToString(колЗаклепокКронштейнаДвойнойПанели)}
+                    },
+                    true,
+                    типДвойнойНижней != "0"
+                        ? new[]
+                        {
+                            $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{имяДвойнойНижней1}",
+                            $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{имяДвойнойНижней2}"
+                        }
+                        : null);
+
+                VentsMatdll(materialP2, new[] { покрытие[7], покрытие[4], покрытие[5] }, newName);
+
+                SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
+            }
+
+            #endregion
+
+            #region Усиливающие рамки
+
+            if (усиление)
+            {
+                const string thiknessF = "1";
+                var bendParams = sbSqlBaseData.BendTable(thiknessF);
+                var bendRadius = Convert.ToDouble(bendParams[0]);
+                var kFactor = Convert.ToDouble(bendParams[1]);
+
+                const double heightF = 38.0;
+
+                #region  Усиливающая рамка по ширине
+
+                newName = усиливающаяРамкаПоШирине.NewName;
+                //newName = modelName + "-06-" + width + "-" + "40-" + materialP2[0] + скотч;
+                newPartPath = $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}.SLDPRT";
+
+                if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
+                {
+                    
+                    SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2(AssemblyName + ".SLDASM", true, 0)));
+                    SolidWorksDocument.Extension.SelectByID2("02-11-06-40--1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    swAsm.ReplaceComponents(newPartPath, "", true, true);
+                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("02-11-06-40-.SLDPRT");
+                }
+                else
+                {
+                    SwPartParamsChangeWithNewName("02-11-06-40-",
+                        $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}",
+                            new[,]
+                            {
+                                {"D2@Эскиз1", pType == "04" || pType == "05" ? Convert.ToString(ширинаПанели-49.2) : Convert.ToString(ширинаПанели-47.2)},
+
+                                {"D1@Эскиз1", Convert.ToString(heightF)},
+
+                                {"D1@Кривая3", Convert.ToString(screwsByWidthInner)},
+                                {"D1@Кривая2", Convert.ToString(колСаморезВинтШирина)},
+                                
+                                
+                                //Размеры для отверсти под клепальные гайки под съемные панели
+                                {"G0@Эскиз32", Convert.ToString(OutputHolesWrapper.G0-3.6)},
+                                {"G1@Эскиз32", Convert.ToString(OutputHolesWrapper.G1)},
+                                {"G2@Эскиз32", Convert.ToString(OutputHolesWrapper.G2)},
+                                {"G3@Эскиз32", Convert.ToString(OutputHolesWrapper.G0)},
+                                 
+                                //Convert.ToString(количествоВинтов)
+                                {"L1@Эскиз32", Convert.ToString(OutputHolesWrapper.L1)},
+                                {"D1@Кривая4", Convert.ToString(OutputHolesWrapper.D1)},
+                                {"L2@Эскиз32", Convert.ToString(OutputHolesWrapper.L2)},
+                                {"D1@Кривая5", Convert.ToString(OutputHolesWrapper.D2)},
+                                {"L3@Эскиз32", Convert.ToString(OutputHolesWrapper.L3)},
+                                {"D1@Кривая6", Convert.ToString(OutputHolesWrapper.D3)},
+
+                                {"Толщина@Листовой металл", thiknessF},
+                                {"D1@Листовой металл", Convert.ToString(bendRadius)},
+                                {"D2@Листовой металл", Convert.ToString(kFactor*1000)}
+                            },
+                        true,
+                        null);
+                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
+                }
+
+                #endregion
+
+                #region  Усиливающая рамка по ширине 2
+
+                if (pType == "01")
+                {
+                    SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2(AssemblyName + ".SLDASM", true, 0)));
+                    SolidWorksDocument.Extension.SelectByID2("02-11-06_2-40--4@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    swAsm.ReplaceComponents($@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{усиливающаяРамкаПоШирине.NewName}.SLDPRT", "", true, true);
+                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("02-11-06_2-40-.SLDPRT");
+                }
+                else
+                {
+                    newName = усиливающаяРамкаПоШирине2.NewName;
+                    //newName = modelName + "-06-" + width + "-" + "40-" + materialP2[0] + скотч;
+                    newPartPath = $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}.SLDPRT";
+
+                    if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
+                    {
+                        SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2(AssemblyName + ".SLDASM", true, 0)));
+                        SolidWorksDocument.Extension.SelectByID2("02-11-06_2-40--4@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                        swAsm.ReplaceComponents(newPartPath, "", true, true);
+                        SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("02-11-06_2-40-.SLDPRT");
+                    }
+                    else
+                    {
+                        SwPartParamsChangeWithNewName("02-11-06_2-40-",
+                            $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}",
+                            new[,]
+                            {
+                                {"D2@Эскиз1",
+                                    pType == "04" || pType == "05"
+                                    ? Convert.ToString(ширинаПанели - 49.2)
+                                    : Convert.ToString(ширинаПанели - 47.2)},
+
+                                {"D1@Эскиз1", Convert.ToString(heightF)},
+
+                                {"D1@Кривая3", Convert.ToString(screwsByWidthInner)},
+                                {"D1@Кривая2", Convert.ToString(колСаморезВинтШирина)},
+                                
+                                //Размеры для отверсти под клепальные гайки под съемные панели
+                                {"G0@Эскиз32", Convert.ToString(OutputHolesWrapper.G0 - 3.6)},
+                                {"G1@Эскиз32", Convert.ToString(OutputHolesWrapper.G1)},
+                                {"G2@Эскиз32", Convert.ToString(OutputHolesWrapper.G2)},
+                                {"G3@Эскиз32", Convert.ToString(OutputHolesWrapper.G0)},
+
+                                //Convert.ToString(количествоВинтов)
+                                {"L1@Эскиз32", Convert.ToString(OutputHolesWrapper.L1)},
+                                {"D1@Кривая4", Convert.ToString(OutputHolesWrapper.D1)},
+                                {"L2@Эскиз32", Convert.ToString(OutputHolesWrapper.L2)},
+                                {"D1@Кривая5", Convert.ToString(OutputHolesWrapper.D2)},
+                                {"L3@Эскиз32", Convert.ToString(OutputHolesWrapper.L3)},
+                                {"D1@Кривая6", Convert.ToString(OutputHolesWrapper.D3)},
+
+                                {"Толщина@Листовой металл", thiknessF},
+                                {"D1@Листовой металл", Convert.ToString(bendRadius)},
+                                {"D2@Листовой металл", Convert.ToString(kFactor*1000)}
+                            },
+                            true,
+                            null);
+                        SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
+                    }
+                }
+
+                #endregion
+
+                #region  Усиливающая рамка по высоте
+
+                newName = усиливающаяРамкаПоВысоте.NewName;
+
+                //newName = modelName + "-07-" + lenght + "-" + "40-" + materialP2[0] + скотч;
+                newPartPath = $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}.SLDPRT";
+
+                if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
+                {
+                    SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2(AssemblyName + ".SLDASM", true, 0)));
+                    SolidWorksDocument.Extension.SelectByID2("02-11-07-40--1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    swAsm.ReplaceComponents(newPartPath, "", true, true);
+                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("02-11-07-40-.SLDPRT");
+                }
+                else
+                {
+                    SwPartParamsChangeWithNewName("02-11-07-40-",
+                        $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}",
+                            new[,]
+                            {
+                                // Габарит
+                                {"D3@Эскиз1", pType == "04" || pType == "05" ? Convert.ToString(высотаПанели-2) : Convert.ToString(высотаПанели)},
+                                {"D1@Эскиз1", Convert.ToString(heightF)},
+                                // Отверстия
+                                {"D1@Эскиз23", pType == "01" ? Convert.ToString(44.4) : Convert.ToString(125)},
+
+                                {"D1@Кривая2", Convert.ToString(screwsByHeightInner)},
+                                {"D1@Кривая1", Convert.ToString(колЗаклепокВысота)},
+                                // Х-ки листа
+                                {"Толщина@Листовой металл", thiknessF},
+                                {"D1@Листовой металл", Convert.ToString(bendRadius)},
+                                {"D2@Листовой металл", Convert.ToString(kFactor*1000)}
+                            },
+                            true,
+                            null);
+                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
+                }
+                #endregion
+            }
+
+            #endregion
+
+            #region Теплоизоляция
+
+            #region наименование теплоизоляции
+
+            //6700  Лента уплотнительная Pes20x3/25 A/AT-B
+            //14800  Лента двохсторонняя акриловая HSA 19х2
+            //4900  Материал теплоизол. Сlassik TWIN50
+
+            //newName = modelName + "-03-" + width + "-" + lenght + "-" + "40";
+
+            #endregion
+
+            newName = теплоизоляция.NewName;
+            newPartPath = $@"{Settings.Default.DestinationFolder}\{Panels0201}\Materials\{newName}.SLDPRT";
+            if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
+            {
+                SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2(AssemblyName + ".SLDASM", true, 0)));
+                SolidWorksDocument.Extension.SelectByID2("02-11-03-40--1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                swAsm.ReplaceComponents(newPartPath, "", false, true);
+                SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("02-11-03-40-.SLDPRT");
+            }
+            else
+            {
+                SwPartParamsChangeWithNewName("02-11-03-40-",
+                    $@"{Settings.Default.DestinationFolder}\{Panels0201}\Materials\{newName}",
+                        new[,]
+                        {
+                            {"D2@Эскиз1", Convert.ToString(высотаПанели-1)},
+                            {"D1@Эскиз1", Convert.ToString(ширинаПанели-2)}
+                        },
+                        true,
+                        null);
+                SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
+            }
+
+            #endregion
+
+            #region Скотч
+
+            const double rizn = 3;
+
+            if (скотч)
+            {
+                //Скотч
+
+                newName = cкотч.NewName;
+                newPartPath = $@"{Settings.Default.DestinationFolder}\{Panels0201}\Materials\{newName}.SLDPRT";
+                if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
+                {
+                    SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2(AssemblyName + ".SLDASM", true, 0)));
+                    SolidWorksDocument.Extension.SelectByID2("02-11-04-40--1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    swAsm.ReplaceComponents(newPartPath, "", false, true);
+                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("02-11-04-40-.SLDPRT");
+                }
+                else
+                {
+                    SwPartParamsChangeWithNewName("02-11-04-40-",
+                        $@"{Settings.Default.DestinationFolder}\{Panels0201}\Materials\{newName}",
+                        new[,]
+                        {
+                            {"D2@Эскиз1", Convert.ToString(высотаПанели - rizn)},
+                            {"D1@Эскиз1", Convert.ToString(ширинаПанели - rizn)}
+                        },
+                        true,
+                        null);
+                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
+                }
+            }
+
+            #endregion
+
+            #region  Pes 20x3/25 A/AT-BT 538x768
+
+            newName = pes.NewName;
+            newPartPath = $@"{Settings.Default.DestinationFolder}\{Panels0201}\Materials\{newName}.SLDPRT";
+
+            if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
+            {
+                SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2(AssemblyName + ".SLDASM", true, 0)));
+                SolidWorksDocument.Extension.SelectByID2("02-11-05-40--1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                swAsm.ReplaceComponents(newPartPath, "", false, true);
+                SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("02-11-05-40-.SLDPRT");
+            }
+            else
+            {
+                SwPartParamsChangeWithNewName("02-11-05-40-",
+                    $@"{Settings.Default.DestinationFolder}\{Panels0201}\Materials\{newName}",
+                        new[,]
+                        {
+                            {"D2@Эскиз1", Convert.ToString(высотаПанели - rizn)},
+                            {"D1@Эскиз1", Convert.ToString(ширинаПанели - rizn)}
+                        },
+                        true,
+                        null);
+                SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
+            }
+
+            #endregion
+
+            #region Кронштейн усиливающей панели
+
+            if (типКрепежнойЧастиУсиливающейПанели == "D")
+            {
+                if (кронштейнДверной == null) goto m1;
+                newName = кронштейнДверной.NewName;
+                //newName = "02-11-09-40-" + lenght;
+                newPartPath = $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}.SLDPRT";
+
+                if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1))
+                {
+                    SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2(AssemblyName + ".SLDASM", true, 0)));
+                    SolidWorksDocument.Extension.SelectByID2("02-11-09-40--1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    swAsm.ReplaceComponents(newPartPath, "", false, true);
+                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("02-11-09-40-.SLDPRT");
+                }
+                else
+                {
+                    SwPartParamsChangeWithNewName("02-11-09-40-",
+                        $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}",
+                            new[,]
+                        {
+                            {"D2@Эскиз1", Convert.ToString(высотаПанели - 45)},
+                            {"D1@Эскиз1", скотч ? Convert.ToString(16.0) : Convert.ToString(17.5)},
+                            {"D1@Кривая1", Convert.ToString(колЗаклепокВысота)}
+                        },
+                        true,
+                        null);
+                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
+                }
+            }
+
+            m1:
+
+            #endregion
+
+            #region Разрезные части
+
+            if (!string.IsNullOrEmpty(типДвойнойРазрез))
+            {
+                #region to delete
+
+                //var имяДвойнойВерхней1 = панельВнешняя.NewName + "-" + типДвойнойВерхней + "1";
+                //var имяДвойнойВерхней2 = панельВнешняя.NewName + "-" + типДвойнойВерхней + "2";
+                //var имяДвойнойНижней1 = панельВнутренняя.NewName + "-" + типДвойнойНижней + "1";
+                //var имяДвойнойНижней2 = панельВнутренняя.NewName + "-" + типДвойнойНижней + "2";
+
+                //MessageBox.Show("имяДвойнойВерхней1 - " + имяДвойнойВерхней1 + "\nимяДвойнойВерхней2 - " +
+                //                имяДвойнойВерхней2 + "\nимяДвойнойНижней1 - " + имяДвойнойНижней1 +
+                //                "\nимяДвойнойНижней2 - " + имяДвойнойНижней1);
+
+                #endregion
+
+                if (типДвойнойВерхней != "0")
+                {
+                    partsToDeleteList.Add(outerPanel);
+
+                    newPartPath = $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{имяДвойнойВерхней1}.SLDPRT";
+                    SolidWorksDocument.Extension.SelectByID2(панельВнешняя.NewName + "-2@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    swAsm.ReplaceComponents(newPartPath, "", false, true);
+                    newPartPath = $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{имяДвойнойВерхней2}.SLDPRT";
+                    SolidWorksDocument.Extension.SelectByID2(панельВнешняя.NewName + "-3@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    swAsm.ReplaceComponents(newPartPath, "", false, true);
+                }
+
+                if (типДвойнойНижней != "0")
+                {
+                    partsToDeleteList.Add(innerPanel);
+
+                    newPartPath = $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{имяДвойнойНижней1}.SLDPRT";
+                    SolidWorksDocument.Extension.SelectByID2(панельВнутренняя.NewName + "-2@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    swAsm.ReplaceComponents(newPartPath, "", false, true);
+                    newPartPath = $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{имяДвойнойНижней2}.SLDPRT";
+                    SolidWorksDocument.Extension.SelectByID2(панельВнутренняя.NewName + "-3@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    swAsm.ReplaceComponents(newPartPath, "", false, true);
+                }
+
+                switch (типДвойнойВерхней)
+                {
+                    case "1":
+                        SolidWorksDocument.Extension.SelectByID2("Cut-ExtrudeW1@" + имяДвойнойВерхней1 + "-2@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditUnsuppress2();
+                        SolidWorksDocument.Extension.SelectByID2("Cut-ExtrudeW2@" + имяДвойнойВерхней2 + "-3@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditUnsuppress2();
+                        solidWorksDocumentExtension.SelectByID2("Rivet Bralo-185@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+                        break;
+
+                    case "2":
+                        SolidWorksDocument.Extension.SelectByID2("Cut-ExtrudeH1@" + имяДвойнойВерхней1 + "-2@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditUnsuppress2();
+                        SolidWorksDocument.Extension.SelectByID2("Cut-ExtrudeH2@" + имяДвойнойВерхней2 + "-3@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditUnsuppress2();
+                        solidWorksDocumentExtension.SelectByID2("Rivet Bralo-186@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+                        break;
+
+                    case "0":
+                        solidWorksDocumentExtension.SelectByID2(панельВнешняя.NewName + "-2@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                        solidWorksDocumentExtension.SelectByID2(панельВнешняя.NewName + "-3@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+
+                        solidWorksDocumentExtension.SelectByID2("Rivet Bralo-185@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+                        solidWorksDocumentExtension.SelectByID2("Rivet Bralo-186@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+                        break;
+                }
+
+                switch (типДвойнойНижней)
+                {
+                    case "1":
+                        SolidWorksDocument.Extension.SelectByID2("Cut-ExtrudeW1@" + имяДвойнойНижней1 + "-2@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditUnsuppress2();
+                        SolidWorksDocument.Extension.SelectByID2("Cut-ExtrudeW2@" + имяДвойнойНижней2 + "-3@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditUnsuppress2();
+                        break;
+
+                    case "2":
+                        SolidWorksDocument.Extension.SelectByID2("Cut-ExtrudeH1@" + имяДвойнойНижней1 + "-2@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditUnsuppress2();
+                        SolidWorksDocument.Extension.SelectByID2("Cut-ExtrudeH2@" + имяДвойнойНижней2 + "-3@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditUnsuppress2();
+                        break;
+
+                    case "0":
+                        solidWorksDocumentExtension.SelectByID2(панельВнутренняя.NewName + "-2@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                        solidWorksDocumentExtension.SelectByID2(панельВнутренняя.NewName + "-3@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                        break;
+                }
+
+                SolidWorksDocument.Extension.SelectByID2("D1@PLANE1@" + AssemblyName, "DIMENSION", 0, 0, 0, false, 0, null, 0);
+                ((Dimension)(SolidWorksDocument.Parameter("D1@PLANE1"))).SystemValue = 40.0 / 1000; SolidWorksDocument.EditRebuild3();
+
+                foreach (var component in new[] { "4", "5", "6", "7", "8", "9", "10", "11", "12", "13" })
+                {
+                    SolidWorksDocument.Extension.SelectByID2("DerivedCrvPattern" + component + "@" + AssemblyName, "COMPPATTERN", 0, 0, 0, true, 0, null, 0); swAsm.DissolveComponentPattern();
+                }
+            }
+
+            #endregion
+
+            #endregion
+
+            #region Задание имени сборки (description Наименование)
+
+            switch (pType)
+            {
+                case "Несъемная":
+                case "Съемная":
+                    pType = pType + " панель";
+                    break;
+            }
+
+            SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2(AssemblyName, true, 0)));
+            //GabaritsForPaintingCamera(SolidWorksDocument);
+
+            #endregion
+
+            #region Сохранение и регистрация сборки в базе
+
+            SolidWorksDocument.EditRebuild3();
+            SolidWorksDocument.ForceRebuild3(true);
+            SolidWorksDocument.SaveAs2(newFramelessPanelPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
+
+            NewComponentsFull.Add(new VentsCadFile
+            {
+                LocalPartFileInfo = new FileInfo(newFramelessPanelPath).FullName,
+                PartIdSql = idAsm
+            });
+
+            try
+            {
+                SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(new FileInfo(newFramelessPanelPath).Name);
+            }
+            catch (Exception)
+            {
+                //
+            }
+
+            List<VentsCadFile> outList;
+
+         
+
+            foreach (var item in outList)
+            {
+                try
+                {
+                    var typeFile = 0;
+                    if (item.LocalPartFileInfo.ToUpper().Contains(".SLDASM")) { typeFile = 2; }
+                    if (item.LocalPartFileInfo.ToUpper().Contains(".SLDPRT")) { typeFile = 1; }
+
+                    //MessageBox.Show("typeFile - " + typeFile + "\n PartIdPdm - " + item.PartIdPdm + "\n PartIdSql - " + item.PartIdSql);
+
+                    if (item.PartIdPdm != 0)
+                    {
+                        sqlBaseData.AirVents_SetPDMID(typeFile, item.PartIdPdm, item.PartIdSql);
+                    }
+                }
+                catch (Exception e)
+                {
+                   //MessageBox.Show(e.ToString(), "AirVents_SetPDMID");
+                }
+            }
+
+            #region Auto Export to XML
+
+            foreach (var newComponent in NewComponents)
+            {
+                //MessageBox.Show(newComponent.Name);
+                // todo open for users
+                //PartInfoToXml(newComponent.FullName);
+            }
+
+            #endregion
 
             #endregion
         }

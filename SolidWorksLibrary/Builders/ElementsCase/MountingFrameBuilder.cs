@@ -76,7 +76,7 @@
 
 //        NewComponents = null;
 
-//        MessageBox.Show(DateTime.Now.Hour.ToString());
+//       //MessageBox.Show(DateTime.Now.Hour.ToString());
 
 //        var modelMontageFramePath = $@"{sourceRootFolder}{TemplateFolder}\{"10-4"}.SLDASM";
 
@@ -100,7 +100,7 @@
 //        if (offsetI > (lenght - 125) * 10)
 //        {
 //            offsetI = (lenght - 250) * 10;
-//            MessageBox.Show("Смещение превышает допустимое значение! Программой установлено - " +
+//           //MessageBox.Show("Смещение превышает допустимое значение! Программой установлено - " +
 //                            (offsetI / 10));
 //        }
 
