@@ -201,7 +201,7 @@ namespace PdmSolidWorksLibrary
             foreach (var process in processes)
             {               
                 process.Kill();
-                Console.WriteLine("\nFind proccess and kill: " + process);
+                //Console.WriteLine("\nFind proccess and kill: " + process);
             }
           
         }
@@ -421,7 +421,7 @@ namespace PdmSolidWorksLibrary
             #endregion
 
 
-            Console.WriteLine(pathToFile);
+            //Console.WriteLine(pathToFile);
             var retryCount = 2;
             var success = false;
             while (!success && retryCount > 0)
@@ -575,7 +575,7 @@ namespace PdmSolidWorksLibrary
                 
                      pdmFile = (IEdmFile5)PdmExemplar.GetObject(EdmObjectType.EdmObject_File, fileId);
 
-                //Console.WriteLine(SearchDoc(pdmFile.Name).Count());
+                ////Console.WriteLine(SearchDoc(pdmFile.Name).Count());
                 FileModelPdm fileModel =  SearchDoc(pdmFile.Name).First(); 
                     //new FileModelPdm
                     //{
@@ -590,7 +590,7 @@ namespace PdmSolidWorksLibrary
                     //};
 
 
-                Console.WriteLine("\n\t\t debug: получен интерфейс файла: " +fileModel.FileName + " id" + fileModel.IDPdm + ", folder path " + fileModel.FolderPath + "\n");
+                //Console.WriteLine("\n\t\t debug: получен интерфейс файла: " +fileModel.FileName + " id" + fileModel.IDPdm + ", folder path " + fileModel.FolderPath + "\n");
                 if (isDownload)
                 {                
                     DownLoadFile(fileModel);   

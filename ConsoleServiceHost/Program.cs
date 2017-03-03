@@ -22,8 +22,8 @@ namespace ConsoleServiceHost
             {
 
                 host.Open();
-                Console.WriteLine("Host started @ " + DateTime.Now.ToString());
-                Console.ReadLine();
+                //Console.WriteLine("Host started @ " + DateTime.Now.ToString());
+                //Console.ReadLine();
             }
         }
         static void Main(string[] args)
@@ -40,9 +40,9 @@ namespace ConsoleServiceHost
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                //Console.WriteLine(ex);
 
-                var v = Process.GetProcesses("ConsoleServiceHost.exe");
+                var v = Process.GetProcesses("//ConsoleServiceHost.exe");
 
                 foreach (var item in v)
                 {
@@ -50,15 +50,15 @@ namespace ConsoleServiceHost
                 }
             }
             Thread.Sleep(500);
-            Console.WriteLine("Press any key to exit");
-            Console.ReadLine();
+            //Console.WriteLine("Press any key to exit");
+            //Console.ReadLine();
 
         }
 
         private static void Instance_ReceivedMessage(MessageEventArgs e)
         {
              
-                Console.WriteLine("Message: " + e.Type + "  time " + e.time.ToShortDateString()+  "; " + e.Message + "\n");
+                //Console.WriteLine("Message: " + e.Type + "  time " + e.time.ToShortDateString()+  "; " + e.Message + "\n");
 
             
         }

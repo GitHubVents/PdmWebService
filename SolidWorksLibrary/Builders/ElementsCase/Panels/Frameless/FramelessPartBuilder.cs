@@ -37,20 +37,23 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
             AssemblyName = "02-11-40-1";
             NewPartPath = System.IO.Path.Combine(RootFolder, SourceFolder, AssemblyName + ".SLDASM");
             Patterns.Observer.MessageObserver.Instance.SetMessage(NewPartPath);
-            SolidWorksAdapter.OpenDocument(NewPartPath, SolidWorks.Interop.swconst.swDocumentTypes_e.swDocASSEMBLY);
-            SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
+            
+
+           SolidWorksDocument =  SolidWorksAdapter.OpenDocument(NewPartPath, SolidWorks.Interop.swconst.swDocumentTypes_e.swDocASSEMBLY);
+           
+          //  SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
             AssemblyDocument = SolidWorksAdapter.ToAssemblyDocument(SolidWorksDocument);
 
             Patterns.Observer.MessageObserver.Instance.SetMessage("calc data. press any key");
             CalculateHandle();
 
             Patterns.Observer.MessageObserver.Instance.SetMessage("delete data.");// press any key");
-          //  Console.ReadKey();
-            DeleteComponents(0);
+          //  //Console.ReadKey();
+            DeleteComponents();
             Patterns.Observer.MessageObserver.Instance.SetMessage("set data. ");// press any key");
 
-            //   Console.ReadKey();
-            SetSize();
+            //   //Console.ReadKey();
+           // SetSize();
         }
 
         void CalculateHandle()
@@ -299,7 +302,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
 
                     base.parameters.Add("D3@2-1-1", 54.0);
                     base.parameters.Add("D2@Эскиз29", 84.0);
-                    base.parameters.Add("D2@Эскиз43", 12.0);
+                    //base.parameters.Add("D2@Эскиз43", 12.0);
                     base.parameters.Add("D1@Эскиз29", 11.3);
                     base.parameters.Add("D1@2-1-1", 11.3);
                     base.parameters.Add("D2@Эскиз39", 11.3);
@@ -317,66 +320,66 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
 
                     dimensions = new Vector2(framelessPanel.SizePanel.X - 40, framelessPanel.SizePanel.Y - 40);
                     base.parameters.Add("D3@2-1-1", 55.0);
-                    Console.WriteLine("1");
+                    //Console.WriteLine("1");
                     base.parameters.Add("D2@Эскиз29", 85.0);
-                    Console.WriteLine("2");
-                    base.parameters.Add("D2@Эскиз43", 11.0);
-                    Console.WriteLine("3");
+                    //Console.WriteLine("2");
+                  //  base.parameters.Add("D2@Эскиз43", 11.0);
+                    //Console.WriteLine("3");
                     base.parameters.Add("D1@Эскиз29", 10.3);
-                    Console.WriteLine("4");
+                    //Console.WriteLine("4");
                     base.parameters.Add("D1@2-1-1", 10.3);
-                    Console.WriteLine("5");
+                    //Console.WriteLine("5");
                     base.parameters.Add("D2@Эскиз39", 10.3);
-                    Console.WriteLine("6");
+                    //Console.WriteLine("6");
                     base.parameters.Add("D1@Эскиз39", 4.0);
-                    Console.WriteLine("7");
+                    //Console.WriteLine("7");
                 }
 
                 base.parameters.Add("D1@Эскиз1", dimensions.X);
-                Console.WriteLine("8");
+                //Console.WriteLine("8");
                 base.parameters.Add("D2@Эскиз1", dimensions.Y);
-                Console.WriteLine("9");
+                //Console.WriteLine("9");
                 if (framelessPanel.PanelType == PanelType_e.RemovablePanel && !framelessPanel.isOneHandle)
                 {  base.parameters.Add("D4@Эскиз47", framelessPanel.widthHandle);
-                    Console.WriteLine("10");
+                    //Console.WriteLine("10");
 
                 }
 
                 //Размеры для отверсти под клепальные гайки под съемные панели
 
              //   base.parameters.Add("D3@2-1-1", 55.0);
-                Console.WriteLine("11");
+                //Console.WriteLine("11");
                 base.parameters.Add("G0@Эскиз49", OutputHolesWrapper.G0);
-                Console.WriteLine("12");
+                //Console.WriteLine("12");
                 base.parameters.Add("G1@Эскиз49", OutputHolesWrapper.G1);
-                Console.WriteLine("13");
+                //Console.WriteLine("13");
                 base.parameters.Add("G2@Эскиз49", OutputHolesWrapper.G2);
-                Console.WriteLine("14");
-                base.parameters.Add("G3@Эскиз49", OutputHolesWrapper.G0);
-                Console.WriteLine("15");
+                //Console.WriteLine("14");
+             // base.parameters.Add("G3@Эскиз49", OutputHolesWrapper.G0);
+                //Console.WriteLine("15");
                 base.parameters.Add("L1@Эскиз49", OutputHolesWrapper.L1);
-                Console.WriteLine("16");
+                //Console.WriteLine("16");
                 base.parameters.Add("L2@Эскиз49", OutputHolesWrapper.L2);
-                Console.WriteLine("17");
+                //Console.WriteLine("17");
                 base.parameters.Add("L3@Эскиз49", OutputHolesWrapper.L3);
-                Console.WriteLine("18");
+                //Console.WriteLine("18");
 
                 base.parameters.Add("D1@Кривая10", OutputHolesWrapper.D1);
-                Console.WriteLine("19");
+                //Console.WriteLine("19");
                 base.parameters.Add("D1@Кривая11", OutputHolesWrapper.D2);
-                Console.WriteLine("20");
+                //Console.WriteLine("20");
                 base.parameters.Add("D1@Кривая12", OutputHolesWrapper.D3);
-                Console.WriteLine("21");
+                //Console.WriteLine("21");
 
                 //Размеры промежуточных профилей
                 base.parameters.Add("Wp1@Эскиз59", Math.Abs(ValProfils.Wp1) < 1 ? 10 : ValProfils.Wp1);
-                Console.WriteLine("22");
+                //Console.WriteLine("22");
                 base.parameters.Add("Wp2@Эскиз59", Math.Abs(ValProfils.Wp2) < 1 ? 10 : ValProfils.Wp2);
-                Console.WriteLine("23");
+                //Console.WriteLine("23");
                 base.parameters.Add("Wp3@Эскиз59", Math.Abs(ValProfils.Wp3) < 1 ? 10 : ValProfils.Wp3);
-                Console.WriteLine("24");
+                //Console.WriteLine("24");
                 base.parameters.Add("Wp4@Эскиз59", Math.Abs(ValProfils.Wp4) < 1 ? 10 : ValProfils.Wp4);
-                Console.WriteLine("25");
+                //Console.WriteLine("25");
 
                 // Для промежуточной панели отверстия
                 //   base.parameters.Add("D1@Кривая14", rivetCountByHeight * 2),
@@ -389,21 +392,21 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
 
 
                 base.parameters.Add("D7@Ребро-кромка1", framelessPanel.lenght);
-                Console.WriteLine("26");
+                //Console.WriteLine("26");
                 base.parameters.Add("Толщина@Листовой металл", framelessPanel.outThickness);
-                Console.WriteLine("27");
+                //Console.WriteLine("27");
                 base.parameters.Add("D1@Листовой металл", (double)BendRadius);
-                Console.WriteLine("28");
+                //Console.WriteLine("28");
                 base.parameters.Add("D2@Листовой металл", (double)KFactor * 1000);
-                Console.WriteLine("29");
+                //Console.WriteLine("29");
 
-                Console.WriteLine("Количество параметров " + parameters.Count);
+                //Console.WriteLine("Количество параметров " + parameters.Count);
                 EditPartParameters(PartName, base.NewPartPath);
 
             }
         }
 
-        protected override void DeleteComponents(int type)
+        protected override void DeleteComponents(int type=0)
         {
             const int deleteOption = (int)swDeleteSelectionOptions_e.swDelete_Absorbed + (int)swDeleteSelectionOptions_e.swDelete_Children;
 
@@ -428,32 +431,44 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
             //var supress = VentsCad.Act.Suppress; 
             //   var unSupress = VentsCad.Act.Unsuppress;
             // var doNothing = VentsCad.Act.DoNothing;
-
-            if (framelessPanel.PanelType == PanelType_e.FrontPanel)
+            
+            
+            
+            if (framelessPanel.PanelType != PanelType_e.FrontPanel)
             {
-                solidWorksDocumentExtension.SelectByID2("Рамка", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
+               
+                Console.WriteLine("framelessPanel.PanelType != PanelType_e.FrontPanel");
+                //Удаление компонентов из сборки
+                //solidWorksDocumentExtension.SelectByID2("Рамка", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
+                //SolidWorksDocument.EditDelete();
+
+                //foreach (var component in new List<string>
+                //{
+                //    "02-11-11-40--1", "02-11-11-40--2", "02-11-11-40--3","02-11-11-40--4",
+                //    "Threaded Rivets Increased-1", "Threaded Rivets Increased-2", "Threaded Rivets Increased-3", "Threaded Rivets Increased-4",
+                //    "Rivet Bralo-71", "Rivet Bralo-72", "Rivet Bralo-73", "Rivet Bralo-74", "Rivet Bralo-75", "Rivet Bralo-76",
+                //    "Rivet Bralo-83", "Rivet Bralo-84", "Rivet Bralo-91", "Rivet Bralo-92", "Rivet Bralo-93", "Rivet Bralo-94"
+                //})
+                //{
+                //    solidWorksDocumentExtension.SelectByID2(component + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                //    SolidWorksDocument.EditDelete();
+                //}
+                     
+                solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть21@" + NameUpPanel +"-1@" +AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                solidWorksDocumentExtension.SelectByID2("Рамка@" + NameUpPanel + "-1@" + AssemblyName, "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
+                solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть26@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
                 SolidWorksDocument.EditDelete();
 
-                foreach (var component in new List<string>
-                {
-                    "02-11-11-40--1", "02-11-11-40--2", "02-11-11-40--3","02-11-11-40--4",
-                    "Threaded Rivets Increased-1", "Threaded Rivets Increased-2", "Threaded Rivets Increased-3", "Threaded Rivets Increased-4",
-                    "Rivet Bralo-71", "Rivet Bralo-72", "Rivet Bralo-73", "Rivet Bralo-74", "Rivet Bralo-75", "Rivet Bralo-76",
-                    "Rivet Bralo-83", "Rivet Bralo-84", "Rivet Bralo-91", "Rivet Bralo-92", "Rivet Bralo-93", "Rivet Bralo-94"
-                })
-                {
-                    solidWorksDocumentExtension.SelectByID2(component + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    SolidWorksDocument.EditDelete();
-                }
-
-                SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть21@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть22@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть1@02-11-03-40--1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                solidWorksDocumentExtension.SelectByID2("Рамка@" + NameUpPanel + "-1@" + AssemblyName, "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
+                solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть22@"+NameDownPanel+"-1@"+AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
                 solidWorksDocumentExtension.SelectByID2("Рамка@" + NameDownPanel + "-1@" + AssemblyName, "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
-                solidWorksDocumentExtension.SelectByID2("Рамка@02-11-03-40--1@" + AssemblyName, "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
-                SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть26@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
+                SolidWorksDocument.EditDelete();
+
+                solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть1@02-11-03-40-@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+               
+               
+                solidWorksDocumentExtension.SelectByID2("Рамка@02-11-03-40-@" + AssemblyName, "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
+               
+                SolidWorksDocument.EditDelete();
 
                 solidWorksDocumentExtension.SelectByID2("Hole72", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
                 SolidWorksDocument.EditDelete();

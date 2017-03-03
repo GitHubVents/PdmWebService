@@ -141,12 +141,19 @@ namespace SolidWorksLibrary.Builders.ElementsCase
         protected virtual void EditPartParameters(string partName, string newPath  )
         {
           
-            Console.WriteLine(newPath);
-            foreach (var item in parameters)
+            //Console.WriteLine(newPath);
+            foreach (var eachParameter in parameters)
             {
-                Console.WriteLine(item.Key + "@" + partName );
-                Dimension myDimension = (SolidWorksDocument.Parameter(item.Key + "@" + partName + ".SLDPRT" )) as Dimension;                   
-                    myDimension.SystemValue = item.Value / 1000;
+                try
+                {
+                  Console.WriteLine(eachParameter.Key + "@" + partName);
+                    Dimension myDimension = (SolidWorksDocument.Parameter(eachParameter.Key + "@" + partName + ".SLDPRT")) as Dimension;
+                    myDimension.SystemValue = eachParameter.Value / 1000;
+                }
+                catch
+                {
+                    Console.WriteLine(eachParameter.Key);
+                }
             }
             SolidWorksDocument.ForceRebuild3(true);
             SolidWorksDocument =  SolidWorksAdapter.AcativeteDoc(partName);

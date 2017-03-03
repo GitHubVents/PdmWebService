@@ -53,9 +53,9 @@ namespace SolidWorksLibrary
                         {
                             process.Kill();
                         }
-                    }                    
+                    }
                     sldWoks_app = new SldWorks() { Visible = true };
-                    MessageObserver.Instance.SetMessage("\t\tCreate exemplar SolidWorks Application", MessageType.System);
+                    MessageObserver.Instance.SetMessage("\t\tCreated exemplar SolidWorks Application", MessageType.System);
                 }
             }
         }
@@ -160,7 +160,7 @@ namespace SolidWorksLibrary
             }
 
             var swDocument = SolidWorksAdapter.SldWoksAppExemplare.OpenDoc6(path, (int)documentType, openDocOptions, configuration, ref errors, ref warnings);
-            SolidWorksAdapter.SldWoksAppExemplare.Visible = true;
+
 
             
 

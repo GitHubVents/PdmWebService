@@ -72,7 +72,7 @@ namespace TaskSystemLibrary
             try
             {
 
-                // Console.WriteLine("Execute pdf task");
+                // //Console.WriteLine("Execute pdf task");
 
                 IEnumerable<DataBaseDomian.Orm.TaskSelection> taskSelections = TaskSystemDataRepository.Instance.
                   GetSelectionsTasks(taskInstance.TaskInstanceID);
@@ -96,7 +96,7 @@ namespace TaskSystemLibrary
             }
             catch //(Exception exception)
             {
-              //  Console.WriteLine(exception.ToString());
+              //  //Console.WriteLine(exception.ToString());
                 TaskSystemDataRepository.Instance.ApplyError(taskInstance.TaskInstanceID);
             }
         }

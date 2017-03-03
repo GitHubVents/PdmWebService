@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TestConsoleApplication
+namespace Test//ConsoleApplication
 {
     class Program 
     {
@@ -22,17 +22,17 @@ namespace TestConsoleApplication
           //  sp.Build(20, 300, 666);
 ///
 
-            Console.ReadLine();
+            //Console.ReadLine();
         }
 
         //private static void Instance_FinishedBuilding(DataToExport dataToExport)
         //{
-        //    Console.WriteLine("good");
+        //    //Console.WriteLine("good");
         //}
 
         //private static void Instance_ReceivedMessage(Patterns.Observer.MessageEventArgs massage)
         //{
-        //    Console.WriteLine(massage.Message);
+        //    //Console.WriteLine(massage.Message);
         //}
     }
 }

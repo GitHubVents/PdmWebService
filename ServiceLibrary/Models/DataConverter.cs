@@ -68,8 +68,8 @@ namespace ServiceLibrary.Models
             {
                 var parts = DataBaseDomian.SwPlusRepository.Instance.Parts;
                 var bomShell = SolidWorksPdmAdapter.Instance.GetBomShell(filePath, configuration);
-                Console.WriteLine(parts.Count());
-                Console.WriteLine(bomShell.Count());
+                //Console.WriteLine(parts.Count());
+                //Console.WriteLine(bomShell.Count());
                 var specifications = from eachBom in bomShell
                                      join eachPart in parts on new { id = (int)eachBom.IdPdm, ver = (int)eachBom.LastVesion, conf = eachBom.Configuration }
                                      equals new { id = (int)eachPart.IDPDM, ver = (int)eachPart.Version, conf = eachPart.ConfigurationName }

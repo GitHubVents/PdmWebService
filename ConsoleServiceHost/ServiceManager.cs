@@ -27,7 +27,7 @@ namespace ConsoleServiceHost
                 }
                 catch (Exception exception)
                 {
-                    Console.WriteLine("Неудалось инициализировать веб службу\n\n" + exception);
+                    //Console.WriteLine("Неудалось инициализировать веб службу\n\n" + exception);
                     throw new Exception("Неудалось инициализировать веб службу\n\n" + exception);
                 }
             }
