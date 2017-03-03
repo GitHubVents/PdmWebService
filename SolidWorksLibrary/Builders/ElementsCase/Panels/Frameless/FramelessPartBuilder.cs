@@ -431,12 +431,12 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
             //var supress = VentsCad.Act.Suppress; 
             //   var unSupress = VentsCad.Act.Unsuppress;
             // var doNothing = VentsCad.Act.DoNothing;
-            
-            
-            
+
+
+
             if (framelessPanel.PanelType != PanelType_e.FrontPanel)
             {
-               
+
                 Console.WriteLine("framelessPanel.PanelType != PanelType_e.FrontPanel");
                 //Удаление компонентов из сборки
                 //solidWorksDocumentExtension.SelectByID2("Рамка", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
@@ -453,13 +453,43 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
                 //    solidWorksDocumentExtension.SelectByID2(component + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
                 //    SolidWorksDocument.EditDelete();
                 //}
-                     
+
+                //List<System.Runtime.InteropServices.DispatchWrapper> arrObjIn = new List<System.Runtime.InteropServices.DispatchWrapper>();
+
+                //List<Feature> selObjs = new List<Feature>();
+                //     SelectionMgr selectionMgr = (SelectionMgr)SolidWorksDocument.SelectionManager;
+                //SelectData selectData = (SelectData)selectionMgr.CreateSelectData();
+
+            //    SolidWorksAdapter.AcativeteDoc(NameUpPanel);
+
+                FeatureManager featureManager = SolidWorksDocument.FeatureManager;
+
+
+
+              var features =  featureManager.GetFeatures(false);
+
+                foreach (var item in features)
+                {
+                  if (item.GetTypeName2().ToLower() == "cut")
+                    {
+                        Console.WriteLine(item.Name + " - "  + item.GetTypeName2().ToLower());
+                   }
+                }
+                return;
+
+             // var feature =  features.First(eachFeature => eachFeature.Name == "Вырез-Вытянуть21");
+
+              ///  Console.WriteLine();
+
                 solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть21@" + NameUpPanel +"-1@" +AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                SolidWorksDocument.EditDelete();
                 solidWorksDocumentExtension.SelectByID2("Рамка@" + NameUpPanel + "-1@" + AssemblyName, "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
+                SolidWorksDocument.EditDelete();
                 solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть26@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
                 SolidWorksDocument.EditDelete();
 
                 solidWorksDocumentExtension.SelectByID2("Вырез-Вытянуть22@"+NameDownPanel+"-1@"+AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                SolidWorksDocument.EditDelete();
                 solidWorksDocumentExtension.SelectByID2("Рамка@" + NameDownPanel + "-1@" + AssemblyName, "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
                 SolidWorksDocument.EditDelete();
 
