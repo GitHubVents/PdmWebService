@@ -78,8 +78,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                 parameters.Add("L3@Эскиз32", OutputHolesWrapper.L3);
                 parameters.Add("D1@Кривая6", OutputHolesWrapper.D3);
                 parameters.Add("Толщина@Листовой металл", thiknessF);
-                parameters.Add("D1@Листовой металл", bendRadius);
-                parameters.Add("D2@Листовой металл", kFactor * 1000);
+                parameters.Add("D1@Листовой металл", (double)BendRadius);
+                parameters.Add("D2@Листовой металл", (double)KFactor * 1000);
                 EditPartParameters("02-11-06-40-", "");
                 //    $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}",
             }
@@ -91,7 +91,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                 if (framelessPanel.PanelType == PanelType_e.BlankPanel) {
                     SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2(AssemblyName + ".SLDASM", true, 0)));
                     DocumentExtension.SelectByID2("02-11-06_2-40--4@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    swAsm.ReplaceComponents($@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{усиливающаяРамкаПоШирине.NewName}.SLDPRT", "", true, true);
+                    AssemblyDocument.ReplaceComponents($@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{усиливающаяРамкаПоШирине.NewName}.SLDPRT", "", true, true);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("02-11-06_2-40-.SLDPRT");
                 }
                 else {
@@ -102,7 +102,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                     if (false){
                         SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2(AssemblyName + ".SLDASM", true, 0)));
                         DocumentExtension.SelectByID2("02-11-06_2-40--4@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                        swAsm.ReplaceComponents(newPartPath, "", true, true);
+                        swAsm.ReplaceComponents(base.NewPartPath, "", true, true);
                         SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("02-11-06_2-40-.SLDPRT");
                     }
                     else {
@@ -121,8 +121,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                     parameters.Add("L3@Эскиз32", OutputHolesWrapper.L3);
                     parameters.Add("D1@Кривая6", OutputHolesWrapper.D3);
                     parameters.Add("Толщина@Листовой металл", thiknessF);
-                    parameters.Add("D1@Листовой металл", bendRadius);
-                    parameters.Add("D2@Листовой металл", kFactor * 1000);
+                    parameters.Add("D1@Листовой металл", (double)base.BendRadius);
+                    parameters.Add("D2@Листовой металл", (double)base.KFactor * 1000);
                     EditPartParameters("02-11-06_2-40-", NewPartPath);
                     }
                 }
@@ -131,7 +131,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
 
                 #region  Усиливающая рамка по высоте
 
-                newName = усиливающаяРамкаПоВысоте.NewName;
+                PartName = усиливающаяРамкаПоВысоте.NewName;
 
                 //newName = modelName + "-07-" + lenght + "-" + "40-" + materialP2[0] + скотч;
                 newPartPath = $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}.SLDPRT";
@@ -149,8 +149,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                 parameters.Add("D1@Кривая2", screwsByHeightInner);
                 parameters.Add("D1@Кривая1", колЗаклепокВысота);
                 parameters.Add("Толщина@Листовой металл", thiknessF);
-                parameters.Add("D1@Листовой металл", bendRadius);
-                parameters.Add("D2@Листовой металл", kFactor * 1000);
+                parameters.Add("D1@Листовой металл", (double)base.BendRadius);
+                parameters.Add("D2@Листовой металл", (double) base.KFactor  * 1000);
 
                 EditPartParameters("02-11-07-40-", NewPartPath);
                 #endregion

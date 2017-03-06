@@ -18,8 +18,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
        protected double screwsByWidthInner   { get; set; }
   protected  string NameUpPanel { get; set; } = "02-11-01-40-";
     protected    string NameDownPanel { get; set; } = "02-11-02-40-";
-        protected ModelDocExtension DocumentExtension { get; set; };
-      protected  string configuration { get; set; };
+        protected ModelDocExtension DocumentExtension { get; set; }
+      protected  string configuration { get; set; }
         public FramelessPanelBuilder(FramelessPanel framelessPanel, List<FramelessPanel> framelessPanelList, string config) : base() {
 
             this.framelessPanel = framelessPanel;
@@ -29,16 +29,12 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
         }
 
 
-        public void Buid() {
+        public void Build() {
             Patterns.Observer.MessageObserver.Instance.SetMessage("Opened solid works");
             AssemblyName = "02-11-40-1";
             NewPartPath = System.IO.Path.Combine(RootFolder, SourceFolder, AssemblyName + ".SLDASM");
-
             Patterns.Observer.MessageObserver.Instance.SetMessage(NewPartPath);
-
-
             SolidWorksDocument = SolidWorksAdapter.OpenDocument(NewPartPath, swDocumentTypes_e.swDocASSEMBLY);
-
             //  SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
             AssemblyDocument = SolidWorksAdapter.ToAssemblyDocument(SolidWorksDocument);
 
