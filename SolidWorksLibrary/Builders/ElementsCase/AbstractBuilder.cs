@@ -18,7 +18,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
     /// <summary>
     /// It abstract class describes the basic behavior of the builder
     /// </summary>
-    public abstract class ProductBuilderBehavior : IFeedbackBuilder
+    public abstract partial class ProductBuilderBehavior : IFeedbackBuilder
     {
         protected Dictionary<string, double> parameters { get; set; }
 
@@ -161,7 +161,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
             + (int )swSaveAsOptions_e.swSaveAsOptions_SaveReferenced + (int)swSaveAsOptions_e.swSaveAsOptions_UpdateInactiveViews, null, ref errors, warnings);
             InitiatorSaveExeption(errors, warnings, newPath);
             this.parameters.Clear();
-            SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(partName );
+            SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(partName);
         }
 
                        // if u will be use abstract build method, u must override constructor in all product_builder[s]

@@ -64,7 +64,7 @@ namespace SolidWorksLibrary.Builders.Pdf
         private string ConvertDrwToPdf( string path)
         {
             int Errors = 0;
-            ModelDoc2 document = SolidWorksAdapter.SldWoksAppExemplare.OpenDoc2(path, (int)SolidWorksDocumentumentTypes_e.SolidWorksDocumentDRAWING, false, false, true, Errors);
+            ModelDoc2 document = SolidWorksAdapter.SldWoksAppExemplare.OpenDoc2(path, (int)swDocumentTypes_e.swDocDRAWING, false, false, true, Errors);
             try
             {
                 ModelDocExtension swModelDocExt;

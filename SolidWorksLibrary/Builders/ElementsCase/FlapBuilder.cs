@@ -49,7 +49,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
             string newDamperAsmPath = $@"{RootFolder}{SubjectDestinationFolder}{newDamperName}.SLDASM";
             string modelDamperDrw = $@"{RootFolder}{NewPartPath}{drawingName}.SLDDRW";
             string modelLamel = $@"{RootFolder}{NewPartPath}{"11-100"}.SLDDRW";
-           ModelDoc2 SolidWorksDocumentDrw = SolidWorksAdapter.OpenDocument(modelDamperDrw, SolidWorksDocumentumentTypes_e.SolidWorksDocumentDRAWING); 
+           ModelDoc2 SolidWorksDocumentDrw = SolidWorksAdapter.OpenDocument(modelDamperDrw,  swDocumentTypes_e.swDocDRAWING); 
 
             ModelDoc2 solidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName);   // TO DO
             AssemblyDoc sldWorksAsm = (AssemblyDoc)solidWorksDocument;
@@ -383,7 +383,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     solidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActiveDoc));
                     solidWorksDocument.ForceRebuild3(false);
 
-                    var docDrw100 = SolidWorksAdapter.SldWoksAppExemplare.OpenDoc6(modelLamel, (int)SolidWorksDocumentumentTypes_e.SolidWorksDocumentDRAWING, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", 0, 0);
+                    var docDrw100 = SolidWorksAdapter.SldWoksAppExemplare.OpenDoc6(modelLamel, (int)swDocumentTypes_e.swDocDRAWING, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", 0, 0);
                     solidWorksDocument.SaveAs2(newPartPathAsm, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
 
                     try
@@ -834,7 +834,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     solidWorksDocument.Extension.SelectByID2("ВНС-47.91.101-2@11-100", "COMPONENT", 0, 0, 0, false, 0, null, 0); solidWorksDocument.EditDelete();
                 }
 
-                var docDrw100 = SolidWorksAdapter.SldWoksAppExemplare.OpenDoc6($@"{RootFolder}{NewPartPath}{"11-100"}.SLDDRW", (int)SolidWorksDocumentumentTypes_e.SolidWorksDocumentDRAWING, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", 0, 0);
+                var docDrw100 = SolidWorksAdapter.SldWoksAppExemplare.OpenDoc6($@"{RootFolder}{NewPartPath}{"11-100"}.SLDDRW", (int)swDocumentTypes_e.swDocDRAWING, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", 0, 0);
 
                 SolidWorksAdapter.AcativeteDoc(Path.GetFileNameWithoutExtension(newPartPathAsm) );
                 solidWorksDocument.ForceRebuild3(false);

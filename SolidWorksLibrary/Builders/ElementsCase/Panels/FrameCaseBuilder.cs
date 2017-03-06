@@ -35,7 +35,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
         {
             string caseAssemblyPath = Path.Combine(RootFolder, SourceFolder, modelName);
             Patterns.Observer.MessageObserver.Instance.SetMessage("\n" + caseAssemblyPath + "\n");
-            ModelDoc2 SolidWorksDocument = SolidWorksAdapter.OpenDocument(caseAssemblyPath, SolidWorksDocumentumentTypes_e.SolidWorksDocumentASSEMBLY);
+            ModelDoc2 SolidWorksDocument = SolidWorksAdapter.OpenDocument(caseAssemblyPath, swDocumentTypes_e.swDocASSEMBLY);// SolidWorksDocumentumentTypes_e.SolidWorksDocumentASSEMBLY);
             Patterns.Observer.MessageObserver.Instance.SetMessage("открылась сборка");
              AssemblyDocument = SolidWorksAdapter.ToAssemblyDocument( SolidWorksDocument); 
             double rivetL;

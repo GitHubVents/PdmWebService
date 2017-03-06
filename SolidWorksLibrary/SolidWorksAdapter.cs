@@ -54,7 +54,11 @@ namespace SolidWorksLibrary
                             process.Kill();
                         }
                     }
-                    sldWoks_app = new SldWorks() { Visible = true };
+                    sldWoks_app = new SldWorks()
+                     // Allow SOLIDWORKS to run in the background
+                     // and be invisible
+                    //sldWoks_app.UserControl = false;
+                    { Visible = true };
                     MessageObserver.Instance.SetMessage("\t\tCreated exemplar SolidWorks Application", MessageType.System);
                 }
             }
@@ -150,12 +154,12 @@ namespace SolidWorksLibrary
 
 
 
-        public static ModelDoc2 OpenDocument(string path, SolidWorksDocumentumentTypes_e documentType, string configuration = "00")
+        public static ModelDoc2 OpenDocument(string path, swDocumentTypes_e documentType, string configuration = "00")
         {
             int errors = 0, warnings = 0;
 
             int openDocOptions = (int)swOpenDocOptions_e.swOpenDocOptions_Silent;
-            if (documentType == SolidWorksDocumentumentTypes_e.SolidWorksDocumentDRAWING) {
+            if (documentType == swDocumentTypes_e.swDocASSEMBLY) {
                 openDocOptions += (int)swOpenDocOptions_e.swOpenDocOptions_LoadModel;
             }
 

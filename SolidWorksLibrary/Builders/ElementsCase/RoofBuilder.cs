@@ -42,7 +42,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
             bool IsExistPart = false;
             CheckExistPart(newRoofName+".SLDASM",out IsExistPart,out newRoofPath);   
             var modelRoofPath = $@"{RootFolder}{SourceFolder}\{modelName}.SLDASM";     
-              solidWorksDocument = SolidWorksAdapter.SldWoksAppExemplare.OpenDoc6(modelRoofPath, (int)SolidWorksDocumentumentTypes_e.SolidWorksDocumentASSEMBLY,
+              solidWorksDocument = SolidWorksAdapter.SldWoksAppExemplare.OpenDoc6(modelRoofPath, (int)swDocumentTypes_e.swDocASSEMBLY,
                 (int)swOpenDocOptions_e.swOpenDocOptions_LoadModel + (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "00", 0, 0);
 
             AssemblyDoc solidWorcsAssemvlyDocyment = (AssemblyDoc)solidWorksDocument;

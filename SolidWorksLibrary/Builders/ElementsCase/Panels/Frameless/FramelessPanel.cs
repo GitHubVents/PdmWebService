@@ -1,9 +1,4 @@
 ﻿using ServiceConstants;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
 {

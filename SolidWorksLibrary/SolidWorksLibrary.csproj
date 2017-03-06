@@ -88,6 +88,7 @@
     <Compile Include="Builders\ElementsCase\Panels\DeterminateCut.cs" />
     <Compile Include="Builders\ElementsCase\Panels\FrameCaseBuilder.cs" />
     <Compile Include="Builders\ElementsCase\Panels\Frameless\BackProfils.cs" />
+    <Compile Include="Builders\ElementsCase\Panels\Frameless\Profiles.cs" />
     <Compile Include="Builders\ElementsCase\Panels\Frameless\CompType_e.cs" />
     <Compile Include="Builders\ElementsCase\Panels\Frameless\FramelessPanel.cs" />
     <Compile Include="Builders\ElementsCase\Panels\Frameless\FramelessPartBuilder.cs" />
@@ -115,6 +116,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Builders\ElementsCase\MonoBlocks\" />
+    <Folder Include="Builders\ElementsCase\Panels\Frameless\Components\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
