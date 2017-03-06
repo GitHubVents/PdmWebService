@@ -63,7 +63,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
             this.innerThickness = innerThickness;
             this.outThickness = outThickness;
 
-            this.isDoublePanal = DeterminateCutPanel.IsCut(sizePanel);
+            this.isDoublePanal = CutPanel.IsCut(sizePanel);
 
             #region calculate panel dimention by profile
 

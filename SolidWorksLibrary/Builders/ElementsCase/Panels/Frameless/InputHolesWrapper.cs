@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text;
+
 namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
 {
     /// <summary>
@@ -69,13 +71,23 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
         }
         public static string InValUpDown()
         {
-            return
-                $"_({(Convert.ToInt32(G0) != 0 ? Convert.ToString(G0) : "")}" +
-                $"{(Convert.ToInt32(B1) != 0 ? "-" + Convert.ToString(B1) : "")}" +
-                $"{(Convert.ToInt32(G1) != 0 ? "_" + Convert.ToString(G1) : "")}" +
-                $"{(Convert.ToInt32(B2) != 0 ? "-" + Convert.ToString(B2) : "")}" +
-                $"{(Convert.ToInt32(G2) != 0 ? "_" + Convert.ToString(G2) : "")}" +
-                $"{(Convert.ToInt32(B3) != 0 ? "-" + Convert.ToString(B3) : "")})";
+            StringBuilder stringBuilder = new StringBuilder();
+
+            stringBuilder.Append($"_({(G0 != 0 ? Convert.ToString(G0) : "")}");
+            stringBuilder.Append($"{(B1 != 0 ? "-" + Convert.ToString(B1) : "")}");
+            stringBuilder.Append($"{(G1 != 0 ? "_" + Convert.ToString(G1) : "")}");
+            stringBuilder.Append($"{(B2 != 0 ? "-" + Convert.ToString(B2) : "")}");
+            stringBuilder.Append($"{(G2 != 0 ? "_" + Convert.ToString(G2) : "")}");
+            stringBuilder.Append($"{(B3 != 0 ? "-" + Convert.ToString(B3) : "")})");
+
+            return stringBuilder.ToString();
+
+                //$"_({(G0 != 0 ? Convert.ToString(G0) : "")}" +
+                //$"{(B1 != 0 ? "-" + Convert.ToString(B1) : "")}" +
+                //$"{( G1 != 0 ? "_" + Convert.ToString(G1) : "")}" +
+                //$"{( B2  != 0 ? "-" + Convert.ToString(B2) : "")}" +
+                //$"{( G2  != 0 ? "_" + Convert.ToString(G2) : "")}" +
+                //$"{( B3  != 0 ? "-" + Convert.ToString(B3) : "")})";
         }
 
         static void CalculateHolesAtRemovablePanel()

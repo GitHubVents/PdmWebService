@@ -14,7 +14,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
             public Vector2 SizePanel { get; set; }
             public Vector2 WindowSize { get; set; }
             public Vector2 WindowsOffset { get; set; }
-
+          public bool усиление { get; set; }
             public double innerHeight = 0;
             public double innerWeidht = 0;
             public double lenght = 0;
