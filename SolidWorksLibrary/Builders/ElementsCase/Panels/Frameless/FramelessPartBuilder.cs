@@ -1,6 +1,7 @@
 ﻿using ServiceConstants;
 using SolidWorks.Interop.sldworks;
 using SolidWorks.Interop.swconst;
+using SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless.Components;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,11 +16,13 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
         private List<FramelessPanel> framelessPanelList;
         public override event SetBendsHandler SetBends;
         protected double колСаморезВинтШирина { get; set; }
-       protected double screwsByWidthInner   { get; set; }
-  protected  string NameUpPanel { get; set; } = "02-11-01-40-";
-    protected    string NameDownPanel { get; set; } = "02-11-02-40-";
-        protected ModelDocExtension DocumentExtension { get; set; }
-      protected  string configuration { get; set; }
+        protected double screwsByWidthInner { get; set; }
+        protected string NameUpPanel { get; set; } = "02-11-01-40-";
+        protected string NameDownPanel { get; set; } = "02-11-02-40-";
+        protected ModelDocExtension DocumentExtension { get {return this.SolidWorksDocument.Extension } }
+        protected string configuration { get; set; }
+        protected double колЗаклепокВысота;
+        protected double screwsByHeightInner;
         public FramelessPanelBuilder(FramelessPanel framelessPanel, List<FramelessPanel> framelessPanelList, string config) : base() {
 
             this.framelessPanel = framelessPanel;
@@ -41,13 +44,13 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
             Patterns.Observer.MessageObserver.Instance.SetMessage("calc data. press any key");
             CalculateHandle();
 
-            Patterns.Observer.MessageObserver.Instance.SetMessage("delete data."); 
-                                                                                  
-         //   DeleteComponents();
+            Patterns.Observer.MessageObserver.Instance.SetMessage("delete data.");
+
+            //   DeleteComponents();
             //Patterns.Observer.MessageObserver.Instance.SetMessage("set data. ");// press any key");
 
             //   //Console.ReadKey();
-        //    SetSize();
+            //    SetSize();
         }
 
         void CalculateHandle() {
@@ -91,7 +94,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
             }
         }
         private void CalculateRivetCount() {
-            double колЗаклепокВысота;
+       
 
 
             if (framelessPanel.PanelType == PanelType_e.RemovablePanel) {
@@ -207,215 +210,210 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
 
 
 
-        //private void SetSize() {
+        private void SetSize() {
 
-        //    // Расчет шага для саморезов и заклепок
-        //    double rivetCountByHeight;
-
-
-        //    //switch (framelessPanel.PanelType)
-        //    //{
-        //    //    case PanelType.RemovablePanel:
-        //    //    case "05":
-        //    //        колСаморезВинтШирина = количествоВинтов;
-        //    //        break;
-        //    //}
+            // Расчет шага для саморезов и заклепок
+            double rivetCountByHeight;
 
 
-        //    #region Оступы для отверстий заклепок, саморезов и винтов
-        //    var отступОтветныхОтверстийШирина = 8;
-        //    var осьСаморезВинт = 9.0;
-        //    var осьОтверстийСаморезВинт = framelessPanel.PanelType == PanelType_e.RemovablePanel ? 12.0 : 11.0;
-        //    var осьПоперечныеОтверстия = 10.1;
-
-        //    if (framelessPanel.ThermoStrip == ThermoStrip.ThermoScotch) {
-        //        осьПоперечныеОтверстия = 10.1;
-        //    }
-
-        //    if (framelessPanel.PanelType != PanelType_e.RemovablePanel) {
-        //        отступОтветныхОтверстийШирина = 47;
-        //        осьСаморезВинт = 9.70;
-        //        осьОтверстийСаморезВинт = 10.3;
-        //    }
-        //    #endregion
-
-        //    #region Диаметры отверстий
-        //    var диамЗаглушкаВинт = 13.1;
-        //    var диамСаморезВинт = 3.3;
-
-        //    if (framelessPanel.PanelType == PanelType_e.RemovablePanel) {
-        //        диамЗаглушкаВинт = 11;
-        //        диамСаморезВинт = 7;
-        //    }
-        //    #endregion
-
-        //    if (CheckExistPart != null)
-        //        CheckExistPart(base.PartName, out IsPartExist, out NewPartPath);
-
-        //    PartName = "02-11-02-40-";
-        //    if (IsPartExist) {
-        //        DocumentExtension.SelectByID2(PartName + "@02-11-40-1", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-        //        AssemblyDocument.ReplaceComponents(base.NewPartPath, "", false, true);
-        //    }
-        //    else {
-
-        //        base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, base.PartName);
-        //        if (SetBends != null)
-        //            SetBends((decimal)framelessPanel.outThickness, out KFactor, out BendRadius);
-
-        //        Vector2 dimensions; // габариты
-        //        if (framelessPanel.PanelType.Equals(PanelType_e.RemovablePanel)) {
-
-        //            const double шагЗаклепокВысота = 125;
-        //            rivetCountByHeight = (Math.Truncate(framelessPanel.SizePanel.Y / шагЗаклепокВысота) + 1) * 1000;
-
-        //            dimensions = new Vector2(framelessPanel.SizePanel.X - 42, framelessPanel.SizePanel.Y - 42);
-
-        //            base.parameters.Add("D3@2-1-1", 54.0);
-        //            base.parameters.Add("D2@Эскиз29", 84.0);
-        //            //base.parameters.Add("D2@Эскиз43", 12.0);
-        //            base.parameters.Add("D1@Эскиз29", 11.3);
-        //            base.parameters.Add("D1@2-1-1", 11.3);
-        //            base.parameters.Add("D2@Эскиз39", 11.3);
-        //            base.parameters.Add("D1@Эскиз39", 5.0);
+            //switch (framelessPanel.PanelType)
+            //{
+            //    case PanelType.RemovablePanel:
+            //    case "05":
+            //        колСаморезВинтШирина = количествоВинтов;
+            //        break;
+            //}
 
 
-        //        }
-        //        else // others
-        //        {
-        //            //     rivetCountByHeight = screwscountByHeight + 1000;
-        //            if (Convert.ToInt32(framelessPanel.SizePanel.Y) > 1000) {
-        //                //      rivetCountByHeight = screwscountByHeight + 3000;
+            #region Оступы для отверстий заклепок, саморезов и винтов
+            var отступОтветныхОтверстийШирина = 8;
+            var осьСаморезВинт = 9.0;
+            var осьОтверстийСаморезВинт = framelessPanel.PanelType == PanelType_e.RemovablePanel ? 12.0 : 11.0;
+            var осьПоперечныеОтверстия = 10.1;
+
+            if (framelessPanel.ThermoStrip == ThermoStrip.ThermoScotch) {
+                осьПоперечныеОтверстия = 10.1;
+            }
+
+            if (framelessPanel.PanelType != PanelType_e.RemovablePanel) {
+                отступОтветныхОтверстийШирина = 47;
+                осьСаморезВинт = 9.70;
+                осьОтверстийСаморезВинт = 10.3;
+            }
+            #endregion
+
+            #region Диаметры отверстий
+            var диамЗаглушкаВинт = 13.1;
+            var диамСаморезВинт = 3.3;
+
+            if (framelessPanel.PanelType == PanelType_e.RemovablePanel) {
+                диамЗаглушкаВинт = 11;
+                диамСаморезВинт = 7;
+            }
+            #endregion
+
+            if (CheckExistPart != null)
+                CheckExistPart(base.PartName, out IsPartExist, out NewPartPath);
+
+            PartName = "02-11-02-40-";
+            if (IsPartExist) {
+                DocumentExtension.SelectByID2(PartName + "@02-11-40-1", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                AssemblyDocument.ReplaceComponents(base.NewPartPath, "", false, true);
+            }
+            else {
+
+                base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, base.PartName);
+                if (SetBends != null)
+                    SetBends((decimal)framelessPanel.outThickness, out KFactor, out BendRadius);
+
+                Vector2 dimensions; // габариты
+                if (framelessPanel.PanelType.Equals(PanelType_e.RemovablePanel)) {
+
+                    const double шагЗаклепокВысота = 125;
+                    rivetCountByHeight = (Math.Truncate(framelessPanel.SizePanel.Y / шагЗаклепокВысота) + 1) * 1000;
+
+                    dimensions = new Vector2(framelessPanel.SizePanel.X - 42, framelessPanel.SizePanel.Y - 42);
+
+                    base.parameters.Add("D3@2-1-1", 54.0);
+                    base.parameters.Add("D2@Эскиз29", 84.0);
+                    //base.parameters.Add("D2@Эскиз43", 12.0);
+                    base.parameters.Add("D1@Эскиз29", 11.3);
+                    base.parameters.Add("D1@2-1-1", 11.3);
+                    base.parameters.Add("D2@Эскиз39", 11.3);
+                    base.parameters.Add("D1@Эскиз39", 5.0);
+
+
+                }
+                else // others
+                {
+                    //     rivetCountByHeight = screwscountByHeight + 1000;
+                    if (Convert.ToInt32(framelessPanel.SizePanel.Y) > 1000) {
+                        //      rivetCountByHeight = screwscountByHeight + 3000;
+                    }
+
+                    dimensions = new Vector2(framelessPanel.SizePanel.X - 40, framelessPanel.SizePanel.Y - 40);
+                    base.parameters.Add("D3@2-1-1", 55.0);
+                    //Console.WriteLine("1");
+                    base.parameters.Add("D2@Эскиз29", 85.0);
+                    //Console.WriteLine("2");
+                    //  base.parameters.Add("D2@Эскиз43", 11.0);
+                    //Console.WriteLine("3");
+                    base.parameters.Add("D1@Эскиз29", 10.3);
+                    //Console.WriteLine("4");
+                    base.parameters.Add("D1@2-1-1", 10.3);
+                    //Console.WriteLine("5");
+                    base.parameters.Add("D2@Эскиз39", 10.3);
+                    //Console.WriteLine("6");
+                    base.parameters.Add("D1@Эскиз39", 4.0);
+                    //Console.WriteLine("7");
+                }
+
+                base.parameters.Add("D1@Эскиз1", dimensions.X);
+                //Console.WriteLine("8");
+                base.parameters.Add("D2@Эскиз1", dimensions.Y);
+                //Console.WriteLine("9");
+                if (framelessPanel.PanelType == PanelType_e.RemovablePanel && !framelessPanel.isOneHandle) {
+                    base.parameters.Add("D4@Эскиз47", framelessPanel.widthHandle);
+                    //Console.WriteLine("10");
+
+                }
+
+                //Размеры для отверсти под клепальные гайки под съемные панели
+
+                //   base.parameters.Add("D3@2-1-1", 55.0);
+                //Console.WriteLine("11");
+                base.parameters.Add("G0@Эскиз49", OutputHolesWrapper.G0);
+                //Console.WriteLine("12");
+                base.parameters.Add("G1@Эскиз49", OutputHolesWrapper.G1);
+                //Console.WriteLine("13");
+                base.parameters.Add("G2@Эскиз49", OutputHolesWrapper.G2);
+                //Console.WriteLine("14");
+                // base.parameters.Add("G3@Эскиз49", OutputHolesWrapper.G0);
+                //Console.WriteLine("15");
+                base.parameters.Add("L1@Эскиз49", OutputHolesWrapper.L1);
+                //Console.WriteLine("16");
+                base.parameters.Add("L2@Эскиз49", OutputHolesWrapper.L2);
+                //Console.WriteLine("17");
+                base.parameters.Add("L3@Эскиз49", OutputHolesWrapper.L3);
+                //Console.WriteLine("18");
+
+                base.parameters.Add("D1@Кривая10", OutputHolesWrapper.D1);
+                //Console.WriteLine("19");
+                base.parameters.Add("D1@Кривая11", OutputHolesWrapper.D2);
+                //Console.WriteLine("20");
+                base.parameters.Add("D1@Кривая12", OutputHolesWrapper.D3);
+                //Console.WriteLine("21");
+
+                //Размеры промежуточных профилей
+                base.parameters.Add("Wp1@Эскиз59", Math.Abs(ValProfils.Wp1) < 1 ? 10 : ValProfils.Wp1);
+                //Console.WriteLine("22");
+                base.parameters.Add("Wp2@Эскиз59", Math.Abs(ValProfils.Wp2) < 1 ? 10 : ValProfils.Wp2);
+                //Console.WriteLine("23");
+                base.parameters.Add("Wp3@Эскиз59", Math.Abs(ValProfils.Wp3) < 1 ? 10 : ValProfils.Wp3);
+                //Console.WriteLine("24");
+                base.parameters.Add("Wp4@Эскиз59", Math.Abs(ValProfils.Wp4) < 1 ? 10 : ValProfils.Wp4);
+                //Console.WriteLine("25");
+
+                // Для промежуточной панели отверстия
+                //   base.parameters.Add("D1@Кривая14", rivetCountByHeight * 2),
+
+
+
+                // Кол-во отверстий под заклепки сшивочных кронштейнов
+                // base.parameters.Add("D1@CrvPatternW", колЗаклепокКронштейнаДвойнойПанели);
+                // { "D1@CrvPatternH",  колЗаклепокКронштейнаДвойнойПанели}
+
+
+                base.parameters.Add("D7@Ребро-кромка1", framelessPanel.lenght);
+                //Console.WriteLine("26");
+                base.parameters.Add("Толщина@Листовой металл", framelessPanel.outThickness);
+                //Console.WriteLine("27");
+                base.parameters.Add("D1@Листовой металл", (double)BendRadius);
+                //Console.WriteLine("28");
+                base.parameters.Add("D2@Листовой металл", (double)KFactor * 1000);
+                //Console.WriteLine("29");
+
+                //Console.WriteLine("Количество параметров " + parameters.Count);
+                EditPartParameters(PartName, base.NewPartPath);
+
+            }
+        }
+
+
+        //private void DeleteFeatures(IEnumerable<FeatureBox> featureBoxList) {
+        //    FeatureManager featureManager = SolidWorksDocument.FeatureManager;
+        //    var selMgr = (SelectionMgr)SolidWorksDocument.SelectionManager;
+
+        //    var selData = (SelectData)selMgr.CreateSelectData();
+
+
+        //    var features = featureManager.GetFeatures(true);
+        //    int count = featureManager.GetFeatureCount(false);
+
+
+        //    foreach (var eachFeatureBox in featureBoxList.Distinct()) {
+        //        SolidWorksAdapter.AcativeteDoc(eachFeatureBox.FileName);
+
+        //        foreach (var item in featureBoxList.Where(each => each.FileName == eachFeatureBox.FileName)) {
+        //            foreach (var feature in features) {
+
+        //                if (featureBoxList.Contains(item.feature)) {
+
+        //                    selMgr.AddSelectionListObject(item, selData);
+        //                }
         //            }
-
-        //            dimensions = new Vector2(framelessPanel.SizePanel.X - 40, framelessPanel.SizePanel.Y - 40);
-        //            base.parameters.Add("D3@2-1-1", 55.0);
-        //            //Console.WriteLine("1");
-        //            base.parameters.Add("D2@Эскиз29", 85.0);
-        //            //Console.WriteLine("2");
-        //            //  base.parameters.Add("D2@Эскиз43", 11.0);
-        //            //Console.WriteLine("3");
-        //            base.parameters.Add("D1@Эскиз29", 10.3);
-        //            //Console.WriteLine("4");
-        //            base.parameters.Add("D1@2-1-1", 10.3);
-        //            //Console.WriteLine("5");
-        //            base.parameters.Add("D2@Эскиз39", 10.3);
-        //            //Console.WriteLine("6");
-        //            base.parameters.Add("D1@Эскиз39", 4.0);
-        //            //Console.WriteLine("7");
         //        }
-
-        //        base.parameters.Add("D1@Эскиз1", dimensions.X);
-        //        //Console.WriteLine("8");
-        //        base.parameters.Add("D2@Эскиз1", dimensions.Y);
-        //        //Console.WriteLine("9");
-        //        if (framelessPanel.PanelType == PanelType_e.RemovablePanel && !framelessPanel.isOneHandle) {
-        //            base.parameters.Add("D4@Эскиз47", framelessPanel.widthHandle);
-        //            //Console.WriteLine("10");
-
-        //        }
-
-        //        //Размеры для отверсти под клепальные гайки под съемные панели
-
-        //        //   base.parameters.Add("D3@2-1-1", 55.0);
-        //        //Console.WriteLine("11");
-        //        base.parameters.Add("G0@Эскиз49", OutputHolesWrapper.G0);
-        //        //Console.WriteLine("12");
-        //        base.parameters.Add("G1@Эскиз49", OutputHolesWrapper.G1);
-        //        //Console.WriteLine("13");
-        //        base.parameters.Add("G2@Эскиз49", OutputHolesWrapper.G2);
-        //        //Console.WriteLine("14");
-        //        // base.parameters.Add("G3@Эскиз49", OutputHolesWrapper.G0);
-        //        //Console.WriteLine("15");
-        //        base.parameters.Add("L1@Эскиз49", OutputHolesWrapper.L1);
-        //        //Console.WriteLine("16");
-        //        base.parameters.Add("L2@Эскиз49", OutputHolesWrapper.L2);
-        //        //Console.WriteLine("17");
-        //        base.parameters.Add("L3@Эскиз49", OutputHolesWrapper.L3);
-        //        //Console.WriteLine("18");
-
-        //        base.parameters.Add("D1@Кривая10", OutputHolesWrapper.D1);
-        //        //Console.WriteLine("19");
-        //        base.parameters.Add("D1@Кривая11", OutputHolesWrapper.D2);
-        //        //Console.WriteLine("20");
-        //        base.parameters.Add("D1@Кривая12", OutputHolesWrapper.D3);
-        //        //Console.WriteLine("21");
-
-        //        //Размеры промежуточных профилей
-        //        base.parameters.Add("Wp1@Эскиз59", Math.Abs(ValProfils.Wp1) < 1 ? 10 : ValProfils.Wp1);
-        //        //Console.WriteLine("22");
-        //        base.parameters.Add("Wp2@Эскиз59", Math.Abs(ValProfils.Wp2) < 1 ? 10 : ValProfils.Wp2);
-        //        //Console.WriteLine("23");
-        //        base.parameters.Add("Wp3@Эскиз59", Math.Abs(ValProfils.Wp3) < 1 ? 10 : ValProfils.Wp3);
-        //        //Console.WriteLine("24");
-        //        base.parameters.Add("Wp4@Эскиз59", Math.Abs(ValProfils.Wp4) < 1 ? 10 : ValProfils.Wp4);
-        //        //Console.WriteLine("25");
-
-        //        // Для промежуточной панели отверстия
-        //        //   base.parameters.Add("D1@Кривая14", rivetCountByHeight * 2),
-
-
-
-        //        // Кол-во отверстий под заклепки сшивочных кронштейнов
-        //        // base.parameters.Add("D1@CrvPatternW", колЗаклепокКронштейнаДвойнойПанели);
-        //        // { "D1@CrvPatternH",  колЗаклепокКронштейнаДвойнойПанели}
-
-
-        //        base.parameters.Add("D7@Ребро-кромка1", framelessPanel.lenght);
-        //        //Console.WriteLine("26");
-        //        base.parameters.Add("Толщина@Листовой металл", framelessPanel.outThickness);
-        //        //Console.WriteLine("27");
-        //        base.parameters.Add("D1@Листовой металл", (double)BendRadius);
-        //        //Console.WriteLine("28");
-        //        base.parameters.Add("D2@Листовой металл", (double)KFactor * 1000);
-        //        //Console.WriteLine("29");
-
-        //        //Console.WriteLine("Количество параметров " + parameters.Count);
-        //        EditPartParameters(PartName, base.NewPartPath);
-
         //    }
+
+
+
+
+        //    model.EditDelete();
         //}
-
-
-        //private void DeleteFeatures (IEnumerable<FeatureBox> featureBoxList)
-        // {
-        //     FeatureManager featureManager = SolidWorksDocument.FeatureManager;
-        //     var selMgr = (SelectionMgr)SolidWorksDocument.SelectionManager;
-
-        //     var selData = (SelectData)selMgr.CreateSelectData();
-
-
-        //     var features = featureManager.GetFeatures(true);
-        //     int count = featureManager.GetFeatureCount(false);
-
-
-        //     foreach (var eachFeatureBox in featureBoxList.Distinct())
-        //     {
-        //         SolidWorksAdapter.AcativeteDoc(eachFeatureBox.FileName);
-
-        //         foreach (var item in featureBoxList.Where(each=> each.FileName == eachFeatureBox.FileName))
-        //         {
-        //             foreach (var feature in features)
-        //             {
-
-        //                 if (featureBoxList.Contains(item.feature))
-        //                 {
-
-        //                     selMgr.AddSelectionListObject(item, selData);
-        //                 }
-        //             }
-        //         }
-        //     }
-
-
-
-
-        //     model.EditDelete();
-        // }
 
         protected override void DeleteComponents(int type = 0) {
             const int deleteOption = (int)swDeleteSelectionOptions_e.swDelete_Absorbed + (int)swDeleteSelectionOptions_e.swDelete_Children;
-              DocumentExtension = SolidWorksDocument.Extension;
+            DocumentExtension = SolidWorksDocument.Extension;
             double HeightOfWindow = WindowProfils.Flange30 ? WindowProfils.Width : (WindowProfils.Width + 2);
             double WidthOfWindow = WindowProfils.Height;
             CompType_e bodyfeat = CompType_e.BODYFEATURE;
@@ -451,11 +449,11 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
 
                 foreach (var component in new List<string>
                 {
-                                "02-11-11-40--1", "02-11-11-40--2", "02-11-11-40--3","02-11-11-40--4",
-                                "Threaded Rivets Increased-1", "Threaded Rivets Increased-2", "Threaded Rivets Increased-3", "Threaded Rivets Increased-4",
-                                "Rivet Bralo-71", "Rivet Bralo-72", "Rivet Bralo-73", "Rivet Bralo-74", "Rivet Bralo-75", "Rivet Bralo-76",
-                                "Rivet Bralo-83", "Rivet Bralo-84", "Rivet Bralo-91", "Rivet Bralo-92", "Rivet Bralo-93", "Rivet Bralo-94"
-                            }) {
+                                        "02-11-11-40--1", "02-11-11-40--2", "02-11-11-40--3","02-11-11-40--4",
+                                        "Threaded Rivets Increased-1", "Threaded Rivets Increased-2", "Threaded Rivets Increased-3", "Threaded Rivets Increased-4",
+                                        "Rivet Bralo-71", "Rivet Bralo-72", "Rivet Bralo-73", "Rivet Bralo-74", "Rivet Bralo-75", "Rivet Bralo-76",
+                                        "Rivet Bralo-83", "Rivet Bralo-84", "Rivet Bralo-91", "Rivet Bralo-92", "Rivet Bralo-93", "Rivet Bralo-94"
+                                    }) {
                     DocumentExtension.SelectByID2(component + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
                     SolidWorksDocument.EditDelete();
                     // FeatureBoxList.Add(new FeatureBox { ComponentName = component, FileName = AssemblyName, IsOptions = false });
@@ -598,7 +596,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
             #region 04 05 - Съемные панели
             switch (framelessPanel.PanelType) {
                 case PanelType_e.RemovablePanel:
-                   
+
                     if (framelessPanel.SizePanel.X > 750) {
                         #region when widht panel larger 750
                         DocumentExtension.SelectByID2("Handel-1", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
@@ -626,8 +624,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                         DocumentExtension.DeleteSelection2(deleteOption);
                         #endregion
                     }
-                  
-                   
+
+
                     else {
                         #region #region when widht panel less 750 
                         DocumentExtension.SelectByID2("Handel-2", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
@@ -719,7 +717,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                     DocumentExtension.SelectByID2("Эскиз30@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0);
                     SolidWorksDocument.EditDelete();
                     #endregion
-                 
+
                     #region Удаление торцевых отверстий под саморезы
                     DocumentExtension.SelectByID2("Вырез-Вытянуть6@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
                     DocumentExtension.DeleteSelection2(deleteOption);
@@ -1061,12 +1059,12 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
 
                 foreach (var number in new[]
                 {
-                                "37", "38", "39", "40",
-                                "41", "42", "43", "44",
-                                "45", "46", "47", "48",
-                                "49", "50", "51", "52",
-                                "53", "54", "55", "56"
-                            }) {
+                                        "37", "38", "39", "40",
+                                        "41", "42", "43", "44",
+                                        "45", "46", "47", "48",
+                                        "49", "50", "51", "52",
+                                        "53", "54", "55", "56"
+                                    }) {
                     DocumentExtension.SelectByID2("Rivet Bralo-" + number + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
                     SolidWorksDocument.EditDelete();
                 }
@@ -1206,10 +1204,10 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
             if (типКрепежнойЧастиУсиливающейПанели != "D") {
                 foreach (var component in new[]
                 {
-                                "02-11-09-40--1",
-                                "Threaded Rivets с насечкой-1", "Threaded Rivets с насечкой-2",
-                                "Threaded Rivets с насечкой-3", "Threaded Rivets с насечкой-4"
-                            }) {
+                                        "02-11-09-40--1",
+                                        "Threaded Rivets с насечкой-1", "Threaded Rivets с насечкой-2",
+                                        "Threaded Rivets с насечкой-3", "Threaded Rivets с насечкой-4"
+                                    }) {
                     DocumentExtension.SelectByID2(component + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
                     SolidWorksDocument.EditDelete();
                 }
@@ -1225,8 +1223,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
 
                 foreach (var component in new[]
                 {
-                                "Threaded Rivets с насечкой-5", "Threaded Rivets с насечкой-6"
-                            }) {
+                                        "Threaded Rivets с насечкой-5", "Threaded Rivets с насечкой-6"
+                                    }) {
                     DocumentExtension.SelectByID2(component + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
                     SolidWorksDocument.EditDelete();
                 }
@@ -1512,7 +1510,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
 
             #endregion
 
-#endregion
+            #endregion
 
             #region Отверстия под усиливающие панели
 
@@ -1547,35 +1545,35 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                 }
 
                 if (ValProfils.Tp4 != "-") {
-                if (configuration.Contains("02")) {
-                foreach (var name in new[] { "U42", "U41" }) {
-                    DocumentExtension.SelectByID2(name + "@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                    SolidWorksDocument.EditUnsuppress2();
-                }
-                foreach (var name in new[] { "U43", "U44" }) {
-                    DocumentExtension.SelectByID2(name + "@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                    SolidWorksDocument.EditUnsuppress2();
+                    if (configuration.Contains("02")) {
+                        foreach (var name in new[] { "U42", "U41" }) {
+                            DocumentExtension.SelectByID2(name + "@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                            SolidWorksDocument.EditUnsuppress2();
+                        }
+                        foreach (var name in new[] { "U43", "U44" }) {
+                            DocumentExtension.SelectByID2(name + "@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                            SolidWorksDocument.EditUnsuppress2();
+                        }
+                    }
+                    if (configuration.Contains("01")) {
+                        foreach (var name in new[] { "U62", "U61" }) {
+                            DocumentExtension.SelectByID2(name + "@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                            SolidWorksDocument.EditUnsuppress2();
+                        }
+                        foreach (var name in new[] { "U63", "U64" }) {
+                            DocumentExtension.SelectByID2(name + "@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                            SolidWorksDocument.EditUnsuppress2();
+                        }
+                    }
                 }
             }
-            if (configuration.Contains("01")) {
-                foreach (var name in new[] { "U62", "U61" }) {
-                    DocumentExtension.SelectByID2(name + "@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                    SolidWorksDocument.EditUnsuppress2();
-                }
-                foreach (var name in new[] { "U63", "U64" }) {
-                    DocumentExtension.SelectByID2(name + "@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                    SolidWorksDocument.EditUnsuppress2();
-                }
-            }
-        }
-    }
 
-                        if (framelessPanel.PanelType == PanelType_e.безОпор || framelessPanel.PanelType == PanelType_e.РамаМонтажная) {
+            if (framelessPanel.PanelType == PanelType_e.безОпор || framelessPanel.PanelType == PanelType_e.РамаМонтажная) {
 
-                            DocumentExtension.SelectByID2("Эскиз59@" + NameUpPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
-                            SolidWorksDocument.EditUnsuppress2();
-                            DocumentExtension.SelectByID2("Эскиз73@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
-                            SolidWorksDocument.EditUnsuppress2();
+                DocumentExtension.SelectByID2("Эскиз59@" + NameUpPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditUnsuppress2();
+                DocumentExtension.SelectByID2("Эскиз73@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
+                SolidWorksDocument.EditUnsuppress2();
 
                 if (ValProfils.Tp1 != "-") {
                     if (configuration.Contains("02")) {
@@ -1645,10 +1643,10 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
 
             double колЗаклепокКронштейнаДвойнойПанели = 2000;
 
-            CutType_e cutType =  CutPanel.DeterminateCutPanel(framelessPanel.SizePanel);
+            CutType_e cutType = CutPanel.DeterminateCutPanel(framelessPanel.SizePanel);
 
-          //  if (!string.IsNullOrEmpty(типДвойнойРазрез)) {
-          if (cutType != CutType_e.Whole) { 
+            //  if (!string.IsNullOrEmpty(типДвойнойРазрез)) {
+            if (cutType != CutType_e.Whole) {
                 var idToDelete = "-2";
                 var idToChange = "-1";
 
@@ -1725,9 +1723,9 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                     case "W":
                         foreach (var number in new[]
                         {
-                                        "121", "122", "123", "124", "162", "163", "164", "165", "166",
-                                        "157", "158", "159", "160", "161"
-                                    }) {
+                                                "121", "122", "123", "124", "162", "163", "164", "165", "166",
+                                                "157", "158", "159", "160", "161"
+                                            }) {
                             DocumentExtension.SelectByID2("Rivet Bralo-" + number + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
                             SolidWorksDocument.EditDelete();
                         }
@@ -1800,74 +1798,74 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                 #region  Панель внешняя
 
                 var newName = панельВнешняя.NewName;
-            var newPartPath = $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}.SLDPRT";
+                var newPartPath = $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}.SLDPRT";
 
-            var outerPanel = newPartPath;
+                var outerPanel = newPartPath;
 
-            //todo вынести кол-во в метод модели
+                //todo вынести кол-во в метод модели
 
-            var screwsByHeight =
-            string.IsNullOrEmpty(типТорцевой)
-                ? колСаморезВинтВысота
-                : колСаморезВинтВысота - 1000;
+                var screwsByHeight =
+                string.IsNullOrEmpty(типТорцевой)
+                    ? колСаморезВинтВысота
+                    : колСаморезВинтВысота - 1000;
 
-            var zaklByHeight =
-                 framelessPanel.PanelType == PanelType_e.BlankPanel || framelessPanel.PanelType == PanelType_e.FrontPanel || framelessPanel.PanelType == PanelType_e.RemovablePanel
-                 ? колЗаклепокВысота
-                 : колЗаклепокВысота + 1000;
+                var zaklByHeight =
+                     framelessPanel.PanelType == PanelType_e.BlankPanel || framelessPanel.PanelType == PanelType_e.FrontPanel || framelessPanel.PanelType == PanelType_e.RemovablePanel
+                     ? колЗаклепокВысота
+                     : колЗаклепокВысота + 1000;
 
-            if (типДвойнойРазрез == "H") {
-                if ((screwsByHeight / 1000) % 2 != 0) {
-                    screwsByHeight = screwsByHeight + 1000;
+                if (типДвойнойРазрез == "H") {
+                    if ((screwsByHeight / 1000) % 2 != 0) {
+                        screwsByHeight = screwsByHeight + 1000;
+                    }
+
+                    if ((zaklByHeight / 1000) % 2 != 0) {
+                        zaklByHeight = zaklByHeight + 1000;
+                    }
                 }
 
-                if ((zaklByHeight / 1000) % 2 != 0) {
-                    zaklByHeight = zaklByHeight + 1000;
+                var screwsByWidth = framelessPanel.PanelType == PanelType_e.BlankPanel || framelessPanel.PanelType == PanelType_e.FrontPanel ? (колСаморезВинтШирина - 1000 < 2000 ? 2000 : колСаморезВинтШирина - 1000)
+                            : (колСаморезВинтШирина < 2000 ? 2000 : колСаморезВинтШирина);
+
+                var zaklByWidth = колЗаклепокШирина;
+
+                if (типДвойнойРазрез == "W") {
+                    if ((screwsByWidth / 1000) % 2 != 0) {
+                        screwsByWidth = screwsByWidth + 1000;
+                    }
+
+                    if ((zaklByWidth / 1000) % 2 != 0) {
+                        zaklByWidth = zaklByWidth + 1000;
+                    }
                 }
-            }
 
-            var screwsByWidth = framelessPanel.PanelType == PanelType_e.BlankPanel || framelessPanel.PanelType == PanelType_e.FrontPanel ? (колСаморезВинтШирина - 1000 < 2000 ? 2000 : колСаморезВинтШирина - 1000)
-                        : (колСаморезВинтШирина < 2000 ? 2000 : колСаморезВинтШирина);
-
-            var zaklByWidth = колЗаклепокШирина;
-
-            if (типДвойнойРазрез == "W") {
-                if ((screwsByWidth / 1000) % 2 != 0) {
-                    screwsByWidth = screwsByWidth + 1000;
+                if (screws.ByWidth > 0 & pType.Contains("3")) {
+                    screwsByWidth = screws.ByWidth;
                 }
 
-                if ((zaklByWidth / 1000) % 2 != 0) {
-                    zaklByWidth = zaklByWidth + 1000;
+                if (screws?.ByHeight > 0) {
+                    screwsByHeight = screws.ByHeight;
                 }
-            }
+                if (screws?.ByWidth > 0) {
+                    screwsByWidth = screws.ByWidth;
+                }
 
-            if (screws.ByWidth > 0 & pType.Contains("3")) {
-                screwsByWidth = screws.ByWidth;
-            }
+                screwsByWidthInner =
+               framelessPanel.PanelType == PanelType_e.BlankPanel || framelessPanel.PanelType == PanelType_e.FrontPanel
+                  ? (колСаморезВинтШирина - 1000 < 2000 ? 2000 : колСаморезВинтШирина - 1000)
+                          : (колСаморезВинтШирина2 < 2000 ? 2000 : колСаморезВинтШирина);
 
-            if (screws?.ByHeight > 0) {
-                screwsByHeight = screws.ByHeight;
-            }
-            if (screws?.ByWidth > 0) {
-                screwsByWidth = screws.ByWidth;
-            }
-
-              screwsByWidthInner =
-             framelessPanel.PanelType == PanelType_e.BlankPanel || framelessPanel.PanelType == PanelType_e.FrontPanel
-                ? (колСаморезВинтШирина - 1000 < 2000 ? 2000 : колСаморезВинтШирина - 1000)
-                        : (колСаморезВинтШирина2 < 2000 ? 2000 : колСаморезВинтШирина);
-
-            var screwsByHeightInner = pType == "04" || pType == "05"
-                ? (колСаморезВинтВысота)
-                : (колСаморезВинтВысота - 1000);
+                  screwsByHeightInner = pType == "04" || pType == "05"
+                    ? (колСаморезВинтВысота)
+                    : (колСаморезВинтВысота - 1000);
 
 
-            if (screws?.ByHeightInner > 0) {
-                screwsByHeightInner = screws.ByHeightInner < 2000 ? 2000 : screws.ByHeightInner;
-            }
-            if (screws?.ByWidthInner > 0) {
-                screwsByWidthInner = screws.ByWidthInner < 2000 ? 2000 : screws.ByWidthInner;
-            }
+                if (screws?.ByHeightInner > 0) {
+                    screwsByHeightInner = screws.ByHeightInner < 2000 ? 2000 : screws.ByHeightInner;
+                }
+                if (screws?.ByWidthInner > 0) {
+                    screwsByWidthInner = screws.ByWidthInner < 2000 ? 2000 : screws.ByWidthInner;
+                }
 
                 //                if (GetExistingFile(newPartPath, 1))//   (Path.GetFileNameWithoutExtension(newPartPath), 1))
                 //                {
@@ -1893,44 +1891,44 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                 //                    }
 
                 //типДвойнойРазрез
-                
+
                 SwPartParamsChangeWithNewName(NameUpPanel,
                     $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}",
                     new[,]
                     {
-                                    // Габариты
-                                    parameters.Add
+                                            // Габариты
+                                            parameters.Add
 
-                                    parameters.Add("D1@Эскиз1", Convert.ToString(ширинаПанели));
-                                    parameters.Add("D2@Эскиз1", Convert.ToString(высотаПанели));
-                                    parameters.Add("D1@3-4", Convert.ToString(screwsByHeight));
-                                    parameters.Add("D1@1-4", Convert.ToString(screwsByHeight));
-                                    parameters.Add("D1@2-4",  Convert.ToString(screwsByWidth));
-                                    parameters.Add("D2@2-2", Convert.ToString(осьСаморезВинт));
-                                    parameters.Add("D4@Эскиз47", Convert.ToString(растояниеМеждуРучками));
-                                    parameters.Add("D1@Эскиз50", Convert.ToString(диамСаморезВинт));
-                                    parameters.Add("D1@2-3-1", Convert.ToString(диамСаморезВинт));
-                                    parameters.Add("D1@Эскиз52", d1Эскиз52);
-                                    parameters.Add("D2@Эскиз52", Convert.ToString(осьПоперечныеОтверстия));
-                                    parameters.Add("D1@Кривая3", Convert.ToString(d1Кривая3));
-                                    parameters.Add("D3@1-1-1", string.IsNullOrEmpty(типТорцевой) || pType == "01" ?  Convert.ToString(35) : Convert.ToString(158.1));
-                                    parameters.Add("D2@3-1-1", string.IsNullOrEmpty(типТорцевой) || pType == "01" ?  Convert.ToString(35) : Convert.ToString(158.1));
-                                    parameters.Add("D3@2-1-1", Convert.ToString(диамЗаглушкаВинт));
-                                    parameters.Add("D1@Эскиз49", Convert.ToString(диамЗаглушкаВинт));
-                                    parameters.Add("D1@Кривая1", Convert.ToString(zaklByWidth));
-                                    parameters.Add("D1@Кривая2", Convert.ToString(zaklByHeight));
-                                    parameters.Add("D7@Ребро-кромка1", framelessPanel.ThermoStrip == ThermoStrip.ThermoScotch   ? Convert.ToString(17.7) : Convert.ToString(19.2));
-                                    parameters.Add("Толщина@Листовой металл", materialP1[1].Replace('.', ','));
-                                    parameters.Add("D1@CrvPatternW", Convert.ToString(колЗаклепокКронштейнаДвойнойПанели));
-                               //      parameters.Add("D1@CrvPatternH", Convert.ToString(колЗаклепокКронштейнаДвойнойПанели));
-                    
-                    типДвойнойВерхней != "0" ? new[]
-                    {
-                                    $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{имяДвойнойВерхней1}",
-                                    $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{имяДвойнойВерхней2}"
-   
-                EditPartParameters(PartName,"");
-                
+                                            parameters.Add("D1@Эскиз1", Convert.ToString(ширинаПанели));
+                parameters.Add("D2@Эскиз1", Convert.ToString(высотаПанели));
+                parameters.Add("D1@3-4", Convert.ToString(screwsByHeight));
+                parameters.Add("D1@1-4", Convert.ToString(screwsByHeight));
+                parameters.Add("D1@2-4", Convert.ToString(screwsByWidth));
+                parameters.Add("D2@2-2", Convert.ToString(осьСаморезВинт));
+                parameters.Add("D4@Эскиз47", Convert.ToString(растояниеМеждуРучками));
+                parameters.Add("D1@Эскиз50", Convert.ToString(диамСаморезВинт));
+                parameters.Add("D1@2-3-1", Convert.ToString(диамСаморезВинт));
+                parameters.Add("D1@Эскиз52", d1Эскиз52);
+                parameters.Add("D2@Эскиз52", Convert.ToString(осьПоперечныеОтверстия));
+                parameters.Add("D1@Кривая3", Convert.ToString(d1Кривая3));
+                parameters.Add("D3@1-1-1", string.IsNullOrEmpty(типТорцевой) || pType == "01" ? Convert.ToString(35) : Convert.ToString(158.1));
+                parameters.Add("D2@3-1-1", string.IsNullOrEmpty(типТорцевой) || pType == "01" ? Convert.ToString(35) : Convert.ToString(158.1));
+                parameters.Add("D3@2-1-1", Convert.ToString(диамЗаглушкаВинт));
+                parameters.Add("D1@Эскиз49", Convert.ToString(диамЗаглушкаВинт));
+                parameters.Add("D1@Кривая1", Convert.ToString(zaklByWidth));
+                parameters.Add("D1@Кривая2", Convert.ToString(zaklByHeight));
+                parameters.Add("D7@Ребро-кромка1", framelessPanel.ThermoStrip == ThermoStrip.ThermoScotch ? Convert.ToString(17.7) : Convert.ToString(19.2));
+                parameters.Add("Толщина@Листовой металл", materialP1[1].Replace('.', ','));
+                parameters.Add("D1@CrvPatternW", Convert.ToString(колЗаклепокКронштейнаДвойнойПанели));
+                //      parameters.Add("D1@CrvPatternH", Convert.ToString(колЗаклепокКронштейнаДвойнойПанели));
+
+                типДвойнойВерхней != "0" ? new[]
+                {
+                                            $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{имяДвойнойВерхней1}",
+                                            $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{имяДвойнойВерхней2}"
+
+                        EditPartParameters(PartName,"");
+
             }
 
             //                #endregion
@@ -3057,6 +3055,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
 
             //            #endregion
         }
+
+
         string ТипУсиливающей() {
             switch (framelessPanel.PanelType) {
                 case PanelType_e.ПростаяУсилПанель:
@@ -3075,21 +3075,21 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                     return null;
             }
         }
-        bool Усиливающая( ) {
+        bool Усиливающая() {
             switch (framelessPanel.PanelType) {
-                case  PanelType_e.ПростаяУсилПанель:
-                case  PanelType_e.ПодДвериНаПетлях:
-                case  PanelType_e.ПоДвериНаЗажимах:
-                case  PanelType_e.ПодТорцевую:
+                case PanelType_e.ПростаяУсилПанель:
+                case PanelType_e.ПодДвериНаПетлях:
+                case PanelType_e.ПоДвериНаЗажимах:
+                case PanelType_e.ПодТорцевую:
                 case PanelType_e.ПодТорцевуюИДвериНаЗажимах:
-                case  PanelType_e.ПодТорцевуюИДвериНаПетлях:
+                case PanelType_e.ПодТорцевуюИДвериНаПетлях:
                     return true;
                 default:
                     return false;
             }
         }
 
-     
+
 
 
     }

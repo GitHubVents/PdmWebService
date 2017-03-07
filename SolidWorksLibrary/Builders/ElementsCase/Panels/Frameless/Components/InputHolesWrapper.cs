@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
-{
+namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless.Components {
     /// <summary>
     /// Входящие параметры для определения отверстий верхней и нижней панелей
     /// </summary>

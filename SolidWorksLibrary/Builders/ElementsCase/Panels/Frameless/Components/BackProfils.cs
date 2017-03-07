@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
-{
+namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless.Components {
     struct WindowProfils
     {
         //Поперечное сечение окна и смещения от центра

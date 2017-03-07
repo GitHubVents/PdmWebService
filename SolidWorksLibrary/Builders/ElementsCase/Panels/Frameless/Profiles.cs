@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SolidWorks.Interop.sldworks;
+using SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless.Components;
+
 namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
     public enum ProfilType_e { VerticalProfil= 1, HorisontalProfil = 2}
      
@@ -46,6 +48,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
             EditPartParameters("02-11-11-40-", NewPartPath);
         }
 
+
+
         //Profiles for reinforcing panel
         #region Усиливающие рамки
         public void ReinforcingProfile () {
@@ -53,7 +57,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
             //var bendParams = sbSqlBaseData.BendTable(thiknessF);
             //var bendRadius = Convert.ToDouble(bendParams[0]);
             //var kFactor = Convert.ToDouble(bendParams[1]);
-            //const double heightF = 38.0; // Артурчик сказал не надо. 06.03.2017 16:45
+            const double heightF = 38.0; // Артурчик сказал не надо. 06.03.2017 16:45
         #region  Усиливающая рамка по ширине
                 //newName = усиливающаяРамкаПоШирине.NewName;
                 //newName = modelName + "-06-" + width + "-" + "40-" + materialP2[0] + скотч;

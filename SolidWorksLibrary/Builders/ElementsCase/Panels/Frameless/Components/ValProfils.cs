@@ -1,6 +1,5 @@
 ﻿using System;
-namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
-{
+namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless.Components {
     
         struct ValProfils
         {

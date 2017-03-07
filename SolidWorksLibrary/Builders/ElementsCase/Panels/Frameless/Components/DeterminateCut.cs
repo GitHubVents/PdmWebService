@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolidWorksLibrary.Builders.ElementsCase.Panels {
+namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Components {
     
     /// <summary>
     /// Describes types cut for panel 
