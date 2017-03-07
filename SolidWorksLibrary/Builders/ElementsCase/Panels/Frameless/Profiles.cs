@@ -91,7 +91,9 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                 if (framelessPanel.PanelType == PanelType_e.BlankPanel) {
                     SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2(AssemblyName + ".SLDASM", true, 0)));
                     DocumentExtension.SelectByID2("02-11-06_2-40--4@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    AssemblyDocument.ReplaceComponents($@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{усиливающаяРамкаПоШирине.NewName}.SLDPRT", "", true, true);
+                AssemblyDocument.ReplaceComponents(System.IO.Path.Combine(RootFolder, SubjectDestinationFolder, усиливающаяРамкаПоШирине.NewName + "SLDPRT"), String.Empty, true, true);
+                                                        //($@"{RootFolder}\{SubjectDestinationFolder}\{усиливающаяРамкаПоШирине.NewName}.SLDPRT", "", true, true);
+
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("02-11-06_2-40-.SLDPRT");
                 }
                 else {
@@ -102,7 +104,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                     if (false){
                         SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2(AssemblyName + ".SLDASM", true, 0)));
                         DocumentExtension.SelectByID2("02-11-06_2-40--4@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                        swAsm.ReplaceComponents(base.NewPartPath, "", true, true);
+                        AssemblyDocument.ReplaceComponents(base.NewPartPath, "", true, true);
                         SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("02-11-06_2-40-.SLDPRT");
                     }
                     else {
@@ -133,15 +135,16 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
 
                 PartName = усиливающаяРамкаПоВысоте.NewName;
 
-                //newName = modelName + "-07-" + lenght + "-" + "40-" + materialP2[0] + скотч;
-                newPartPath = $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}.SLDPRT";
+            NewPartPath = "";// newName = modelName + "-07-" + lenght + "-" + "40-" + materialP2[0] + скотч;
+            NewPartPath = System.IO.Path.Combine(RootFolder, SubjectDestinationFolder, NewPartPath + "SLDPRT");//$@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}.SLDPRT";
 
-                if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1)) {
-                    SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2(AssemblyName + ".SLDASM", true, 0)));
-                    DocumentExtension.SelectByID2("02-11-07-40--1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    swAsm.ReplaceComponents(newPartPath, "", true, true);
-                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("02-11-07-40-.SLDPRT");
-                }
+            //if (GetExistingFile(Path.GetFileNameWithoutExtension(NewPartPath), 1)) {
+            //    SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2(AssemblyName + ".SLDASM", true, 0)));
+            //    DocumentExtension.SelectByID2("02-11-07-40--1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+            //    AssemblyDocument.ReplaceComponents(newPartPath, "", true, true);
+            //    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("02-11-07-40-.SLDPRT");
+            if (false) ;
+              
                 else {
                 parameters.Add("D3@Эскиз1", framelessPanel.PanelType == PanelType_e.RemovablePanel ? framelessPanel.SizePanel.Y - 2 : framelessPanel.SizePanel.Y);
                 parameters.Add("D1@Эскиз1", heightF);
