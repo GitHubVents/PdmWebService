@@ -1,16 +1,12 @@
 ﻿using ServiceConstants;
 using SolidWorks.Interop.sldworks;
 using SolidWorks.Interop.swconst;
+using SolidWorksLibrary.Builders.ElementsCase.Panels.Components;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
-namespace SolidWorksLibrary.Builders.ElementsCase.Panels
-{
+namespace SolidWorksLibrary.Builders.ElementsCase.Panels {
     public class PanelBuilder : ProductBuilderBehavior
     {
         #region fields
@@ -53,12 +49,14 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
 
             NewPartPath = System.IO.Path.Combine(RootFolder, SourceFolder, AssemblyName + ".SLDASM");
             SolidWorksAdapter.OpenDocument(NewPartPath, swDocumentTypes_e.swDocASSEMBLY);
-            SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
-            AssemblyDocument = SolidWorksAdapter.ToAssemblyDocument(SolidWorksDocument);
+            SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM"); 
         }
 
         public void Build(PanelType_e panelType, PanelProfile profile, Vector2 sizePanel, Materials OuterMaterial, Materials InnerMaterial, double outThickness, double innerThickness)
         {
+
+            
+
             this.sizePanel = sizePanel;
             this.innerThickness = innerThickness;
             this.outThickness = outThickness;

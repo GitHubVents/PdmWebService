@@ -43,7 +43,12 @@ namespace SolidWorksLibrary.Builders.ElementsCase
         /// <summary>
         /// Working assembly document
         /// </summary>
-        protected AssemblyDoc AssemblyDocument { get; set; }
+        protected AssemblyDoc AssemblyDocument {
+            get {
+                SolidWorksAdapter.AcativeteDoc(AssemblyName);
+                return SolidWorksAdapter.ToAssemblyDocument(SolidWorksDocument);
+            }
+        }
         /// <summary>
         /// Working SolidWork document { asm, prt }
         /// </summary>
@@ -146,13 +151,16 @@ namespace SolidWorksLibrary.Builders.ElementsCase
             {
                 try
                 {
-                  Console.WriteLine(eachParameter.Key + "@" + partName);
-                    Dimension myDimension = (SolidWorksDocument.Parameter(eachParameter.Key + "@" + partName + ".SLDPRT")) as Dimension;
-                    myDimension.SystemValue = eachParameter.Value / 1000;
+                    
+                         Console.WriteLine(eachParameter.Key + "@" + partName + " val: " + eachParameter.Value) ;
+                        Dimension myDimension = (SolidWorksDocument.Parameter(eachParameter.Key + "@" + partName + ".SLDPRT")) as Dimension;
+                        myDimension.SystemValue = eachParameter.Value / 1000;
+                    
+
                 }
-                catch
+                catch (Exception ex)
                 {
-                    Console.WriteLine(eachParameter.Key);
+                    Console.WriteLine(eachParameter.Key + " " + ex);
                 }
             }
             SolidWorksDocument.ForceRebuild3(true);

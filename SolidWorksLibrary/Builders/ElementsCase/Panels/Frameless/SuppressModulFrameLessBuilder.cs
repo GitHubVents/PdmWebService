@@ -9,7 +9,7 @@
              
 
 //            #region For others panels
-//            else {
+       
 
 //                if (configuration.Contains("01")) {
 //                    DocumentExtension.SelectByID2("Вырез-Вытянуть25@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);

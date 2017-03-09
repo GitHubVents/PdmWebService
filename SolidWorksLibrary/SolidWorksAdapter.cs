@@ -32,31 +32,28 @@ namespace SolidWorksLibrary
         /// </summary>
         private static void InitSolidWorks()
         {
-            if (sldWoks_app == null)
-            {
+            if (sldWoks_app == null) {
                 MessageObserver.Instance.SetMessage("Initialize SolidWorks exemplare");
-            try
-            {
-              
-                sldWoks_app = (SldWorks)Marshal.GetActiveObject("SldWorks.Application");
-                MessageObserver.Instance.SetMessage("\t\tTake an existing exemplar SolidWorks Application", MessageType.System);
-            }
-            catch (Exception ex)
-            {
-                MessageObserver.Instance.SetMessage("\t\tFailed take an existing exemplar SolidWorks Application " + ex, MessageType.Warning);
-                
+                try {
+
+                    sldWoks_app = new SldWorks();
+                    //sldWoks_app = (SldWorks)Marshal.GetActiveObject("SldWorks.Application");
+                    MessageObserver.Instance.SetMessage("\t\tTake an existing exemplar SolidWorks Application", MessageType.System);
+                }
+
+                catch (Exception ex) {
+                    MessageObserver.Instance.SetMessage("\t\tFailed take an existing exemplar SolidWorks Application " + ex, MessageType.Warning);
+
                     Process[] processes = Process.GetProcessesByName("SLDWORKS");
                     int processesLength = processes.Length;
-                    if (processesLength > 0)
-                    { 
-                        foreach (var process in processes)
-                        {
+                    if (processesLength > 0) {
+                        foreach (var process in processes) {
                             process.Kill();
                         }
                     }
                     sldWoks_app = new SldWorks()
-                     // Allow SOLIDWORKS to run in the background
-                     // and be invisible
+                    // Allow SOLIDWORKS to run in the background
+                    // and be invisible
                     //sldWoks_app.UserControl = false;
                     { Visible = true };
                     MessageObserver.Instance.SetMessage("\t\tCreated exemplar SolidWorks Application", MessageType.System);

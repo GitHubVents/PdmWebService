@@ -1,6 +1,7 @@
 ﻿using ServiceConstants;
 using SolidWorks.Interop.sldworks;
 using SolidWorks.Interop.swconst;
+using SolidWorksLibrary.Builders.ElementsCase.Panels.Components;
 using SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless.Components;
 using System;
 using System.Collections.Generic;
@@ -16,14 +17,23 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
         private List<FramelessPanel> framelessPanelList;
         public override event SetBendsHandler SetBends;
         protected double колСаморезВинтШирина { get; set; }
-        protected double screwsByWidthInner { get; set; }
+        protected double ScrewsByWidthInner { get; set; }
         protected string NameUpPanel { get; set; } = "02-11-01-40-";
         protected string NameDownPanel { get; set; } = "02-11-02-40-";
-        protected ModelDocExtension DocumentExtension { get {return this.SolidWorksDocument.Extension } }
+        protected ModelDocExtension DocumentExtension { get { return this.SolidWorksDocument.Extension; } }
         protected string configuration { get; set; }
         protected double колЗаклепокВысота;
-        protected double screwsByHeightInner;
+        protected double ScrewsByHeightInner;
+        protected double колЗаклепокШирина;
+        protected string типДвойнойРазрез;
+        protected string типТорцевой;
+        protected string типДвойнойНижней;
+        protected string типДвойнойВерхней;
+        protected double колСаморезВинтШирина2;
+        protected double колСаморезВинтВысота2;
+
         public FramelessPanelBuilder(FramelessPanel framelessPanel, List<FramelessPanel> framelessPanelList, string config) : base() {
+
 
             this.framelessPanel = framelessPanel;
             this.framelessPanelList = framelessPanelList;
@@ -39,18 +49,24 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
             Patterns.Observer.MessageObserver.Instance.SetMessage(NewPartPath);
             SolidWorksDocument = SolidWorksAdapter.OpenDocument(NewPartPath, swDocumentTypes_e.swDocASSEMBLY);
             //  SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
-            AssemblyDocument = SolidWorksAdapter.ToAssemblyDocument(SolidWorksDocument);
+             
 
             Patterns.Observer.MessageObserver.Instance.SetMessage("calc data. press any key");
             CalculateHandle();
+            CalculateRivetCount();
+
+            InputHolesWrapper.StringValue(framelessPanel.SizePanel.X.ToString());
 
             Patterns.Observer.MessageObserver.Instance.SetMessage("delete data.");
+            GetCountframelessPanel(ref колСаморезВинтШирина2, ref колСаморезВинтВысота2);
 
-            //   DeleteComponents();
+            SetSize();
+            DeleteComponents();
+            SolidWorksDocument.EditRebuild3();
             //Patterns.Observer.MessageObserver.Instance.SetMessage("set data. ");// press any key");
 
             //   //Console.ReadKey();
-            //    SetSize();
+
         }
 
         void CalculateHandle() {
@@ -94,14 +110,14 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
             }
         }
         private void CalculateRivetCount() {
-       
+
 
 
             if (framelessPanel.PanelType == PanelType_e.RemovablePanel) {
                 Vector2 removebalePanelSize;
                 double distanceL;
-                int countScrews;
-                CalculateRemovablePanel(framelessPanel.SizePanel, out removebalePanelSize, out distanceL, out countScrews);
+                int countframelessPanel;
+                CalculateRemovablePanel(framelessPanel.SizePanel, out removebalePanelSize, out distanceL, out countframelessPanel);
                 const double шагЗаклепокВысота = 125;
                 колЗаклепокВысота = (Math.Truncate(removebalePanelSize.Y / шагЗаклепокВысота) + 1) * 1000;
 
@@ -155,11 +171,11 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
 
             //    var lenghtOfProfil = framelessPanel.SizePanel.Y;
 
-            //    var nameOfProfil = усиление ? "02-11-13-40-" : "02-11-14-40-";
-            //    var nameOfProfilToDelete = !усиление ? "02-11-13-40-" : "02-11-14-40-";
+            //    var nameOfProfil = framelessPanel.усиление  ? "02-11-13-40-" : "02-11-14-40-";
+            //    var nameOfProfilToDelete = !framelessPanel.усиление  ? "02-11-13-40-" : "02-11-14-40-";
 
             //    // todo учет толщины
-            //    var deltaForLenght = усиление ? 48.0 : 3.5;
+            //    var deltaForLenght = framelessPanel.усиление  ? 48.0 : 3.5;
             //    var newNameP = nameOfProfil + framelessPanel.SizePanel.Y;
 
             //    var cut = типДвойнойРазрез == "H" ? " по высоте H " : " по ширине W ";
@@ -186,23 +202,23 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
         /// <summary>
         ///  Расчет шага для саморезов и заклепок
         /// </summary>
-        /// <param name="screwsCountByWidht"></param>
-        /// <param name="screwscountByHeight"></param>
-        private void GetCountScrews(ref double screwsCountByWidht, ref double screwscountByHeight) {
-            double stepScrewsByWeidht = 200;
-            double stepScrewsByHeight = 200;
+        /// <param name="колСаморезВинтВысота"></param>
+        /// <param name="колСаморезВинтВысота"></param>
+        private void GetCountframelessPanel(ref double колСаморезВинтВысота, ref double колСаморезВинтШирина) {
+            колСаморезВинтШирина = 200;
+            колСаморезВинтВысота = 200;
 
             if (framelessPanel.SizePanel.X < 600) {
-                stepScrewsByWeidht = 150;
+                колСаморезВинтШирина = 150;
             }
             if (framelessPanel.SizePanel.Y < 600) {
-                stepScrewsByHeight = 150;
+                колСаморезВинтВысота = 150;
             }
-            screwsCountByWidht = (Math.Truncate(framelessPanel.SizePanel.X / stepScrewsByWeidht) + 1) * 1000;
-            screwscountByHeight = (Math.Truncate(framelessPanel.SizePanel.Y / stepScrewsByHeight) + 1) * 1000;
+            колСаморезВинтШирина = (Math.Truncate(framelessPanel.SizePanel.X / колСаморезВинтШирина) + 1) * 1000;
+            колСаморезВинтВысота = (Math.Truncate(framelessPanel.SizePanel.Y / колСаморезВинтВысота) + 1) * 1000;
 
             if (framelessPanel.Screws?.ByHeightInnerUp > 1000) {
-                screwscountByHeight = framelessPanel.Screws.ByHeightInnerUp;
+                колСаморезВинтВысота = framelessPanel.Screws.ByHeightInnerUp;
             }
         }
 
@@ -252,10 +268,71 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
             }
             #endregion
 
+            #region 02-11-01-40-
+
+            PartName = "02-11-01-40-";
+
             if (CheckExistPart != null)
                 CheckExistPart(base.PartName, out IsPartExist, out NewPartPath);
+            if (IsPartExist) {
+                DocumentExtension.SelectByID2(PartName + "@02-11-40-1", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                AssemblyDocument.ReplaceComponents(base.NewPartPath, "", false, true);
+            }
+            else {
+                base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, base.PartName);
+                if (SetBends != null)
+                    SetBends((decimal)framelessPanel.outThickness, out KFactor, out BendRadius);
 
+                var d1Кривая3 = framelessPanel.PanelType == PanelType_e.FrontPanel
+                    ? (колСаморезВинтШирина - 1000 < 2000 ? 2000 : колСаморезВинтШирина - 1000)
+                    : (колСаморезВинтШирина < 2000 ? 2000 : колСаморезВинтШирина);
+
+                var d1Эскиз52 = 30; //= типКрепежнойЧастиУсиливающейПанели == null ? 30 : 20);
+
+                if (!string.IsNullOrEmpty(типТорцевой)) {
+                    d1Кривая3 = колСаморезВинтШирина < 2000 ? 2000 : колСаморезВинтШирина;
+                    d1Эскиз52 = 35;
+                }
+
+                if (framelessPanel.Screws?.ByWidthInnerUp > 0) {
+                    d1Кривая3 = framelessPanel.Screws.ByWidthInnerUp;
+                }
+
+                //типДвойнойРазрез
+
+
+                // Габариты
+                parameters.Add("D1@Эскиз1", framelessPanel.SizePanel.X);
+                parameters.Add("D2@Эскиз1", framelessPanel.SizePanel.Y);
+                //      parameters.Add("D1@3-4",  ScrewsByHeight);
+                //       parameters.Add("D1@1-4", ScrewsByHeight);
+                //    parameters.Add("D1@2-4",  screwsByWidth);
+                parameters.Add("D2@2-2", осьСаморезВинт);
+                parameters.Add("D4@Эскиз47", framelessPanel.widthHandle);
+                parameters.Add("D1@Эскиз50", диамСаморезВинт);
+                parameters.Add("D1@2-3-1", диамСаморезВинт);
+                parameters.Add("D1@Эскиз52", d1Эскиз52);
+                parameters.Add("D2@Эскиз52", осьПоперечныеОтверстия);
+                //         parameters.Add("D1@Кривая3", d1Кривая3);
+                parameters.Add("D3@1-1-1", string.IsNullOrEmpty(типТорцевой) || framelessPanel.PanelType == PanelType_e.BlankPanel ? 35 : 158.1);
+                parameters.Add("D2@3-1-1", string.IsNullOrEmpty(типТорцевой) || framelessPanel.PanelType == PanelType_e.BlankPanel ? 35 : 158.1);
+                parameters.Add("D3@2-1-1", диамЗаглушкаВинт);
+                parameters.Add("D1@Эскиз49", диамЗаглушкаВинт);
+                //        parameters.Add("D1@Кривая1", zaklByWidth);
+                //        parameters.Add("D1@Кривая2", zaklByHeight);
+                parameters.Add("D7@Ребро-кромка1", framelessPanel.ThermoStrip == ThermoStrip.ThermoScotch ? 17.7 : 19.2);
+                //      parameters.Add("Толщина@Листовой металл", materialP1[1].Replace('.', ',');
+                //         parameters.Add("D1@CrvPatternW", колЗаклепокКронштейнаДвойнойПанели);
+                //   parameters.Add("D1@CrvPatternH", колЗаклепокКронштейнаДвойнойПанели);
+                EditPartParameters(PartName, base.NewPartPath);
+            }
+            #endregion
+
+            #region Panel 02-11-02-40-
             PartName = "02-11-02-40-";
+
+            if (CheckExistPart != null)
+                CheckExistPart(base.PartName, out IsPartExist, out NewPartPath);
             if (IsPartExist) {
                 DocumentExtension.SelectByID2(PartName + "@02-11-40-1", "COMPONENT", 0, 0, 0, false, 0, null, 0);
                 AssemblyDocument.ReplaceComponents(base.NewPartPath, "", false, true);
@@ -286,9 +363,9 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                 }
                 else // others
                 {
-                    //     rivetCountByHeight = screwscountByHeight + 1000;
+                    //     rivetCountByHeight = ScrewsByHeight + 1000;
                     if (Convert.ToInt32(framelessPanel.SizePanel.Y) > 1000) {
-                        //      rivetCountByHeight = screwscountByHeight + 3000;
+                        //      rivetCountByHeight = ScrewsByHeight + 3000;
                     }
 
                     dimensions = new Vector2(framelessPanel.SizePanel.X - 40, framelessPanel.SizePanel.Y - 40);
@@ -328,7 +405,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                 //Console.WriteLine("13");
                 base.parameters.Add("G2@Эскиз49", OutputHolesWrapper.G2);
                 //Console.WriteLine("14");
-                // base.parameters.Add("G3@Эскиз49", OutputHolesWrapper.G0);
+                 //base.parameters.Add("G3@Эскиз49", OutputHolesWrapper.G0);
                 //Console.WriteLine("15");
                 base.parameters.Add("L1@Эскиз49", OutputHolesWrapper.L1);
                 //Console.WriteLine("16");
@@ -364,7 +441,9 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                 // { "D1@CrvPatternH",  колЗаклепокКронштейнаДвойнойПанели}
 
 
-                base.parameters.Add("D7@Ребро-кромка1", framelessPanel.lenght);
+               // base.parameters.Add("D7@Ребро-кромка1", framelessPanel.lenght);
+
+
                 //Console.WriteLine("26");
                 base.parameters.Add("Толщина@Листовой металл", framelessPanel.outThickness);
                 //Console.WriteLine("27");
@@ -375,6 +454,68 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
 
                 //Console.WriteLine("Количество параметров " + parameters.Count);
                 EditPartParameters(PartName, base.NewPartPath);
+                #endregion
+
+                #region Теплоизоляция
+
+                //6700  Лента уплотнительная Pes20x3/25 A/AT-B
+                //14800  Лента двохсторонняя акриловая HSA 19х2
+                //4900  Материал теплоизол. Сlassik TWIN50
+
+                PartName = "02-11-03-40-";
+
+                if (CheckExistPart != null)
+                    CheckExistPart(base.PartName, out IsPartExist, out NewPartPath);
+                if (IsPartExist) {
+                    DocumentExtension.SelectByID2(PartName + "@02-11-40-1", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    AssemblyDocument.ReplaceComponents(base.NewPartPath, "", false, true);
+                }
+                else {
+                    base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, base.PartName);
+                    NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, PartName);
+                    parameters.Add("D2@Эскиз1", framelessPanel.SizePanel.Y - 1);
+                    parameters.Add("D1@Эскиз1", framelessPanel.SizePanel.X - 2);
+                    EditPartParameters(PartName, NewPartPath);
+                }
+                #endregion
+
+                #region Скотч
+                PartName = "02-11-04-40-";
+
+                if (framelessPanel.ThermoStrip == ThermoStrip.ThermoScotch) {
+
+                    if (CheckExistPart != null)
+                        CheckExistPart(base.PartName, out IsPartExist, out NewPartPath);
+                    if (IsPartExist) {
+                        DocumentExtension.SelectByID2(PartName + "@02-11-40-1", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                        AssemblyDocument.ReplaceComponents(base.NewPartPath, "", false, true);
+                    }
+                    else {
+                        base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, base.PartName);
+                        parameters.Add("D2@Эскиз1", framelessPanel.SizePanel.Y - 3);
+                        parameters.Add("D1@Эскиз1", framelessPanel.SizePanel.X - 3);
+                        EditPartParameters(PartName, NewPartPath);
+                    }
+                }
+                #endregion
+
+                #region  Pes 20x3/25 A/AT-BT 538x768
+                PartName = "02-11-05-40-";
+
+                if (CheckExistPart != null)
+                    CheckExistPart(base.PartName, out IsPartExist, out NewPartPath);
+                if (IsPartExist) {
+                    DocumentExtension.SelectByID2(PartName + "@02-11-40-1", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    AssemblyDocument.ReplaceComponents(base.NewPartPath, "", false, true);
+                }
+                else {
+
+                    base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, base.PartName);
+                    parameters.Add("D2@Эскиз1", framelessPanel.SizePanel.Y - 3);
+                    parameters.Add("D1@Эскиз1", framelessPanel.SizePanel.X - 3);
+                    EditPartParameters(PartName, NewPartPath);
+                }
+                #endregion
 
             }
         }
@@ -413,18 +554,17 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
 
         protected override void DeleteComponents(int type = 0) {
             const int deleteOption = (int)swDeleteSelectionOptions_e.swDelete_Absorbed + (int)swDeleteSelectionOptions_e.swDelete_Children;
-            DocumentExtension = SolidWorksDocument.Extension;
             double HeightOfWindow = WindowProfils.Flange30 ? WindowProfils.Width : (WindowProfils.Width + 2);
             double WidthOfWindow = WindowProfils.Height;
-            CompType_e bodyfeat = CompType_e.BODYFEATURE;
-            CompType_e sketch = CompType_e.SKETCH;
+            SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName);
+            SolidWorksDocument.EditRebuild3();
 
 
             //   List<FeatureBox> FeatureBoxList = new List<FeatureBox>();
 
 
-            //var ftrfolder = VentsCad.CompType.FTRFOLDER;
-            //var dimension = VentsCad.CompType.DIMENSION;           
+            //var ftrfolder = VentsCad.ComframelessPanel.PanelType.FTRFOLDER;
+            //var dimension = VentsCad.ComframelessPanel.PanelType.DIMENSION;           
 
             //var HeightOfWindow = BackProfils.Flange30 ?
             //        BackProfils.ByHeight / 1000 : (BackProfils.ByHeight + 2) / 1000;
@@ -458,9 +598,6 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                     SolidWorksDocument.EditDelete();
                     // FeatureBoxList.Add(new FeatureBox { ComponentName = component, FileName = AssemblyName, IsOptions = false });
                 }
-
-
-
                 DocumentExtension.SelectByID2("Вырез-Вытянуть21@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
                 SolidWorksDocument.EditDelete();
 
@@ -476,17 +613,17 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                 DocumentExtension.SelectByID2("Рамка@" + NameDownPanel + "-1@" + AssemblyName, "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
                 SolidWorksDocument.EditDelete();
 
-                DocumentExtension.SelectByID2("Вырез-Вытянуть1@02-11-03-40-@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                SolidWorksDocument.EditDelete();
+                DocumentExtension.SelectByID2("Вырез-Вытянуть1@02-11-03-40--1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                DocumentExtension.DeleteSelection2(deleteOption);
 
                 DocumentExtension.SelectByID2("Рамка@02-11-03-40-@" + AssemblyName, "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
                 SolidWorksDocument.EditDelete();
 
                 DocumentExtension.SelectByID2("Hole72", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
                 SolidWorksDocument.EditDelete();
-                SolidWorksDocument.EditRebuild3();
             }
             #endregion
+
             #region Fro others panels
             else {
                 DocumentExtension.SelectByID2("Threaded Rivets-38@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
@@ -774,9 +911,16 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                 case PanelType_e.НожкиОпорные:
                 case PanelType_e.FrontPanel:
 
+
+
+                    //Access and modify indent feature
+                
+               
+
+
+
                     DocumentExtension.SelectByID2("Handel-1", "FTRFOLDER", 0, 0, 0, false, 0, null, 0);
-                    SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.EditDelete(); 
 
                     DocumentExtension.SelectByID2("Threaded Rivets-25@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
                     SolidWorksDocument.EditDelete();
@@ -1059,12 +1203,12 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
 
                 foreach (var number in new[]
                 {
-                                        "37", "38", "39", "40",
-                                        "41", "42", "43", "44",
-                                        "45", "46", "47", "48",
-                                        "49", "50", "51", "52",
-                                        "53", "54", "55", "56"
-                                    }) {
+                                            "37", "38", "39", "40",
+                                            "41", "42", "43", "44",
+                                            "45", "46", "47", "48",
+                                            "49", "50", "51", "52",
+                                            "53", "54", "55", "56"
+                                        }) {
                     DocumentExtension.SelectByID2("Rivet Bralo-" + number + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
                     SolidWorksDocument.EditDelete();
                 }
@@ -1204,10 +1348,10 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
             if (типКрепежнойЧастиУсиливающейПанели != "D") {
                 foreach (var component in new[]
                 {
-                                        "02-11-09-40--1",
-                                        "Threaded Rivets с насечкой-1", "Threaded Rivets с насечкой-2",
-                                        "Threaded Rivets с насечкой-3", "Threaded Rivets с насечкой-4"
-                                    }) {
+                                            "02-11-09-40--1",
+                                            "Threaded Rivets с насечкой-1", "Threaded Rivets с насечкой-2",
+                                            "Threaded Rivets с насечкой-3", "Threaded Rivets с насечкой-4"
+                                        }) {
                     DocumentExtension.SelectByID2(component + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
                     SolidWorksDocument.EditDelete();
                 }
@@ -1223,8 +1367,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
 
                 foreach (var component in new[]
                 {
-                                        "Threaded Rivets с насечкой-5", "Threaded Rivets с насечкой-6"
-                                    }) {
+                                            "Threaded Rivets с насечкой-5", "Threaded Rivets с насечкой-6"
+                                        }) {
                     DocumentExtension.SelectByID2(component + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
                     SolidWorksDocument.EditDelete();
                 }
@@ -1458,6 +1602,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
             }
 
 
+            #endregion
+
             #region To Delete
 
             if (ValProfils.Tp1 == "05") {
@@ -1468,8 +1614,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                 DocumentExtension.SelectByID2("Эскиз88@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0);
                 SolidWorksDocument.EditSuppress();
 
-                //VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, VentsCad.CompType.BODYFEATURE, "Тип-05-1@" + NameDownPanel + "-1", VentsCad.Act.Suppress);
-                //VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, VentsCad.CompType.BODYFEATURE, "Эскиз88@" + NameDownPanel + "-1", VentsCad.Act.Suppress);
+                //VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, VentsCad.ComframelessPanel.PanelType.BODYFEATURE, "Тип-05-1@" + NameDownPanel + "-1", VentsCad.Act.Suppress);
+                //VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, VentsCad.ComframelessPanel.PanelType.BODYFEATURE, "Эскиз88@" + NameDownPanel + "-1", VentsCad.Act.Suppress);
             }
 
             if (ValProfils.Tp2 == "05") {
@@ -1480,8 +1626,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                 DocumentExtension.SelectByID2("Эскиз66@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0);
                 SolidWorksDocument.EditSuppress();
 
-                //VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, VentsCad.CompType.BODYFEATURE, "Тип-05-2@" + NameDownPanel + "-1", VentsCad.Act.Suppress);
-                //VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, VentsCad.CompType.BODYFEATURE, "Эскиз66@" + NameDownPanel + "-1", VentsCad.Act.Suppress);
+                //VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, VentsCad.ComframelessPanel.PanelType.BODYFEATURE, "Тип-05-2@" + NameDownPanel + "-1", VentsCad.Act.Suppress);
+                //VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, VentsCad.ComframelessPanel.PanelType.BODYFEATURE, "Эскиз66@" + NameDownPanel + "-1", VentsCad.Act.Suppress);
             }
 
             if (ValProfils.Tp3 == "05") {
@@ -1492,8 +1638,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                 DocumentExtension.SelectByID2("Эскиз67@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0);
                 SolidWorksDocument.EditSuppress();
 
-                //VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, VentsCad.CompType.BODYFEATURE, "Тип-05-3@" + NameDownPanel + "-1", VentsCad.Act.Suppress);
-                //VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, VentsCad.CompType.BODYFEATURE, "Эскиз67@" + NameDownPanel + "-1", VentsCad.Act.Suppress);
+                //VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, VentsCad.ComframelessPanel.PanelType.BODYFEATURE, "Тип-05-3@" + NameDownPanel + "-1", VentsCad.Act.Suppress);
+                //VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, VentsCad.ComframelessPanel.PanelType.BODYFEATURE, "Эскиз67@" + NameDownPanel + "-1", VentsCad.Act.Suppress);
             }
 
             if (ValProfils.Tp4 == "05") {
@@ -1504,11 +1650,9 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                 DocumentExtension.SelectByID2("Эскиз89@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0);
                 SolidWorksDocument.EditSuppress();
 
-                //VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, VentsCad.CompType.BODYFEATURE, "Тип-05-4@" + NameDownPanel + "-1", VentsCad.Act.Suppress);
-                //VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, VentsCad.CompType.BODYFEATURE, "Эскиз89@" + NameDownPanel + "-1", VentsCad.Act.Suppress);
+                //VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, VentsCad.ComframelessPanel.PanelType.BODYFEATURE, "Тип-05-4@" + NameDownPanel + "-1", VentsCad.Act.Suppress);
+                //VentsCad.DoWithSwDoc(SolidWorksAdapter.SldWoksAppExemplare, VentsCad.ComframelessPanel.PanelType.BODYFEATURE, "Эскиз89@" + NameDownPanel + "-1", VentsCad.Act.Suppress);
             }
-
-            #endregion
 
             #endregion
 
@@ -1567,59 +1711,58 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                     }
                 }
             }
+            //    if (framelessPanel.PanelType == PanelType_e.безОпор || framelessPanel.PanelType == PanelType_e.РамаМонтажная) {
 
-            if (framelessPanel.PanelType == PanelType_e.безОпор || framelessPanel.PanelType == PanelType_e.РамаМонтажная) {
+            //        DocumentExtension.SelectByID2("Эскиз59@" + NameUpPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
+            //        SolidWorksDocument.EditUnsuppress2();
+            //        DocumentExtension.SelectByID2("Эскиз73@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
+            //        SolidWorksDocument.EditUnsuppress2();
 
-                DocumentExtension.SelectByID2("Эскиз59@" + NameUpPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
-                SolidWorksDocument.EditUnsuppress2();
-                DocumentExtension.SelectByID2("Эскиз73@" + NameDownPanel + "-1@" + AssemblyName, "SKETCH", 0, 0, 0, true, 0, null, 0);
-                SolidWorksDocument.EditUnsuppress2();
-
-                if (ValProfils.Tp1 != "-") {
-                    if (configuration.Contains("02")) {
-                        foreach (var name in new[] { "U32", "U31" }) {
-                            DocumentExtension.SelectByID2(name + "@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                            SolidWorksDocument.EditUnsuppress2();
-                        }
-                        foreach (var name in new[] { "U33", "U34" }) {
-                            DocumentExtension.SelectByID2(name + "@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                            SolidWorksDocument.EditUnsuppress2();
-                        }
-                    }
-                    if (configuration.Contains("01")) {
-                        foreach (var name in new[] { "U52", "U51" }) {
-                            DocumentExtension.SelectByID2(name + "@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                            SolidWorksDocument.EditUnsuppress2();
-                        }
-                        foreach (var name in new[] { "U53", "U54" }) {
-                            DocumentExtension.SelectByID2(name + "@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                            SolidWorksDocument.EditUnsuppress2();
-                        }
-                    }
-                }
-                if (ValProfils.Tp4 != "-") {
-                    if (configuration.Contains("02")) {
-                        foreach (var name in new[] { "U42", "U41" }) {
-                            DocumentExtension.SelectByID2(name + "@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                            SolidWorksDocument.EditUnsuppress2();
-                        }
-                        foreach (var name in new[] { "U43", "U44" }) {
-                            DocumentExtension.SelectByID2(name + "@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                            SolidWorksDocument.EditUnsuppress2();
-                        }
-                    }
-                    if (configuration.Contains("01")) {
-                        foreach (var name in new[] { "U62", "U61" }) {
-                            DocumentExtension.SelectByID2(name + "@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                            SolidWorksDocument.EditUnsuppress2();
-                        }
-                        foreach (var name in new[] { "U63", "U64" }) {
-                            DocumentExtension.SelectByID2(name + "@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                            SolidWorksDocument.EditUnsuppress2();
-                        }
-                    }
-                }
-            }
+            //        if (ValProfils.Tp1 != "-") {
+            //            if (configuration.Contains("02")) {
+            //                foreach (var name in new[] { "U32", "U31" }) {
+            //                    DocumentExtension.SelectByID2(name + "@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //                    SolidWorksDocument.EditUnsuppress2();
+            //                }
+            //                foreach (var name in new[] { "U33", "U34" }) {
+            //                    DocumentExtension.SelectByID2(name + "@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //                    SolidWorksDocument.EditUnsuppress2();
+            //                }
+            //            }
+            //            if (configuration.Contains("01")) {
+            //                foreach (var name in new[] { "U52", "U51" }) {
+            //                    DocumentExtension.SelectByID2(name + "@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //                    SolidWorksDocument.EditUnsuppress2();
+            //                }
+            //                foreach (var name in new[] { "U53", "U54" }) {
+            //                    DocumentExtension.SelectByID2(name + "@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //                    SolidWorksDocument.EditUnsuppress2();
+            //                }
+            //            }
+            //        }
+            //        if (ValProfils.Tp4 != "-") {
+            //            if (configuration.Contains("02")) {
+            //                foreach (var name in new[] { "U42", "U41" }) {
+            //                    DocumentExtension.SelectByID2(name + "@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //                    SolidWorksDocument.EditUnsuppress2();
+            //                }
+            //                foreach (var name in new[] { "U43", "U44" }) {
+            //                    DocumentExtension.SelectByID2(name + "@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //                    SolidWorksDocument.EditUnsuppress2();
+            //                }
+            //            }
+            //            if (configuration.Contains("01")) {
+            //                foreach (var name in new[] { "U62", "U61" }) {
+            //                    DocumentExtension.SelectByID2(name + "@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //                    SolidWorksDocument.EditUnsuppress2();
+            //                }
+            //                foreach (var name in new[] { "U63", "U64" }) {
+            //                    DocumentExtension.SelectByID2(name + "@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //                    SolidWorksDocument.EditUnsuppress2();
+            //                }
+            //            }
+            //        }
+            //    }
 
             #endregion
 
@@ -1629,544 +1772,452 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
             {
                 DocumentExtension.SelectByID2("02-11-04-40--1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
                 SolidWorksDocument.EditDelete();
-
+                
                 //Задаем растояние между двумя деталями
-                DocumentExtension.SelectByID2("D1@Расстояние1@" + AssemblyName + ".SLDASM", "DIMENSION", 0, 0, 0, true, 0, null, 0);
+                Console.WriteLine("растояние "+ SolidWorksDocument.GetTitle());
+                
+                DocumentExtension.SelectByID2("D1@Расстояние1@" + AssemblyName, "DIMENSION", 0, 0, 0, true, 0, null, 0);
                 ((Dimension)(SolidWorksDocument.Parameter("D1@Расстояние1"))).SystemValue = 0;
             }
 
             #endregion
 
-            #region Изменение деталей
+            //    #region Изменение деталей
 
-            #region Кронштейны двойной панели            
+            //    #region Кронштейны двойной панели            
 
-            double колЗаклепокКронштейнаДвойнойПанели = 2000;
+            //    double колЗаклепокКронштейнаДвойнойПанели = 2000;
 
-            CutType_e cutType = CutPanel.DeterminateCutPanel(framelessPanel.SizePanel);
+            //    CutType_e cutType = CutPanel.DeterminateCutPanel(framelessPanel.SizePanel);
 
-            //  if (!string.IsNullOrEmpty(типДвойнойРазрез)) {
-            if (cutType != CutType_e.Whole) {
-                var idToDelete = "-2";
-                var idToChange = "-1";
+            //    //  if (!string.IsNullOrEmpty(типДвойнойРазрез)) {
+            //    if (cutType != CutType_e.Whole) {
+            //        var idToDelete = "-2";
+            //        var idToChange = "-1";
 
-                var lenghtOfProfil = Convert.ToDouble(height);
+            //        var lenghtOfProfil = Convert.ToDouble(height);
 
-                var nameOfProfil = усиление ? "02-11-13-40-" : "02-11-14-40-";
-                var nameOfProfilToDelete = !усиление ? "02-11-13-40-" : "02-11-14-40-";
+            //      //  var nameOfProfil = framelessPanel.усиление  ? "02-11-13-40-" : "02-11-14-40-";
+            //      //  var nameOfProfilToDelete = !framelessPanel.усиление  ? "02-11-13-40-" : "02-11-14-40-";
 
-                // todo учет толщины
-                var deltaForLenght = усиление ? 48.0 : 3.5;
-                var newNameP = nameOfProfil + height;
+            //        // todo учет толщины
+            //        var deltaForLenght = framelessPanel.усиление  ? 48.0 : 3.5;
+            //      //  var newNameP = nameOfProfil + height;
 
-                var cut = типДвойнойРазрез == "H" ? " по высоте H " : " по ширине W ";
+            //        var cut = типДвойнойРазрез == "H" ? " по высоте H " : " по ширине W ";
 
-                if (типДвойнойРазрез == "H") {
-                    idToDelete = "-1";
-                    idToChange = "-2";
-                    newNameP = nameOfProfil + width;
-                    lenghtOfProfil = width;
-                }
+            //        if (типДвойнойРазрез == "H") {
+            //            idToDelete = "-1";
+            //            idToChange = "-2";
+            //            newNameP = nameOfProfil  + framelessPanel.SizePanel.X;
+            //            lenghtOfProfil = framelessPanel.SizePanel.X;
+            //        }
 
-                DocumentExtension.SelectByID2(nameOfProfil + idToDelete + "@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                SolidWorksDocument.EditDelete();
-                DocumentExtension.SelectByID2(nameOfProfilToDelete + "-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                SolidWorksDocument.EditDelete();
-                DocumentExtension.SelectByID2(nameOfProfilToDelete + "-2@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                SolidWorksDocument.EditDelete();
+            //        DocumentExtension.SelectByID2(nameOfProfil + idToDelete + "@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+            //        SolidWorksDocument.EditDelete();
+            //        DocumentExtension.SelectByID2(nameOfProfilToDelete + "-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+            //        SolidWorksDocument.EditDelete();
+            //        DocumentExtension.SelectByID2(nameOfProfilToDelete + "-2@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+            //        SolidWorksDocument.EditDelete();
 
-                #region
+            #region
 
-                switch (типДвойнойРазрез) {
-                    case "H":
-                        foreach (var number in new[]
-                        { "105", "106", "113", "114", "137", "138", "139", "140", "141", "142", "143", "144", "145", "146"}) {
-                            DocumentExtension.SelectByID2("Rivet Bralo-" + number + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                            SolidWorksDocument.EditDelete();
-                        }
+            //        switch (типДвойнойРазрез) {
+            //            case "H":
+            //                foreach (var number in new[]
+            //                { "105", "106", "113", "114", "137", "138", "139", "140", "141", "142", "143", "144", "145", "146"}) {
+            //                    DocumentExtension.SelectByID2("Rivet Bralo-" + number + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+            //                    SolidWorksDocument.EditDelete();
+            //                }
 
-                        DocumentExtension.SelectByID2("Cut-ExtrudeWP1@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                        DocumentExtension.DeleteSelection2(deleteOption);
-                        DocumentExtension.SelectByID2("Cut-ExtrudeW@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                        DocumentExtension.DeleteSelection2(deleteOption);
-                        DocumentExtension.SelectByID2("Cut-ExtrudeWP1@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                        DocumentExtension.DeleteSelection2(deleteOption);
-                        DocumentExtension.SelectByID2("Cut-ExtrudeW@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                        DocumentExtension.DeleteSelection2(deleteOption);
-                        DocumentExtension.SelectByID2("WP1@" + AssemblyName, "FTRFOLDER", 0, 0, 0, true, 0, null, 0);
-                        SolidWorksDocument.EditDelete();
-                        DocumentExtension.SelectByID2("Cut-ExtrudeWC@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                        DocumentExtension.DeleteSelection2(deleteOption);
+            //                DocumentExtension.SelectByID2("Cut-ExtrudeWP1@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //                DocumentExtension.DeleteSelection2(deleteOption);
+            //                DocumentExtension.SelectByID2("Cut-ExtrudeW@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //                DocumentExtension.DeleteSelection2(deleteOption);
+            //                DocumentExtension.SelectByID2("Cut-ExtrudeWP1@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //                DocumentExtension.DeleteSelection2(deleteOption);
+            //                DocumentExtension.SelectByID2("Cut-ExtrudeW@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //                DocumentExtension.DeleteSelection2(deleteOption);
+            //                DocumentExtension.SelectByID2("WP1@" + AssemblyName, "FTRFOLDER", 0, 0, 0, true, 0, null, 0);
+            //                SolidWorksDocument.EditDelete();
+            //                DocumentExtension.SelectByID2("Cut-ExtrudeWC@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //                DocumentExtension.DeleteSelection2(deleteOption);
 
-                        if (типДвойнойВерхней == "0") {
-                            foreach (var number in new[] { "123", "124", "160", "161", "157", "158", "159" }) {
-                                DocumentExtension.SelectByID2("Rivet Bralo-" + number + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                                SolidWorksDocument.EditDelete();
-                            }
-                            DocumentExtension.SelectByID2("Cut-ExtrudeHP1@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                            DocumentExtension.DeleteSelection2(deleteOption);
-                            DocumentExtension.SelectByID2("Cut-ExtrudeH@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                            DocumentExtension.DeleteSelection2(deleteOption);
-                        }
-                        if (типДвойнойНижней == "0") {
-                            foreach (var number in new[] { "121", "122", "162", "163", "164", "165", "166" }) {
-                                DocumentExtension.SelectByID2("Rivet Bralo-" + number + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                                SolidWorksDocument.EditDelete();
-                            }
-                            DocumentExtension.SelectByID2("Cut-ExtrudeHP1@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                            DocumentExtension.DeleteSelection2(deleteOption);
-                            DocumentExtension.SelectByID2("Cut-ExtrudeH@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                            DocumentExtension.DeleteSelection2(deleteOption);
-                        }
-                        break;
+            //                if (типДвойнойВерхней == "0") {
+            //                    foreach (var number in new[] { "123", "124", "160", "161", "157", "158", "159" }) {
+            //                        DocumentExtension.SelectByID2("Rivet Bralo-" + number + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+            //                        SolidWorksDocument.EditDelete();
+            //                    }
+            //                    DocumentExtension.SelectByID2("Cut-ExtrudeHP1@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //                    DocumentExtension.DeleteSelection2(deleteOption);
+            //                    DocumentExtension.SelectByID2("Cut-ExtrudeH@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //                    DocumentExtension.DeleteSelection2(deleteOption);
+            //                }
+            //                if (типДвойнойНижней == "0") {
+            //                    foreach (var number in new[] { "121", "122", "162", "163", "164", "165", "166" }) {
+            //                        DocumentExtension.SelectByID2("Rivet Bralo-" + number + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+            //                        SolidWorksDocument.EditDelete();
+            //                    }
+            //                    DocumentExtension.SelectByID2("Cut-ExtrudeHP1@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //                    DocumentExtension.DeleteSelection2(deleteOption);
+            //                    DocumentExtension.SelectByID2("Cut-ExtrudeH@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //                    DocumentExtension.DeleteSelection2(deleteOption);
+            //                }
+            //                break;
 
-                    case "W":
-                        foreach (var number in new[]
-                        {
-                                                "121", "122", "123", "124", "162", "163", "164", "165", "166",
-                                                "157", "158", "159", "160", "161"
-                                            }) {
-                            DocumentExtension.SelectByID2("Rivet Bralo-" + number + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                            SolidWorksDocument.EditDelete();
-                        }
+            //            case "W":
+            //                foreach (var number in new[]
+            //                {
+            //                                        "121", "122", "123", "124", "162", "163", "164", "165", "166",
+            //                                        "157", "158", "159", "160", "161"
+            //                                    }) {
+            //                    DocumentExtension.SelectByID2("Rivet Bralo-" + number + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+            //                    SolidWorksDocument.EditDelete();
+            //                }
 
-                        DocumentExtension.SelectByID2("HP1@" + AssemblyName, "FTRFOLDER", 0, 0, 0, true, 0, null, 0);
-                        SolidWorksDocument.EditDelete();
-                        DocumentExtension.SelectByID2("Cut-ExtrudeHP1@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                        DocumentExtension.DeleteSelection2(deleteOption);
-                        DocumentExtension.SelectByID2("Cut-ExtrudeH@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                        DocumentExtension.DeleteSelection2(deleteOption);
-                        DocumentExtension.SelectByID2("Cut-ExtrudeHP1@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                        DocumentExtension.DeleteSelection2(deleteOption);
-                        DocumentExtension.SelectByID2("Cut-ExtrudeH@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                        DocumentExtension.DeleteSelection2(deleteOption);
-                        DocumentExtension.SelectByID2("Cut-ExtrudeHC@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                        DocumentExtension.DeleteSelection2(deleteOption);
+            //                DocumentExtension.SelectByID2("HP1@" + AssemblyName, "FTRFOLDER", 0, 0, 0, true, 0, null, 0);
+            //                SolidWorksDocument.EditDelete();
+            //                DocumentExtension.SelectByID2("Cut-ExtrudeHP1@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //                DocumentExtension.DeleteSelection2(deleteOption);
+            //                DocumentExtension.SelectByID2("Cut-ExtrudeH@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //                DocumentExtension.DeleteSelection2(deleteOption);
+            //                DocumentExtension.SelectByID2("Cut-ExtrudeHP1@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //                DocumentExtension.DeleteSelection2(deleteOption);
+            //                DocumentExtension.SelectByID2("Cut-ExtrudeH@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //                DocumentExtension.DeleteSelection2(deleteOption);
+            //                DocumentExtension.SelectByID2("Cut-ExtrudeHC@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //                DocumentExtension.DeleteSelection2(deleteOption);
 
-                        if (типДвойнойВерхней == "0") {
-                            foreach (var number in new[] { "113", "114", "137", "138", "139", "140", "141" }) {
-                                DocumentExtension.SelectByID2("Rivet Bralo-" + number + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                                SolidWorksDocument.EditDelete();
-                            }
-                            DocumentExtension.SelectByID2("Cut-ExtrudeWP1@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                            DocumentExtension.DeleteSelection2(deleteOption);
-                            DocumentExtension.SelectByID2("Cut-ExtrudeW@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                            DocumentExtension.DeleteSelection2(deleteOption);
-                            DocumentExtension.SelectByID2("Cut-ExtrudeWC@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                            DocumentExtension.DeleteSelection2(deleteOption);
-                        }
-                        if (типДвойнойНижней == "0") {
-                            foreach (var number in new[] { "105", "106", "142", "143", "144", "145", "146" }) {
-                                DocumentExtension.SelectByID2("Rivet Bralo-" + number + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                                SolidWorksDocument.EditDelete();
-                            }
-                            DocumentExtension.SelectByID2("Cut-ExtrudeWP1@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                            DocumentExtension.DeleteSelection2(deleteOption);
-                            DocumentExtension.SelectByID2("Cut-ExtrudeW@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                            DocumentExtension.DeleteSelection2(deleteOption);
-                        }
-                        break;
-                }
+            //                if (типДвойнойВерхней == "0") {
+            //                    foreach (var number in new[] { "113", "114", "137", "138", "139", "140", "141" }) {
+            //                        DocumentExtension.SelectByID2("Rivet Bralo-" + number + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+            //                        SolidWorksDocument.EditDelete();
+            //                    }
+            //                    DocumentExtension.SelectByID2("Cut-ExtrudeWP1@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //                    DocumentExtension.DeleteSelection2(deleteOption);
+            //                    DocumentExtension.SelectByID2("Cut-ExtrudeW@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //                    DocumentExtension.DeleteSelection2(deleteOption);
+            //                    DocumentExtension.SelectByID2("Cut-ExtrudeWC@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //                    DocumentExtension.DeleteSelection2(deleteOption);
+            //                }
+            //                if (типДвойнойНижней == "0") {
+            //                    foreach (var number in new[] { "105", "106", "142", "143", "144", "145", "146" }) {
+            //                        DocumentExtension.SelectByID2("Rivet Bralo-" + number + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+            //                        SolidWorksDocument.EditDelete();
+            //                    }
+            //                    DocumentExtension.SelectByID2("Cut-ExtrudeWP1@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //                    DocumentExtension.DeleteSelection2(deleteOption);
+            //                    DocumentExtension.SelectByID2("Cut-ExtrudeW@" + NameDownPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //                    DocumentExtension.DeleteSelection2(deleteOption);
+            //                }
+            //                break;
+            //        }
 
-                #endregion
+            //        #endregion
 
-                //var newPartPathP = $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newNameP}.SLDPRT";
+            //        //var newPartPathP = $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newNameP}.SLDPRT";
 
-                колЗаклепокКронштейнаДвойнойПанели = (Math.Truncate((lenghtOfProfil - 45.0) / 125) + 1) * 1000;
+            //        колЗаклепокКронштейнаДвойнойПанели = (Math.Truncate((lenghtOfProfil - 45.0) / 125) + 1) * 1000;
 
-                if (false)
-                    ;
-                //GetExistingFile(Path.GetFileNameWithoutExtension(newPartPathP), 1)) {
-                //    SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2(AssemblyName + ".SLDASM", true, 0)));
-                //    DocumentExtension.SelectByID2(nameOfProfil + idToChange + "@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                //    swAsm.ReplaceComponents(newPartPathP, "", false, true);
-                //SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(nameOfProfil + ".SLDPRT");}
-                else {
-                    //EditPartParameters();
-                    //SwPartParamsChangeWithNewName(nameOfProfil, $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newNameP}",
-                    //    new[,]
-                    //    {
-                    //            {"D2@Эскиз1", Convert.ToString(lenghtOfProfil - deltaForLenght)},
-                    //            {"D1@CrvPattern1", Convert.ToString(колЗаклепокКронштейнаДвойнойПанели)}
-                    //    },
-                    //    false, null);
-                }
+            //        if (false)
+            //            ;
+            //        //GetExistingFile(Path.GetFileNameWithoutExtension(newPartPathP), 1)) {
+            //        //    SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2(AssemblyName + ".SLDASM", true, 0)));
+            //        //    DocumentExtension.SelectByID2(nameOfProfil + idToChange + "@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+            //        //    swAsm.ReplaceComponents(newPartPathP, "", false, true);
+            //        //SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(nameOfProfil + ".SLDPRT");}
+            //        else {
+            //            //EditPartParameters();
+            //            //SwPartParamsChangeWithNewName(nameOfProfil, $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newNameP}",
+            //            //    new[,]
+            //            //    {
+            //            //            {"D2@Эскиз1", lenghtOfProfil - deltaForLenght)},
+            //            //            {"D1@CrvPattern1", колЗаклепокКронштейнаДвойнойПанели)}
+            //            //    },
+            //            //    false, null);
+            //        }
 
 
-                #endregion
+            #endregion
 
-                #region  Панель внешняя
+            #region  Панель внешняя
 
-                var newName = панельВнешняя.NewName;
-                var newPartPath = $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}.SLDPRT";
+            //      //  var newName = панельВнешняя.NewName;
+            //        //var newPartPath = $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}.SLDPRT";
 
-                var outerPanel = newPartPath;
+            //      //  var outerPanel = newPartPath;
 
-                //todo вынести кол-во в метод модели
+            //        //todo вынести кол-во в метод модели
 
-                var screwsByHeight =
-                string.IsNullOrEmpty(типТорцевой)
-                    ? колСаморезВинтВысота
-                    : колСаморезВинтВысота - 1000;
+            //        var ScrewsByHeight =
+            //        string.IsNullOrEmpty(типТорцевой)
+            //            ? колСаморезВинтВысота
+            //            : колСаморезВинтВысота - 1000;
 
-                var zaklByHeight =
-                     framelessPanel.PanelType == PanelType_e.BlankPanel || framelessPanel.PanelType == PanelType_e.FrontPanel || framelessPanel.PanelType == PanelType_e.RemovablePanel
-                     ? колЗаклепокВысота
-                     : колЗаклепокВысота + 1000;
+            //        var zaklByHeight =
+            //             framelessPanel.PanelType == PanelType_e.BlankPanel || framelessPanel.PanelType == PanelType_e.FrontPanel || framelessPanel.PanelType == PanelType_e.RemovablePanel
+            //             ? колЗаклепокВысота
+            //             : колЗаклепокВысота + 1000;
 
-                if (типДвойнойРазрез == "H") {
-                    if ((screwsByHeight / 1000) % 2 != 0) {
-                        screwsByHeight = screwsByHeight + 1000;
-                    }
+            //        if (типДвойнойРазрез == "H") {
+            //            if ((ScrewsByHeight / 1000) % 2 != 0) {
+            //                ScrewsByHeight = ScrewsByHeight + 1000;
+            //            }
 
-                    if ((zaklByHeight / 1000) % 2 != 0) {
-                        zaklByHeight = zaklByHeight + 1000;
-                    }
-                }
+            //            if ((zaklByHeight / 1000) % 2 != 0) {
+            //                zaklByHeight = zaklByHeight + 1000;
+            //            }
+            //        }
 
-                var screwsByWidth = framelessPanel.PanelType == PanelType_e.BlankPanel || framelessPanel.PanelType == PanelType_e.FrontPanel ? (колСаморезВинтШирина - 1000 < 2000 ? 2000 : колСаморезВинтШирина - 1000)
-                            : (колСаморезВинтШирина < 2000 ? 2000 : колСаморезВинтШирина);
+            //        var ScrewsByWidth = framelessPanel.PanelType == PanelType_e.BlankPanel || framelessPanel.PanelType == PanelType_e.FrontPanel ? (колСаморезВинтШирина - 1000 < 2000 ? 2000 : колСаморезВинтШирина - 1000)
+            //                    : (колСаморезВинтШирина < 2000 ? 2000 : колСаморезВинтШирина);
 
-                var zaklByWidth = колЗаклепокШирина;
+            //        var zaklByWidth = колЗаклепокШирина;
 
-                if (типДвойнойРазрез == "W") {
-                    if ((screwsByWidth / 1000) % 2 != 0) {
-                        screwsByWidth = screwsByWidth + 1000;
-                    }
+            //        if (типДвойнойРазрез == "W") {
+            //            if ((ScrewsByWidth / 1000) % 2 != 0) {
+            //                ScrewsByWidth = ScrewsByWidth + 1000;
+            //            }
 
-                    if ((zaklByWidth / 1000) % 2 != 0) {
-                        zaklByWidth = zaklByWidth + 1000;
-                    }
-                }
+            //            if ((zaklByWidth / 1000) % 2 != 0) {
+            //                zaklByWidth = zaklByWidth + 1000;
+            //            }
+            //        }
 
-                if (screws.ByWidth > 0 & pType.Contains("3")) {
-                    screwsByWidth = screws.ByWidth;
-                }
+            //        if (framelessPanel.Screws.ByWidth > 0 /*& framelessPanel.PanelType.Contains("3")*/) {
+            //            ScrewsByWidth = framelessPanel.Screws.ByWidth;
+            //        }
 
-                if (screws?.ByHeight > 0) {
-                    screwsByHeight = screws.ByHeight;
-                }
-                if (screws?.ByWidth > 0) {
-                    screwsByWidth = screws.ByWidth;
-                }
+            //        if (framelessPanel.Screws?.ByHeight > 0) {
+            //            ScrewsByHeight = framelessPanel.Screws.ByHeight;
+            //        }
+            //        if (framelessPanel.Screws?.ByWidth > 0) {
+            //            ScrewsByWidth = framelessPanel.Screws.ByWidth;
+            //        }
 
-                screwsByWidthInner =
+            ScrewsByWidthInner =
                framelessPanel.PanelType == PanelType_e.BlankPanel || framelessPanel.PanelType == PanelType_e.FrontPanel
                   ? (колСаморезВинтШирина - 1000 < 2000 ? 2000 : колСаморезВинтШирина - 1000)
                           : (колСаморезВинтШирина2 < 2000 ? 2000 : колСаморезВинтШирина);
 
-                  screwsByHeightInner = pType == "04" || pType == "05"
-                    ? (колСаморезВинтВысота)
-                    : (колСаморезВинтВысота - 1000);
+            //        ScrewsByHeightInner = framelessPanel.PanelType == PanelType_e.RemovablePanel
+            //          ? (колСаморезВинтВысота)
+            //          : (колСаморезВинтВысота - 1000);
 
 
-                if (screws?.ByHeightInner > 0) {
-                    screwsByHeightInner = screws.ByHeightInner < 2000 ? 2000 : screws.ByHeightInner;
-                }
-                if (screws?.ByWidthInner > 0) {
-                    screwsByWidthInner = screws.ByWidthInner < 2000 ? 2000 : screws.ByWidthInner;
-                }
-
-                //                if (GetExistingFile(newPartPath, 1))//   (Path.GetFileNameWithoutExtension(newPartPath), 1))
-                //                {
-                //                    SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2(AssemblyName + ".SLDASM", true, 0)));
-                //                    DocumentExtension.SelectByID2(NameUpPanel + "-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                //                    swAsm.ReplaceComponents(newPartPath, "", false, true);
-                //                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(NameUpPanel + ".SLDPRT");
-                //                }
-                //                else {
-                //                    var d1Кривая3 = pType == "35"
-                //                        ? (колСаморезВинтШирина - 1000 < 2000 ? 2000 : колСаморезВинтШирина - 1000)
-                //                        : (колСаморезВинтШирина < 2000 ? 2000 : колСаморезВинтШирина);
-
-                //                    var d1Эскиз52 = типКрепежнойЧастиУсиливающейПанели == null ? Convert.ToString(30) : Convert.ToString(20);
-
-                //                    if (!string.IsNullOrEmpty(типТорцевой)) {
-                //                        d1Кривая3 = колСаморезВинтШирина < 2000 ? 2000 : колСаморезВинтШирина;
-                //                        d1Эскиз52 = Convert.ToString(35);
-                //                    }
-
-                //                    if (screws?.ByWidthInnerUp > 0) {
-                //                        d1Кривая3 = screws.ByWidthInnerUp;
-                //                    }
-
-                //типДвойнойРазрез
-
-                SwPartParamsChangeWithNewName(NameUpPanel,
-                    $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}",
-                    new[,]
-                    {
-                                            // Габариты
-                                            parameters.Add
-
-                                            parameters.Add("D1@Эскиз1", Convert.ToString(ширинаПанели));
-                parameters.Add("D2@Эскиз1", Convert.ToString(высотаПанели));
-                parameters.Add("D1@3-4", Convert.ToString(screwsByHeight));
-                parameters.Add("D1@1-4", Convert.ToString(screwsByHeight));
-                parameters.Add("D1@2-4", Convert.ToString(screwsByWidth));
-                parameters.Add("D2@2-2", Convert.ToString(осьСаморезВинт));
-                parameters.Add("D4@Эскиз47", Convert.ToString(растояниеМеждуРучками));
-                parameters.Add("D1@Эскиз50", Convert.ToString(диамСаморезВинт));
-                parameters.Add("D1@2-3-1", Convert.ToString(диамСаморезВинт));
-                parameters.Add("D1@Эскиз52", d1Эскиз52);
-                parameters.Add("D2@Эскиз52", Convert.ToString(осьПоперечныеОтверстия));
-                parameters.Add("D1@Кривая3", Convert.ToString(d1Кривая3));
-                parameters.Add("D3@1-1-1", string.IsNullOrEmpty(типТорцевой) || pType == "01" ? Convert.ToString(35) : Convert.ToString(158.1));
-                parameters.Add("D2@3-1-1", string.IsNullOrEmpty(типТорцевой) || pType == "01" ? Convert.ToString(35) : Convert.ToString(158.1));
-                parameters.Add("D3@2-1-1", Convert.ToString(диамЗаглушкаВинт));
-                parameters.Add("D1@Эскиз49", Convert.ToString(диамЗаглушкаВинт));
-                parameters.Add("D1@Кривая1", Convert.ToString(zaklByWidth));
-                parameters.Add("D1@Кривая2", Convert.ToString(zaklByHeight));
-                parameters.Add("D7@Ребро-кромка1", framelessPanel.ThermoStrip == ThermoStrip.ThermoScotch ? Convert.ToString(17.7) : Convert.ToString(19.2));
-                parameters.Add("Толщина@Листовой металл", materialP1[1].Replace('.', ','));
-                parameters.Add("D1@CrvPatternW", Convert.ToString(колЗаклепокКронштейнаДвойнойПанели));
-                //      parameters.Add("D1@CrvPatternH", Convert.ToString(колЗаклепокКронштейнаДвойнойПанели));
-
-                типДвойнойВерхней != "0" ? new[]
-                {
-                                            $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{имяДвойнойВерхней1}",
-                                            $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{имяДвойнойВерхней2}"
-
-                        EditPartParameters(PartName,"");
-
+            //        if (framelessPanel.Screws?.ByHeightInner > 0) {
+            //            ScrewsByHeightInner = framelessPanel.Screws.ByHeightInner < 2000 ? 2000 : framelessPanel.Screws.ByHeightInner;
+            //        }
+            if (framelessPanel.Screws?.ByWidthInner > 0) {
+                ScrewsByWidthInner = framelessPanel.Screws.ByWidthInner < 2000 ? 2000 : framelessPanel.Screws.ByWidthInner;
             }
 
-            //                #endregion
+            //        //                if (GetExistingFile(newPartPath, 1))//   (Path.GetFileNameWithoutExtension(newPartPath), 1))
+            //        //                {
+            //        //                    SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2(AssemblyName + ".SLDASM", true, 0)));
+            //        //                    DocumentExtension.SelectByID2(NameUpPanel + "-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+            //        //                    swAsm.ReplaceComponents(newPartPath, "", false, true);
+            //        //                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(NameUpPanel + ".SLDPRT");
+            //        //                }
+            //        //                else {
+            //        //                    var d1Кривая3 = framelessPanel.PanelType == "35"
+            //        //                        ? (колСаморезВинтШирина - 1000 < 2000 ? 2000 : колСаморезВинтШирина - 1000)
+            //        //                        : (колСаморезВинтШирина < 2000 ? 2000 : колСаморезВинтШирина);
 
-            //                #region  Панель внутреняя
+            //        //                    var d1Эскиз52 = типКрепежнойЧастиУсиливающейПанели == null ? 30) : 20);
 
-            //                newName = панельВнутренняя.NewName;
-            //                //newName = modelname2 + "-02-" + width + "-" + lenght + "-" + "40-" + materialP2[0] + strenghtP + panelsUpDownConfigString;
-            //                newPartPath = $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}.SLDPRT";
-            //                var innerPanel = newPartPath;
+            //        //                    if (!string.IsNullOrEmpty(типТорцевой)) {
+            //        //                        d1Кривая3 = колСаморезВинтШирина < 2000 ? 2000 : колСаморезВинтШирина;
+            //        //                        d1Эскиз52 = 35);
+            //        //                    }
 
-            //                if (false) ;
-            //                //    (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1)) {
-            //                //SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2(AssemblyName + ".SLDASM", true, 0)));
-            //                //DocumentExtension.SelectByID2(NameDownPanel + "-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-            //                //swAsm.ReplaceComponents(newPartPath, "", false, true);
-            //                //SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(NameDownPanel + ".SLDPRT");
-            //            }
-            //            else {
-            //                //EditPartParameters();
-            //                SwPartParamsChangeWithNewName(NameDownPanel,
-            //                    $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}",
-            //                    new[,]
-            //                    {
-            //                        {"D1@Эскиз1", pType == "04" || pType == "05"
-            //                                ? Convert.ToString(ширинаПанели - 42)
-            //                                : Convert.ToString(ширинаПанели - 40)},
+            //        //                    if (framelessPanel.Screws?.ByWidthInnerUp > 0) {
+            //        //                        d1Кривая3 = framelessPanel.Screws.ByWidthInnerUp;
+            //        //                    }
 
-            //                        {"D2@Эскиз1", pType == "04" || pType == "05"
-            //                                ? Convert.ToString(высотаПанели - 42)
-            //                                : Convert.ToString(высотаПанели - 40)},
+            //        //типДвойнойРазрез
 
-            //                        {"D1@1-3", Convert.ToString(screwsByWidth)},
-            //                        {"D1@Кривая6", Convert.ToString(screwsByHeight)},
+            //        //    SwPartParamsChangeWithNewName(NameUpPanel,
+            //        //       $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}",
+            //        //      new[,]
+            //        //      {
+            //        // Габариты
+            //        //  parameters.Add
 
-            //                        {"D1@1-4", Convert.ToString(колСаморезВинтВысота)},
+            //        parameters.Add("D1@Эскиз1", framelessPanel.SizePanel.X);
+            //        parameters.Add("D2@Эскиз1", framelessPanel.SizePanel.Y);
+            //        parameters.Add("D1@3-4", ScrewsByHeight);
+            //        parameters.Add("D1@1-4", ScrewsByHeight);
+            //        parameters.Add("D1@2-4", ScrewsByWidth);
+            //        parameters.Add("D2@2-2", осьСаморезВинт);
+            //        parameters.Add("D4@Эскиз47", framelessPanel.widthHandle);
+            //        parameters.Add("D1@Эскиз50", диамСаморезВинт);
+            //        parameters.Add("D1@2-3-1", диамСаморезВинт);
+            //        parameters.Add("D1@Эскиз52", d1Эскиз52);
+            //        parameters.Add("D2@Эскиз52", осьПоперечныеОтверстия);
+            //        parameters.Add("D1@Кривая3", d1Кривая3);
+            //        parameters.Add("D3@1-1-1", framelessPanel.PanelType == PanelType_e.BlankPanel ? 35 : 158.1);
+            //        parameters.Add("D2@3-1-1", framelessPanel.PanelType == PanelType_e.BlankPanel ? 35 : 158.1);
+            //        parameters.Add("D3@2-1-1", диамЗаглушкаВинт);
+            //        parameters.Add("D1@Эскиз49", диамЗаглушкаВинт);
+            //        parameters.Add("D1@Кривая1", zaklByWidth);
+            //        parameters.Add("D1@Кривая2", zaklByHeight);
+            //        parameters.Add("D7@Ребро-кромка1", framelessPanel.ThermoStrip == ThermoStrip.ThermoScotch ? 17.7 : 19.2);
+            //        //  parameters.Add("Толщина@Листовой металл", materialP1[1].Replace('.', ',');
+            //        parameters.Add("D1@CrvPatternW", колЗаклепокКронштейнаДвойнойПанели);
+            //        //      parameters.Add("D1@CrvPatternH", колЗаклепокКронштейнаДвойнойПанели));
 
-            //                        {"D1@Кривая5", Convert.ToString(screwsByWidthInner)},
+            //        //типДвойнойВерхней != "0" ? new[]
+            //        //{
+            //        //                            $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{имяДвойнойВерхней1}",
+            //        //                            $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{имяДвойнойВерхней2}"
 
-            //                        {"D1@Кривая4", Convert.ToString(screwsByHeightInner)},
+            //        EditPartParameters(PartName, "");
 
-            //                        {"D2@Эскиз32", pType == "01" || pType == "35"
-            //                                ? Convert.ToString(77.5)
-            //                                : Convert.ToString(158.1)},
+            //        //   }
 
-            //                        {"D4@Эскиз47", Convert.ToString(растояниеМеждуРучками)},
+            #endregion
 
-            //                        {"D1@Эскиз38", Convert.ToString(диамСаморезВинт)},
-            //                        {"D3@1-1-1", Convert.ToString(диамСаморезВинт)},
+            #region  Панель внутреняя
 
-            //                        {"D1@Эскиз40", string.IsNullOrEmpty(типТорцевой) || pType == "01"
-            //                                ? Convert.ToString(15)
-            //                                : Convert.ToString(138.1)},
+            //        //                newName = панельВнутренняя.NewName;
+            //        //                //newName = modelname2 + "-02-" + width + "-" + lenght + "-" + "40-" + materialP2[0] + strenghtP + panelsUpDownConfigString;
+            //        //                newPartPath = $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}.SLDPRT";
+            //        //                var innerPanel = newPartPath;
 
-            //                        {"D2@1-2", Convert.ToString(осьОтверстийСаморезВинт)},
+            //        //                if (false) ;
+            //        //                //    (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1)) {
+            //        //                //SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2(AssemblyName + ".SLDASM", true, 0)));
+            //        //                //DocumentExtension.SelectByID2(NameDownPanel + "-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+            //        //                //swAsm.ReplaceComponents(newPartPath, "", false, true);
+            //        //                //SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(NameDownPanel + ".SLDPRT");
+            //        //            }
+            //        //            else {
+            //        //                //EditPartParameters();
+            //        //                SwPartParamsChangeWithNewName(NameDownPanel,
+            //        //                    $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}",
+            //        //                    new[,]
+            //        //                    {
+            //        //                        {"D1@Эскиз1", framelessPanel.PanelType == "04" || framelessPanel.PanelType == "05"
+            //        //                                ? ширинаПанели - 42)
+            //        //                                : ширинаПанели - 40)},
 
-            //                        {"D1@2-3", Convert.ToString(zaklByWidth)},
-            //                        {"D1@Кривая1", Convert.ToString(zaklByWidth)},
+            //        //                        {"D2@Эскиз1", framelessPanel.PanelType == "04" || framelessPanel.PanelType == "05"
+            //        //                                ? высотаПанели - 42)
+            //        //                                : высотаПанели - 40)},
 
-            //                        {"D1@Кривая2", Convert.ToString(zaklByHeight)},
+            //        //                        {"D1@1-3", framelessPanel.ScrewsByWidth)},
+            //        //                        {"D1@Кривая6", framelessPanel.ScrewsByHeight)},
 
-            //                        {"D3@2-1-1", pType == "04" || pType == "05"
-            //                                ? Convert.ToString(54.0)
-            //                                : Convert.ToString(55.0)},
+            //        //                        {"D1@1-4", колСаморезВинтВысота)},
 
-            //                        {"D2@Эскиз29", pType == "04" || pType == "05"
-            //                                ? Convert.ToString(84.0)
-            //                                : Convert.ToString(85.0)},
+            //        //                        {"D1@Кривая5", ScrewsByWidthInner)},
 
-            //                        {"D2@Эскиз43", pType == "04" || pType == "05"
-            //                                ? Convert.ToString(12.0)
-            //                                : Convert.ToString(11.0)},
+            //        //                        {"D1@Кривая4", ScrewsByHeightInner)},
 
-            //                        {"D1@Эскиз29", pType == "04" || pType == "05"
-            //                                ? Convert.ToString(11.3)
-            //                                : Convert.ToString(10.3)},
+            //        //                        {"D2@Эскиз32", framelessPanel.PanelType == "01" || framelessPanel.PanelType == "35"
+            //        //                                ? 77.5)
+            //        //                                : 158.1)},
 
-            //                        {"D1@2-1-1", pType == "04" || pType == "05"
-            //                                ? Convert.ToString(11.3)
-            //                                : Convert.ToString(10.3)},
+            //        //                        {"D4@Эскиз47", растояниеМеждуРучками)},
 
-            //                        {"D2@Эскиз39", pType == "04" || pType == "05"
-            //                                ? Convert.ToString(11.3)
-            //                                : Convert.ToString(10.3)},
+            //        //                        {"D1@Эскиз38", диамСаморезВинт)},
+            //        //                        {"D3@1-1-1", диамСаморезВинт)},
 
-            //                        {"D1@Эскиз39", pType == "04" || pType == "05"
-            //                                ? Convert.ToString(5.0)
-            //                                : Convert.ToString(4.0)},
+            //        //                        {"D1@Эскиз40", string.IsNullOrEmpty(типТорцевой) || framelessPanel.PanelType == "01"
+            //        //                                ? 15)
+            //        //                                : 138.1)},
 
-            //                        //Рамка усиливающая
-            //                        {"D1@Кривая9", pType == "01" || pType == "35"
-            //                                ? Convert.ToString(колСаморезВинтШирина - 1000)
-            //                                : Convert.ToString(колСаморезВинтШирина)},
+            //        //                        {"D2@1-2", осьОтверстийСаморезВинт)},
 
-            //                        {"D1@Кривая7", Convert.ToString(колЗаклепокВысота)},
+            //        //                        {"D1@2-3", zaklByWidth)},
+            //        //                        {"D1@Кривая1", zaklByWidth)},
 
-            //                        {"D3@Эскиз56", Convert.ToString(отступОтветныхОтверстийШирина)},
+            //        //                        {"D1@Кривая2", zaklByHeight)},
 
-            //                        //Размеры для отверсти под клепальные гайки под съемные панели
-            //                        {"G0@Эскиз49", Convert.ToString(OutputHolesWrapper.G0)},
-            //                        {"G1@Эскиз49", Convert.ToString(OutputHolesWrapper.G1)},
-            //                        {"G2@Эскиз49", Convert.ToString(OutputHolesWrapper.G2)},
-            //                        {"G3@Эскиз49", Convert.ToString(OutputHolesWrapper.G0)},
+            //        //                        {"D3@2-1-1", framelessPanel.PanelType == "04" || framelessPanel.PanelType == "05"
+            //        //                                ? 54.0)
+            //        //                                : 55.0)},
 
-            //                        //Convert.ToString(количествоВинтов)
-            //                        {"L1@Эскиз49", Convert.ToString(OutputHolesWrapper.L1)},
-            //                        {"D1@Кривая10", Convert.ToString(OutputHolesWrapper.D1)},
-            //                        {"L2@Эскиз49", Convert.ToString(OutputHolesWrapper.L2)},
-            //                        {"D1@Кривая11", Convert.ToString(OutputHolesWrapper.D2)},
-            //                        {"L3@Эскиз49", Convert.ToString(OutputHolesWrapper.L3)},
-            //                        {"D1@Кривая12", Convert.ToString(OutputHolesWrapper.D3)},
+            //        //                        {"D2@Эскиз29", framelessPanel.PanelType == "04" || framelessPanel.PanelType == "05"
+            //        //                                ? 84.0)
+            //        //                                : 85.0)},
 
-            //                        //Размеры промежуточных профилей
-            //                        {"Wp1@Эскиз59", Math.Abs(ValProfils.Wp1) < 1 ? "10" : Convert.ToString(ValProfils.Wp1)},
-            //                        {"Wp2@Эскиз59", Math.Abs(ValProfils.Wp2) < 1 ? "10" : Convert.ToString(ValProfils.Wp2)},
-            //                        {"Wp3@Эскиз59", Math.Abs(ValProfils.Wp3) < 1 ? "10" : Convert.ToString(ValProfils.Wp3)},
-            //                        {"Wp4@Эскиз59", Math.Abs(ValProfils.Wp4) < 1 ? "10" : Convert.ToString(ValProfils.Wp4)},
+            //        //                        {"D2@Эскиз43", framelessPanel.PanelType == "04" || framelessPanel.PanelType == "05"
+            //        //                                ? 12.0)
+            //        //                                : 11.0)},
 
-            //                        //todo Для промежуточной панели отверстия
-            //                        {"D1@Кривая14", Convert.ToString(колЗаклепокВысота*2)},
+            //        //                        {"D1@Эскиз29", framelessPanel.PanelType == "04" || framelessPanel.PanelType == "05"
+            //        //                                ? 11.3)
+            //        //                                : 10.3)},
 
-            //                        {"Толщина@Листовой металл", materialP2[1].Replace('.', ',')},
+            //        //                        {"D1@2-1-1", framelessPanel.PanelType == "04" || framelessPanel.PanelType == "05"
+            //        //                                ? 11.3)
+            //        //                                : 10.3)},
 
-            //                        // Кол-во отверстий под заклепки сшивочных кронштейнов
-            //                        {"D1@CrvPatternW", Convert.ToString(колЗаклепокКронштейнаДвойнойПанели)},
-            //                        {"D1@CrvPatternH", Convert.ToString(колЗаклепокКронштейнаДвойнойПанели)}
-            //                    },
-            //                    true,
-            //                    типДвойнойНижней != "0"
-            //                        ? new[]
-            //                        {
-            //                            $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{имяДвойнойНижней1}",
-            //                            $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{имяДвойнойНижней2}"
-            //                        }
-            //                        : null);
+            //        //                        {"D2@Эскиз39", framelessPanel.PanelType == "04" || framelessPanel.PanelType == "05"
+            //        //                                ? 11.3)
+            //        //                                : 10.3)},
 
-            //                VentsMatdll(materialP2, new[] { покрытие[7], покрытие[4], покрытие[5] }, newName);
+            //        //                        {"D1@Эскиз39", framelessPanel.PanelType == "04" || framelessPanel.PanelType == "05"
+            //        //                                ? 5.0)
+            //        //                                : 4.0)},
 
-            //                SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
-            //            }
+            //        //                        //Рамка усиливающая
+            //        //                        {"D1@Кривая9", framelessPanel.PanelType == "01" || framelessPanel.PanelType == "35"
+            //        //                                ? колСаморезВинтШирина - 1000)
+            //        //                                : колСаморезВинтШирина)},
 
-            //            #endregion
+            //        //                        {"D1@Кривая7", колЗаклепокВысота)},
 
+            //        //                        {"D3@Эскиз56", отступОтветныхОтверстийШирина)},
 
+            //        //                        //Размеры для отверсти под клепальные гайки под съемные панели
+            //        //                        {"G0@Эскиз49", OutputHolesWrapper.G0)},
+            //        //                        {"G1@Эскиз49", OutputHolesWrapper.G1)},
+            //        //                        {"G2@Эскиз49", OutputHolesWrapper.G2)},
+            //        //                        {"G3@Эскиз49", OutputHolesWrapper.G0)},
 
-            //            #region Теплоизоляция
+            //        //                        //количествоВинтов)
+            //        //                        {"L1@Эскиз49", OutputHolesWrapper.L1)},
+            //        //                        {"D1@Кривая10", OutputHolesWrapper.D1)},
+            //        //                        {"L2@Эскиз49", OutputHolesWrapper.L2)},
+            //        //                        {"D1@Кривая11", OutputHolesWrapper.D2)},
+            //        //                        {"L3@Эскиз49", OutputHolesWrapper.L3)},
+            //        //                        {"D1@Кривая12", OutputHolesWrapper.D3)},
 
-            //            #region наименование теплоизоляции
+            //        //                        //Размеры промежуточных профилей
+            //        //                        {"Wp1@Эскиз59", Math.Abs(ValProfils.Wp1) < 1 ? "10" : ValProfils.Wp1)},
+            //        //                        {"Wp2@Эскиз59", Math.Abs(ValProfils.Wp2) < 1 ? "10" : ValProfils.Wp2)},
+            //        //                        {"Wp3@Эскиз59", Math.Abs(ValProfils.Wp3) < 1 ? "10" : ValProfils.Wp3)},
+            //        //                        {"Wp4@Эскиз59", Math.Abs(ValProfils.Wp4) < 1 ? "10" : ValProfils.Wp4)},
 
-            //            //6700  Лента уплотнительная Pes20x3/25 A/AT-B
-            //            //14800  Лента двохсторонняя акриловая HSA 19х2
-            //            //4900  Материал теплоизол. Сlassik TWIN50
+            //        //                        //todo Для промежуточной панели отверстия
+            //        //                        {"D1@Кривая14", колЗаклепокВысота*2)},
 
-            //            //newName = modelName + "-03-" + width + "-" + lenght + "-" + "40";
+            //        //                        {"Толщина@Листовой металл", materialP2[1].Replace('.', ',')},
 
-            //            #endregion
+            //        //                        // Кол-во отверстий под заклепки сшивочных кронштейнов
+            //        //                        {"D1@CrvPatternW", колЗаклепокКронштейнаДвойнойПанели)},
+            //        //                        {"D1@CrvPatternH", колЗаклепокКронштейнаДвойнойПанели)}
+            //        //                    },
+            //        //                    true,
+            //        //                    типДвойнойНижней != "0"
+            //        //                        ? new[]
+            //        //                        {
+            //        //                            $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{имяДвойнойНижней1}",
+            //        //                            $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{имяДвойнойНижней2}"
+            //        //                        }
+            //        //                        : null);
 
-            //            newName = теплоизоляция.NewName;
-            //            newPartPath = $@"{Settings.Default.DestinationFolder}\{Panels0201}\Materials\{newName}.SLDPRT";
-            //            if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1)) {
-            //                SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2(AssemblyName + ".SLDASM", true, 0)));
-            //                DocumentExtension.SelectByID2("02-11-03-40--1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-            //                swAsm.ReplaceComponents(newPartPath, "", false, true);
-            //                SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("02-11-03-40-.SLDPRT");
-            //            }
-            //            else {
-            //                SwPartParamsChangeWithNewName("02-11-03-40-",
-            //                    $@"{Settings.Default.DestinationFolder}\{Panels0201}\Materials\{newName}",
-            //                        new[,]
-            //                        {
-            //                            {"D2@Эскиз1", Convert.ToString(высотаПанели-1)},
-            //                            {"D1@Эскиз1", Convert.ToString(ширинаПанели-2)}
-            //                        },
-            //                        true,
-            //                        null);
-            //                SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
-            //            }
+            //        //                VentsMatdll(materialP2, new[] { покрытие[7], покрытие[4], покрытие[5] }, newName);
 
-            //            #endregion
+            //        //                SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
+            //        //            }
 
-            //            #region Скотч
+            #endregion
 
-            //            const double rizn = 3;
-
-            //            if (скотч) {
-            //                //Скотч
-
-            //                newName = cкотч.NewName;
-            //                newPartPath = $@"{Settings.Default.DestinationFolder}\{Panels0201}\Materials\{newName}.SLDPRT";
-            //                if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1)) {
-            //                    SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2(AssemblyName + ".SLDASM", true, 0)));
-            //                    DocumentExtension.SelectByID2("02-11-04-40--1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-            //                    swAsm.ReplaceComponents(newPartPath, "", false, true);
-            //                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("02-11-04-40-.SLDPRT");
-            //                }
-            //                else {
-            //                    SwPartParamsChangeWithNewName("02-11-04-40-",
-            //                        $@"{Settings.Default.DestinationFolder}\{Panels0201}\Materials\{newName}",
-            //                        new[,]
-            //                        {
-            //                            {"D2@Эскиз1", Convert.ToString(высотаПанели - rizn)},
-            //                            {"D1@Эскиз1", Convert.ToString(ширинаПанели - rizn)}
-            //                        },
-            //                        true,
-            //                        null);
-            //                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
-            //                }
-            //            }
-
-            //            #endregion
-
-            //            #region  Pes 20x3/25 A/AT-BT 538x768
-
-            //            newName = pes.NewName;
-            //            newPartPath = $@"{Settings.Default.DestinationFolder}\{Panels0201}\Materials\{newName}.SLDPRT";
-
-            //            if (GetExistingFile(Path.GetFileNameWithoutExtension(newPartPath), 1)) {
-            //                SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2(AssemblyName + ".SLDASM", true, 0)));
-            //                DocumentExtension.SelectByID2("02-11-05-40--1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-            //                swAsm.ReplaceComponents(newPartPath, "", false, true);
-            //                SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("02-11-05-40-.SLDPRT");
-            //            }
-            //            else {
-            //                SwPartParamsChangeWithNewName("02-11-05-40-",
-            //                    $@"{Settings.Default.DestinationFolder}\{Panels0201}\Materials\{newName}",
-            //                        new[,]
-            //                        {
-            //                            {"D2@Эскиз1", Convert.ToString(высотаПанели - rizn)},
-            //                            {"D1@Эскиз1", Convert.ToString(ширинаПанели - rizn)}
-            //                        },
-            //                        true,
-            //                        null);
-            //                SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
-            //            }
-
-            //            #endregion
-
-            //            #region Кронштейн усиливающей панели
+            #region Кронштейн усиливающей панели
 
             //            if (типКрепежнойЧастиУсиливающейПанели == "D") {
             //                if (кронштейнДверной == null)
@@ -2186,9 +2237,9 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
             //                        $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}",
             //                            new[,]
             //                        {
-            //                            {"D2@Эскиз1", Convert.ToString(высотаПанели - 45)},
-            //                            {"D1@Эскиз1", скотч ? Convert.ToString(16.0) : Convert.ToString(17.5)},
-            //                            {"D1@Кривая1", Convert.ToString(колЗаклепокВысота)}
+            //                            {"D2@Эскиз1", высотаПанели - 45)},
+            //                            {"D1@Эскиз1", скотч ? 16.0) : 17.5)},
+            //                            {"D1@Кривая1", колЗаклепокВысота)}
             //                        },
             //                        true,
             //                        null);
@@ -2198,864 +2249,853 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
 
             //m1:
 
-            //#endregion
-
-            //#region Разрезные части
-
-            //            if (!string.IsNullOrEmpty(типДвойнойРазрез)) {
-            //                #region to delete
-
-            //                //var имяДвойнойВерхней1 = панельВнешняя.NewName + "-" + типДвойнойВерхней + "1";
-            //                //var имяДвойнойВерхней2 = панельВнешняя.NewName + "-" + типДвойнойВерхней + "2";
-            //                //var имяДвойнойНижней1 = панельВнутренняя.NewName + "-" + типДвойнойНижней + "1";
-            //                //var имяДвойнойНижней2 = панельВнутренняя.NewName + "-" + типДвойнойНижней + "2";
-
-            //                //MessageBox.Show("имяДвойнойВерхней1 - " + имяДвойнойВерхней1 + "\nимяДвойнойВерхней2 - " +
-            //                //                имяДвойнойВерхней2 + "\nимяДвойнойНижней1 - " + имяДвойнойНижней1 +
-            //                //                "\nимяДвойнойНижней2 - " + имяДвойнойНижней1);
-
-            //                #endregion
-
-            //                if (типДвойнойВерхней != "0") {
-            //                    partsToDeleteList.Add(outerPanel);
-
-            //                    newPartPath = $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{имяДвойнойВерхней1}.SLDPRT";
-            //                    DocumentExtension.SelectByID2(панельВнешняя.NewName + "-2@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-            //                    swAsm.ReplaceComponents(newPartPath, "", false, true);
-            //                    newPartPath = $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{имяДвойнойВерхней2}.SLDPRT";
-            //                    DocumentExtension.SelectByID2(панельВнешняя.NewName + "-3@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-            //                    swAsm.ReplaceComponents(newPartPath, "", false, true);
-            //                }
-
-            //                if (типДвойнойНижней != "0") {
-            //                    partsToDeleteList.Add(innerPanel);
-
-            //                    newPartPath = $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{имяДвойнойНижней1}.SLDPRT";
-            //                    DocumentExtension.SelectByID2(панельВнутренняя.NewName + "-2@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-            //                    swAsm.ReplaceComponents(newPartPath, "", false, true);
-            //                    newPartPath = $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{имяДвойнойНижней2}.SLDPRT";
-            //                    DocumentExtension.SelectByID2(панельВнутренняя.NewName + "-3@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-            //                    swAsm.ReplaceComponents(newPartPath, "", false, true);
-            //                }
-
-            //                switch (типДвойнойВерхней) {
-            //                    case "1":
-            //                        DocumentExtension.SelectByID2("Cut-ExtrudeW1@" + имяДвойнойВерхней1 + "-2@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-            //                        SolidWorksDocument.EditUnsuppress2();
-            //                        DocumentExtension.SelectByID2("Cut-ExtrudeW2@" + имяДвойнойВерхней2 + "-3@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-            //                        SolidWorksDocument.EditUnsuppress2();
-            //                        DocumentExtension.SelectByID2("Rivet Bralo-185@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
-            //                        SolidWorksDocument.EditDelete();
-            //                        break;
-
-            //                    case "2":
-            //                        DocumentExtension.SelectByID2("Cut-ExtrudeH1@" + имяДвойнойВерхней1 + "-2@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-            //                        SolidWorksDocument.EditUnsuppress2();
-            //                        DocumentExtension.SelectByID2("Cut-ExtrudeH2@" + имяДвойнойВерхней2 + "-3@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-            //                        SolidWorksDocument.EditUnsuppress2();
-            //                        DocumentExtension.SelectByID2("Rivet Bralo-186@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
-            //                        SolidWorksDocument.EditDelete();
-            //                        break;
-
-            //                    case "0":
-            //                        DocumentExtension.SelectByID2(панельВнешняя.NewName + "-2@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-            //                        SolidWorksDocument.EditDelete();
-            //                        DocumentExtension.SelectByID2(панельВнешняя.NewName + "-3@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-            //                        SolidWorksDocument.EditDelete();
-
-            //                        DocumentExtension.SelectByID2("Rivet Bralo-185@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
-            //                        SolidWorksDocument.EditDelete();
-            //                        DocumentExtension.SelectByID2("Rivet Bralo-186@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
-            //                        SolidWorksDocument.EditDelete();
-            //                        break;
-            //                }
-
-            //                switch (типДвойнойНижней) {
-            //                    case "1":
-            //                        DocumentExtension.SelectByID2("Cut-ExtrudeW1@" + имяДвойнойНижней1 + "-2@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-            //                        SolidWorksDocument.EditUnsuppress2();
-            //                        DocumentExtension.SelectByID2("Cut-ExtrudeW2@" + имяДвойнойНижней2 + "-3@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-            //                        SolidWorksDocument.EditUnsuppress2();
-            //                        break;
+            #endregion
+
+            #region Разрезные части
+
+            //        //            if (!string.IsNullOrEmpty(типДвойнойРазрез)) {
+            //        //                #region to delete
+
+            //        //                //var имяДвойнойВерхней1 = панельВнешняя.NewName + "-" + типДвойнойВерхней + "1";
+            //        //                //var имяДвойнойВерхней2 = панельВнешняя.NewName + "-" + типДвойнойВерхней + "2";
+            //        //                //var имяДвойнойНижней1 = панельВнутренняя.NewName + "-" + типДвойнойНижней + "1";
+            //        //                //var имяДвойнойНижней2 = панельВнутренняя.NewName + "-" + типДвойнойНижней + "2";
+
+            //        //                //MessageBox.Show("имяДвойнойВерхней1 - " + имяДвойнойВерхней1 + "\nимяДвойнойВерхней2 - " +
+            //        //                //                имяДвойнойВерхней2 + "\nимяДвойнойНижней1 - " + имяДвойнойНижней1 +
+            //        //                //                "\nимяДвойнойНижней2 - " + имяДвойнойНижней1);
+
+            //        //                #endregion
+
+            //        //                if (типДвойнойВерхней != "0") {
+            //        //                    partsToDeleteList.Add(outerPanel);
+
+            //        //                    newPartPath = $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{имяДвойнойВерхней1}.SLDPRT";
+            //        //                    DocumentExtension.SelectByID2(панельВнешняя.NewName + "-2@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+            //        //                    swAsm.ReplaceComponents(newPartPath, "", false, true);
+            //        //                    newPartPath = $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{имяДвойнойВерхней2}.SLDPRT";
+            //        //                    DocumentExtension.SelectByID2(панельВнешняя.NewName + "-3@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+            //        //                    swAsm.ReplaceComponents(newPartPath, "", false, true);
+            //        //                }
+
+            //        //                if (типДвойнойНижней != "0") {
+            //        //                    partsToDeleteList.Add(innerPanel);
+
+            //        //                    newPartPath = $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{имяДвойнойНижней1}.SLDPRT";
+            //        //                    DocumentExtension.SelectByID2(панельВнутренняя.NewName + "-2@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+            //        //                    swAsm.ReplaceComponents(newPartPath, "", false, true);
+            //        //                    newPartPath = $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{имяДвойнойНижней2}.SLDPRT";
+            //        //                    DocumentExtension.SelectByID2(панельВнутренняя.NewName + "-3@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+            //        //                    swAsm.ReplaceComponents(newPartPath, "", false, true);
+            //        //                }
+
+            //        //                switch (типДвойнойВерхней) {
+            //        //                    case "1":
+            //        //                        DocumentExtension.SelectByID2("Cut-ExtrudeW1@" + имяДвойнойВерхней1 + "-2@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //        //                        SolidWorksDocument.EditUnsuppress2();
+            //        //                        DocumentExtension.SelectByID2("Cut-ExtrudeW2@" + имяДвойнойВерхней2 + "-3@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //        //                        SolidWorksDocument.EditUnsuppress2();
+            //        //                        DocumentExtension.SelectByID2("Rivet Bralo-185@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+            //        //                        SolidWorksDocument.EditDelete();
+            //        //                        break;
+
+            //        //                    case "2":
+            //        //                        DocumentExtension.SelectByID2("Cut-ExtrudeH1@" + имяДвойнойВерхней1 + "-2@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //        //                        SolidWorksDocument.EditUnsuppress2();
+            //        //                        DocumentExtension.SelectByID2("Cut-ExtrudeH2@" + имяДвойнойВерхней2 + "-3@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //        //                        SolidWorksDocument.EditUnsuppress2();
+            //        //                        DocumentExtension.SelectByID2("Rivet Bralo-186@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+            //        //                        SolidWorksDocument.EditDelete();
+            //        //                        break;
+
+            //        //                    case "0":
+            //        //                        DocumentExtension.SelectByID2(панельВнешняя.NewName + "-2@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+            //        //                        SolidWorksDocument.EditDelete();
+            //        //                        DocumentExtension.SelectByID2(панельВнешняя.NewName + "-3@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+            //        //                        SolidWorksDocument.EditDelete();
+
+            //        //                        DocumentExtension.SelectByID2("Rivet Bralo-185@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+            //        //                        SolidWorksDocument.EditDelete();
+            //        //                        DocumentExtension.SelectByID2("Rivet Bralo-186@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
+            //        //                        SolidWorksDocument.EditDelete();
+            //        //                        break;
+            //        //                }
 
-            //                    case "2":
-            //                        DocumentExtension.SelectByID2("Cut-ExtrudeH1@" + имяДвойнойНижней1 + "-2@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-            //                        SolidWorksDocument.EditUnsuppress2();
-            //                        DocumentExtension.SelectByID2("Cut-ExtrudeH2@" + имяДвойнойНижней2 + "-3@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-            //                        SolidWorksDocument.EditUnsuppress2();
-            //                        break;
+            //        //                switch (типДвойнойНижней) {
+            //        //                    case "1":
+            //        //                        DocumentExtension.SelectByID2("Cut-ExtrudeW1@" + имяДвойнойНижней1 + "-2@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //        //                        SolidWorksDocument.EditUnsuppress2();
+            //        //                        DocumentExtension.SelectByID2("Cut-ExtrudeW2@" + имяДвойнойНижней2 + "-3@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //        //                        SolidWorksDocument.EditUnsuppress2();
+            //        //                        break;
 
-            //                    case "0":
-            //                        DocumentExtension.SelectByID2(панельВнутренняя.NewName + "-2@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-            //                        SolidWorksDocument.EditDelete();
-            //                        DocumentExtension.SelectByID2(панельВнутренняя.NewName + "-3@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-            //                        SolidWorksDocument.EditDelete();
-            //                        break;
-            //                }
+            //        //                    case "2":
+            //        //                        DocumentExtension.SelectByID2("Cut-ExtrudeH1@" + имяДвойнойНижней1 + "-2@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //        //                        SolidWorksDocument.EditUnsuppress2();
+            //        //                        DocumentExtension.SelectByID2("Cut-ExtrudeH2@" + имяДвойнойНижней2 + "-3@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+            //        //                        SolidWorksDocument.EditUnsuppress2();
+            //        //                        break;
+
+            //        //                    case "0":
+            //        //                        DocumentExtension.SelectByID2(панельВнутренняя.NewName + "-2@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+            //        //                        SolidWorksDocument.EditDelete();
+            //        //                        DocumentExtension.SelectByID2(панельВнутренняя.NewName + "-3@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+            //        //                        SolidWorksDocument.EditDelete();
+            //        //                        break;
+            //        //                }
+
+            //        //                DocumentExtension.SelectByID2("D1@PLANE1@" + AssemblyName, "DIMENSION", 0, 0, 0, false, 0, null, 0);
+            //        //                ((Dimension)(SolidWorksDocument.Parameter("D1@PLANE1"))).SystemValue = 40.0 / 1000;
+            //        //                SolidWorksDocument.EditRebuild3();
+
+            //        //                foreach (var component in new[] { "4", "5", "6", "7", "8", "9", "10", "11", "12", "13" }) {
+            //        //                    DocumentExtension.SelectByID2("DerivedCrvPattern" + component + "@" + AssemblyName, "COMPPATTERN", 0, 0, 0, true, 0, null, 0);
+            //        //                    swAsm.DissolveComponentPattern();
+            //        //                }
+            //        //            }
 
-            //                DocumentExtension.SelectByID2("D1@PLANE1@" + AssemblyName, "DIMENSION", 0, 0, 0, false, 0, null, 0);
-            //                ((Dimension)(SolidWorksDocument.Parameter("D1@PLANE1"))).SystemValue = 40.0 / 1000;
-            //                SolidWorksDocument.EditRebuild3();
-
-            //                foreach (var component in new[] { "4", "5", "6", "7", "8", "9", "10", "11", "12", "13" }) {
-            //                    DocumentExtension.SelectByID2("DerivedCrvPattern" + component + "@" + AssemblyName, "COMPPATTERN", 0, 0, 0, true, 0, null, 0);
-            //                    swAsm.DissolveComponentPattern();
-            //                }
-            //            }
+            #endregion
 
-            //            #endregion
+            //        //            #endregion
 
-            //            #endregion
+            #region Задание имени сборки (description Наименование)
 
-            //            #region Задание имени сборки (description Наименование)
+            //        //            //switch (framelessPanel.PanelType) {
+            //        //            //    case "Несъемная":
+            //        //            //    case "Съемная":
+            //        //            //        framelessPanel.PanelType = framelessPanel.PanelType + " панель";
+            //        //            //        break;
+            //        //            //}
 
-            //            //switch (pType) {
-            //            //    case "Несъемная":
-            //            //    case "Съемная":
-            //            //        pType = pType + " панель";
-            //            //        break;
-            //            //}
+            //        //            SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2(AssemblyName, true, 0)));
+            //        //            //GabaritsForPaintingCamera(SolidWorksDocument);
 
-            //            SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2(AssemblyName, true, 0)));
-            //            //GabaritsForPaintingCamera(SolidWorksDocument);
+            //        //            #endregion
 
-            //            #endregion
+            //        //            #region Сохранение и регистрация сборки в базе
 
-            //            #region Сохранение и регистрация сборки в базе
+            //        //            SolidWorksDocument.EditRebuild3();
+            //        //            SolidWorksDocument.ForceRebuild3(true);
+            //        //            SolidWorksDocument.SaveAs2(newFramelessPanelPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
 
-            //            SolidWorksDocument.EditRebuild3();
-            //            SolidWorksDocument.ForceRebuild3(true);
-            //            SolidWorksDocument.SaveAs2(newFramelessPanelPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
+            //        //            NewComponentsFull.Add(new VentsCadFile {
+            //        //                LocalPartFileInfo = new FileInfo(newFramelessPanelPath).FullName,
+            //        //                PartIdSql = idAsm
+            //        //            });
 
-            //            NewComponentsFull.Add(new VentsCadFile {
-            //                LocalPartFileInfo = new FileInfo(newFramelessPanelPath).FullName,
-            //                PartIdSql = idAsm
-            //            });
+            //        //            try {
+            //        //                SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(new FileInfo(newFramelessPanelPath).Name);
+            //        //            }
+            //        //            catch (Exception) {
+            //        //                //
+            //        //            }
 
-            //            try {
-            //                SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(new FileInfo(newFramelessPanelPath).Name);
-            //            }
-            //            catch (Exception) {
-            //                //
-            //            }
+            //        //            //  List<VentsCadFile> outList;
 
-            //            //  List<VentsCadFile> outList;
 
 
+            //        //            foreach (var item in outList) {
+            //        //                var typeFile = 0;
+            //        //                if (item.LocalPartFileInfo.ToUpper().Contains(".SLDASM")) { typeFile = 2; }
+            //        //                if (item.LocalPartFileInfo.ToUpper().Contains(".SLDPRT")) { typeFile = 1; }
 
-            //            foreach (var item in outList) {
-            //                var typeFile = 0;
-            //                if (item.LocalPartFileInfo.ToUpper().Contains(".SLDASM")) { typeFile = 2; }
-            //                if (item.LocalPartFileInfo.ToUpper().Contains(".SLDPRT")) { typeFile = 1; }
+            //        //                //MessageBox.Show("typeFile - " + typeFile + "\n PartIdPdm - " + item.PartIdPdm + "\n PartIdSql - " + item.PartIdSql);
 
-            //                //MessageBox.Show("typeFile - " + typeFile + "\n PartIdPdm - " + item.PartIdPdm + "\n PartIdSql - " + item.PartIdSql);
+            //        //                if (item.PartIdPdm != 0) {
+            //        //                    //    sqlBaseData.AirVents_SetPDMID(typeFile, item.PartIdPdm, item.PartIdSql);
+            //        //                }
+            //        //            }
 
-            //                if (item.PartIdPdm != 0) {
-            //                    //    sqlBaseData.AirVents_SetPDMID(typeFile, item.PartIdPdm, item.PartIdSql);
-            //                }
-            //            }
 
+            #endregion
 
-            //            #region Auto Export to XML
 
-            //        //    foreach (var newComponent in NewComponents) {
-            //                //MessageBox.Show(newComponent.Name);
-            //                // todo open for users
-            //                //PartInfoToXml(newComponent.FullName);
-            //          //  }
+            //        //            #region Начальные проверки и пути
 
-            //            #endregion
 
-            //            #endregion
 
+            //        //            bool needToAddStepInsertionAndStep;
 
-            //            #region Начальные проверки и пути
+            //        //          //  var framelessPanel.PanelType = typeOfPanel[0];
 
+            //        //          //string типУсиливающей = ТипУсиливающей();
 
+            //        //        //   bool усилисвающя = Усиливающая(); 
 
-            //            bool needToAddStepInsertionAndStep;
+            //        //            //if (усилисвающя) {
+            //        //            //    framelessPanel.PanelType = "01";
+            //        //            //}
 
-            //          //  var pType = typeOfPanel[0];
+            //        //            switch (framelessPanel.PanelType) {
+            //        //                case  PanelType_e.BlankPanel:
+            //        //                case  PanelType_e.RemovablePanel:
+            //        //                //case "05":
+            //        //                case  PanelType_e.FrontPanel:
+            //        //                    needToAddStepInsertionAndStep = false;
+            //        //                    break;
+            //        //                default:
+            //        //                    needToAddStepInsertionAndStep = true;
+            //        //                    break;
+            //        //            }
 
-            //          //string типУсиливающей = ТипУсиливающей();
-
-            //        //   bool усилисвающя = Усиливающая(); 
-
-            //            //if (усилисвающя) {
-            //            //    pType = "01";
-            //            //}
-
-            //            switch (framelessPanel.PanelType) {
-            //                case  PanelType_e.BlankPanel:
-            //                case  PanelType_e.RemovablePanel:
-            //                //case "05":
-            //                case  PanelType_e.FrontPanel:
-            //                    needToAddStepInsertionAndStep = false;
-            //                    break;
-            //                default:
-            //                    needToAddStepInsertionAndStep = true;
-            //                    break;
-            //            }
-
-            //            if (Усиливающая()) {
-            //                needToAddStepInsertionAndStep = true;
-            //            }
-
-            //            var panelsUpDownConfigString =
-            //                (framelessPanel.PanelType !=  PanelType_e.RemovablePanel   & framelessPanel.PanelType !=  PanelType_e.BlankPanel & framelessPanel.PanelType !=  PanelType_e.FrontPanel)
-            //                    ?InputHolesWrapper.InValUpDown() : "";
-
-            //            #region Обозначение ДЕТАЛЕЙ и СБОРКИ из БАЗЫ
-
-
-            //            #region Задание наименований
-
-            //            //var sqlBaseData = new SqlBaseData();
-            //          //  var newId = sqlBaseData.PanelNumber() + 1;
-            //          ///  var partIds = new List<KeyValuePair<int, int>>();
-
-            //            #region панельВнешняя, панельВнутренняя            
-
-            //         //   var панельВнешняя =
-            //         //       new AddingPanel {
-            //         //           PanelTypeId = Convert.ToInt32(typeOfPanel[2]),
-            //         //           ElementType = 1,
-            //         //           Width = width,
-            //         //           Height = height,
-            //         //           PartThick = 40,
-            //         //           PartMat = materialP1[0],
-            //         //           PartMatThick = materialP1[1],
-            //         //           Reinforcing = усиление,
-            //         //           Ral = null,
-            //         //           CoatingType = null,
-            //         //           CoatingClass = null,
-            //         //           Mirror = config.Contains("01"),
-            //         //           StickyTape = скотч,
-            //         //           StepInsertion = needToAddStepInsertionAndStep ? расположениеВставок : null,
-            //         //           AirHole = типТорцевой
-            //         //       };
-            //         //  // var id = панельВнешняя.AddPart();
-
-            //         ////   панельВнешняя.PartQuery =
-            //         //   //    $"PanelTypeId = {Convert.ToInt32(typeOfPanel[2])}, ElementType = {1}\nWidth = {Convert.ToInt32(width)}, Height = {Convert.ToInt32(height)},\nPartThick = 40, PartMat = {Convert.ToInt32(materialP1[0])}, PartMatThick = {Convert.ToDouble(materialP1[1].Replace('.', ','))}\nReinforcing = {усиление}, Ral = {покрытие[0]}, CoatingClass = {Convert.ToInt32(покрытие[2])}\nMirror = {config.Contains("01")}, StickyTape = {скотч}\nStepInsertion = {(needToAddStepInsertionAndStep ? расположениеВставок : null)}, AirHole = {типТорцевой}";
-
-
-
-            //         //   //панельВнешняя.NewName = "02-" + typeOfPanel[0] + "-1-" + id;
-
-            //         //   var панельВнутренняя =
-            //         //       new AddingPanel {
-            //         //           PanelTypeId = усилисвающя ? Convert.ToInt32(первыйТип[2]) : Convert.ToInt32(typeOfPanel[2]),
-            //         //           ElementType = 2,
-            //         //           Width = Convert.ToInt32(width),
-            //         //           Height = Convert.ToInt32(height),
-            //         //           PartThick = 40,
-            //         //           PartMat = Convert.ToInt32(materialP2[0]),
-            //         //           PartMatThick = Convert.ToDouble(materialP2[1].Replace('.', ',')),
-            //         //           Reinforcing = усиление,
-            //         //           Ral = покрытие[3],
-            //         //           CoatingType = покрытие[4],
-            //         //           CoatingClass = Convert.ToInt32(покрытие[5]),
-            //         //           Mirror = config.Contains("01"),
-            //         //           Step = needToAddStepInsertionAndStep ? расположениеПанелей : null,
-            //         //           StepInsertion = needToAddStepInsertionAndStep ? расположениеВставок : null,
-            //         //           AirHole = типТорцевой
-            //         //       };
-            //         //   //id = панельВнутренняя.AddPart();
-
-            //         //   //if (типДвойной == "00") {
-            //         //   //    //   partIds.Add(new KeyValuePair<int, int>(2, id));
-            //         //   //}
-
-            //         //   //панельВнутренняя.NewName = "02-" + pType + "-2-" + id;
-            //         //   //панельВнутренняя.PartQuery =
-            //         //   //    $" PanelTypeId = {Convert.ToInt32(typeOfPanel[2])},ElementType = 2\nWidth = {Convert.ToInt32(width)}, Height = {Convert.ToInt32(height)}\nPartThick = {40}, PartMat = {Convert.ToInt32(materialP2[0])}, PartMatThick = {Convert.ToDouble(materialP2[1].Replace('.', ','))}\nReinforcing = {усиление}, Ral = {покрытие[3]}, CoatingType = {покрытие[4]}, CoatingClass = {Convert.ToInt32(покрытие[5])}\nMirror = {config.Contains("01")}, Step = {(needToAddStepInsertionAndStep ? расположениеПанелей : null)}, StickyTape = {скотч}\nStepInsertion = {(needToAddStepInsertionAndStep ? расположениеВставок : null)}, AirHole = {типТорцевой}";
-
-            //         //   // Сшитые панели Внешняя тип + первая/вторая = 11, 12 или 21, 22 тоже и с нижней
-
-            //         //   var имяДвойнойВерхней1 = "";
-            //         //   var имяДвойнойВерхней2 = "";
-            //         //   var имяДвойнойНижней1 = "";
-            //         //   var имяДвойнойНижней2 = "";
-
-            //         //   AddingPanel панельВнешняяДвойная1 = null;
-            //         //   AddingPanel панельВнешняяДвойная2 = null;
-            //         //   AddingPanel панельВнутренняяДвойная1 = null;
-            //         //   AddingPanel панельВнутренняяДвойная2 = null;
-
-            //         //   if (типДвойной != "00") {
-            //         //       панельВнешняяДвойная1 =
-            //         //           new AddingPanel {
-            //         //               PanelTypeId = Convert.ToInt32(typeOfPanel[2]),
-            //         //               ElementType = Convert.ToInt32(типДвойной.Remove(1, 1) + "1"),
-            //         //               Width = Convert.ToInt32(width),
-            //         //               Height = Convert.ToInt32(height),
-            //         //               PartThick = 40,
-            //         //               PartMat = Convert.ToInt32(materialP1[0]),
-            //         //               PartMatThick = Convert.ToDouble(materialP1[1].Replace('.', ',')),
-            //         //               Reinforcing = усиление,
-            //         //               Ral = покрытие[0],
-            //         //               CoatingType = покрытие[1],
-            //         //               CoatingClass = Convert.ToInt32(покрытие[2]),
-            //         //               Mirror = config.Contains("01"),
-            //         //               StickyTape = скотч,//.Contains("Со скотчем"),
-            //         //               StepInsertion = needToAddStepInsertionAndStep ? расположениеВставок : null,
-            //         //               AirHole = типТорцевой
-            //         //           };
-            //         //     //  id = панельВнешняяДвойная1.AddPart();
-
-            //         //    //   partIds.Add(new KeyValuePair<int, int>(Convert.ToInt32(типДвойной.Remove(1, 1) + "1"), id));
-            //         //    //   панельВнешняяДвойная1.NewName = "02-" + pType + "-1-" + id;
-            //         //    //   имяДвойнойВерхней1 = панельВнешняяДвойная1.NewName;
-
-            //         //    //   панельВнешняяДвойная1.PartQuery =
-            //         //   //    $"PanelTypeId = {Convert.ToInt32(typeOfPanel[2])}, ElementType = {Convert.ToInt32(типДвойной.Remove(1, 1) + "1")}\nWidth = {Convert.ToInt32(width)}, Height = {Convert.ToInt32(height)},\nPartThick = 40, PartMat = {Convert.ToInt32(materialP1[0])}, PartMatThick = {Convert.ToDouble(materialP1[1].Replace('.', ','))}\nReinforcing = {усиление}, Ral = {покрытие[0]}, CoatingClass = {Convert.ToInt32(покрытие[2])}\nMirror = {config.Contains("01")}, StickyTape = {скотч}\nStepInsertion = {(needToAddStepInsertionAndStep ? расположениеВставок : null)}, AirHole = {типТорцевой}";
-
-            //         //       панельВнешняяДвойная2 =
-            //         //           new AddingPanel {
-            //         //               PanelTypeId = Convert.ToInt32(typeOfPanel[2]),
-            //         //               ElementType = Convert.ToInt32(типДвойной.Remove(1, 1) + "2"),
-            //         //               Width = Convert.ToInt32(width),
-            //         //               Height = Convert.ToInt32(height),
-            //         //               PartThick = 40,
-            //         //               PartMat = Convert.ToInt32(materialP1[0]),
-            //         //               PartMatThick = Convert.ToDouble(materialP1[1].Replace('.', ',')),
-            //         //               Reinforcing = усиление,
-            //         //               Ral = покрытие[0],
-            //         //               CoatingType = покрытие[1],
-            //         //               CoatingClass = Convert.ToInt32(покрытие[2]),
-            //         //               Mirror = config.Contains("01"),
-            //         //               StickyTape = скотч,//.Contains("Со скотчем"),
-            //         //               StepInsertion = needToAddStepInsertionAndStep ? расположениеВставок : null,
-            //         //               AirHole = типТорцевой
-            //         //           };
-            //         //    //   id = панельВнешняяДвойная2.AddPart();
-            //         //    //   partIds.Add(new KeyValuePair<int, int>(Convert.ToInt32(типДвойной.Remove(1, 1) + "2"), id));
-            //         //    //   панельВнешняяДвойная2.NewName = "02-" + pType + "-1-" + id;
-            //         //    //   имяДвойнойВерхней2 = панельВнешняяДвойная2.NewName;
-            //         //    //   панельВнешняяДвойная2.PartQuery =
-            //         //    //       $"PanelTypeId = {Convert.ToInt32(typeOfPanel[2])}, ElementType = {Convert.ToInt32(типДвойной.Remove(1, 1) + "2")}\nWidth = {Convert.ToInt32(width)}, Height = {Convert.ToInt32(height)},\nPartThick = 40, PartMat = {Convert.ToInt32(materialP1[0])}, PartMatThick = {Convert.ToDouble(materialP1[1].Replace('.', ','))}\nReinforcing = {усиление}, Ral = {покрытие[0]}, CoatingClass = {Convert.ToInt32(покрытие[2])}\nMirror = {config.Contains("01")} StickyTape = {скотч}\nStepInsertion = {(needToAddStepInsertionAndStep ? расположениеВставок : null)}, AirHole = {типТорцевой}";
-
-
-            //         //       if (типДвойной.Remove(0, 1) != "0") {
-            //         //           панельВнутренняяДвойная1 =
-            //         //               new AddingPanel {
-            //         //                   PanelTypeId = Convert.ToInt32(typeOfPanel[2]),
-            //         //                   ElementType = Convert.ToInt32(типДвойной.Remove(0, 1) + "1"),
-            //         //                   Width = Convert.ToInt32(width),
-            //         //                   Height = Convert.ToInt32(height),
-            //         //                   PartThick = 40,
-            //         //                   PartMat = Convert.ToInt32(materialP2[0]),
-            //         //                   PartMatThick = Convert.ToDouble(materialP2[1].Replace('.', ',')),
-            //         //                   Reinforcing = усиление,
-            //         //                   Ral = покрытие[3],
-            //         //                   CoatingType = покрытие[4],
-            //         //                   CoatingClass = Convert.ToInt32(покрытие[5]),
-            //         //                   Mirror = config.Contains("01"),
-            //         //                   Step = needToAddStepInsertionAndStep ? расположениеПанелей : null,
-            //         //                   StepInsertion = needToAddStepInsertionAndStep ? расположениеВставок : null,
-            //         //                   AirHole = типТорцевой
-            //         //               };
-            //         //       //    id = панельВнутренняяДвойная1.AddPart();
-            //         //      //     partIds.Add(new KeyValuePair<int, int>(Convert.ToInt32(типДвойной.Remove(0, 1) + "1"), id));
-            //         //      //     панельВнутренняяДвойная1.NewName = "02-" + pType + "-2-" + id;
-            //         //     //      имяДвойнойНижней1 = панельВнутренняяДвойная1.NewName;
-
-            //         //           панельВнутренняяДвойная2 =
-            //         //               new AddingPanel {
-            //         //                   PanelTypeId = Convert.ToInt32(typeOfPanel[2]),
-            //         //                   ElementType = Convert.ToInt32(типДвойной.Remove(0, 1) + "2"),
-            //         //                   Width = Convert.ToInt32(width),
-            //         //                   Height = Convert.ToInt32(height),
-            //         //                   PartThick = 40,
-            //         //                   PartMat = Convert.ToInt32(materialP2[0]),
-            //         //                   PartMatThick = Convert.ToDouble(materialP2[1].Replace('.', ',')),
-            //         //                   Reinforcing = усиление,
-            //         //                   Ral = покрытие[3],
-            //         //                   CoatingType = покрытие[4],
-            //         //                   CoatingClass = Convert.ToInt32(покрытие[5]),
-            //         //                   Mirror = config.Contains("01"),
-            //         //                   Step = needToAddStepInsertionAndStep ? расположениеПанелей : null,
-            //         //                   StepInsertion = needToAddStepInsertionAndStep ? расположениеВставок : null,
-            //         //                   AirHole = типТорцевой
-            //         //               };
-            //         //      //     id = панельВнутренняяДвойная2.AddPart();
-            //         //     //      partIds.Add(new KeyValuePair<int, int>(Convert.ToInt32(типДвойной.Remove(0, 1) + "2"), id));
-            //         //    //       панельВнутренняяДвойная2.NewName = "02-" + pType + "-2-" + id;
-            //         //     //      имяДвойнойНижней2 = панельВнутренняяДвойная2.NewName;
-            //         //       }
-            //         //   }
-
-            //         //   #endregion
-
-            //         //   #region теплоизоляция, cкотч, усиливающаяРамкаПоШирине, усиливающаяРамкаПоВысоте
-
-            //         //   //var теплоизоляция =
-            //         //   //    new AddingPanel {
-            //         //   //        PanelTypeId = typeOfPanel[2],
-            //         //   //        ElementType = 3,
-            //         //   //        Width = width,
-            //         //   //        Height = height,
-            //         //   //        PartThick = 40,
-            //         //   //        PartMat = 4900,
-
-            //         //   //        PartMatThick = 1,
-            //         //   //        Ral = "Без покрытия",
-            //         //   //        CoatingType = "0",
-            //         //   //        CoatingClass = 0,
-            //         //   //        AirHole = типТорцевой
-            //         //   //    };
-            //         // //  id = теплоизоляция.AddPart();
-            //         ////   partIds.Add(new KeyValuePair<int, int>(3, id));
-            //         ////   теплоизоляция.NewName = "02-" + id;
-            //         ////   теплоизоляция.PartQuery =
-            //         // //      $"PanelTypeId = {Convert.ToInt32(typeOfPanel[2])}, ElementType = 3\nWidth = {Convert.ToInt32(width)}, Height = {Convert.ToInt32(height)}\nPartThick = 40, PartMat = 4900, PartMatThick = 1\nRal = Без покрытия, CoatingType = 0, CoatingClass = {Convert.ToInt32("0")}\nAirHole = {типТорцевой}";
-
-            //         //   //AddingPanel cкотч = null;
-
-            //         //   //if (скотч)// Со скотчем
-            //         //   //{
-            //         //   //    cкотч =
-            //         //   //        new AddingPanel {
-            //         //   //            PanelTypeId = 14,
-            //         //   //            ElementType = 4,
-            //         //   //            Width = width,
-            //         //   //            Height = height,
-            //         //   //            PartThick = 40,
-            //         //   //            PartMat = 14800,
-            //         //   //            PartMatThick = 1,
-            //         //   //            Ral = "Без покрытия",
-            //         //   //            CoatingType = "0",
-            //         //   //            CoatingClass = Convert.ToInt32("0")
-            //         //   //        };
-            //         //  //     id = cкотч.AddPart();
-            //         //  //     partIds.Add(new KeyValuePair<int, int>(4, id));
-            //         //   //    cкотч.NewName = "02-" + id;
-            //         //   //    cкотч.PartQuery =
-            //         //  //         $"PanelTypeId = 14, ElementType = 4\nWidth = {Convert.ToInt32(width)}, Height = {Convert.ToInt32(height)}\nPartThick = 40, PartMat = 14800, PartMatThick = 1, Ral = Без покрытия\nCoatingType = 0, CoatingClass = {Convert.ToInt32("0")}";
-            //         //   }
-
-            //         //   var pes =
-            //         //       new AddingPanel {
-            //         //           PanelTypeId = 15,
-            //         //           ElementType = 5,
-            //         //           Width = Convert.ToInt32(width),
-            //         //           Height = Convert.ToInt32(height),
-            //         //           PartThick = 40,
-            //         //           PartMat = 6700,
-
-            //         //           PartMatThick = 1,
-            //         //           Ral = "Без покрытия",
-            //         //           CoatingType = "0",
-            //         //           CoatingClass = Convert.ToInt32("0")
-            //         //       };
-            //         // //  id = pes.AddPart();
-            //         ////   partIds.Add(new KeyValuePair<int, int>(5, id));
-            //         ////   pes.NewName = "02-" + id;
-            //         ////   pes.PartQuery =
-            //         ////       $"PanelTypeId = 15, ElementType = 5\nWidth = {Convert.ToInt32(width)}, Height = {Convert.ToInt32(height)}\nPartThick = 40, PartMat = 6700, PartMatThick = 1\nRal = Без покрытия, CoatingType = 0\nCoatingClass = {Convert.ToInt32("0")}";
-
-            //         //   AddingPanel усиливающаяРамкаПоШирине = null;
-            //         //   AddingPanel усиливающаяРамкаПоШирине2 = null;
-            //         //   AddingPanel усиливающаяРамкаПоВысоте = null;
-
-            //         //   if (усиление) {
-            //         //       усиливающаяРамкаПоШирине =
-            //         //           new AddingPanel {
-            //         //               PanelTypeId = Convert.ToInt32(typeOfPanel[2]),
-            //         //               ElementType = 6,
-            //         //               Height = 40,
-            //         //               Width = Convert.ToInt32(width),
-            //         //               PartThick = 40,
-            //         //               PartMat = 1800,
-            //         //               PartMatThick = Convert.ToDouble("1".Replace('.', ',')),
-            //         //               Mirror = config.Contains("01"),
-            //         //               Step = needToAddStepInsertionAndStep ? расположениеПанелей : null,
-            //         //               StepInsertion = needToAddStepInsertionAndStep ? расположениеВставок : null,
-
-            //         //               Ral = "Без покрытия",
-            //         //               CoatingType = "0",
-            //         //               CoatingClass = Convert.ToInt32("0")
-            //         //           };
-            //         //   //    id = усиливающаяРамкаПоШирине.AddPart();
-            //         //    //   partIds.Add(new KeyValuePair<int, int>(6, id));
-            //         //    //   усиливающаяРамкаПоШирине.NewName = "02-" + id;
-
-            //         //       if (pType != "01") {
-            //         //           усиливающаяРамкаПоШирине2 =
-            //         //               new AddingPanel {
-            //         //                   PanelTypeId = Convert.ToInt32(typeOfPanel[2]),
-            //         //                   ElementType = 62,
-            //         //                   Height = 40,
-            //         //                   Width = Convert.ToInt32(width),
-            //         //                   PartThick = 40,
-            //         //                   PartMat = 1800,
-            //         //                   PartMatThick = Convert.ToDouble("1".Replace('.', ',')),
-            //         //                   Mirror = config.Contains("01"),
-            //         //                   Step = needToAddStepInsertionAndStep ? расположениеПанелей : null,
-            //         //                   StepInsertion = needToAddStepInsertionAndStep ? расположениеВставок : null,
-
-            //         //                   Ral = "Без покрытия",
-            //         //                   CoatingType = "0",
-            //         //                   CoatingClass = Convert.ToInt32("0")
-            //         //               };
-            //         //      //     id = усиливающаяРамкаПоШирине2.AddPart();
-            //         //       //    partIds.Add(new KeyValuePair<int, int>(62, id));
-            //         //       //    усиливающаяРамкаПоШирине2.NewName = "02-" + id;
-            //         //       }
-
-            //         //       усиливающаяРамкаПоВысоте =
-            //         //           new AddingPanel {
-            //         //               PanelTypeId = Convert.ToInt32(typeOfPanel[2]),
-            //         //               ElementType = 7,
-            //         //               Height = Convert.ToInt32(height),
-            //         //               Width = 40,
-            //         //               PartThick = 40,
-            //         //               PartMat = 1800,
-            //         //               PartMatThick = Convert.ToDouble("1".Replace('.', ',')),
-            //         //               Mirror = config.Contains("01"),
-            //         //               Step = needToAddStepInsertionAndStep ? расположениеПанелей : null,
-            //         //               StepInsertion = needToAddStepInsertionAndStep ? расположениеВставок : null,
-
-            //         //               Ral = "Без покрытия",
-            //         //               CoatingType = "0",
-            //         //               CoatingClass = Convert.ToInt32("0")
-            //         //           };
-            //         //    //   id = усиливающаяРамкаПоВысоте.AddPart();
-            //         //    //   partIds.Add(new KeyValuePair<int, int>(7, id));
-            //         //    //   усиливающаяРамкаПоВысоте.NewName = "02-" + id;
-            //         //   }
-
-            //         //   AddingPanel кронштейнДверной = null;
-
-            //         //   if (усилисвающя) {
-            //         //       if (ТипУсиливающей().Remove(0, 1).Contains("D")) {
-            //         //           //MessageBox.Show(Усиливающая(pType) + "\n" + типУсиливающей.Remove(0, 1).Contains("D"));
-            //         //           кронштейнДверной = new AddingPanel {
-            //         //               PanelTypeId = Convert.ToInt32(typeOfPanel[2]),
-            //         //               ElementType = 9,
-            //         //               Height = Convert.ToInt32(height),
-            //         //               Width = 20,
-            //         //               PartThick = 40,
-            //         //               PartMat = 1800,
-            //         //               PartMatThick = Convert.ToDouble("1".Replace('.', ',')),
-            //         //               Mirror = config.Contains("01"),
-
-            //         //               Ral = "Без покрытия",
-            //         //               CoatingType = "0",
-            //         //               CoatingClass = Convert.ToInt32("0")
-            //         //           };
-            //         //     //      id = кронштейнДверной.AddPart();
-            //         //     //      partIds.Add(new KeyValuePair<int, int>(9, id));
-            //         //     //      кронштейнДверной.NewName = "02-" + id;
-            //         //    //       кронштейнДверной.PartQuery = $"PanelTypeId = {Convert.ToInt32(typeOfPanel[2])}, ElementType = 9\nHeight = {Convert.ToInt32(height)}, Width = 20\nPartThick = 40, PartMat = 1800\nPartMatThick = {Convert.ToDouble("1".Replace('.', ','))}, Mirror = {config.Contains("01")}\n,Ral = Без покрытия, CoatingType = 0\nCoatingClass = {Convert.ToInt32("0")}";
-            //         //       }
-            //         //   }
-
-            //         //   AddingPanel профильТорцевойРамкиВертикальный = null;
-            //         //   AddingPanel профильТорцевойРамкиГоризонтальный = null;
-
-            //         //   if (типТорцевой != null) {
-            //         //       профильТорцевойРамкиВертикальный = new AddingPanel {
-            //         //           PanelTypeId = Convert.ToInt32(typeOfPanel[2]),
-            //         //           ElementType = 11,
-            //         //           Height = (int)HeightOfWindow,
-            //         //           Width = 40,
-            //         //           PartThick = 40,
-            //         //           PartMat = 1800,
-            //         //           PartMatThick = Convert.ToDouble("1".Replace('.', ',')),
-            //         //           Mirror = config.Contains("01"),
-
-            //         //           Ral = "Без покрытия",
-            //         //           CoatingType = "0",
-            //         //           CoatingClass = Convert.ToInt32("0"),
-
-            //         //           AirHole = типТорцевой
-            //         //       };
-            //         //  //     id = профильТорцевойРамкиВертикальный.AddPart();
-            //         //   //    partIds.Add(new KeyValuePair<int, int>(11, id));
-            //         //   //    профильТорцевойРамкиВертикальный.NewName = "02-" + id;
-
-
-            //         //       профильТорцевойРамкиГоризонтальный = new AddingPanel {
-            //         //           PanelTypeId = Convert.ToInt32(typeOfPanel[2]),
-            //         //           ElementType = 12,
-            //         //           Height = (int)WidthOfWindow,//BackProfils.Height,
-            //         //           Width = 40,
-            //         //           PartThick = 40,
-            //         //           PartMat = 1800,
-            //         //           PartMatThick = Convert.ToDouble("1".Replace('.', ',')),
-            //         //           Mirror = config.Contains("01"),
-
-            //         //           Ral = "Без покрытия",
-            //         //           CoatingType = "0",
-            //         //           CoatingClass = Convert.ToInt32("0"),
-
-            //         //           AirHole = типТорцевой
-            //         //       };
-            //         //   //    id = профильТорцевойРамкиГоризонтальный.AddPart();
-            //         //    //   partIds.Add(new KeyValuePair<int, int>(12, id));
-            //         //    //   профильТорцевойРамкиГоризонтальный.NewName = "02-" + id;
-            //         //   }
-
-            //            #endregion
-
-            //            #region Сборка панели
-
-
-            //            //var iDs = "";
-
-            //            //var idAsm = 0;
-            //            //foreach (var сборка in partIds.Select(partId => new AddingPanel {
-            //            //    PartId = partId.Value,
-
-            //            //    PanelTypeId = Convert.ToInt32(typeOfPanel[2]),
-
-            //            //    ElementType = partId.Key,
-
-            //            //    Width = Convert.ToInt32(width),
-            //            //    Height = Convert.ToInt32(height),
-
-            //            //    PanelMatOut = Convert.ToInt32(materialP1[0]),
-            //            //    PanelMatIn = Convert.ToInt32(materialP2[0]),
-            //            //    PanelThick = 40,
-            //            //    PanelMatThickOut = Convert.ToDouble(materialP1[1].Replace('.', ',')),
-            //            //    PanelMatThickIn = Convert.ToDouble(materialP2[1].Replace('.', ',')),
-            //            //    RalOut = покрытие[0],
-            //            //    RalIn = покрытие[0],
-            //            //    CoatingTypeOut = покрытие[1],
-            //            //    CoatingTypeIn = покрытие[1],
-            //            //    CoatingClassOut = Convert.ToInt32(покрытие[2]),
-            //            //    CoatingClassIn = Convert.ToInt32(покрытие[2]),
-
-            //            //    Mirror = config.Contains("01"),
-            //            //    Step = needToAddStepInsertionAndStep ? расположениеПанелей : null,
-            //            //    StepInsertion = needToAddStepInsertionAndStep ? расположениеВставок : null,
-            //            //    Reinforcing = усиление,
-            //            //    StickyTape = скотч,//.Contains("Со скотчем"),
-
-            //            //    AirHole = типТорцевой,
-
-            //            //    PanelNumber = newId
-            //            //})) {
-            //            //    idAsm = сборка.Add();
-            //            //    iDs = iDs + "\n" + idAsm;
-            //            //}
-
-            //            //MessageBox.Show(iDs);
-            //            //return null;
-
-            //            #endregion
-
-
-            //          //  var обозначениеНовойПанели = "02-" + typeOfPanel[0] + "-" + idAsm;
-
-            //            //existingAsmsAndParts.AddRange(new List<ExistingAsmsAndParts>
-            //            //    {
-            //            //        new ExistingAsmsAndParts
-            //            //        {
-            //            //            PartName = обозначениеНовойПанели,
-            //            //            Comment = "Сборка панели",
-            //            //            IdAsm = обозначениеНовойПанели + " - " + typeOfPanel[1],
-            //            //            PartQuery = $@"PanelTypeId = {Convert.ToInt32(typeOfPanel[2])}
-            //            //            Width = {Convert.ToInt32(width)} Height = {Convert.ToInt32(height)}" +
-
-            //            //            #region to delete
-            //            //            //PanelMatOut = {Convert.ToInt32(materialP1[0])}
-            //            //            //PanelMatIn = {Convert.ToInt32(materialP2[0])}
-            //            //            //PanelMatThickOut = {Convert.ToDouble(materialP1[1].Replace('.', ','))}
-            //            //            //PanelMatThickIn = {Convert.ToDouble(materialP2[1].Replace('.', ','))}
-            //            //            //RalOut = {покрытие[0]}
-            //            //            //RalIn = {покрытие[0]}
-            //            //            //CoatingTypeOut = {покрытие[1]}
-            //            //            //CoatingTypeIn = {покрытие[1]}
-            //            //            //CoatingClassOut = {Convert.ToInt32(покрытие[2])}
-            //            //            //CoatingClassIn = {Convert.ToInt32(покрытие[2])}
-            //            //            #endregion
-
-            //            //            $@" Mirror = {config.Contains("01")}
-            //            //            Step = {(needToAddStepInsertionAndStep ? расположениеПанелей : null)}
-            //            //            StepInsertion = {(needToAddStepInsertionAndStep ? расположениеВставок : null)}
-            //            //            Reinforcing = {усиление}
-            //            //            StickyTape = {скотч}
-            //            //            AirHole = {типТорцевой}
-            //            //            PanelNumber = {newId}"
-            //            //        }
-            //            //    });
-
-
-            //            //if (типДвойной == "00") {
-            //            //    existingAsmsAndParts.AddRange(new List<ExistingAsmsAndParts>
-            //            //    {
-            //            //        new ExistingAsmsAndParts
-            //            //        {
-            //            //            PartName = панельВнешняя.NewName,
-            //            //            Comment = "Панель Внешняя",
-            //            //            IdAsm = обозначениеНовойПанели + " - " + typeOfPanel[1],
-            //            //            PartQuery = панельВнешняя.PartQuery
-            //            //        }
-            //            //    });
-            //            //}
-            //            //else {
-            //            //    existingAsmsAndParts.AddRange(new List<ExistingAsmsAndParts>
-            //            //    {
-            //            //        new ExistingAsmsAndParts
-            //            //        {
-            //            //            PartName = панельВнешняяДвойная1.NewName,
-            //            //            Comment = "Панель Внутренняя 1",
-            //            //            IdAsm = обозначениеНовойПанели + " - " + typeOfPanel[1],
-            //            //            PartQuery = панельВнешняяДвойная1.PartQuery
-            //            //        },
-            //            //        new ExistingAsmsAndParts
-            //            //        {
-            //            //            PartName = панельВнешняяДвойная2.NewName,
-            //            //            Comment = "Панель Внутренняя 2",
-            //            //            IdAsm = обозначениеНовойПанели + " - " + typeOfPanel[1],
-            //            //            PartQuery = панельВнешняяДвойная2.PartQuery
-            //            //        }
-            //            //    });
-            //            //}
-
-            //            //if (типДвойной == "00") {
-            //            //    existingAsmsAndParts.AddRange(new List<ExistingAsmsAndParts>
-            //            //    {
-            //            //        new ExistingAsmsAndParts
-            //            //        {
-            //            //            PartName = панельВнутренняя.NewName,
-            //            //            Comment = "Панель Внутренняя",
-            //            //            IdAsm = обозначениеНовойПанели + " - " + typeOfPanel[1],
-            //            //            PartQuery = панельВнутренняя.PartQuery
-            //            //        }
-            //            //    });
-            //            //}
-            //            //else {
-            //            //    existingAsmsAndParts.AddRange(new List<ExistingAsmsAndParts>
-            //            //    {
-            //            //        new ExistingAsmsAndParts
-            //            //        {
-            //            //            PartName = панельВнутренняяДвойная1.NewName,
-            //            //            Comment = "Панель Внутренняя 1",
-            //            //            IdAsm = обозначениеНовойПанели + " - " + typeOfPanel[1],
-            //            //            PartQuery = панельВнутренняяДвойная1.PartQuery
-            //            //        },
-            //            //        new ExistingAsmsAndParts
-            //            //        {
-            //            //            PartName = панельВнутренняяДвойная2.NewName,
-            //            //            Comment = "Панель Внутренняя 2",
-            //            //            IdAsm = обозначениеНовойПанели + " - " + typeOfPanel[1],
-            //            //            PartQuery = панельВнутренняяДвойная2.PartQuery
-            //            //        }
-            //            //    });
-            //            //}
-
-            //            //if (кронштейнДверной != null) {
-            //            //    existingAsmsAndParts.Add(new ExistingAsmsAndParts {
-            //            //        PartName = кронштейнДверной.NewName,
-            //            //        Comment = "Кронштейн дверной",
-            //            //        IdAsm = обозначениеНовойПанели + " - " + typeOfPanel[1],
-            //            //        PartQuery = кронштейнДверной.PartQuery
-            //            //    });
-            //            //}
-            //            //if (cкотч != null) {
-            //            //    existingAsmsAndParts.Add(new ExistingAsmsAndParts {
-            //            //        PartName = cкотч?.NewName,
-            //            //        Comment = "Скотч",
-            //            //        IdAsm = обозначениеНовойПанели + " - " + typeOfPanel[1],
-            //            //        PartQuery = cкотч?.PartQuery
-            //            //    });
-            //            //}
-            //            //if (усиливающаяРамкаПоВысоте != null) {
-            //            //    existingAsmsAndParts.Add(new ExistingAsmsAndParts {
-            //            //        PartName = усиливающаяРамкаПоВысоте?.NewName,
-            //            //        Comment = "Усиливающая рамка по высоте",
-            //            //        IdAsm = обозначениеНовойПанели + " - " + typeOfPanel[1]
-            //            //    });
-            //            //}
-            //            //if (усиливающаяРамкаПоШирине != null) {
-            //            //    existingAsmsAndParts.Add(new ExistingAsmsAndParts {
-            //            //        PartName = усиливающаяРамкаПоШирине?.NewName,
-            //            //        Comment = "Усиливающая рамка по ширине",
-            //            //        IdAsm = обозначениеНовойПанели + " - " + typeOfPanel[1]
-            //            //    });
-            //            //}
-            //            //if (профильТорцевойРамкиВертикальный != null) {
-            //            //    existingAsmsAndParts.Add(new ExistingAsmsAndParts {
-            //            //        PartName = профильТорцевойРамкиВертикальный?.NewName,
-            //            //        Comment = "Профиль торцевой рамки вертикальный",
-            //            //        IdAsm = обозначениеНовойПанели + " - " + typeOfPanel[1]
-            //            //    });
-            //            //}
-            //            //if (профильТорцевойРамкиГоризонтальный != null) {
-            //            //    existingAsmsAndParts.Add(new ExistingAsmsAndParts {
-            //            //        PartName = профильТорцевойРамкиГоризонтальный?.NewName,
-            //            //        Comment = "Профиль торцевой рамки горизонтальный",
-            //            //        IdAsm = обозначениеНовойПанели + " - " + typeOfPanel[1]
-            //            //    });
-            //            //}
-
-            //            //if (onlySearch)
-            //            //    return null;
-
-            //            #endregion
-
-            //            #endregion
-
-            //            string[] frameProfils = null;
-
-            //            if (типТорцевой != null) {
-
-            //                    frameProfils = new[]
-            //                    { 
-            //                        FrameProfil(framelessPanel.WindowSize.Y + 60, framelessPanel.ThermoStrip,//.Contains("Со скотчем"),
-            //                        "00",
-            //                            BackProfils.Flange30, профильТорцевойРамкиВертикальный.NewName),
-            //                        FrameProfil( framelessPanel.WindowSize.X+ 0, framelessPanel.ThermoStrip,//.Contains("Со скотчем"), 
-            //                        "01",
-            //                            BackProfils.Flange30, профильТорцевойРамкиГоризонтальный.NewName)
-            //                    };
-            //                }              
-
-
-            //            switch (framelessPanel.PanelType) {
-            //                case PanelType_e.RemovablePanel:
-            //                    _destinationFolder = Panels0204; // Folder - 02-04-Removable Panels
-            //                    break;
-            //                default:
-            //                    _destinationFolder = Panels0201; // Folder - 02-01-Panels
-            //                    break;
-            //            }
-
-
-            //            #region Двойная
-
-            //            var типДвойнойВерхней = "0";
-            //            var типДвойнойНижней = "0";
-            //            string типДвойнойРазрез = null;
-
-            //            if (типДвойной != "00") {
-            //                nameAsm = "02-11-40-2";
-
-            //                NameUpPanel = "02-11-01-40-2-";
-            //                NameDownPanel = "02-11-02-40-2-";
-
-            //                типДвойнойВерхней = типДвойной.Remove(1, 1);
-            //                типДвойнойНижней = типДвойной.Remove(0, 1);
-
-            //                if (типДвойной.Contains("1")) {
-            //                    типДвойнойРазрез = "W";
-            //                }
-            //                if (типДвойной.Contains("2")) {
-            //                    типДвойнойРазрез = "H";
-            //                }
-            //            }
-
-            //            #endregion
-
-            //            //var modelPanelAsmbly = new FileInfo($@"{sourceFolder}{modelPanelsPath}\{nameAsm}.SLDASM").FullName;
-
-            //            #endregion
+            //        //            if (Усиливающая()) {
+            //        //                needToAddStepInsertionAndStep = true;
+            //        //            }
+
+            //        //            var panelsUpDownConfigString =
+            //        //                (framelessPanel.PanelType !=  PanelType_e.RemovablePanel   & framelessPanel.PanelType !=  PanelType_e.BlankPanel & framelessPanel.PanelType !=  PanelType_e.FrontPanel)
+            //        //                    ?InputHolesWrapper.InValUpDown() : "";
+
+            //        //            #region Обозначение ДЕТАЛЕЙ и СБОРКИ из БАЗЫ
+
+
+            //        //            #region Задание наименований
+
+            //        //            //var sqlBaseData = new SqlBaseData();
+            //        //          //  var newId = sqlBaseData.PanelNumber() + 1;
+            //        //          ///  var partIds = new List<KeyValuePair<int, int>>();
+
+            //        //            #region панельВнешняя, панельВнутренняя            
+
+            //        //         //   var панельВнешняя =
+            //        //         //       new AddingPanel {
+            //        //         //           PanelTypeId = Convert.ToInt32(typeOfPanel[2]),
+            //        //         //           ElementType = 1,
+            //        //         //           Width = width,
+            //        //         //           Height = height,
+            //        //         //           PartThick = 40,
+            //        //         //           PartMat = materialP1[0],
+            //        //         //           PartMatThick = materialP1[1],
+            //        //         //           Reinforcing = framelessPanel.усиление ,
+            //        //         //           Ral = null,
+            //        //         //           CoatingType = null,
+            //        //         //           CoatingClass = null,
+            //        //         //           Mirror = config.Contains("01"),
+            //        //         //           StickyTape = скотч,
+            //        //         //           StepInsertion = needToAddStepInsertionAndStep ? расположениеВставок : null,
+            //        //         //           AirHole = типТорцевой
+            //        //         //       };
+            //        //         //  // var id = панельВнешняя.AddPart();
+
+            //        //         ////   панельВнешняя.PartQuery =
+            //        //         //   //    $"PanelTypeId = {Convert.ToInt32(typeOfPanel[2])}, ElementType = {1}\nWidth = {Convert.ToInt32(width)}, Height = {Convert.ToInt32(height)},\nPartThick = 40, PartMat = {Convert.ToInt32(materialP1[0])}, PartMatThick = {Convert.ToDouble(materialP1[1].Replace('.', ','))}\nReinforcing = {framelessPanel.усиление }, Ral = {покрытие[0]}, CoatingClass = {Convert.ToInt32(покрытие[2])}\nMirror = {config.Contains("01")}, StickyTape = {скотч}\nStepInsertion = {(needToAddStepInsertionAndStep ? расположениеВставок : null)}, AirHole = {типТорцевой}";
+
+
+
+            //        //         //   //панельВнешняя.NewName = "02-" + typeOfPanel[0] + "-1-" + id;
+
+            //        //         //   var панельВнутренняя =
+            //        //         //       new AddingPanel {
+            //        //         //           PanelTypeId = усилисвающя ? Convert.ToInt32(первыйТип[2]) : Convert.ToInt32(typeOfPanel[2]),
+            //        //         //           ElementType = 2,
+            //        //         //           Width = Convert.ToInt32(width),
+            //        //         //           Height = Convert.ToInt32(height),
+            //        //         //           PartThick = 40,
+            //        //         //           PartMat = Convert.ToInt32(materialP2[0]),
+            //        //         //           PartMatThick = Convert.ToDouble(materialP2[1].Replace('.', ',')),
+            //        //         //           Reinforcing = framelessPanel.усиление ,
+            //        //         //           Ral = покрытие[3],
+            //        //         //           CoatingType = покрытие[4],
+            //        //         //           CoatingClass = Convert.ToInt32(покрытие[5]),
+            //        //         //           Mirror = config.Contains("01"),
+            //        //         //           Step = needToAddStepInsertionAndStep ? расположениеПанелей : null,
+            //        //         //           StepInsertion = needToAddStepInsertionAndStep ? расположениеВставок : null,
+            //        //         //           AirHole = типТорцевой
+            //        //         //       };
+            //        //         //   //id = панельВнутренняя.AddPart();
+
+            //        //         //   //if (типДвойной == "00") {
+            //        //         //   //    //   partIds.Add(new KeyValuePair<int, int>(2, id));
+            //        //         //   //}
+
+            //        //         //   //панельВнутренняя.NewName = "02-" + framelessPanel.PanelType + "-2-" + id;
+            //        //         //   //панельВнутренняя.PartQuery =
+            //        //         //   //    $" PanelTypeId = {Convert.ToInt32(typeOfPanel[2])},ElementType = 2\nWidth = {Convert.ToInt32(width)}, Height = {Convert.ToInt32(height)}\nPartThick = {40}, PartMat = {Convert.ToInt32(materialP2[0])}, PartMatThick = {Convert.ToDouble(materialP2[1].Replace('.', ','))}\nReinforcing = {framelessPanel.усиление }, Ral = {покрытие[3]}, CoatingType = {покрытие[4]}, CoatingClass = {Convert.ToInt32(покрытие[5])}\nMirror = {config.Contains("01")}, Step = {(needToAddStepInsertionAndStep ? расположениеПанелей : null)}, StickyTape = {скотч}\nStepInsertion = {(needToAddStepInsertionAndStep ? расположениеВставок : null)}, AirHole = {типТорцевой}";
+
+            //        //         //   // Сшитые панели Внешняя тип + первая/вторая = 11, 12 или 21, 22 тоже и с нижней
+
+            //        //         //   var имяДвойнойВерхней1 = "";
+            //        //         //   var имяДвойнойВерхней2 = "";
+            //        //         //   var имяДвойнойНижней1 = "";
+            //        //         //   var имяДвойнойНижней2 = "";
+
+            //        //         //   AddingPanel панельВнешняяДвойная1 = null;
+            //        //         //   AddingPanel панельВнешняяДвойная2 = null;
+            //        //         //   AddingPanel панельВнутренняяДвойная1 = null;
+            //        //         //   AddingPanel панельВнутренняяДвойная2 = null;
+
+            //        //         //   if (типДвойной != "00") {
+            //        //         //       панельВнешняяДвойная1 =
+            //        //         //           new AddingPanel {
+            //        //         //               PanelTypeId = Convert.ToInt32(typeOfPanel[2]),
+            //        //         //               ElementType = Convert.ToInt32(типДвойной.Remove(1, 1) + "1"),
+            //        //         //               Width = Convert.ToInt32(width),
+            //        //         //               Height = Convert.ToInt32(height),
+            //        //         //               PartThick = 40,
+            //        //         //               PartMat = Convert.ToInt32(materialP1[0]),
+            //        //         //               PartMatThick = Convert.ToDouble(materialP1[1].Replace('.', ',')),
+            //        //         //               Reinforcing = framelessPanel.усиление ,
+            //        //         //               Ral = покрытие[0],
+            //        //         //               CoatingType = покрытие[1],
+            //        //         //               CoatingClass = Convert.ToInt32(покрытие[2]),
+            //        //         //               Mirror = config.Contains("01"),
+            //        //         //               StickyTape = скотч,//.Contains("Со скотчем"),
+            //        //         //               StepInsertion = needToAddStepInsertionAndStep ? расположениеВставок : null,
+            //        //         //               AirHole = типТорцевой
+            //        //         //           };
+            //        //         //     //  id = панельВнешняяДвойная1.AddPart();
+
+            //        //         //    //   partIds.Add(new KeyValuePair<int, int>(Convert.ToInt32(типДвойной.Remove(1, 1) + "1"), id));
+            //        //         //    //   панельВнешняяДвойная1.NewName = "02-" + framelessPanel.PanelType + "-1-" + id;
+            //        //         //    //   имяДвойнойВерхней1 = панельВнешняяДвойная1.NewName;
+
+            //        //         //    //   панельВнешняяДвойная1.PartQuery =
+            //        //         //   //    $"PanelTypeId = {Convert.ToInt32(typeOfPanel[2])}, ElementType = {Convert.ToInt32(типДвойной.Remove(1, 1) + "1")}\nWidth = {Convert.ToInt32(width)}, Height = {Convert.ToInt32(height)},\nPartThick = 40, PartMat = {Convert.ToInt32(materialP1[0])}, PartMatThick = {Convert.ToDouble(materialP1[1].Replace('.', ','))}\nReinforcing = {framelessPanel.усиление }, Ral = {покрытие[0]}, CoatingClass = {Convert.ToInt32(покрытие[2])}\nMirror = {config.Contains("01")}, StickyTape = {скотч}\nStepInsertion = {(needToAddStepInsertionAndStep ? расположениеВставок : null)}, AirHole = {типТорцевой}";
+
+            //        //         //       панельВнешняяДвойная2 =
+            //        //         //           new AddingPanel {
+            //        //         //               PanelTypeId = Convert.ToInt32(typeOfPanel[2]),
+            //        //         //               ElementType = Convert.ToInt32(типДвойной.Remove(1, 1) + "2"),
+            //        //         //               Width = Convert.ToInt32(width),
+            //        //         //               Height = Convert.ToInt32(height),
+            //        //         //               PartThick = 40,
+            //        //         //               PartMat = Convert.ToInt32(materialP1[0]),
+            //        //         //               PartMatThick = Convert.ToDouble(materialP1[1].Replace('.', ',')),
+            //        //         //               Reinforcing = framelessPanel.усиление ,
+            //        //         //               Ral = покрытие[0],
+            //        //         //               CoatingType = покрытие[1],
+            //        //         //               CoatingClass = Convert.ToInt32(покрытие[2]),
+            //        //         //               Mirror = config.Contains("01"),
+            //        //         //               StickyTape = скотч,//.Contains("Со скотчем"),
+            //        //         //               StepInsertion = needToAddStepInsertionAndStep ? расположениеВставок : null,
+            //        //         //               AirHole = типТорцевой
+            //        //         //           };
+            //        //         //    //   id = панельВнешняяДвойная2.AddPart();
+            //        //         //    //   partIds.Add(new KeyValuePair<int, int>(Convert.ToInt32(типДвойной.Remove(1, 1) + "2"), id));
+            //        //         //    //   панельВнешняяДвойная2.NewName = "02-" + framelessPanel.PanelType + "-1-" + id;
+            //        //         //    //   имяДвойнойВерхней2 = панельВнешняяДвойная2.NewName;
+            //        //         //    //   панельВнешняяДвойная2.PartQuery =
+            //        //         //    //       $"PanelTypeId = {Convert.ToInt32(typeOfPanel[2])}, ElementType = {Convert.ToInt32(типДвойной.Remove(1, 1) + "2")}\nWidth = {Convert.ToInt32(width)}, Height = {Convert.ToInt32(height)},\nPartThick = 40, PartMat = {Convert.ToInt32(materialP1[0])}, PartMatThick = {Convert.ToDouble(materialP1[1].Replace('.', ','))}\nReinforcing = {framelessPanel.усиление }, Ral = {покрытие[0]}, CoatingClass = {Convert.ToInt32(покрытие[2])}\nMirror = {config.Contains("01")} StickyTape = {скотч}\nStepInsertion = {(needToAddStepInsertionAndStep ? расположениеВставок : null)}, AirHole = {типТорцевой}";
+
+
+            //        //         //       if (типДвойной.Remove(0, 1) != "0") {
+            //        //         //           панельВнутренняяДвойная1 =
+            //        //         //               new AddingPanel {
+            //        //         //                   PanelTypeId = Convert.ToInt32(typeOfPanel[2]),
+            //        //         //                   ElementType = Convert.ToInt32(типДвойной.Remove(0, 1) + "1"),
+            //        //         //                   Width = Convert.ToInt32(width),
+            //        //         //                   Height = Convert.ToInt32(height),
+            //        //         //                   PartThick = 40,
+            //        //         //                   PartMat = Convert.ToInt32(materialP2[0]),
+            //        //         //                   PartMatThick = Convert.ToDouble(materialP2[1].Replace('.', ',')),
+            //        //         //                   Reinforcing = framelessPanel.усиление ,
+            //        //         //                   Ral = покрытие[3],
+            //        //         //                   CoatingType = покрытие[4],
+            //        //         //                   CoatingClass = Convert.ToInt32(покрытие[5]),
+            //        //         //                   Mirror = config.Contains("01"),
+            //        //         //                   Step = needToAddStepInsertionAndStep ? расположениеПанелей : null,
+            //        //         //                   StepInsertion = needToAddStepInsertionAndStep ? расположениеВставок : null,
+            //        //         //                   AirHole = типТорцевой
+            //        //         //               };
+            //        //         //       //    id = панельВнутренняяДвойная1.AddPart();
+            //        //         //      //     partIds.Add(new KeyValuePair<int, int>(Convert.ToInt32(типДвойной.Remove(0, 1) + "1"), id));
+            //        //         //      //     панельВнутренняяДвойная1.NewName = "02-" + framelessPanel.PanelType + "-2-" + id;
+            //        //         //     //      имяДвойнойНижней1 = панельВнутренняяДвойная1.NewName;
+
+            //        //         //           панельВнутренняяДвойная2 =
+            //        //         //               new AddingPanel {
+            //        //         //                   PanelTypeId = Convert.ToInt32(typeOfPanel[2]),
+            //        //         //                   ElementType = Convert.ToInt32(типДвойной.Remove(0, 1) + "2"),
+            //        //         //                   Width = Convert.ToInt32(width),
+            //        //         //                   Height = Convert.ToInt32(height),
+            //        //         //                   PartThick = 40,
+            //        //         //                   PartMat = Convert.ToInt32(materialP2[0]),
+            //        //         //                   PartMatThick = Convert.ToDouble(materialP2[1].Replace('.', ',')),
+            //        //         //                   Reinforcing = framelessPanel.усиление ,
+            //        //         //                   Ral = покрытие[3],
+            //        //         //                   CoatingType = покрытие[4],
+            //        //         //                   CoatingClass = Convert.ToInt32(покрытие[5]),
+            //        //         //                   Mirror = config.Contains("01"),
+            //        //         //                   Step = needToAddStepInsertionAndStep ? расположениеПанелей : null,
+            //        //         //                   StepInsertion = needToAddStepInsertionAndStep ? расположениеВставок : null,
+            //        //         //                   AirHole = типТорцевой
+            //        //         //               };
+            //        //         //      //     id = панельВнутренняяДвойная2.AddPart();
+            //        //         //     //      partIds.Add(new KeyValuePair<int, int>(Convert.ToInt32(типДвойной.Remove(0, 1) + "2"), id));
+            //        //         //    //       панельВнутренняяДвойная2.NewName = "02-" + framelessPanel.PanelType + "-2-" + id;
+            //        //         //     //      имяДвойнойНижней2 = панельВнутренняяДвойная2.NewName;
+            //        //         //       }
+            //        //         //   }
+
+            //        //         //   #endregion
+
+            //        //         //   #region теплоизоляция, cкотч, усиливающаяРамкаПоШирине, усиливающаяРамкаПоВысоте
+
+            //        //         //   //var теплоизоляция =
+            //        //         //   //    new AddingPanel {
+            //        //         //   //        PanelTypeId = typeOfPanel[2],
+            //        //         //   //        ElementType = 3,
+            //        //         //   //        Width = width,
+            //        //         //   //        Height = height,
+            //        //         //   //        PartThick = 40,
+            //        //         //   //        PartMat = 4900,
+
+            //        //         //   //        PartMatThick = 1,
+            //        //         //   //        Ral = "Без покрытия",
+            //        //         //   //        CoatingType = "0",
+            //        //         //   //        CoatingClass = 0,
+            //        //         //   //        AirHole = типТорцевой
+            //        //         //   //    };
+            //        //         // //  id = теплоизоляция.AddPart();
+            //        //         ////   partIds.Add(new KeyValuePair<int, int>(3, id));
+            //        //         ////   теплоизоляция.NewName = "02-" + id;
+            //        //         ////   теплоизоляция.PartQuery =
+            //        //         // //      $"PanelTypeId = {Convert.ToInt32(typeOfPanel[2])}, ElementType = 3\nWidth = {Convert.ToInt32(width)}, Height = {Convert.ToInt32(height)}\nPartThick = 40, PartMat = 4900, PartMatThick = 1\nRal = Без покрытия, CoatingType = 0, CoatingClass = {Convert.ToInt32("0")}\nAirHole = {типТорцевой}";
+
+            //        //         //   //AddingPanel cкотч = null;
+
+            //        //         //   //if (скотч)// Со скотчем
+            //        //         //   //{
+            //        //         //   //    cкотч =
+            //        //         //   //        new AddingPanel {
+            //        //         //   //            PanelTypeId = 14,
+            //        //         //   //            ElementType = 4,
+            //        //         //   //            Width = width,
+            //        //         //   //            Height = height,
+            //        //         //   //            PartThick = 40,
+            //        //         //   //            PartMat = 14800,
+            //        //         //   //            PartMatThick = 1,
+            //        //         //   //            Ral = "Без покрытия",
+            //        //         //   //            CoatingType = "0",
+            //        //         //   //            CoatingClass = Convert.ToInt32("0")
+            //        //         //   //        };
+            //        //         //  //     id = cкотч.AddPart();
+            //        //         //  //     partIds.Add(new KeyValuePair<int, int>(4, id));
+            //        //         //   //    cкотч.NewName = "02-" + id;
+            //        //         //   //    cкотч.PartQuery =
+            //        //         //  //         $"PanelTypeId = 14, ElementType = 4\nWidth = {Convert.ToInt32(width)}, Height = {Convert.ToInt32(height)}\nPartThick = 40, PartMat = 14800, PartMatThick = 1, Ral = Без покрытия\nCoatingType = 0, CoatingClass = {Convert.ToInt32("0")}";
+            //        //         //   }
+
+            //        //         //   var pes =
+            //        //         //       new AddingPanel {
+            //        //         //           PanelTypeId = 15,
+            //        //         //           ElementType = 5,
+            //        //         //           Width = Convert.ToInt32(width),
+            //        //         //           Height = Convert.ToInt32(height),
+            //        //         //           PartThick = 40,
+            //        //         //           PartMat = 6700,
+
+            //        //         //           PartMatThick = 1,
+            //        //         //           Ral = "Без покрытия",
+            //        //         //           CoatingType = "0",
+            //        //         //           CoatingClass = Convert.ToInt32("0")
+            //        //         //       };
+            //        //         // //  id = pes.AddPart();
+            //        //         ////   partIds.Add(new KeyValuePair<int, int>(5, id));
+            //        //         ////   pes.NewName = "02-" + id;
+            //        //         ////   pes.PartQuery =
+            //        //         ////       $"PanelTypeId = 15, ElementType = 5\nWidth = {Convert.ToInt32(width)}, Height = {Convert.ToInt32(height)}\nPartThick = 40, PartMat = 6700, PartMatThick = 1\nRal = Без покрытия, CoatingType = 0\nCoatingClass = {Convert.ToInt32("0")}";
+
+            //        //         //   AddingPanel усиливающаяРамкаПоШирине = null;
+            //        //         //   AddingPanel усиливающаяРамкаПоШирине2 = null;
+            //        //         //   AddingPanel усиливающаяРамкаПоВысоте = null;
+
+            //        //         //   if (framelessPanel.усиление ) {
+            //        //         //       усиливающаяРамкаПоШирине =
+            //        //         //           new AddingPanel {
+            //        //         //               PanelTypeId = Convert.ToInt32(typeOfPanel[2]),
+            //        //         //               ElementType = 6,
+            //        //         //               Height = 40,
+            //        //         //               Width = Convert.ToInt32(width),
+            //        //         //               PartThick = 40,
+            //        //         //               PartMat = 1800,
+            //        //         //               PartMatThick = Convert.ToDouble("1".Replace('.', ',')),
+            //        //         //               Mirror = config.Contains("01"),
+            //        //         //               Step = needToAddStepInsertionAndStep ? расположениеПанелей : null,
+            //        //         //               StepInsertion = needToAddStepInsertionAndStep ? расположениеВставок : null,
+
+            //        //         //               Ral = "Без покрытия",
+            //        //         //               CoatingType = "0",
+            //        //         //               CoatingClass = Convert.ToInt32("0")
+            //        //         //           };
+            //        //         //   //    id = усиливающаяРамкаПоШирине.AddPart();
+            //        //         //    //   partIds.Add(new KeyValuePair<int, int>(6, id));
+            //        //         //    //   усиливающаяРамкаПоШирине.NewName = "02-" + id;
+
+            //        //         //       if (framelessPanel.PanelType != "01") {
+            //        //         //           усиливающаяРамкаПоШирине2 =
+            //        //         //               new AddingPanel {
+            //        //         //                   PanelTypeId = Convert.ToInt32(typeOfPanel[2]),
+            //        //         //                   ElementType = 62,
+            //        //         //                   Height = 40,
+            //        //         //                   Width = Convert.ToInt32(width),
+            //        //         //                   PartThick = 40,
+            //        //         //                   PartMat = 1800,
+            //        //         //                   PartMatThick = Convert.ToDouble("1".Replace('.', ',')),
+            //        //         //                   Mirror = config.Contains("01"),
+            //        //         //                   Step = needToAddStepInsertionAndStep ? расположениеПанелей : null,
+            //        //         //                   StepInsertion = needToAddStepInsertionAndStep ? расположениеВставок : null,
+
+            //        //         //                   Ral = "Без покрытия",
+            //        //         //                   CoatingType = "0",
+            //        //         //                   CoatingClass = Convert.ToInt32("0")
+            //        //         //               };
+            //        //         //      //     id = усиливающаяРамкаПоШирине2.AddPart();
+            //        //         //       //    partIds.Add(new KeyValuePair<int, int>(62, id));
+            //        //         //       //    усиливающаяРамкаПоШирине2.NewName = "02-" + id;
+            //        //         //       }
+
+            //        //         //       усиливающаяРамкаПоВысоте =
+            //        //         //           new AddingPanel {
+            //        //         //               PanelTypeId = Convert.ToInt32(typeOfPanel[2]),
+            //        //         //               ElementType = 7,
+            //        //         //               Height = Convert.ToInt32(height),
+            //        //         //               Width = 40,
+            //        //         //               PartThick = 40,
+            //        //         //               PartMat = 1800,
+            //        //         //               PartMatThick = Convert.ToDouble("1".Replace('.', ',')),
+            //        //         //               Mirror = config.Contains("01"),
+            //        //         //               Step = needToAddStepInsertionAndStep ? расположениеПанелей : null,
+            //        //         //               StepInsertion = needToAddStepInsertionAndStep ? расположениеВставок : null,
+
+            //        //         //               Ral = "Без покрытия",
+            //        //         //               CoatingType = "0",
+            //        //         //               CoatingClass = Convert.ToInt32("0")
+            //        //         //           };
+            //        //         //    //   id = усиливающаяРамкаПоВысоте.AddPart();
+            //        //         //    //   partIds.Add(new KeyValuePair<int, int>(7, id));
+            //        //         //    //   усиливающаяРамкаПоВысоте.NewName = "02-" + id;
+            //        //         //   }
+
+            //        //         //   AddingPanel кронштейнДверной = null;
+
+            //        //         //   if (усилисвающя) {
+            //        //         //       if (ТипУсиливающей().Remove(0, 1).Contains("D")) {
+            //        //         //           //MessageBox.Show(Усиливающая(framelessPanel.PanelType) + "\n" + типУсиливающей.Remove(0, 1).Contains("D"));
+            //        //         //           кронштейнДверной = new AddingPanel {
+            //        //         //               PanelTypeId = Convert.ToInt32(typeOfPanel[2]),
+            //        //         //               ElementType = 9,
+            //        //         //               Height = Convert.ToInt32(height),
+            //        //         //               Width = 20,
+            //        //         //               PartThick = 40,
+            //        //         //               PartMat = 1800,
+            //        //         //               PartMatThick = Convert.ToDouble("1".Replace('.', ',')),
+            //        //         //               Mirror = config.Contains("01"),
+
+            //        //         //               Ral = "Без покрытия",
+            //        //         //               CoatingType = "0",
+            //        //         //               CoatingClass = Convert.ToInt32("0")
+            //        //         //           };
+            //        //         //     //      id = кронштейнДверной.AddPart();
+            //        //         //     //      partIds.Add(new KeyValuePair<int, int>(9, id));
+            //        //         //     //      кронштейнДверной.NewName = "02-" + id;
+            //        //         //    //       кронштейнДверной.PartQuery = $"PanelTypeId = {Convert.ToInt32(typeOfPanel[2])}, ElementType = 9\nHeight = {Convert.ToInt32(height)}, Width = 20\nPartThick = 40, PartMat = 1800\nPartMatThick = {Convert.ToDouble("1".Replace('.', ','))}, Mirror = {config.Contains("01")}\n,Ral = Без покрытия, CoatingType = 0\nCoatingClass = {Convert.ToInt32("0")}";
+            //        //         //       }
+            //        //         //   }
+
+            //        //         //   AddingPanel профильТорцевойРамкиВертикальный = null;
+            //        //         //   AddingPanel профильТорцевойРамкиГоризонтальный = null;
+
+            //        //         //   if (типТорцевой != null) {
+            //        //         //       профильТорцевойРамкиВертикальный = new AddingPanel {
+            //        //         //           PanelTypeId = Convert.ToInt32(typeOfPanel[2]),
+            //        //         //           ElementType = 11,
+            //        //         //           Height = (int)HeightOfWindow,
+            //        //         //           Width = 40,
+            //        //         //           PartThick = 40,
+            //        //         //           PartMat = 1800,
+            //        //         //           PartMatThick = Convert.ToDouble("1".Replace('.', ',')),
+            //        //         //           Mirror = config.Contains("01"),
+
+            //        //         //           Ral = "Без покрытия",
+            //        //         //           CoatingType = "0",
+            //        //         //           CoatingClass = Convert.ToInt32("0"),
+
+            //        //         //           AirHole = типТорцевой
+            //        //         //       };
+            //        //         //  //     id = профильТорцевойРамкиВертикальный.AddPart();
+            //        //         //   //    partIds.Add(new KeyValuePair<int, int>(11, id));
+            //        //         //   //    профильТорцевойРамкиВертикальный.NewName = "02-" + id;
+
+
+            //        //         //       профильТорцевойРамкиГоризонтальный = new AddingPanel {
+            //        //         //           PanelTypeId = Convert.ToInt32(typeOfPanel[2]),
+            //        //         //           ElementType = 12,
+            //        //         //           Height = (int)WidthOfWindow,//BackProfils.Height,
+            //        //         //           Width = 40,
+            //        //         //           PartThick = 40,
+            //        //         //           PartMat = 1800,
+            //        //         //           PartMatThick = Convert.ToDouble("1".Replace('.', ',')),
+            //        //         //           Mirror = config.Contains("01"),
+
+            //        //         //           Ral = "Без покрытия",
+            //        //         //           CoatingType = "0",
+            //        //         //           CoatingClass = Convert.ToInt32("0"),
+
+            //        //         //           AirHole = типТорцевой
+            //        //         //       };
+            //        //         //   //    id = профильТорцевойРамкиГоризонтальный.AddPart();
+            //        //         //    //   partIds.Add(new KeyValuePair<int, int>(12, id));
+            //        //         //    //   профильТорцевойРамкиГоризонтальный.NewName = "02-" + id;
+            //        //         //   }
+
+            //        //            #endregion
+
+            //        //            #region Сборка панели
+
+
+            //        //            //var iDs = "";
+
+            //        //            //var idAsm = 0;
+            //        //            //foreach (var сборка in partIds.Select(partId => new AddingPanel {
+            //        //            //    PartId = partId.Value,
+
+            //        //            //    PanelTypeId = Convert.ToInt32(typeOfPanel[2]),
+
+            //        //            //    ElementType = partId.Key,
+
+            //        //            //    Width = Convert.ToInt32(width),
+            //        //            //    Height = Convert.ToInt32(height),
+
+            //        //            //    PanelMatOut = Convert.ToInt32(materialP1[0]),
+            //        //            //    PanelMatIn = Convert.ToInt32(materialP2[0]),
+            //        //            //    PanelThick = 40,
+            //        //            //    PanelMatThickOut = Convert.ToDouble(materialP1[1].Replace('.', ',')),
+            //        //            //    PanelMatThickIn = Convert.ToDouble(materialP2[1].Replace('.', ',')),
+            //        //            //    RalOut = покрытие[0],
+            //        //            //    RalIn = покрытие[0],
+            //        //            //    CoatingTypeOut = покрытие[1],
+            //        //            //    CoatingTypeIn = покрытие[1],
+            //        //            //    CoatingClassOut = Convert.ToInt32(покрытие[2]),
+            //        //            //    CoatingClassIn = Convert.ToInt32(покрытие[2]),
+
+            //        //            //    Mirror = config.Contains("01"),
+            //        //            //    Step = needToAddStepInsertionAndStep ? расположениеПанелей : null,
+            //        //            //    StepInsertion = needToAddStepInsertionAndStep ? расположениеВставок : null,
+            //        //            //    Reinforcing = framelessPanel.усиление ,
+            //        //            //    StickyTape = скотч,//.Contains("Со скотчем"),
+
+            //        //            //    AirHole = типТорцевой,
+
+            //        //            //    PanelNumber = newId
+            //        //            //})) {
+            //        //            //    idAsm = сборка.Add();
+            //        //            //    iDs = iDs + "\n" + idAsm;
+            //        //            //}
+
+            //        //            //MessageBox.Show(iDs);
+            //        //            //return null;
+
+            //        //            #endregion
+
+
+            //        //          //  var обозначениеНовойПанели = "02-" + typeOfPanel[0] + "-" + idAsm;
+
+            //        //            //existingAsmsAndParts.AddRange(new List<ExistingAsmsAndParts>
+            //        //            //    {
+            //        //            //        new ExistingAsmsAndParts
+            //        //            //        {
+            //        //            //            PartName = обозначениеНовойПанели,
+            //        //            //            Comment = "Сборка панели",
+            //        //            //            IdAsm = обозначениеНовойПанели + " - " + typeOfPanel[1],
+            //        //            //            PartQuery = $@"PanelTypeId = {Convert.ToInt32(typeOfPanel[2])}
+            //        //            //            Width = {Convert.ToInt32(width)} Height = {Convert.ToInt32(height)}" +
+
+            //        //            //            #region to delete
+            //        //            //            //PanelMatOut = {Convert.ToInt32(materialP1[0])}
+            //        //            //            //PanelMatIn = {Convert.ToInt32(materialP2[0])}
+            //        //            //            //PanelMatThickOut = {Convert.ToDouble(materialP1[1].Replace('.', ','))}
+            //        //            //            //PanelMatThickIn = {Convert.ToDouble(materialP2[1].Replace('.', ','))}
+            //        //            //            //RalOut = {покрытие[0]}
+            //        //            //            //RalIn = {покрытие[0]}
+            //        //            //            //CoatingTypeOut = {покрытие[1]}
+            //        //            //            //CoatingTypeIn = {покрытие[1]}
+            //        //            //            //CoatingClassOut = {Convert.ToInt32(покрытие[2])}
+            //        //            //            //CoatingClassIn = {Convert.ToInt32(покрытие[2])}
+            //        //            //            #endregion
+
+            //        //            //            $@" Mirror = {config.Contains("01")}
+            //        //            //            Step = {(needToAddStepInsertionAndStep ? расположениеПанелей : null)}
+            //        //            //            StepInsertion = {(needToAddStepInsertionAndStep ? расположениеВставок : null)}
+            //        //            //            Reinforcing = {framelessPanel.усиление }
+            //        //            //            StickyTape = {скотч}
+            //        //            //            AirHole = {типТорцевой}
+            //        //            //            PanelNumber = {newId}"
+            //        //            //        }
+            //        //            //    });
+
+
+            //        //            //if (типДвойной == "00") {
+            //        //            //    existingAsmsAndParts.AddRange(new List<ExistingAsmsAndParts>
+            //        //            //    {
+            //        //            //        new ExistingAsmsAndParts
+            //        //            //        {
+            //        //            //            PartName = панельВнешняя.NewName,
+            //        //            //            Comment = "Панель Внешняя",
+            //        //            //            IdAsm = обозначениеНовойПанели + " - " + typeOfPanel[1],
+            //        //            //            PartQuery = панельВнешняя.PartQuery
+            //        //            //        }
+            //        //            //    });
+            //        //            //}
+            //        //            //else {
+            //        //            //    existingAsmsAndParts.AddRange(new List<ExistingAsmsAndParts>
+            //        //            //    {
+            //        //            //        new ExistingAsmsAndParts
+            //        //            //        {
+            //        //            //            PartName = панельВнешняяДвойная1.NewName,
+            //        //            //            Comment = "Панель Внутренняя 1",
+            //        //            //            IdAsm = обозначениеНовойПанели + " - " + typeOfPanel[1],
+            //        //            //            PartQuery = панельВнешняяДвойная1.PartQuery
+            //        //            //        },
+            //        //            //        new ExistingAsmsAndParts
+            //        //            //        {
+            //        //            //            PartName = панельВнешняяДвойная2.NewName,
+            //        //            //            Comment = "Панель Внутренняя 2",
+            //        //            //            IdAsm = обозначениеНовойПанели + " - " + typeOfPanel[1],
+            //        //            //            PartQuery = панельВнешняяДвойная2.PartQuery
+            //        //            //        }
+            //        //            //    });
+            //        //            //}
+
+            //        //            //if (типДвойной == "00") {
+            //        //            //    existingAsmsAndParts.AddRange(new List<ExistingAsmsAndParts>
+            //        //            //    {
+            //        //            //        new ExistingAsmsAndParts
+            //        //            //        {
+            //        //            //            PartName = панельВнутренняя.NewName,
+            //        //            //            Comment = "Панель Внутренняя",
+            //        //            //            IdAsm = обозначениеНовойПанели + " - " + typeOfPanel[1],
+            //        //            //            PartQuery = панельВнутренняя.PartQuery
+            //        //            //        }
+            //        //            //    });
+            //        //            //}
+            //        //            //else {
+            //        //            //    existingAsmsAndParts.AddRange(new List<ExistingAsmsAndParts>
+            //        //            //    {
+            //        //            //        new ExistingAsmsAndParts
+            //        //            //        {
+            //        //            //            PartName = панельВнутренняяДвойная1.NewName,
+            //        //            //            Comment = "Панель Внутренняя 1",
+            //        //            //            IdAsm = обозначениеНовойПанели + " - " + typeOfPanel[1],
+            //        //            //            PartQuery = панельВнутренняяДвойная1.PartQuery
+            //        //            //        },
+            //        //            //        new ExistingAsmsAndParts
+            //        //            //        {
+            //        //            //            PartName = панельВнутренняяДвойная2.NewName,
+            //        //            //            Comment = "Панель Внутренняя 2",
+            //        //            //            IdAsm = обозначениеНовойПанели + " - " + typeOfPanel[1],
+            //        //            //            PartQuery = панельВнутренняяДвойная2.PartQuery
+            //        //            //        }
+            //        //            //    });
+            //        //            //}
+
+            //        //            //if (кронштейнДверной != null) {
+            //        //            //    existingAsmsAndParts.Add(new ExistingAsmsAndParts {
+            //        //            //        PartName = кронштейнДверной.NewName,
+            //        //            //        Comment = "Кронштейн дверной",
+            //        //            //        IdAsm = обозначениеНовойПанели + " - " + typeOfPanel[1],
+            //        //            //        PartQuery = кронштейнДверной.PartQuery
+            //        //            //    });
+            //        //            //}
+            //        //            //if (cкотч != null) {
+            //        //            //    existingAsmsAndParts.Add(new ExistingAsmsAndParts {
+            //        //            //        PartName = cкотч?.NewName,
+            //        //            //        Comment = "Скотч",
+            //        //            //        IdAsm = обозначениеНовойПанели + " - " + typeOfPanel[1],
+            //        //            //        PartQuery = cкотч?.PartQuery
+            //        //            //    });
+            //        //            //}
+            //        //            //if (усиливающаяРамкаПоВысоте != null) {
+            //        //            //    existingAsmsAndParts.Add(new ExistingAsmsAndParts {
+            //        //            //        PartName = усиливающаяРамкаПоВысоте?.NewName,
+            //        //            //        Comment = "Усиливающая рамка по высоте",
+            //        //            //        IdAsm = обозначениеНовойПанели + " - " + typeOfPanel[1]
+            //        //            //    });
+            //        //            //}
+            //        //            //if (усиливающаяРамкаПоШирине != null) {
+            //        //            //    existingAsmsAndParts.Add(new ExistingAsmsAndParts {
+            //        //            //        PartName = усиливающаяРамкаПоШирине?.NewName,
+            //        //            //        Comment = "Усиливающая рамка по ширине",
+            //        //            //        IdAsm = обозначениеНовойПанели + " - " + typeOfPanel[1]
+            //        //            //    });
+            //        //            //}
+            //        //            //if (профильТорцевойРамкиВертикальный != null) {
+            //        //            //    existingAsmsAndParts.Add(new ExistingAsmsAndParts {
+            //        //            //        PartName = профильТорцевойРамкиВертикальный?.NewName,
+            //        //            //        Comment = "Профиль торцевой рамки вертикальный",
+            //        //            //        IdAsm = обозначениеНовойПанели + " - " + typeOfPanel[1]
+            //        //            //    });
+            //        //            //}
+            //        //            //if (профильТорцевойРамкиГоризонтальный != null) {
+            //        //            //    existingAsmsAndParts.Add(new ExistingAsmsAndParts {
+            //        //            //        PartName = профильТорцевойРамкиГоризонтальный?.NewName,
+            //        //            //        Comment = "Профиль торцевой рамки горизонтальный",
+            //        //            //        IdAsm = обозначениеНовойПанели + " - " + typeOfPanel[1]
+            //        //            //    });
+            //        //            //}
+
+            //        //            //if (onlySearch)
+            //        //            //    return null;
+
+            //        //            #endregion
+
+            //        //            #endregion
+
+            //        //            string[] frameProfils = null;
+
+            //        //            if (типТорцевой != null) {
+
+            //        //                    frameProfils = new[]
+            //        //                    { 
+            //        //                        FrameProfil(framelessPanel.WindowSize.Y + 60, framelessPanel.ThermoStrip,//.Contains("Со скотчем"),
+            //        //                        "00",
+            //        //                            BackProfils.Flange30, профильТорцевойРамкиВертикальный.NewName),
+            //        //                        FrameProfil( framelessPanel.WindowSize.X+ 0, framelessPanel.ThermoStrip,//.Contains("Со скотчем"), 
+            //        //                        "01",
+            //        //                            BackProfils.Flange30, профильТорцевойРамкиГоризонтальный.NewName)
+            //        //                    };
+            //        //                }              
+
+
+            //        //            switch (framelessPanel.PanelType) {
+            //        //                case PanelType_e.RemovablePanel:
+            //        //                    _destinationFolder = Panels0204; // Folder - 02-04-Removable Panels
+            //        //                    break;
+            //        //                default:
+            //        //                    _destinationFolder = Panels0201; // Folder - 02-01-Panels
+            //        //                    break;
+            //        //            }
+
+
+            //        //            #region Двойная
+
+            //        //            var типДвойнойВерхней = "0";
+            //        //            var типДвойнойНижней = "0";
+            //        //            string типДвойнойРазрез = null;
+
+            //        //            if (типДвойной != "00") {
+            //        //                nameAsm = "02-11-40-2";
+
+            //        //                NameUpPanel = "02-11-01-40-2-";
+            //        //                NameDownPanel = "02-11-02-40-2-";
+
+            //        //                типДвойнойВерхней = типДвойной.Remove(1, 1);
+            //        //                типДвойнойНижней = типДвойной.Remove(0, 1);
+
+            //        //                if (типДвойной.Contains("1")) {
+            //        //                    типДвойнойРазрез = "W";
+            //        //                }
+            //        //                if (типДвойной.Contains("2")) {
+            //        //                    типДвойнойРазрез = "H";
+            //        //                }
+            //        //            }
+
+            //        //            #endregion
+
+            //        //            //var modelPanelAsmbly = new FileInfo($@"{sourceFolder}{modelPanelsPath}\{nameAsm}.SLDASM").FullName;
+
+            //                    #endregion
         }
-
 
         string ТипУсиливающей() {
             switch (framelessPanel.PanelType) {
@@ -3075,6 +3115,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                     return null;
             }
         }
+
         bool Усиливающая() {
             switch (framelessPanel.PanelType) {
                 case PanelType_e.ПростаяУсилПанель:
@@ -3088,10 +3129,6 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                     return false;
             }
         }
-
-
-
-
     }
 }
  

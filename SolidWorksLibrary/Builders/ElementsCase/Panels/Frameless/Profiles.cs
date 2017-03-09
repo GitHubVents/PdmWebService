@@ -52,22 +52,26 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
 
         //Profiles for reinforcing panel
         #region Усиливающие рамки
-        public void ReinforcingProfile () {
-            const string thiknessF = "1";
+        public void ReinforcingProfile (string testName) {
+            const double thiknessF = 1;
             //var bendParams = sbSqlBaseData.BendTable(thiknessF);
             //var bendRadius = Convert.ToDouble(bendParams[0]);
             //var kFactor = Convert.ToDouble(bendParams[1]);
             const double heightF = 38.0; // Артурчик сказал не надо. 06.03.2017 16:45
-        #region  Усиливающая рамка по ширине
-                //newName = усиливающаяРамкаПоШирине.NewName;
-                //newName = modelName + "-06-" + width + "-" + "40-" + materialP2[0] + скотч;
-                //newPartPath = $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}.SLDPRT";
+            #region  Усиливающая рамка по ширине
+            //newName = усиливающаяРамкаПоШирине.NewName;
+            //newName = modelName + "-06-" + width + "-" + "40-" + materialP2[0] + скотч;
+            //newPartPath = $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}.SLDPRT";
 
+
+
+            SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(testName);// "02-11-07-40-"); // horisontal up
+            
             if (false) { }
             else {
                 parameters.Add("D2@Эскиз1", framelessPanel.PanelType == PanelType_e.RemovablePanel ? framelessPanel.SizePanel.X - 49.2 : framelessPanel.SizePanel.X - 47.2);
                 //parameters.Add("D1@Эскиз1", heightF);
-                parameters.Add("D1@Кривая3", screwsByWidthInner);
+                parameters.Add("D1@Кривая3", ScrewsByWidthInner);
                 parameters.Add("D1@Кривая2", колСаморезВинтШирина);
                 //Размеры для отверсти под клепальные гайки под съемные панели
                 parameters.Add("G0@Эскиз32", OutputHolesWrapper.G0 - 3.6);
@@ -95,7 +99,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                 if (framelessPanel.PanelType == PanelType_e.BlankPanel) {
                     SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2(AssemblyName + ".SLDASM", true, 0)));
                     DocumentExtension.SelectByID2("02-11-06_2-40--4@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                AssemblyDocument.ReplaceComponents(System.IO.Path.Combine(RootFolder, SubjectDestinationFolder, усиливающаяРамкаПоШирине.NewName + "SLDPRT"), String.Empty, true, true);
+              //  AssemblyDocument.ReplaceComponents(System.IO.Path.Combine(RootFolder, SubjectDestinationFolder, усиливающаяРамкаПоШирине.NewName + "SLDPRT"), String.Empty, true, true);
                                                         //($@"{RootFolder}\{SubjectDestinationFolder}\{усиливающаяРамкаПоШирине.NewName}.SLDPRT", "", true, true);
 
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("02-11-06_2-40-.SLDPRT");
@@ -114,7 +118,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                     else {
                     parameters.Add("D2@Эскиз1", framelessPanel.PanelType == PanelType_e.RemovablePanel ? framelessPanel.SizePanel.X - 49.2 : framelessPanel.SizePanel.X - 47.2);
                     parameters.Add("D1@Эскиз1", heightF);
-                    parameters.Add("D1@Кривая3", screwsByWidthInner);
+                    parameters.Add("D1@Кривая3", ScrewsByWidthInner);
                     parameters.Add("D1@Кривая2", колСаморезВинтШирина);
                     parameters.Add("G0@Эскиз32", OutputHolesWrapper.G0 - 3.6);
                     parameters.Add("G1@Эскиз32", OutputHolesWrapper.G1);
@@ -137,7 +141,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
 
                 #region  Усиливающая рамка по высоте
 
-                PartName = усиливающаяРамкаПоВысоте.NewName;
+               // PartName = усиливающаяРамкаПоВысоте.NewName;
 
             NewPartPath = "";// newName = modelName + "-07-" + lenght + "-" + "40-" + materialP2[0] + скотч;
             NewPartPath = System.IO.Path.Combine(RootFolder, SubjectDestinationFolder, NewPartPath + "SLDPRT");//$@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}.SLDPRT";
@@ -153,7 +157,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                 parameters.Add("D3@Эскиз1", framelessPanel.PanelType == PanelType_e.RemovablePanel ? framelessPanel.SizePanel.Y - 2 : framelessPanel.SizePanel.Y);
                 parameters.Add("D1@Эскиз1", heightF);
                 parameters.Add("D1@Эскиз23", framelessPanel.PanelType == PanelType_e.BlankPanel ? 44.4 : 125);
-                parameters.Add("D1@Кривая2", screwsByHeightInner);
+                parameters.Add("D1@Кривая2", ScrewsByHeightInner);
                 parameters.Add("D1@Кривая1", колЗаклепокВысота);
                 parameters.Add("Толщина@Листовой металл", thiknessF);
                 parameters.Add("D1@Листовой металл", (double)base.BendRadius);

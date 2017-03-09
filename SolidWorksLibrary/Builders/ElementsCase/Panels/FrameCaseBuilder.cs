@@ -37,7 +37,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
             Patterns.Observer.MessageObserver.Instance.SetMessage("\n" + caseAssemblyPath + "\n");
             ModelDoc2 SolidWorksDocument = SolidWorksAdapter.OpenDocument(caseAssemblyPath, swDocumentTypes_e.swDocASSEMBLY);// SolidWorksDocumentumentTypes_e.SolidWorksDocumentASSEMBLY);
             Patterns.Observer.MessageObserver.Instance.SetMessage("открылась сборка");
-             AssemblyDocument = SolidWorksAdapter.ToAssemblyDocument( SolidWorksDocument); 
+             //AssemblyDocument = SolidWorksAdapter.ToAssemblyDocument( SolidWorksDocument); 
             double rivetL;
             string newName = "01-P150-45-" + (frameSize.Z - 140);
             string newPartPath = GetFrameCasePath(newName);
@@ -136,7 +136,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
                 SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(modelName);
                 SolidWorksDocument.EditRebuild3();
                 SolidWorksDocument.ForceRebuild3(true);
-                AssemblyDocument = (AssemblyDoc)SolidWorksDocument;
+             //   AssemblyDocument = (AssemblyDoc)SolidWorksDocument;
 
                 if (serviceSide == ServiceSide.Left)
                 {
