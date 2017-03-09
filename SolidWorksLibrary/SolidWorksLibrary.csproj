@@ -87,7 +87,7 @@
     <Compile Include="Builders\ElementsCase\MountingFrameBuilder.cs" />
     <Compile Include="Builders\ElementsCase\Panels\Frameless\Components\DeterminateCut.cs" />
     <Compile Include="Builders\ElementsCase\Panels\FrameCaseBuilder.cs" />
-    <Compile Include="Builders\ElementsCase\Panels\Frameless\Components\BackProfils.cs" />
+    <Compile Include="Builders\ElementsCase\Panels\Frameless\Components\WindowProfils.cs" />
     <Compile Include="Builders\ElementsCase\Panels\Frameless\DeleteModulFrameLessBuilder.cs" />
     <Compile Include="Builders\ElementsCase\Panels\Frameless\Profiles.cs" />
     <Compile Include="Builders\ElementsCase\Panels\Frameless\Components\CompType_e.cs" />

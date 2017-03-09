@@ -45,7 +45,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
         /// </summary>
         protected AssemblyDoc AssemblyDocument {
             get {
-                SolidWorksAdapter.AcativeteDoc(AssemblyName);
+                //SolidWorksAdapter.AcativeteDoc(AssemblyName);
                 return SolidWorksAdapter.ToAssemblyDocument(SolidWorksDocument);
             }
         }

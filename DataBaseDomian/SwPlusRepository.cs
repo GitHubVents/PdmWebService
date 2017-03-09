@@ -54,6 +54,16 @@ namespace DataBaseDomian
             }
         }
 
+        /// <summary>
+        /// Add part of panel and returns it's id
+        /// </summary>
+        /// <returns></returns>
+        public int  AddPartOfPanel(int panelType, int elementType, int widht, int height, int partThick, int parMat, int partMatThick, bool mirror, bool stickyTape, string step, string stepInsertion,bool reinfocung,string airHole ) {
+            int? partId = 0;
+            partId = DataContext.AirVents_AddPartOfPanel_test(panelType, elementType, widht, height, partThick, parMat, partMatThick, mirror, stickyTape, step, stepInsertion, reinfocung, airHole,ref partId);
+            return (int)partId;
+        }
+
         public void RefreshRepositoryStatus()
         {
             try

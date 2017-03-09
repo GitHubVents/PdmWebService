@@ -87,6 +87,14 @@ namespace DataBaseDomian.Orm
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), iDPDM, configuration, version);
 			return ((int)(result.ReturnValue));
 		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.AirVents_AddPartOfPanel_test")]
+		public int AirVents_AddPartOfPanel_test([global::System.Data.Linq.Mapping.ParameterAttribute(Name="PanelTypeID", DbType="Int")] System.Nullable<int> panelTypeID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="ElementType", DbType="Int")] System.Nullable<int> elementType, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Width", DbType="Int")] System.Nullable<int> width, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Height", DbType="Int")] System.Nullable<int> height, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="PartThick", DbType="Int")] System.Nullable<int> partThick, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="PartMat", DbType="Int")] System.Nullable<int> partMat, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="PartMatThick", DbType="Decimal(3,1)")] System.Nullable<decimal> partMatThick, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Mirror", DbType="Bit")] System.Nullable<bool> mirror, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="StickyTape", DbType="Bit")] System.Nullable<bool> stickyTape, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Step", DbType="NVarChar(255)")] string step, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="StepInsertion", DbType="NVarChar(255)")] string stepInsertion, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Reinforcing", DbType="Bit")] System.Nullable<bool> reinforcing, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="AirHole", DbType="NVarChar(255)")] string airHole, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="PARTID", DbType="Int")] ref System.Nullable<int> pARTID)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), panelTypeID, elementType, width, height, partThick, partMat, partMatThick, mirror, stickyTape, step, stepInsertion, reinforcing, airHole, pARTID);
+			pARTID = ((System.Nullable<int>)(result.GetParameterValue(13)));
+			return ((int)(result.ReturnValue));
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.View_Parts")]

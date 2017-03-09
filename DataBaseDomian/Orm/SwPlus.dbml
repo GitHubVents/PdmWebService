@@ -30,4 +30,21 @@
     <Parameter Name="Version" Parameter="version" Type="System.Int32" DbType="Int" />
     <Return Type="System.Int32" />
   </Function>
+  <Function Name="dbo.AirVents_AddPartOfPanel_test" Method="AirVents_AddPartOfPanel_test">
+    <Parameter Name="PanelTypeID" Parameter="panelTypeID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="ElementType" Parameter="elementType" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Width" Parameter="width" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Height" Parameter="height" Type="System.Int32" DbType="Int" />
+    <Parameter Name="PartThick" Parameter="partThick" Type="System.Int32" DbType="Int" />
+    <Parameter Name="PartMat" Parameter="partMat" Type="System.Int32" DbType="Int" />
+    <Parameter Name="PartMatThick" Parameter="partMatThick" Type="System.Decimal" DbType="Decimal(3,1)" />
+    <Parameter Name="Mirror" Parameter="mirror" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="StickyTape" Parameter="stickyTape" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="Step" Parameter="step" Type="System.String" DbType="NVarChar(255)" />
+    <Parameter Name="StepInsertion" Parameter="stepInsertion" Type="System.String" DbType="NVarChar(255)" />
+    <Parameter Name="Reinforcing" Parameter="reinforcing" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="AirHole" Parameter="airHole" Type="System.String" DbType="NVarChar(255)" />
+    <Parameter Name="PARTID" Parameter="pARTID" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
 </Database>
