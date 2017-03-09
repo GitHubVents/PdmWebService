@@ -87,8 +87,8 @@
     <Compile Include="Builders\ElementsCase\MountingFrameBuilder.cs" />
     <Compile Include="Builders\ElementsCase\Panels\Frameless\Components\DeterminateCut.cs" />
     <Compile Include="Builders\ElementsCase\Panels\FrameCaseBuilder.cs" />
+    <Compile Include="Builders\ElementsCase\Panels\Frameless\Components\ExistPartsChecker.cs" />
     <Compile Include="Builders\ElementsCase\Panels\Frameless\Components\WindowProfils.cs" />
-    <Compile Include="Builders\ElementsCase\Panels\Frameless\DeleteModulFrameLessBuilder.cs" />
     <Compile Include="Builders\ElementsCase\Panels\Frameless\Profiles.cs" />
     <Compile Include="Builders\ElementsCase\Panels\Frameless\Components\CompType_e.cs" />
     <Compile Include="Builders\ElementsCase\Panels\Frameless\FramelessPanel.cs" />
@@ -97,7 +97,6 @@
     <Compile Include="Builders\ElementsCase\Panels\Frameless\Components\OutputHolesWrapper.cs" />
     <Compile Include="Builders\ElementsCase\Panels\Frameless\Components\Screws.cs" />
     <Compile Include="Builders\ElementsCase\Panels\Frameless\Components\ValProfils.cs" />
-    <Compile Include="Builders\ElementsCase\Panels\Frameless\SuppressModulFrameLessBuilder.cs" />
     <Compile Include="Builders\ElementsCase\Panels\PanelBuilder.cs" />
     <Compile Include="Builders\ElementsCase\Vector.cs" />
     <Compile Include="Builders\Pdf\PdfBuilder.cs" />
