@@ -118,13 +118,16 @@
         //Панель  теплообменника     02-05-ХХХХ
     }
 
-    public enum ElemetPanelType_e {
-
+    /// <summary>
+    /// Desctibes elemet types for panel
+    /// </summary>
+    public enum ElemetPanelType_e
+    {
         Inner_panel = 1,
-Outer_panel =  2,
+        Outer_panel = 2,
         Inner_panel_left,
         Inner_panel_right,
-        Outer_panel_left ,
+        Outer_panel_left,
         Outer_panel_right,
         Insulation = 3,
         Scotch = 4,
@@ -135,7 +138,6 @@ Outer_panel =  2,
         Door_Bracket = 9,
         Profile_Front_Panel_Horizontal = 12,
         Profile_Front_Panel_Vertical = 12
-
     }
 
     #endregion panels
