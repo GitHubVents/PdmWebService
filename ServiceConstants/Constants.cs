@@ -107,10 +107,10 @@
         ПодТорцевуюИДвериНаЗажимах = 28,
         ПодТорцевуюИДвериНаПетлях = 29,
         #region system constants
-        InsulationWool = 0,
+        Insulation = 0,
         SealingTape = 0,
         WithScotch = 0,
-        withoutScotch = 0
+        WithoutScotch = 0
         #endregion
 
         // ThePanelHeatExchanger = 6,  

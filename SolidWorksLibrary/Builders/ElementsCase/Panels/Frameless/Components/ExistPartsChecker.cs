@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ServiceConstants;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,8 +22,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless.Components {
  bool reinfocung,
  string airHole
 );
-
-
+     
     public class ExistPartsChecker {
         /// <summary>
         /// Occurs when someone wants to add or check a entity.
@@ -45,9 +45,10 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless.Components {
         /// <summary>
         /// Check entity by input parameters. If entity esixt returns it is id, otherwise will be create new entity by input parameters and return it is id.
         /// </summary>
-        /// <param name="elementType"></param>
+        /// <param name="panelType">Panel type (can be one of system types equal to 0)</param>
+        /// <param name="elementType">Panel element type</param>
         /// <param name="partThick"></param>
-        /// <param name="parMat"></param>
+        /// <param name="partMat"></param>
         /// <param name="partMatThick"></param>
         /// <param name="mirror"></param>
         /// <param name="stickyTape"></param>
@@ -55,10 +56,10 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless.Components {
         /// <param name="stepInsertion"></param>
         /// <param name="airHole"></param>
         /// <returns></returns>
-        public int GetId(int elementType, int partThick, int parMat, int partMatThick, bool mirror, bool stickyTape, string step, string stepInsertion, string airHole) {
+        public int GetId(PanelType_e panelType ,  ElemetPanelType_e elemetType, int partThick, int partMat, int partMatThick, bool mirror, bool stickyTape, string step, string stepInsertion, string airHole) {
 
             if (this.addPartOfPanelEvent != null) {
-                return this.addPartOfPanelEvent((int)framelessPanel.PanelType, elementType, framelessPanel.SizePanel, partMatThick, parMat, partMatThick, mirror, stickyTape, step, stepInsertion, framelessPanel.усиление, airHole);
+                return this.addPartOfPanelEvent((int)panelType, (int)elemetType, framelessPanel.SizePanel, partMatThick, partMat, partMatThick, mirror, stickyTape, step, stepInsertion, framelessPanel.усиление, airHole);
             }
             throw new Exception("Failed add or find part of panel in the data base");
         }

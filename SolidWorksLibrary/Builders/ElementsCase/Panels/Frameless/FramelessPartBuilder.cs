@@ -2934,7 +2934,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
             //14800  Лента двохсторонняя акриловая HSA 19х2
             //4900  Материал теплоизол. Сlassik TWIN50        
 
-            int partId = this.existPartsChecker.GetId((int)ElemetPanelType_e.Insulation, PANEL_LENGHT, 4900, 0, false, false, "0", "0", "0");
+            int partId = this.existPartsChecker.GetId(PanelType_e.Insulation, ElemetPanelType_e.Insulation, PANEL_LENGHT, 4900, 0, false, false, "0", "0", "0");
 
             PartName = "02-" + partId;
 
@@ -2960,7 +2960,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
 
             if (framelessPanel.ThermoStrip == ThermoStrip_e.ThermoScotch) {
 
-                partId = this.existPartsChecker.GetId((int)ElemetPanelType_e.Scotch, PANEL_LENGHT, 4900, 0, false, false, "0", "0", "0");
+                partId = this.existPartsChecker.GetId(PanelType_e.WithScotch, ElemetPanelType_e.Scotch, PANEL_LENGHT, 4900, 0, false, false, "0", "0", "0");
 
                 PartName = "02-" + partId;
 
@@ -2984,7 +2984,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
 
             #region  Pes 20x3/25 A/AT-BT 538x768
 
-            partId = this.existPartsChecker.GetId((int)ElemetPanelType_e.Sealing_Tape, PANEL_LENGHT, 4900, 0, false, false, "0", "0", "0");
+            partId = this.existPartsChecker.GetId(PanelType_e.SealingTape, ElemetPanelType_e.Sealing_Tape, PANEL_LENGHT, 4900, 0, false, false, "0", "0", "0");
 
             PartName = "02-" + partId;
 
