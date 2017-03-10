@@ -14,7 +14,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
 
         //Profile for FrontPanel
         public void FrameProfil( double lenght, ProfilType_e type, bool flange30, string partName) {
-            var width =  framelessPanel.ThermoStrip ==  ThermoStrip.ThermoScotch ? 38.5 : 40.0;
+            var width =  framelessPanel.ThermoStrip ==  ThermoStrip_e.ThermoScotch ? 38.5 : 40.0;
             string config = "00";
 
             switch (type) {

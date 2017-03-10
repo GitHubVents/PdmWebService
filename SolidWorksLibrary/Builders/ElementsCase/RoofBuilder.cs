@@ -16,18 +16,18 @@ namespace SolidWorksLibrary.Builders.ElementsCase
             ComponentsPathList =     new List<string>();
             SetProperties(@"\15 - Крыша", @"\15 - Roof");
         }
-        public string Build(RoofType type, int width, int lenght, bool onlyPath)  
+        public string Build(RoofType_e type, int width, int lenght, bool onlyPath)  
         {
             string newPartPath = string.Empty;
             string modelName;
             switch (type)
             {
-                case  RoofType.One:
-                case  RoofType.Two:
-                case  RoofType.Three:
-                case  RoofType.Four:
-                case  RoofType.Five:
-                case  RoofType.Six:
+                case  RoofType_e.One:
+                case  RoofType_e.Two:
+                case  RoofType_e.Three:
+                case  RoofType_e.Four:
+                case  RoofType_e.Five:
+                case  RoofType_e.Six:
                     modelName = "15-000";
                     break;
                 default:
@@ -57,12 +57,12 @@ namespace SolidWorksLibrary.Builders.ElementsCase
             var addwidth2 = 75;
             var type4 = 0;
             var divwidth = 1;
-            if (type ==  RoofType.Two || type ==  RoofType.Six)
+            if (type ==  RoofType_e.Two || type ==  RoofType_e.Six)
             {
                 addwidth = 75;
                 divwidth = 2;
             }
-            if (type ==  RoofType.Four)
+            if (type ==  RoofType_e.Four)
             {
                 type4 = 170;
                 addwidth2 = 170 + 75;
@@ -123,7 +123,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
 
       
             //15-002
-            if (type ==  RoofType.Six)
+            if (type ==  RoofType_e.Six)
             {
                 try
                 {
@@ -179,7 +179,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
                     Patterns.Observer.MessageObserver.Instance.SetMessage(e.ToString());
                 }
             }
-            else if (type != RoofType.Six)
+            else if (type != RoofType_e.Six)
             {
                 solidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2("15-000.SLDASM", true, 0)));
                 solidWorksDocument.Extension.SelectByID2("15-002-1@15-000", "COMPONENT", 0, 0, 0, false, 0, null, 0);
@@ -188,8 +188,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase
 
             switch (type)
             {
-                case  RoofType.Two:
-                case  RoofType.Six:
+                case  RoofType_e.Two:
+                case  RoofType_e.Six:
                     solidWorksDocument.Extension.SelectByID2("Винт самосверл 6-гр.гол с шайбой-33@15-000", "COMPONENT", 0, 0, 0, false, 0, null, 0);
                     solidWorksDocument.EditDelete();
                     break;
@@ -289,8 +289,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase
 
         protected override void DeleteComponents(int type)
         {
-            RoofType etype = (RoofType)type;
-            if (etype ==  RoofType.One || etype == RoofType.Five)
+            RoofType_e etype = (RoofType_e)type;
+            if (etype ==  RoofType_e.One || etype == RoofType_e.Five)
             {
                 const int deleteOption = (int)swDeleteSelectionOptions_e.swDelete_Absorbed +
                                         (int)swDeleteSelectionOptions_e.swDelete_Children;
@@ -319,7 +319,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
                 solidWorksDocument.Extension.SelectByID2("ЗеркальныйКомпонент2", "COMPPATTERN", 0, 0, 0, false, 0, null, 0);
                 solidWorksDocument.EditDelete();
             }
-            if (etype ==  RoofType.Two || etype ==  RoofType.Six)
+            if (etype ==  RoofType_e.Two || etype ==  RoofType_e.Six)
             {
                 solidWorksDocument.Extension.SelectByID2("Rivet Bralo-1@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
                 solidWorksDocument.Extension.SelectByID2("Rivet Bralo-2@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0);
@@ -347,7 +347,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
                 solidWorksDocument.Extension.SelectByID2("Зеркальное отражение1@15-002-1@15-000", "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
                 solidWorksDocument.EditDelete();
             }
-            if (etype ==  RoofType.Three || etype ==  RoofType.Four)
+            if (etype ==  RoofType_e.Three || etype ==  RoofType_e.Four)
             {
                 const int deleteOption = (int)swDeleteSelectionOptions_e.swDelete_Absorbed +
                                         (int)swDeleteSelectionOptions_e.swDelete_Children;

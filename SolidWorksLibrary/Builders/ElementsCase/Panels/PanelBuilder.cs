@@ -52,7 +52,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels {
             SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM"); 
         }
 
-        public void Build(PanelType_e panelType, PanelProfile profile, Vector2 sizePanel, Materials OuterMaterial, Materials InnerMaterial, double outThickness, double innerThickness)
+        public void Build(PanelType_e panelType, PanelProfile_e profile, Vector2 sizePanel, Materials_e OuterMaterial, Materials_e InnerMaterial, double outThickness, double innerThickness)
         {
 
             
@@ -67,21 +67,21 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels {
 
             switch (profile)
             {
-                case PanelProfile.Profile_3_0:
+                case PanelProfile_e.Profile_3_0:
                     innerHeight = sizePanel.X - 7;
                     innerWeidht = sizePanel.Y - 7;
                     lenght = 27;
                     deepInsulation = 20;
                     break;
 
-                case PanelProfile.Profile_5_0:
+                case PanelProfile_e.Profile_5_0:
                     innerHeight = sizePanel.X - 10;
                     innerWeidht = sizePanel.Y - 10;
                     lenght = 48;
                     deepInsulation = 45;
                     break;
 
-                case PanelProfile.Profile_7_0:
+                case PanelProfile_e.Profile_7_0:
                     innerHeight = sizePanel.X - 10;
                     innerWeidht = sizePanel.Y - 10;
                     lenght = 50;
@@ -145,7 +145,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels {
 
         }
 
-        private void SinglePanel(PanelType_e panelType, Materials OuterMaterial, Materials InnerMaterial, PanelProfile profile)
+        private void SinglePanel(PanelType_e panelType, Materials_e OuterMaterial, Materials_e InnerMaterial, PanelProfile_e profile)
         {
             base.PartName = "02-" + (int)panelType + "-01-" + sizePanel.X + "-" + sizePanel.Y + "-" + OuterMaterial + "-" + InnerMaterial + "-" + (int)profile;
 
@@ -207,7 +207,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels {
         }
 
 
-        private void DoublePanel(PanelType_e panelType, Materials OuterMaterial, Materials InnerMaterial, PanelProfile profile)
+        private void DoublePanel(PanelType_e panelType, Materials_e OuterMaterial, Materials_e InnerMaterial, PanelProfile_e profile)
         {
             base.PartName = "02-" + (int)panelType + "-01-" + sizePanel.X + "-" + sizePanel.Y + "-" + OuterMaterial + "-" + InnerMaterial + "-" + (int)profile;
             if (CheckExistPart != null)
@@ -291,23 +291,23 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels {
         /// <summary>
         /// Build Insulation
         /// </summary>
-        private void Insulation(PanelProfile profile)
+        private void Insulation(PanelProfile_e profile)
         {
             string MaterialsFolder = "Materials";
-            PartName = "02-03-" + (profile == PanelProfile.Profile_5_0 ? string.Empty : ((int)profile).ToString()) + sizePanel.X + "-" + sizePanel.Y;
+            PartName = "02-03-" + (profile == PanelProfile_e.Profile_5_0 ? string.Empty : ((int)profile).ToString()) + sizePanel.X + "-" + sizePanel.Y;
 
             string tapeMaterialName = string.Empty, insulationMaterialName = string.Empty;
             switch (profile)
             {
-                case PanelProfile.Profile_3_0:
+                case PanelProfile_e.Profile_3_0:
                     tapeMaterialName = "Лента 30";
                     insulationMaterialName = "";
                     break;
-                case PanelProfile.Profile_5_0:
+                case PanelProfile_e.Profile_5_0:
                     tapeMaterialName = "Лента 50";
                     insulationMaterialName = "";
                     break;
-                case PanelProfile.Profile_7_0:
+                case PanelProfile_e.Profile_7_0:
                     tapeMaterialName = "Лента 50";
                     insulationMaterialName = "";
                     break;
@@ -333,7 +333,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels {
                 EditPartParameters("02-01-003", base.NewPartPath);
             }
 
-            PartName = "02-04-" + (profile == PanelProfile.Profile_5_0 ? string.Empty : ((int)profile).ToString()) + sizePanel.X + "-" + sizePanel.Y;
+            PartName = "02-04-" + (profile == PanelProfile_e.Profile_5_0 ? string.Empty : ((int)profile).ToString()) + sizePanel.X + "-" + sizePanel.Y;
             if (CheckExistPart != null)
                 CheckExistPart(PartName, out IsPartExist, out NewPartPath);
             if (IsPartExist)

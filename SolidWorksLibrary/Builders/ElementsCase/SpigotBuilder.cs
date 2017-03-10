@@ -21,7 +21,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
         private int warning = 0, error = 0;
 
-        public string Build(SpigotType type, int width, int height)
+        public string Build(SpigotType_e type, int width, int height)
         {
             string modelName = GetModelName(type);
             NewSpigotName = GetSpigotName(type, width, height);        
@@ -315,11 +315,11 @@ namespace PDMWebService.Data.Solid.ElementsCase
        
         protected override void DeleteComponents(int type)
         {
-            SpigotType e_type = (SpigotType)type;
+            SpigotType_e e_type = (SpigotType_e)type;
 
             const int deleteOption = (int)swDeleteSelectionOptions_e.swDelete_Absorbed + (int)swDeleteSelectionOptions_e.swDelete_Children;
 
-            if (e_type == SpigotType.Twenty_mm)
+            if (e_type == SpigotType_e.Twenty_mm)
             {              
 
                 solidWorksDocument.Extension.SelectByID2("12-30-001-1@12-00", "COMPONENT", 0, 0, 0, true, 0, null, 0);
@@ -343,7 +343,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 solidWorksDocument.Extension.SelectByID2("Клей-2@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
                 solidWorksDocument.Extension.DeleteSelection2(deleteOption);
             }
-            if (e_type == SpigotType.Thirty_mm)
+            if (e_type == SpigotType_e.Thirty_mm)
             {
                  
                 solidWorksDocument.Extension.SelectByID2("12-20-001-1@12-00", "COMPONENT", 0, 0, 0, true, 0, null, 0);
@@ -384,7 +384,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
         /// <param name="height"></param>
         /// <param name="isShowExtension">Put true if need name and extension </param>
         /// <returns></returns>
-        public static  string GetSpigotName(SpigotType spigotType, int width, int height, bool isShowExtension = false)
+        public static  string GetSpigotName(SpigotType_e spigotType, int width, int height, bool isShowExtension = false)
         {
             // if we need show extension for example that 
             // a check the availability in the data base
@@ -398,13 +398,13 @@ namespace PDMWebService.Data.Solid.ElementsCase
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        private static  string GetModelName(SpigotType type)
+        private static  string GetModelName(SpigotType_e type)
         {
             switch (type)
             {
-                case SpigotType.Twenty_mm:
+                case SpigotType_e.Twenty_mm:
                     return "12-20";
-                case SpigotType.Thirty_mm:
+                case SpigotType_e.Thirty_mm:
                     return "12-30";
 
                 default:

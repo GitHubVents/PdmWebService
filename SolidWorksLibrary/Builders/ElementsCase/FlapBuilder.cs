@@ -25,15 +25,15 @@ namespace PDMWebService.Data.Solid.ElementsCase
         /// <param name="isOutDoor"></param>
         /// <param name="material"></param>
         /// <returns></returns>
-        public string Build(FlapTypes flapType, int width, int height, bool isOutDoor, string[] material)
+        public string Build(FlapTypes_e flapType, int width, int height, bool isOutDoor, string[] material)
         {  
             switch (flapType)
             {
-                case FlapTypes.Twenty_mm:
+                case FlapTypes_e.Twenty_mm:
                     PartName = "11-20";
                     AssemblyName = "11 - Damper";
                     break;
-                case FlapTypes.Thirty_mm:
+                case FlapTypes_e.Thirty_mm:
                     PartName = "11-30";
                     AssemblyName = "11-30";
                     break;
@@ -75,7 +75,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
             #region typeOfFlange = "20"
 
-            if (flapType == FlapTypes.Twenty_mm)
+            if (flapType == FlapTypes_e.Twenty_mm)
             {
                 if ((countL / 1000) % 2 == 1) //нечетное
                 {
@@ -412,7 +412,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
             #region typeOfFlange = "30"
 
-            if (flapType ==  FlapTypes.Thirty_mm)
+            if (flapType ==  FlapTypes_e.Thirty_mm)
             {
                 string newName;
                 string newPartPath;

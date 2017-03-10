@@ -97,7 +97,7 @@ namespace DataBaseDomian
             int taskInstanceId = 0;
             try
             {
-                taskInstanceId = this.DataContext.Tasks_SetTaskInstance((int)TasksType.Pdf, userId);
+                taskInstanceId = this.DataContext.Tasks_SetTaskInstance((int)TasksType_e.Pdf, userId);
                 MessageObserver.Instance.SetMessage("Created task instance with id " + taskInstanceId, MessageType.System);
 
                 foreach (var eachDocumentId in arrayDocumentId)
@@ -130,12 +130,12 @@ namespace DataBaseDomian
         {
            
 
-            MessageObserver.Instance.SetMessage("Add new task to data base { " + TasksType.Dxf + " }", MessageType.System);
+            MessageObserver.Instance.SetMessage("Add new task to data base { " + TasksType_e.Dxf + " }", MessageType.System);
 
             int taskInstanceId = 0;
             try
             {
-                taskInstanceId = this.DataContext.Tasks_SetTaskInstance((int)TasksType.Dxf, 100500);
+                taskInstanceId = this.DataContext.Tasks_SetTaskInstance((int)TasksType_e.Dxf, 100500);
                 MessageObserver.Instance.SetMessage("Created task instance with id " + taskInstanceId, MessageType.System);
 
                 foreach (var eachDocumentId in arrayDocumentId)
@@ -169,7 +169,7 @@ namespace DataBaseDomian
             try
             {
                 RefreshRepositoryStatus();
-                return DataContext.TaskInstances.First(eachTaskInstance => eachTaskInstance.TaskStatus == (int)TaskStatus.Waiting);
+                return DataContext.TaskInstances.First(eachTaskInstance => eachTaskInstance.TaskStatus == (int)TaskStatus_e.Waiting);
             }
             catch
             {
@@ -203,7 +203,7 @@ namespace DataBaseDomian
         /// <param name="taskInstanceId"></param>
         public void ApplyError(int taskInstanceId)
         {
-            this.DataContext.Tasks_SetTaskStatus((int)TaskStatus.Error, taskInstanceId);
+            this.DataContext.Tasks_SetTaskStatus((int)TaskStatus_e.Error, taskInstanceId);
             DataContext.SubmitChanges();
 
             RefreshRepositoryStatus();
@@ -216,7 +216,7 @@ namespace DataBaseDomian
         /// <param name="taskInstanceId"></param>
         public void ApplyCompleted(int taskInstanceId)
         {
-            this.DataContext.Tasks_SetTaskStatus((int)TaskStatus.Completed, taskInstanceId);
+            this.DataContext.Tasks_SetTaskStatus((int)TaskStatus_e.Completed, taskInstanceId);
             DataContext.SubmitChanges();
 
             RefreshRepositoryStatus();
@@ -229,7 +229,7 @@ namespace DataBaseDomian
         /// <param name="taskInstanceId"></param>
         public void ApplyWaiting(int taskInstanceId)
         {
-            this.DataContext.Tasks_SetTaskStatus((int)TaskStatus.Waiting, taskInstanceId);
+            this.DataContext.Tasks_SetTaskStatus((int)TaskStatus_e.Waiting, taskInstanceId);
             DataContext.SubmitChanges();
 
             RefreshRepositoryStatus();
@@ -242,7 +242,7 @@ namespace DataBaseDomian
         /// <param name="taskInstanceId"></param>
         public void ApplyExecution(int taskInstanceId)
         {
-            this.DataContext.Tasks_SetTaskStatus((int)TaskStatus.Execution, taskInstanceId);
+            this.DataContext.Tasks_SetTaskStatus((int)TaskStatus_e.Execution, taskInstanceId);
             DataContext.SubmitChanges();
 
             RefreshRepositoryStatus();
@@ -260,7 +260,7 @@ namespace DataBaseDomian
 
             RefreshRepositoryStatus();
 
-            int counExecutingTasks = DataContext.View_ActiveTasks.Where(eachTask => eachTask.TaskStatus == (int)TaskStatus.Execution).Count();
+            int counExecutingTasks = DataContext.View_ActiveTasks.Where(eachTask => eachTask.TaskStatus == (int)TaskStatus_e.Execution).Count();
 
             return counExecutingTasks > 0 ? true : false;
         }
@@ -273,7 +273,7 @@ namespace DataBaseDomian
         {
 
             RefreshRepositoryStatus();
-            int countWaitingTasks = DataContext.View_ActiveTasks.Where(eachTask => eachTask.TaskStatus == (int)TaskStatus.Waiting).Count();
+            int countWaitingTasks = DataContext.View_ActiveTasks.Where(eachTask => eachTask.TaskStatus == (int)TaskStatus_e.Waiting).Count();
             return countWaitingTasks > 0 ? true : false;
         }
         #endregion

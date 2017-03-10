@@ -22,9 +22,9 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
             public bool isOneHandle = false;
             public Screws Screws { get; set; }
             //public bool isDoublePanal { get; set; }
-            public ThermoStrip ThermoStrip { get; set; }
+            public ThermoStrip_e ThermoStrip { get; set; }
 
-            public FramelessPanel(PanelType_e panelType, Vector2 sizePanel, Vector2 windowSize, Vector2 windowsOffset, ThermoStrip thermoStrip, Screws screws)
+            public FramelessPanel(PanelType_e panelType, Vector2 sizePanel, Vector2 windowSize, Vector2 windowsOffset, ThermoStrip_e thermoStrip, Screws screws)
             {
                 this.PanelType = panelType;
                 this.SizePanel = sizePanel;

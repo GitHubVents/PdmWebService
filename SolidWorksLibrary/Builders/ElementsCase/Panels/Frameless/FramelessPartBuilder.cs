@@ -245,7 +245,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
             var осьОтверстийСаморезВинт = framelessPanel.PanelType == PanelType_e.RemovablePanel ? 12.0 : 11.0;
             var осьПоперечныеОтверстия = 10.1;
 
-            if (framelessPanel.ThermoStrip == ThermoStrip.ThermoScotch) {
+            if (framelessPanel.ThermoStrip == ThermoStrip_e.ThermoScotch) {
                 осьПоперечныеОтверстия = 10.1;
             }
 
@@ -324,7 +324,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                 base.parameters.Add("D1@Эскиз49", диамЗаглушкаВинт);
                 base.parameters.Add("D1@Кривая1", zaklByWidth);
                 base.parameters.Add("D1@Кривая2", zaklByHeight);
-                base.parameters.Add("D7@Ребро-кромка1", framelessPanel.ThermoStrip == ThermoStrip.ThermoScotch ? 17.7 : 19.2);
+                base.parameters.Add("D7@Ребро-кромка1", framelessPanel.ThermoStrip == ThermoStrip_e.ThermoScotch ? 17.7 : 19.2);
                 //      base.parameters.Add("Толщина@Листовой металл", materialP1[1].Replace('.', ',');
                 //         base.parameters.Add("D1@CrvPatternW", колЗаклепокКронштейнаДвойнойПанели);
                 //   base.parameters.Add("D1@CrvPatternH", колЗаклепокКронштейнаДвойнойПанели);
@@ -1591,7 +1591,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
 
             #region На заклепках (удаляем скотч)
 
-            if (framelessPanel.ThermoStrip != ThermoStrip.ThermoScotch) // На заклепках
+            if (framelessPanel.ThermoStrip != ThermoStrip_e.ThermoScotch) // На заклепках
             {
                 DocumentExtension.SelectByID2("02-11-04-40--1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
                 SolidWorksDocument.EditDelete();
@@ -1645,8 +1645,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
 
             #region
 
-            switch ((int)CutPanel.DeterminateCutPanel(framelessPanel.SizePanel)) { //  switch (типДвойнойРазрез) {
-                case (int)CutType_e.Horisontal: //case "H":
+            switch ( (int)CutPanel.DeterminateCutPanel(framelessPanel.SizePanel) ) { //  switch (типДвойнойРазрез) {
+                case  (int)CutType_e.Horisontal  : //case "H":
                     foreach (var number in new[]
                     { "105", "106", "113", "114", "137", "138", "139", "140", "141", "142", "143", "144", "145", "146"}) {
                         DocumentExtension.SelectByID2("Rivet Bralo-" + number + "@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
@@ -1665,6 +1665,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                     SolidWorksDocument.EditDelete();
                     DocumentExtension.SelectByID2("Cut-ExtrudeWC@" + NameUpPanel + "-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
                     DocumentExtension.DeleteSelection2(deleteOption);
+                    break;
 
                     //                if (типДвойнойВерхней == "0") {
                     //                    foreach (var number in new[] { "123", "124", "160", "161", "157", "158", "159" }) {
@@ -1889,7 +1890,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                         // base.parameters.Add("D1@Эскиз49", диамЗаглушкаВинт);
                         base.parameters.Add("D1@Кривая1", zaklByWidth);
                         base.parameters.Add("D1@Кривая2", zaklByHeight);
-                        base.parameters.Add("D7@Ребро-кромка1", framelessPanel.ThermoStrip == ThermoStrip.ThermoScotch ? 17.7 : 19.2);
+                        base.parameters.Add("D7@Ребро-кромка1", framelessPanel.ThermoStrip == ThermoStrip_e.ThermoScotch ? 17.7 : 19.2);
                         //  base.parameters.Add("Толщина@Листовой металл", materialP1[1].Replace('.', ',');
                         //base.parameters.Add("D1@CrvPatternW", колЗаклепокКронштейнаДвойнойПанели);
                         //      base.parameters.Add("D1@CrvPatternH", колЗаклепокКронштейнаДвойнойПанели));
@@ -2038,7 +2039,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                             //        new[,]
                             //    {
                             base.parameters.Add("D2@Эскиз1", framelessPanel.SizePanel.Y - 45);
-                            base.parameters.Add("D1@Эскиз1", framelessPanel.ThermoStrip == ThermoStrip.ThermoScotch ? 16.0 : 17.5);
+                            base.parameters.Add("D1@Эскиз1", framelessPanel.ThermoStrip == ThermoStrip_e.ThermoScotch ? 16.0 : 17.5);
                             base.parameters.Add("D1@Кривая1", колЗаклепокВысота);
                             EditPartParameters(PartName, NewPartPath);
                         }
@@ -2936,10 +2937,10 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
             //4900  Материал теплоизол. Сlassik TWIN50        
 
             int partId = this.existPartsChecker.GetId(3, PANEL_LENGHT, 4900, 0, false, false, "0", "0", "0");
-            if (partId != 0) {
+         
                 PartName = "02-"+ partId;     
-            }             
-
+          
+            Console.WriteLine("got part name "+ PartName);
             if (CheckExistPart != null)
                 CheckExistPart(base.PartName, out IsPartExist, out NewPartPath);
             if (IsPartExist) {
@@ -2959,12 +2960,13 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
             #region Скотч
            
 
-            if (framelessPanel.ThermoStrip == ThermoStrip.ThermoScotch) {
+            if (framelessPanel.ThermoStrip == ThermoStrip_e.ThermoScotch) {
 
                   partId = this.existPartsChecker.GetId(4, PANEL_LENGHT, 4900, 0, false, false, "0", "0", "0");
-                if (partId != 0) {
+               
                     PartName = "02-" + partId;
-                }
+                 
+                Console.WriteLine("got part name " + PartName);
                 if (CheckExistPart != null)
                     CheckExistPart(base.PartName, out IsPartExist, out NewPartPath);
 
@@ -2985,9 +2987,10 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
             #region  Pes 20x3/25 A/AT-BT 538x768
 
             partId = this.existPartsChecker.GetId(5, PANEL_LENGHT, 4900, 0, false, false, "0", "0", "0");
-            if (partId != 0) {
+        
                 PartName = "02-" + partId;
-            }
+         
+            Console.WriteLine("got part name " + PartName);
             if (CheckExistPart != null)
                 CheckExistPart(base.PartName, out IsPartExist, out NewPartPath);
             if (IsPartExist) {
