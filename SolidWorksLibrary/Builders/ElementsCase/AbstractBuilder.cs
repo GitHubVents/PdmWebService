@@ -62,6 +62,11 @@ namespace SolidWorksLibrary.Builders.ElementsCase
         /// </summary>
         protected string PartName { get; set; }
         /// <summary>
+        /// Part prototype name with which working
+        /// </summary>
+        protected string PartPrototypeName { get; set; }
+
+        /// <summary>
         /// Sheetmetal bend radius 
         /// </summary>
         protected decimal BendRadius   = 5; // default value
