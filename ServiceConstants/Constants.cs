@@ -1,5 +1,6 @@
 ﻿namespace ServiceConstants
 {
+    #region task reg
     /// <summary>
     /// Describes enumeration task types { VibroInsertion, Flap, Roof, MountingFrame, Panel, HousingBlock, Monoblock, Frameless } and their numeric constants
     /// </summary>
@@ -28,7 +29,9 @@
         Error = 3,
         Execution = 4,       
     }
+    #endregion
 
+ 
     /// <summary>
     /// Describes spigon type and their values { 20mm, 30mm }
     /// </summary>
@@ -56,7 +59,7 @@
     {
         Twenty_mm = 20, Thirty_mm = 30
     }
-
+ 
 
     /// <summary>
     /// Describes Flape types ant their id [customize]
@@ -83,36 +86,63 @@
         Profile_5_0 = 50,
         Profile_7_0 = 70
     }
+    #region panels 
     /// <summary>
     /// Describes panel types
     /// </summary>
-    public enum PanelType_e
-    {
-        BlankPanel = 1,
-        
-        //  PanelHinged = 3,
-        RemovablePanel = 4,      
-        // ThePanelHeatExchanger = 6,
-      
-
+    public enum PanelType_e {
+        BlankPanel = 1,                                                 
+        RemovablePanel = 4,                                                  
         безКрыши = 21,
         односкат = 22,
         Двухскат = 23,
         безОпор = 30,
         РамаМонтажная = 31,
-        НожкиОпорные = 32,
-        //Панель  теплообменника                                  02-05-ХХХХ
-
+        НожкиОпорные = 32,                                                
         FrontPanel = 35,
         ПростаяУсилПанель = 24,
         ПодДвериНаПетлях = 25,
         ПоДвериНаЗажимах = 26,
         ПодТорцевую = 27,
         ПодТорцевуюИДвериНаЗажимах = 28,
-        ПодТорцевуюИДвериНаПетлях = 29
+        ПодТорцевуюИДвериНаПетлях = 29,
+        #region system constants
+        InsulationWool = 0,
+        SealingTape = 0,
+        WithScotch = 0,
+        withoutScotch = 0
+        #endregion
+
+        // ThePanelHeatExchanger = 6,  
+        //  PanelHinged = 3,
+        //Панель  теплообменника     02-05-ХХХХ
     }
 
-   public enum  ThermoStrip_e
+    public enum ElemetPanelType_e {
+
+        Inner_panel = 1,
+Outer_panel =  2,
+        Inner_panel_left,
+        Inner_panel_right,
+        Outer_panel_left ,
+        Outer_panel_right,
+        Insulation = 3,
+        Scotch = 4,
+        Sealing_Tape = 5,
+        Strengthening_frame_by_width_bottom = 6,
+        trengthening_Frame_By_Width_Top = 62,
+        Strengthening_Frame_By_Width_Height = 7,
+        Door_Bracket = 9,
+        Profile_Front_Panel_Horizontal = 12,
+        Profile_Front_Panel_Vertical = 12
+
+    }
+
+    #endregion panels
+
+
+
+    public enum  ThermoStrip_e
     {
         ThermoScotch  = 1,
         Rivet = 2
