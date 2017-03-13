@@ -177,7 +177,43 @@ namespace SolidWorksLibrary.Builders.ElementsCase
             SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(partName);
         }
 
-                       // if u will be use abstract build method, u must override constructor in all product_builder[s]
+        ///// <summary>
+        /////  Assigns the NewPartPath for assembly combineted path of [RootFolder, SourceFolder, AssemblyName]
+        ///// </summary>
+        ///// <param name="isExpansion">if isExpansion is equal to true, adds expansion .SLDASM</param>
+        //protected void CreatePathToAssembly(bool isExpansion)
+        //{
+        //    NewPartPath = Path.Combine(RootFolder, SourceFolder, AssemblyName + (isExpansion==true?  ".SLDASM":string.Empty));
+        //}
+
+        ///// <summary>
+        /////  Assigns the NewPartPath combineted path of [RootFolder, SourceFolder, PartName]
+        ///// </summary>
+        ///// <param name="isExpansion">if isExpansion is equal to true, adds expansion .SLDPRT</param>
+        //protected void CreateNewPartPath(bool isExpansion)
+        //{
+        //    NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, PartName + (isExpansion == true ? ".SLDPRT" : string.Empty));
+        //}
+
+        ///// <summary>
+        /////  Assigns the NewPartPath combineted path of [RootFolder, directories, PartName]
+        ///// </summary>
+        ///// <param name="isExpansion">if isExpansion is equal to true, adds expansion .SLDPRT</param>
+        //protected void CreateNewPartPath(string [] directories,bool isExpansion)
+        //{
+        //    System.Text.StringBuilder pathStringBuilder = new System.Text.StringBuilder( );
+        //    pathStringBuilder.Append(RootFolder);
+        //    pathStringBuilder.Append(@"\");
+        //    foreach (var dir in directories)
+        //    {
+        //        pathStringBuilder.Append(dir);
+        //        pathStringBuilder.Append(@"\");
+        //    }
+        //    pathStringBuilder.Append(PartName);
+        //    NewPartPath = pathStringBuilder.ToString( );
+        //}
+
+        // if u will be use abstract build method, u must override constructor in all product_builder[s]
         // /// <summary>
         //   /// Build prduct
         //   /// </summary>

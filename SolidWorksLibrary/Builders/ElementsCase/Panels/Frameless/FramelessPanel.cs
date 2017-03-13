@@ -20,11 +20,15 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
             public double innerThickness = 1;
             public double halfWidthPanel;
             public bool isOneHandle = false;
-            public Screws Screws { get; set; }
-            //public bool isDoublePanal { get; set; }
+            public Screws Screws { get; set; } 
             public ThermoStrip_e ThermoStrip { get; set; }
 
-            public FramelessPanel(PanelType_e panelType, Vector2 sizePanel, Vector2 windowSize, Vector2 windowsOffset, ThermoStrip_e thermoStrip, Screws screws)
+        /// <summary>
+        /// Is assembly mirror
+        /// </summary>
+        private bool IsMirror { get; set; }  // Determines whether it is a mirror for dual panels
+
+        public FramelessPanel(PanelType_e panelType, Vector2 sizePanel, Vector2 windowSize, Vector2 windowsOffset, ThermoStrip_e thermoStrip, Screws screws)
             {
                 this.PanelType = panelType;
                 this.SizePanel = sizePanel;
@@ -34,7 +38,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
                 ThermoStrip = thermoStrip;
 
             }
+ 
 
-       
+
     }
 }
