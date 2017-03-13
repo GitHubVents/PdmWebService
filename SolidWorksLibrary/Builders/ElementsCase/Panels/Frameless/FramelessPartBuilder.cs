@@ -265,7 +265,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
             #endregion
 
             #region 02-11-01-40-
-            int partId = this.existPartsChecker.GetId(0, 0, 0, 0, true, true, "", "", "");
+            int partId = 0;//= this.existPartsChecker.GetId(PanelType_e0, 0, 0, 0, true, true, "", "", "");
             if (partId != 0) {
                 PartName = "02-0" + (int)framelessPanel.PanelType + "-01-" + partId;      // TO DO replase string 35 / 01
             }
@@ -2984,7 +2984,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
 
             #region  Pes 20x3/25 A/AT-BT 538x768
 
-            partId = this.existPartsChecker.GetId(PanelType_e.SealingTape, ElemetPanelType_e.Sealing_Tape, PANEL_LENGHT, 4900, 0, false, false, "0", "0", "0");
+            partId = this.existPartsChecker.GetId(PanelType_e.SealingTape, ElemetPanelType_e.Sealing_tape, PANEL_LENGHT, 4900, 0, false, false, "0", "0", "0");
 
             PartName = "02-" + partId;
 

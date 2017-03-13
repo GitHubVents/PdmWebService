@@ -131,13 +131,13 @@
         Outer_panel_right,
         Insulation = 3,
         Scotch = 4,
-        Sealing_Tape = 5,
+        Sealing_tape = 5,
         Strengthening_frame_by_width_bottom = 6,
-        trengthening_Frame_By_Width_Top = 62,
-        Strengthening_Frame_By_Width_Height = 7,
-        Door_Bracket = 9,
-        Profile_Front_Panel_Horizontal = 12,
-        Profile_Front_Panel_Vertical = 12
+        Trengthening_frame_by_width_top = 62,
+        Strengthening_frame_by_width_height = 7,
+        Door_bracket = 9,
+        Profile_front_panel_horizontal = 12,
+        Profile_front_panel_vertical = 12
     }
 
     #endregion panels

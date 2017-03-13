@@ -288,7 +288,7 @@ namespace ServiceLibrary.ConcreteService
 
 
         //TO DO
-        public void CreateSpigot(SpigotType type, int width, int height)
+        public void CreateSpigot(SpigotType_e type, int width, int height)
         {
             MessageObserver.Instance.SetMessage("Пришел запрос на генерацию вибровставки с параметрами { тип: " + type + ", ширина: " + width + ", высота: " + height);
             if (spigotBuilder == null) spigotBuilder = new SpigotBuilder();

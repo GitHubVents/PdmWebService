@@ -111,7 +111,7 @@ namespace ServiceLibrary.ServiceInterface
         bool isServiceWork();
 
         [OperationContract(IsOneWay =true)]
-        void CreateSpigot(SpigotType type, int width, int height);
+        void CreateSpigot(SpigotType_e type, int width, int height);
 
     }
 }

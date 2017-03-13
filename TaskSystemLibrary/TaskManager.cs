@@ -53,19 +53,19 @@ namespace TaskSystemLibrary
                 TaskSystemDataRepository.Instance.ApplyExecution(taskInstance.TaskInstanceID);
             }      
 
-            if (taskInstance != null && taskInstance.TaskStatus == (int)TaskStatus.Execution)
+            if (taskInstance != null && taskInstance.TaskStatus == (int)TaskStatus_e.Execution)
             {
                 switch (taskInstance.TaskID) // check task type
                 {
                     #region dxf
-                    case (int)TasksType.Dxf:
+                    case (int)TasksType_e.Dxf:
                         ExecuterFactory.ExecuteDxf(taskInstance);
                         break;
                     #endregion
 
                     #region pdf
 
-                    case (int)TasksType.Pdf:
+                    case (int)TasksType_e.Pdf:
                         ExecuterFactory.ExecutePdf(taskInstance);
                         break;
                         #endregion
