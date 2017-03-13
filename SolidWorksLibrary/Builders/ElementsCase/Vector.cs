@@ -111,6 +111,11 @@
         }
         #endregion
         public static Vector2 Zero { get { return new Vector2(0, 0); } }
+
+        public override string ToString( )
+        {
+            return $"Vector2[x:{X},y:{Y}]";
+        }
     }
 
         public class Vector3 : Vector2 
@@ -123,5 +128,10 @@
             }
      
         public static Vector3 Zero { get { return new Vector3(0, 0,0); } }
+
+        public override string ToString( )
+        {
+            return $"Vector2[x:{X}, y:{Y}, z:{Z}]";
+        }
     }     
 }

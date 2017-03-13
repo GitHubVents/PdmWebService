@@ -6,11 +6,9 @@ using SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless.Components;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
+namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
+{
 
 
     public partial class FramelessPanelBuilder : ProductBuilderBehavior {
@@ -37,7 +35,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
         protected double zaklByWidth;
         protected double zaklByHeight;
         double количествоВинтов = 2000;
-        protected const short PANEL_LENGHT = 40;
+        protected const byte PANEL_LENGHT = 40;
         public ExistPartsChecker existPartsChecker { get; private set; }
         #endregion
 
@@ -1821,11 +1819,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                 }
 
                 //типДвойнойРазрез
-
-                //    SwPartParamsChangeWithNewName(NameUpPanel,
-                //       $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}",
-                //      new[,]
-                //      {
+                
                 // Габариты
                 //  base.parameters.Add
 
@@ -1882,52 +1876,32 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                 PartName = NameDownPanel;
                 NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, PartName);
                 base.parameters.Add("D1@Эскиз1", framelessPanel.PanelType == PanelType_e.RemovablePanel ? framelessPanel.SizePanel.X - 42 : framelessPanel.SizePanel.X - 40);
-
                 base.parameters.Add("D2@Эскиз1", framelessPanel.PanelType == PanelType_e.RemovablePanel ? framelessPanel.SizePanel.Y - 42 : framelessPanel.SizePanel.Y - 40);
-
                 base.parameters.Add("D1@1-3", framelessPanel.Screws.ByWidth);
                 base.parameters.Add("D1@Кривая6", framelessPanel.Screws.ByHeight);
-
                 base.parameters.Add("D1@1-4", колСаморезВинтВысота2/* колСаморезВинтВысота*/);
-
                 base.parameters.Add("D1@Кривая5", ScrewsByWidthInner);
-
                 base.parameters.Add("D1@Кривая4", ScrewsByHeightInner);
-
                 base.parameters.Add("D2@Эскиз32", framelessPanel.PanelType == PanelType_e.BlankPanel || framelessPanel.PanelType == PanelType_e.FrontPanel ? 77.5 : 158.1);
-
                 base.parameters.Add("D4@Эскиз47", framelessPanel.widthHandle);
-
                 //  base.parameters.Add("D1@Эскиз38", диамСаморезВинт);
                 //  base.parameters.Add("D3@1-1-1", диамСаморезВинт);
-
                 base.parameters.Add("D1@Эскиз40", string.IsNullOrEmpty(типТорцевой) || framelessPanel.PanelType == PanelType_e.BlankPanel ? 15 : 138.1);
-                // base.parameters.Add("D2@1-2", осьОтверстийСаморезВинт);,
-
+                // base.parameters.Add("D2@1-2", осьОтверстийСаморезВинт);
                 base.parameters.Add("D1@2-3", zaklByWidth);
                 base.parameters.Add("D1@Кривая1", zaklByWidth);
-
                 base.parameters.Add("D1@Кривая2", zaklByHeight);
-
                 base.parameters.Add("D3@2-1-1", framelessPanel.PanelType == PanelType_e.RemovablePanel ? 54.0 : 55.0);
-
                 base.parameters.Add("D2@Эскиз29", framelessPanel.PanelType == PanelType_e.RemovablePanel ? 84.0 : 85.0);
-
                 base.parameters.Add("D2@Эскиз43", framelessPanel.PanelType == PanelType_e.RemovablePanel ? 12.0 : 11.0);
-
                 base.parameters.Add("D1@Эскиз29", framelessPanel.PanelType == PanelType_e.RemovablePanel ? 11.3 : 10.3);
-
                 base.parameters.Add("D1@2-1-1", framelessPanel.PanelType == PanelType_e.RemovablePanel ? 11.3 : 10.3);
-
                 base.parameters.Add("D2@Эскиз39", framelessPanel.PanelType == PanelType_e.RemovablePanel ? 11.3 : 10.3);
-
                 base.parameters.Add("D1@Эскиз39", framelessPanel.PanelType == PanelType_e.RemovablePanel ? 5.0 : 4.0);
-
                 //Рамка усиливающая
                 base.parameters.Add("D1@Кривая9", framelessPanel.PanelType == PanelType_e.BlankPanel || framelessPanel.PanelType == PanelType_e.FrontPanel
                     ? колСаморезВинтШирина - 1000
                         : колСаморезВинтШирина);
-
                 base.parameters.Add("D1@Кривая7", колЗаклепокВысота);
 
                 //  base.parameters.Add("D3@Эскиз56", отступОтветныхОтверстийШирина);
@@ -1961,8 +1935,6 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                 //  VentsMatdll(materialP2, new[] { покрытие[7], покрытие[4], покрытие[5] }, newName);
 
                 EditPartParameters(PartName, NewPartPath);
-                
-
             }
 
             #endregion
@@ -2059,19 +2031,18 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
 
                     case "2":
                     //    DocumentExtension.SelectByID2("Cut-ExtrudeH1@" + имяДвойнойВерхней1 + "-2@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                    SolidWorksDocument.EditUnsuppress2( );
+                   // SolidWorksDocument.EditUnsuppress2( );
                     //    DocumentExtension.SelectByID2("Cut-ExtrudeH2@" + имяДвойнойВерхней2 + "-3@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                    SolidWorksDocument.EditUnsuppress2( );
+                    //SolidWorksDocument.EditUnsuppress2( );
                     DocumentExtension.SelectByID2("Rivet Bralo-186@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
                     SolidWorksDocument.EditDelete( );
                     break;
 
                     case "0":
                     //   DocumentExtension.SelectByID2(панельВнешняя.NewName + "-2@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    SolidWorksDocument.EditDelete( );
+                    //SolidWorksDocument.EditDelete( );
                     //   DocumentExtension.SelectByID2(панельВнешняя.NewName + "-3@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    SolidWorksDocument.EditDelete( );
-
+                    //SolidWorksDocument.EditDelete( );
                     DocumentExtension.SelectByID2("Rivet Bralo-185@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
                     SolidWorksDocument.EditDelete( );
                     DocumentExtension.SelectByID2("Rivet Bralo-186@" + AssemblyName, "COMPONENT", 0, 0, 0, true, 0, null, 0);
@@ -2082,30 +2053,29 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                 switch (типДвойнойНижней) {
                     case "1":
                     //  DocumentExtension.SelectByID2("Cut-ExtrudeW1@" + имяДвойнойНижней1 + "-2@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                    SolidWorksDocument.EditUnsuppress2( );
+                    //SolidWorksDocument.EditUnsuppress2( );
                     //  DocumentExtension.SelectByID2("Cut-ExtrudeW2@" + имяДвойнойНижней2 + "-3@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                    SolidWorksDocument.EditUnsuppress2( );
+                    //SolidWorksDocument.EditUnsuppress2( );
                     break;
 
                     case "2":
-                    //   DocumentExtension.SelectByID2("Cut-ExtrudeH1@" + имяДвойнойНижней1 + "-2@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                    SolidWorksDocument.EditUnsuppress2( );
-                    ///   DocumentExtension.SelectByID2("Cut-ExtrudeH2@" + имяДвойнойНижней2 + "-3@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                    SolidWorksDocument.EditUnsuppress2( );
+                    //DocumentExtension.SelectByID2("Cut-ExtrudeH1@" + имяДвойнойНижней1 + "-2@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                    //SolidWorksDocument.EditUnsuppress2( );
+                    //DocumentExtension.SelectByID2("Cut-ExtrudeH2@" + имяДвойнойНижней2 + "-3@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                    //SolidWorksDocument.EditUnsuppress2( );
                     break;
 
                     case "0":
                     //      DocumentExtension.SelectByID2(панельВнутренняя.NewName + "-2@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    SolidWorksDocument.EditDelete( );
+                    //SolidWorksDocument.EditDelete( );
                     //      DocumentExtension.SelectByID2(панельВнутренняя.NewName + "-3@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    SolidWorksDocument.EditDelete( );
+                    //SolidWorksDocument.EditDelete( );
                     break;
                 }
 
                 DocumentExtension.SelectByID2("D1@PLANE1@" + AssemblyName, "DIMENSION", 0, 0, 0, false, 0, null, 0);
                 ((Dimension)(SolidWorksDocument.Parameter("D1@PLANE1"))).SystemValue = 40.0 / 1000;
                 SolidWorksDocument.EditRebuild3( );
-
                 foreach (var component in new[] { "4", "5", "6", "7", "8", "9", "10", "11", "12", "13" }) {
                     DocumentExtension.SelectByID2("DerivedCrvPattern" + component + "@" + AssemblyName, "COMPPATTERN", 0, 0, 0, true, 0, null, 0);
                     AssemblyDocument.DissolveComponentPattern( );
@@ -2855,6 +2825,10 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
             //                    #endregion
         }
 
+        /// <summary>
+        /// Returns amplifying type for panel
+        /// </summary>
+        /// <returns></returns>
         string AmplifyingType( ) {
             switch (framelessPanel.PanelType) {
                 case PanelType_e.ПростаяУсилПанель:
@@ -2874,6 +2848,10 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
             }
         }
 
+        /// <summary>
+        /// Check amplifying on panel
+        /// </summary>
+        /// <returns></returns>
         private bool IsAmplifying( ) {
             switch (framelessPanel.PanelType) {
                 case PanelType_e.ПростаяУсилПанель: case PanelType_e.ПодДвериНаПетлях: case PanelType_e.ПоДвериНаЗажимах: case PanelType_e.ПодТорцевую: case PanelType_e.ПодТорцевуюИДвериНаЗажимах:
