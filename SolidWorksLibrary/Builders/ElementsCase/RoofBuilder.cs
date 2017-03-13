@@ -37,8 +37,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
               base.NewPartPath = $@"{RootFolder}{SubjectDestinationFolder}\{base.PartName}.SLDASM"; 
             CheckExistPart(base.PartName+".SLDASM",out  base.IsPartExist,out base.NewPartPath);   
             var modelRoofPath = $@"{RootFolder}{SourceFolder}\{base.PartName}.SLDASM";
-              SolidWorksDocument = SolidWorksAdapter.SldWoksAppExemplare.OpenDoc6(modelRoofPath, (int)swDocumentTypes_e.swDocASSEMBLY,
-                (int)swOpenDocOptions_e.swOpenDocOptions_LoadModel + (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "00", 0, 0);
+            SolidWorksDocument = SolidWorksAdapter.OpenDocument(modelRoofPath, swDocumentTypes_e.swDocASSEMBLY); 
 
             AssemblyDoc solidWorcsAssemvlyDocyment = SolidWorksAdapter.ToAssemblyDocument(SolidWorksDocument);              
             DeleteComponents((int)type);            
@@ -60,14 +59,12 @@ namespace SolidWorksLibrary.Builders.ElementsCase
                 addwidth2 = 170 + 75;
             }
 
-            var widthD = (Convert.ToDouble(width) / divwidth + addwidth);
-            var lengthD = (Convert.ToDouble(lenght) - 28.5);
+            double widthD = (Convert.ToDouble(width) / divwidth + addwidth);
+            double lengthD = (Convert.ToDouble(lenght) - 28.5);
             const double step = 200;
             const double step2 = 150;
-            var weldW = Convert.ToDouble((Math.Truncate(Convert.ToDouble(lenght) / step) + 1));
-            var weldW2 = Convert.ToDouble((Math.Truncate(Convert.ToDouble(lenght) / step2) + 1));
-            
-            var ComponentsPathList = new List<FileInfo>();
+            double weldW = Convert.ToDouble((Math.Truncate(Convert.ToDouble(lenght) / step) + 1));
+            double weldW2 = Convert.ToDouble((Math.Truncate(Convert.ToDouble(lenght) / step2) + 1)); 
 
             //15-001
                 SolidWorksAdapter.SldWoksAppExemplare.IActivateDoc2("15-001", true, 0);
@@ -112,8 +109,6 @@ namespace SolidWorksLibrary.Builders.ElementsCase
 
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newPartName);
                 }
-
-
       
             //15-002
             if (type ==  RoofType_e.Six)
@@ -127,15 +122,14 @@ namespace SolidWorksLibrary.Builders.ElementsCase
                     CheckExistPart(newPartName, out base.IsPartExist, out base.NewPartPath);
                     if (base.IsPartExist)
                     {
-                        SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2("15-000.SLDASM", true, 0)));
+                        SolidWorksDocument =  SolidWorksAdapter.AcativeteDoc("15-000.SLDASM");
                         SolidWorksDocument.Extension.SelectByID2("15-002-1@15-000", "COMPONENT", 0, 0, 0, false, 0, null, 0);
                         solidWorcsAssemvlyDocyment.ReplaceComponents(base.NewPartPath, "", true, true);
                         SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("15-002.SLDPRT");
                     }
                     else
                     {
-                          base.NewPartPath =
-                         $@"{RootFolder}\{SubjectDestinationFolder}\{newPartName}.SLDPRT";
+                          base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newPartName}.SLDPRT";
                         //EditPartParameters("15-002",
                         //    $@"{RootFolder}\{SubjectDestinationFolder}\{newPartName}",
                         //    new[,]
@@ -157,12 +151,11 @@ namespace SolidWorksLibrary.Builders.ElementsCase
                         }
                         catch (Exception e)
                         {
-                            //MessageBox.Show(e.ToString());
                         }
 
                         SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newPartName);
                     }
-                    SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2("15-000.SLDASM", true, 0)));
+                    SolidWorksDocument =  SolidWorksAdapter.AcativeteDoc("15-000.SLDASM");
                     SolidWorksDocument.Extension.SelectByID2("15-001-3@15-000", "COMPONENT", 0, 0, 0, false, 0, null, 0);
                     SolidWorksDocument.Extension.SelectByID2("ЗеркальныйКомпонент2@15-000", "COMPPATTERN", 0, 0, 0, false, 0, null, 0);
                     SolidWorksDocument.EditSuppress2();
@@ -174,7 +167,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
             }
             else if (type != RoofType_e.Six)
             {
-                SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc2("15-000.SLDASM", true, 0)));
+                SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("15-000.SLDASM" );
                 SolidWorksDocument.Extension.SelectByID2("15-002-1@15-000", "COMPONENT", 0, 0, 0, false, 0, null, 0);
                 SolidWorksDocument.EditDelete();
             }
@@ -192,31 +185,19 @@ namespace SolidWorksLibrary.Builders.ElementsCase
                     break;
             }
 
-            #endregion
-
-            //  GabaritsForPaintingCamera(SolidWorksDocument);
+            #endregion             
             try
             {
-                SolidWorksDocument.ForceRebuild3(true);
-                //Console.WriteLine("newRoofPath " + newRoofPath);
+                SolidWorksDocument.ForceRebuild3(true); 
                 SolidWorksDocument.SaveAs2(base.NewPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
-                ComponentsPathList.Add(new FileInfo(base.NewPartPath));
+                ComponentsPathList.Add( base.NewPartPath);
                 SolidWorksAdapter.CloseAllDocumentsAndExit();
-                //  PDMWebService.Data.PDM.SolidWorksPdmAdapter.Instance.CheckInOutPdm(newComponents, true);
-                //Console.WriteLine("RoofBuilder строка 324 пересмотреть CheckInOutPdm");
-
-                foreach (var newComponent in base.ComponentsPathList)
-                {
-                    //   ExportXmlSql.Export(newComponent.FullName);
-                }
-
             }
             catch (Exception ex)
             {
                 Patterns.Observer.MessageObserver.Instance.SetMessage(ex.ToString());
             }
             if (onlyPath) return base.NewPartPath;
-            //MessageBox.Show(newRoofPath, "Модель построена");
 
             return base.NewPartPath;
         }
@@ -227,25 +208,12 @@ namespace SolidWorksLibrary.Builders.ElementsCase
            // if (model == null) throw new NullReferenceException("Модель ненайдена");
 
            // try
-           // {
-           //     // //MessageBox.Show(newName);
+           // { 
 
-           //   //  var setMaterials = new SetMaterials();
-           // //    ToSQL.Conn = Settings.Default.ConnectionToSQL;
-           //  //   var toSql = new ToSQL();
-
-           //     // //MessageBox.Show($"Conn - {ToSQL.Conn} SetMaterials {setMaterials == null} toSql - {toSql == null} _swApp {_swApp == null} levelId - {Convert.ToInt32(materialP1[0])}");
-
+           //   //  var setMaterials = new SetMaterials();  
            ////     setMaterials?.ApplyMaterial("", "00", Convert.ToInt32(materialP1[0]), SolidWorksInstance.SldWoksApp);
            //   //  model?.Save();
-
-           //     foreach (var confname in setMaterials.GetConfigurationNames(SolidWorksInstance.SldWoksApp))
-           //     {
-           //         foreach (var matname in setMaterials.GetCustomProperty(confname, SolidWorksInstance.SldWoksApp))
-           //         {
-           //             toSql.AddCustomProperty(confname, matname.Name, SolidWorksInstance.SldWoksApp);
-           //         }
-           //     }
+        
 
            //     if (покрытие != null)
            //     {
@@ -262,20 +230,16 @@ namespace SolidWorksLibrary.Builders.ElementsCase
            //         setMaterials.CheckSheetMetalProperty("00", SolidWorksInstance.SldWoksApp, out message);
            //         if (message != null)
            //         {
-           //             //  //MessageBox.Show(message, newName + " 858 ");
            //         }
            //     }
            //     catch (Exception e)
            //     {
-           //         //MessageBox.Show($"{newName}\n{e.ToString()}\n{e.StackTrace}", "VentsMatdll");
            //     }
            // }
            // catch (Exception e)
            // {
-           //     //MessageBox.Show($"{newName}\n{e.ToString()}\n{e.StackTrace}\n{newName}", "VentsMatdll 2");
            // }
-
-           // GabaritsForPaintingCamera(model);
+            
 
            // model?.Save();
         }
@@ -283,10 +247,14 @@ namespace SolidWorksLibrary.Builders.ElementsCase
         protected override void DeleteComponents(int type)
         {
             RoofType_e etype = (RoofType_e)type;
+
+
+            const int deleteOption = (int)swDeleteSelectionOptions_e.swDelete_Absorbed +
+                                        (int)swDeleteSelectionOptions_e.swDelete_Children;
+
             if (etype ==  RoofType_e.One || etype == RoofType_e.Five)
             {
-                const int deleteOption = (int)swDeleteSelectionOptions_e.swDelete_Absorbed +
-                                        (int)swDeleteSelectionOptions_e.swDelete_Children;
+                
                 SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть3@15-001-1@15-000", "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
                 SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
                 SolidWorksDocument.Extension.SelectByID2("Эскиз26@15-001-1@15-000", "SKETCH", 0, 0, 0, false, 0, null, 0);
@@ -341,9 +309,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
                 SolidWorksDocument.EditDelete();
             }
             if (etype ==  RoofType_e.Three || etype ==  RoofType_e.Four)
-            {
-                const int deleteOption = (int)swDeleteSelectionOptions_e.swDelete_Absorbed +
-                                        (int)swDeleteSelectionOptions_e.swDelete_Children;
+            { 
 
                 SolidWorksDocument.Extension.SelectByID2("Винт самосверл 6-гр.гол с шайбой-33@15-000", "COMPONENT", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
 
