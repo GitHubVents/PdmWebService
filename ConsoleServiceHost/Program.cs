@@ -22,8 +22,8 @@ namespace ConsoleServiceHost
             {
 
                 host.Open();
-                //Console.WriteLine("Host started @ " + DateTime.Now.ToString());
-                //Console.ReadLine();
+                 Console.WriteLine("Host started @ " + DateTime.Now.ToString());
+               Console.ReadLine();
             }
         }
         static void Main(string[] args)

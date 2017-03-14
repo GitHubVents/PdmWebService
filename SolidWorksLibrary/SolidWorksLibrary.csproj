@@ -78,10 +78,7 @@
     <Compile Include="Builders\Dxf\DxfBulder.cs" />
     <Compile Include="Builders\Dxf\DxfFile.cs" />
     <Compile Include="Builders\ElementsCase\AbstractBuilder.cs" />
-    <Compile Include="Builders\ElementsCase\FeatureBox.cs" />
     <Compile Include="Builders\ElementsCase\FlapBuilder.cs" />
-    <Compile Include="Builders\ElementsCase\FramelessPanelsBuilder.cs" />
-    <Compile Include="Builders\ElementsCase\FramePanelsBuilder.cs" />
     <Compile Include="Builders\ElementsCase\IFeedbackBuilder.cs" />
     <Compile Include="Builders\Case\MonoBlockBuilder.cs" />
     <Compile Include="Builders\ElementsCase\MountingFrameBuilder.cs" />
@@ -90,7 +87,6 @@
     <Compile Include="Builders\ElementsCase\Panels\Frameless\Components\ExistPartsChecker.cs" />
     <Compile Include="Builders\ElementsCase\Panels\Frameless\Components\WindowProfils.cs" />
     <Compile Include="Builders\ElementsCase\Panels\Frameless\Profiles.cs" />
-    <Compile Include="Builders\ElementsCase\Panels\Frameless\Components\CompType_e.cs" />
     <Compile Include="Builders\ElementsCase\Panels\Frameless\FramelessPanel.cs" />
     <Compile Include="Builders\ElementsCase\Panels\Frameless\FramelessPartBuilder.cs" />
     <Compile Include="Builders\ElementsCase\Panels\Frameless\Components\InputHolesWrapper.cs" />

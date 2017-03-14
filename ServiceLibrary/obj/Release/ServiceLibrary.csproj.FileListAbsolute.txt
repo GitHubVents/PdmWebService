@@ -19,5 +19,3 @@ D:\Vlad\PDM-WebService\ServiceLibrary\obj\Release\ServiceLibrary.csprojResolveAs
 D:\Vlad\PDM-WebService\ServiceLibrary\obj\Release\ServiceLibrary.csproj.ResolveComReference.cache
 D:\Vlad\PDM-WebService\ServiceLibrary\obj\Release\ServiceLibrary.dll
 D:\Vlad\PDM-WebService\ServiceLibrary\obj\Release\ServiceLibrary.pdb
-D:\Vlad\PDM-WebService\ServiceLibrary\bin\Release\ServiceLibrary.dll.CodeAnalysisLog.xml
-D:\Vlad\PDM-WebService\ServiceLibrary\bin\Release\ServiceLibrary.dll.lastcodeanalysissucceeded

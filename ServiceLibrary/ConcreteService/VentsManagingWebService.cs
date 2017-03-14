@@ -293,13 +293,13 @@ namespace ServiceLibrary.ConcreteService
             MessageObserver.Instance.SetMessage("Пришел запрос на генерацию вибровставки с параметрами { тип: " + type + ", ширина: " + width + ", высота: " + height);
             if (spigotBuilder == null) spigotBuilder = new SpigotBuilder();
          
-            var modelName = SpigotBuilder.GetSpigotName(type, width, height, true);
+            var modelName = SpigotBuilder.GetSpigotName(type,new SolidWorksLibrary.Builders.ElementsCase.Vector2(width,height), true);
             if (!System.IO.File.Exists(@"C:\TestPDM\12 - Вибровставка\" + modelName))
             {
 
                 MessageObserver.Instance.SetMessage("я ненашел сборку с подобными параметрами. начинаю генерацию");
 
-                spigotBuilder.Build(type, width, height);
+                spigotBuilder.Build(type, new SolidWorksLibrary.Builders.ElementsCase.Vector2(width, height));
             }
             else
             {
