@@ -23,7 +23,7 @@ namespace ConsoleServiceHost
             {
                 try
                 {
-                    serviceHost = new ServiceHost(typeof(VentsManagingWebService),  serviceAddress); 
+                    serviceHost = new ServiceHost(typeof(CadWebService),  serviceAddress); 
                 }
                 catch (Exception exception)
                 {

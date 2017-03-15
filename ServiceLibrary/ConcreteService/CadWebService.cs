@@ -13,7 +13,7 @@ using TaskSystemLibrary;
 
 namespace ServiceLibrary.ConcreteService
 {
-    public class VentsManagingWebService : ISolidWebService
+    public class CadWebService : ISolidWebService
     {
       
    
@@ -266,7 +266,7 @@ namespace ServiceLibrary.ConcreteService
        private static  SpigotBuilder spigotBuilder;
 
         //                                                        TEST CONSTRUCTOR
-        public VentsManagingWebService()
+        public CadWebService()
         {
             try
             {

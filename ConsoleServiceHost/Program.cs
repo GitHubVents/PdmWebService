@@ -18,7 +18,7 @@ namespace ConsoleServiceHost
         {
 
             using (System.ServiceModel.ServiceHost host = new
-                System.ServiceModel.ServiceHost(typeof(VentsManagingWebService)))
+                System.ServiceModel.ServiceHost(typeof(CadWebService)))
             {
 
                 host.Open();
