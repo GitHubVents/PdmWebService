@@ -50,7 +50,8 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConcreteService\VentsManagingWebService.cs" />
+    <Compile Include="ConcreteService\CadWebService.cs" />
+    <Compile Include="ConcreteService\CadWebServiceSimulation.cs" />
     <Compile Include="Models\DataContracts\TransmittableFileModel.cs" />
     <Compile Include="Models\DataContracts\TransmittableSpecification.cs" />
     <Compile Include="Models\DataContracts\TransmittableTaskData.cs" />

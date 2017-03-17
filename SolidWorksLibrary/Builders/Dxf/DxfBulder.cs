@@ -15,16 +15,12 @@ using System.Linq;
     public class DxfBulder : Singeton<DxfBulder>
     {
         private DxfBulder() : base()
-        {
-            this.solidWorksApp = SolidWorksAdapter.SldWoksAppExemplare;   
+        {  
             MessageObserver.Instance.SetMessage("Create DxfBulder",MessageType.Success);
         }
-        /// <summary>
-        /// SolidWorks exemplar
-        /// </summary>
-        private SldWorks solidWorksApp;
 
-       
+        public string DxfFolder { get; set; }    
+              
 
         /// <summary>
         /// Delegate handling the finished building the dxf file
@@ -46,7 +42,6 @@ using System.Linq;
         public void Build(string pathTofile, int IdPdm, int currentVesin)
         {
             MessageObserver.Instance.SetMessage("\t\t debug: input path " + pathTofile+ " input id: " + IdPdm + "  input ver: " + currentVesin+ "\n Thread sleep 4 sec.");
-            System.Threading.Thread.Sleep(4000);
             Build(pathTofile, IdPdm, currentVesin, false);       
          
         }
@@ -79,8 +74,8 @@ using System.Linq;
                     try
                     {
                         string emptyConfigyration = "";
-                        modelDoc = SolidWorksAdapter.SldWoksAppExemplare.OpenDoc6(partPath, (int)  swDocumentTypes_e.swDocPART , (int)swOpenDocOptions_e.swOpenDocOptions_Silent, emptyConfigyration, error, warnings);
-                        modelDoc = SolidWorksAdapter.SldWoksAppExemplare.IActiveDoc2;
+                        modelDoc = SolidWorksAdapter.OpenDocument(partPath, swDocumentTypes_e.swDocPART);// SolidWorksAdapter.SldWoksAppExemplare.OpenDoc6(partPath, (int)  swDocumentTypes_e.swDocPART , (int)swOpenDocOptions_e.swOpenDocOptions_Silent, emptyConfigyration, error, warnings);
+                       // modelDoc = SolidWorksAdapter.SldWoksAppExemplare.IActiveDoc2;
 
                         MessageObserver.Instance.SetMessage("\tOpened document " + Path.GetFileName(partPath), MessageType.System);
                         // Проверяет наличие дерева постоения в моделе.
@@ -138,7 +133,13 @@ using System.Linq;
                     }
 
                     byte[] dxfByteCode;
-                    DXF dxf = new DXF();
+                    DXF dxf;
+
+                    if (DxfFolder != null && DxfFolder != string.Empty)
+                        dxf = new DXF(DxfFolder);
+                    else
+                        dxf = new DXF( );
+
                     isSave  = dxf.ConvertToDXF(eachConfiguration,  modelDoc, out dxfByteCode, isSheetmetal);
                     // dataToExport is method parameter
                   var  dataToExport = CutList.GetDataToExport(  modelDoc);
@@ -149,12 +150,10 @@ using System.Linq;
                         MessageObserver.Instance.SetMessage("\t" + eachConfiguration + " succsess building. Add to result list", MessageType.Success);
 
                         // конфигурация получена при выполнении GetDataToExport 
-                        dataToExport.DxfByteCode = dxfByteCode;
-                        dataToExport.ConfigurationName = eachConfiguration;
+                        dataToExport.DXFByte = dxfByteCode;
+                        dataToExport.Configuration = eachConfiguration;
                         dataToExport.IdPdm = idPdm;
                         dataToExport.Version = version;
-
-
                         if (FinishedBuilding != null)
                             FinishedBuilding(dataToExport);
 

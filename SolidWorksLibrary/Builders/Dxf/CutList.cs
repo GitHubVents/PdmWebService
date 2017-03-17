@@ -97,7 +97,7 @@ namespace SolidWorksLibrary.Builders.Dxf
                                 out толщинаЛистовогоМеталла);
                             }
                            // swCustProp.Set(SheetMetalThicknessRu, толщинаЛистовогоМеталла);
-                            dataToExport.SheetMetalThickness = Convert.ToDecimal( толщинаЛистовогоМеталла.Replace(".", ","));
+                            dataToExport.Thickness = (float)Convert.ToDouble( толщинаЛистовогоМеталла.Replace(".", ","));
 
                             string сгибы;
                             swCustProp.Get4(BendsRu, true, out valOut, out сгибы);
@@ -108,10 +108,10 @@ namespace SolidWorksLibrary.Builders.Dxf
                           //  swCustProp.Set(BendsRu, сгибы);
                             dataToExport.Bend = Convert.ToInt32( сгибы );
                          
-                            dataToExport.PaintX =  GetDimentions( )[0];
-                            dataToExport.PaintY =GetDimentions(  )[1];
-                            dataToExport.PaintZ =  GetDimentions(   )[2];
-                            dataToExport.SurfaceArea = GetSurfaceArea ( );
+                            dataToExport.PaintX =  (int)GetDimentions( )[0];
+                            dataToExport.PaintY = (int)GetDimentions(  )[1];
+                            dataToExport.PaintZ = (int)GetDimentions(   )[2];
+                            dataToExport.SurfaceArea = (float)GetSurfaceArea ( );
                         }
                         m1:
                         swSubFeat = swSubFeat.GetNextFeature();

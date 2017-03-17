@@ -28,7 +28,7 @@ namespace ServiceLibrary.Models.DataContracts
         /// 
         /// </summary>
         [DataMember]
-        public string[] Designation { get; set; }
+        public string Designation { get; set; }
 
         /// <summary>
         /// Type task

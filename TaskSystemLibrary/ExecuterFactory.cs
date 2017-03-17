@@ -44,22 +44,22 @@ namespace TaskSystemLibrary
                 //     " SheetMetalThickness " + dataToExport.SheetMetalThickness
                 //    );
               
-                TaskSystemDataRepository.Instance.UpDateCutList
-                    (
-                    dataToExport.ConfigurationName, 
-                    dataToExport.DxfByteCode,
-                    null,
-                    null,
-                  dataToExport.Bend ,
-                  dataToExport.SheetMetalThickness  ,
-                    dataToExport.Version,
-                    (decimal)dataToExport.PaintX,
-                    (decimal)dataToExport.PaintY,
-                    (decimal)dataToExport.PaintZ,
-                    dataToExport.IdPdm,
-                    dataToExport.SheetMetalThickness 
+                //TaskSystemDataRepository.Instance.UpDateCutList
+                //    (
+                //    dataToExport.ConfigurationName, 
+                //    dataToExport.DxfByteCode,
+                //    null,
+                //    null,
+                //  dataToExport.Bend ,
+                //  dataToExport.SheetMetalThickness  ,
+                //    dataToExport.Version,
+                //    (decimal)dataToExport.PaintX,
+                //    (decimal)dataToExport.PaintY,
+                //    (decimal)dataToExport.PaintZ,
+                //    dataToExport.IdPdm,
+                //    dataToExport.SheetMetalThickness 
 
-                    );
+                //    );
             }
             catch (Exception ex)
             {

@@ -19,9 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PdmSolidWorksLibrary", "Pdm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceConstants", "ServiceConstants\ServiceConstants.csproj", "{21A48C37-403D-4966-9414-6EA2327A204B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsoleApplication", "TestConsoleApplication\TestConsoleApplication.csproj", "{6A9FCC9D-F46C-45F5-8AC7-387C6562E4CD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VentsMaterials - DLL", "..\AirVentsCad\2. VentsMaterials - DLL\VentsMaterials - DLL\VentsMaterials - DLL.csproj", "{5BDD7CBB-5DED-4C1F-9CB2-432B9257FD07}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolidWorksService", "SolidWorksService", "{FF3FBB82-0E91-456E-AA1E-C5C53F72D2BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,14 +59,6 @@ Global
 		{21A48C37-403D-4966-9414-6EA2327A204B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21A48C37-403D-4966-9414-6EA2327A204B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21A48C37-403D-4966-9414-6EA2327A204B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6A9FCC9D-F46C-45F5-8AC7-387C6562E4CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6A9FCC9D-F46C-45F5-8AC7-387C6562E4CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6A9FCC9D-F46C-45F5-8AC7-387C6562E4CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6A9FCC9D-F46C-45F5-8AC7-387C6562E4CD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5BDD7CBB-5DED-4C1F-9CB2-432B9257FD07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5BDD7CBB-5DED-4C1F-9CB2-432B9257FD07}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5BDD7CBB-5DED-4C1F-9CB2-432B9257FD07}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5BDD7CBB-5DED-4C1F-9CB2-432B9257FD07}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

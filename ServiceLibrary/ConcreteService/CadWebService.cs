@@ -15,12 +15,7 @@ namespace ServiceLibrary.ConcreteService
 {
     public class CadWebService : ISolidWebService
     {
-      
-   
-
-
-
-
+       
         private TaskManager taskManager;
         //public VentsManagingWebService()
         //{

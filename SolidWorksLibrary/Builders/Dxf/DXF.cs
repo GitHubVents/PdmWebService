@@ -39,8 +39,8 @@ namespace SolidWorksLibrary.Builders.Dxf
               
                 var sDxfName = DxfNameBuild(swModel.GetTitle(), configuration) + ".dxf";
                 dxfFilePath = Path.Combine(FolderToSaveDxf, sDxfName);
-
-                Directory.CreateDirectory(FolderToSaveDxf);
+                if (!Directory.Exists(FolderToSaveDxf))
+                    Directory.CreateDirectory(FolderToSaveDxf);
 
                 var dataAlignment = new double[12];
 

@@ -14,7 +14,7 @@ namespace SolidWorksLibrary
         /// <summary>
         /// SolidWorks exemplare
         /// </summary>
-        private static SldWorks sldWoks_app;
+        private static SldWorks sldWoksApp;
  
         /// <summary>
         /// Get SolidWorksExemplare
@@ -24,7 +24,7 @@ namespace SolidWorksLibrary
             get
             {
                 InitSolidWorks();
-                return  sldWoks_app;
+                return  sldWoksApp;
             }
         }
         /// <summary>
@@ -32,12 +32,12 @@ namespace SolidWorksLibrary
         /// </summary>
         private static void InitSolidWorks()
         {
-            if (sldWoks_app == null) {
+            if (sldWoksApp == null) {
                 MessageObserver.Instance.SetMessage("Initialize SolidWorks exemplare");
                 try {
 
-                    sldWoks_app = new SldWorks();
-                    //sldWoks_app = (SldWorks)Marshal.GetActiveObject("SldWorks.Application");
+                    
+                     sldWoksApp = (SldWorks)Marshal.GetActiveObject("SldWorks.Application");
                     MessageObserver.Instance.SetMessage("\t\tTake an existing exemplar SolidWorks Application", MessageType.System);
                 }
 
@@ -51,7 +51,7 @@ namespace SolidWorksLibrary
                             process.Kill();
                         }
                     }
-                    sldWoks_app = new SldWorks()
+                    sldWoksApp = new SldWorks( )  
                     // Allow SOLIDWORKS to run in the background
                     // and be invisible
                     //sldWoks_app.UserControl = false;

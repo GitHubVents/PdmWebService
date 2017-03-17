@@ -12,6 +12,8 @@ namespace ServiceLibrary.ConcreteService
 {
     class CadWebServiceSimulation : ISolidWebService
     {
+        Random randomExemplare = new Random();
+
         public void CreateDxf(int[] filesId)
         {
             MessageObserver.Instance.SetMessage($"Created {filesId.Length - 1} dxf files");
@@ -31,12 +33,12 @@ namespace ServiceLibrary.ConcreteService
         {
             MessageObserver.Instance.SetMessage($"Got specification; It's Length-1: {specification.Length - 1}");
         }
-        Random randomExemplare = new Random();
+       
         public TransmittableTaskData[] GetActiveTasksData( )
         {
             TransmittableTaskData[] transmittableTaskData = new TransmittableTaskData[randomExemplare.Next(3, 7)];
 
-            for (int i = transmittableTaskData.Length - 1; i >= 0; i--)
+            for (byte i = (byte)( transmittableTaskData.Length- 1) ; i != 0; i--)
             {
                 transmittableTaskData[i] = new TransmittableTaskData
                 {
@@ -58,7 +60,7 @@ namespace ServiceLibrary.ConcreteService
             string source = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             StringBuilder resultBuilder = new StringBuilder( );
 
-            for (int i = 0; i < 2; i++)
+            for (byte i = 0; i < 2; i++)
             {
                 resultBuilder.Append(source[randomExemplare.Next(0, source.Length - 1)]);
                 resultBuilder.Append(source[randomExemplare.Next(0, source.Length - 1)]);
@@ -73,7 +75,7 @@ namespace ServiceLibrary.ConcreteService
         {
             TransmittableTaskData[] transmittableTaskData = new TransmittableTaskData[randomExemplare.Next(3, 7)];
 
-            for (int i = transmittableTaskData.Length - 1; i >= 0; i--)
+            for (byte i =(byte) (transmittableTaskData.Length - 1); i != 0; i--)
             {
                 transmittableTaskData[i] = new TransmittableTaskData
                 {
@@ -105,7 +107,7 @@ namespace ServiceLibrary.ConcreteService
         {
             TransmittableSpecification[] specification = new TransmittableSpecification[randomExemplare.Next(10, 50)];
 
-            for (int i = specification.Length - 1; i >= 0; i--)
+            for (byte i = (byte)(specification.Length - 1); i != 0; i--)
             {
                 specification[i].Bend = randomExemplare.Next(70, 120).ToString( );
                 specification[i].CodeMaterial = randomExemplare.Next(800, 1200).ToString( );
@@ -142,7 +144,8 @@ namespace ServiceLibrary.ConcreteService
         public TransmittableFileModel[] Search(string nameSegment)
         {
             TransmittableFileModel[] TransmittableFileModels = new TransmittableFileModel[randomExemplare.Next(0, 30)];
-            for (int i = TransmittableFileModels.Length - 1; i >= 0; i--)
+            byte i = (byte)(TransmittableFileModels.Length - 1);
+            for (; i != 0; i--)
             {
                 TransmittableFileModels[i] = new TransmittableFileModel( )
                 {
@@ -161,7 +164,7 @@ namespace ServiceLibrary.ConcreteService
         {
             string testStr = GenerateText( );
             byte[] byteCode = new byte[testStr.Length];
-            for (int i = 0; i < byteCode.Length; i++)
+            for (byte i = 0; i < byteCode.Length; i++)
             {
                 byteCode[i] = (byte)testStr[i];
             }
