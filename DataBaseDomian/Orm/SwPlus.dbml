@@ -1,27 +1,34 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="SWPlusDB" Class="SwPlusDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Connection Mode="AppSettings" ConnectionString="Data Source=pdmsrv;Initial Catalog=SWPlusDB;Persist Security Info=True;User ID=AirVentsCad" SettingsObjectName="DataBaseDomian.Properties.Settings" SettingsPropertyName="SWPlusDBConnectionString" Provider="System.Data.SqlClient" />
-  <Table Name="dbo.View_Parts" Member="View_Parts">
-    <Type Name="View_Part">
-      <Column Name="Bend" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="PaintX" Type="System.Decimal" DbType="Decimal(10,2)" CanBeNull="true" />
-      <Column Name="PaintY" Type="System.Decimal" DbType="Decimal(10,2)" CanBeNull="true" />
-      <Column Name="PaintZ" Type="System.Decimal" DbType="Decimal(10,2)" CanBeNull="true" />
-      <Column Name="SurfaceArea" Type="System.Decimal" DbType="Decimal(10,3)" CanBeNull="true" />
-      <Column Name="Thickness" Type="System.Decimal" DbType="Decimal(3,1)" CanBeNull="true" />
-      <Column Name="Version" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="WorkpieceX" Type="System.Decimal" DbType="Decimal(10,2)" CanBeNull="true" />
-      <Column Name="WorkpieceY" Type="System.Decimal" DbType="Decimal(10,2)" CanBeNull="true" />
-      <Column Name="IDPDM" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="ConfigurationName" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
-      <Column Name="DXF" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
-    </Type>
-  </Table>
   <Table Name="Materials.BendTable" Member="BendTables">
     <Type Name="BendTable">
       <Column Name="BendID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="Thickness" Type="System.Decimal" DbType="Decimal(2,1) NOT NULL" CanBeNull="false" />
       <Column Name="[K-Factor]" Member="K_Factor" Type="System.Decimal" DbType="Decimal(5,3) NOT NULL" CanBeNull="false" />
       <Column Name="BendRadius" Type="System.Decimal" DbType="Decimal(4,2) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.View_Parts" Member="View_Parts">
+    <Type Name="View_Part">
+      <Column Name="Bend" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PaintX" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PaintY" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PaintZ" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SurfaceArea" Type="System.Decimal" DbType="Decimal(10,3) NOT NULL" CanBeNull="false" />
+      <Column Name="Thickness" Type="System.Decimal" DbType="Decimal(10,2) NOT NULL" CanBeNull="false" />
+      <Column Name="Version" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="WorkpieceX" Type="System.Decimal" DbType="Decimal(10,2) NOT NULL" CanBeNull="false" />
+      <Column Name="WorkpieceY" Type="System.Decimal" DbType="Decimal(10,2) NOT NULL" CanBeNull="false" />
+      <Column Name="IDPDM" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ConfigurationName" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="DXF" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.GetPath" Member="GetPaths">
+    <Type Name="GetPath">
+      <Column Name="DocumentID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Filename" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Path" Type="System.String" DbType="NVarChar(260)" CanBeNull="true" />
     </Type>
   </Table>
   <Function Name="dbo.DXFCheck" Method="DXFCheck">

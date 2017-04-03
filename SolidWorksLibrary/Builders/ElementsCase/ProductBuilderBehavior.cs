@@ -6,13 +6,7 @@ using System.Collections.Generic;
 
 namespace SolidWorksLibrary.Builders.ElementsCase
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="thickness"></param>
-    /// <param name="kFactor"></param>
-    /// <param name="bendRadius"></param>
-    public delegate void SetBendsHandler(decimal thickness, out decimal kFactor, out decimal bendRadius);
+
 
     /// <summary>
     /// It abstract class describes the basic behavior of the builder
@@ -26,7 +20,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
         /// <summary>
         /// Path list to built files
         /// </summary>
-        protected List<string> ComponentsPathList { get; set; }
+        public List<string> ComponentsPathList { get; protected set; }
         /// <summary>
         /// Sorce folder where there is the prototypes for the build
         /// </summary>
@@ -38,7 +32,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
         /// <summary>
         /// Root folder file system
         /// </summary>
-        protected string RootFolder { get; set; }
+        public string RootFolder { get; set; }
         /// <summary>
         /// Working assembly document
         /// </summary>
@@ -76,10 +70,12 @@ namespace SolidWorksLibrary.Builders.ElementsCase
         /// <summary>
         /// Provides notification and feedback to set bends for part
         /// </summary>
-        public virtual event SetBendsHandler SetBends;
+        public virtual SetBendsHandler SetBends { get; set; }
 
         protected bool IsPartExist;
         #endregion
+
+        protected string DebugRootFolder { get { return @"C:\TestPDM"; } }
 
         public ProductBuilderBehavior()
         {
@@ -96,7 +92,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
         /// <param name="sourceFolder">Sorce folder where there is the prototypes for the build</param>
         protected void SetProperties(string subjectDestinationFolder, string sourceFolder)
         {
-            this.RootFolder = @"C:\TestPDM"; // test default value
+            this.RootFolder = @"D:\Test"; // test default value
             this.SubjectDestinationFolder = subjectDestinationFolder;
             this.SourceFolder = sourceFolder;
         }
@@ -120,12 +116,13 @@ namespace SolidWorksLibrary.Builders.ElementsCase
         /// <summary>
         /// Provides notification and feedback to check for part
         /// </summary>
-        public CheckExistPartHandler CheckExistPart { get; set; }        
+        public CheckExistPartHandler CheckExistPart { get; set; }
+
 
         /// <summary>
         /// Informing subscribers the completion of building 
         /// </summary>
-        public FinishedBuildHandler FinishedBuild { get; set; }
+        public   FinishedBuildHandler FinishedBuild { get; set; }
 
 
         protected virtual void DeleteComponents(int type)

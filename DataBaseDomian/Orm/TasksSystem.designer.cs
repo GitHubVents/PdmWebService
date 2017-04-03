@@ -11,23 +11,23 @@
 
 namespace DataBaseDomian.Orm
 {
-	using System.Data.Linq;
-	using System.Data.Linq.Mapping;
-	using System.Data;
-	using System.Collections.Generic;
-	using System.Reflection;
-	using System.Linq;
-	using System.Linq.Expressions;
-	using System.ComponentModel;
-	using System;
-	
-	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="TaskDataBase")]
-	public partial class TasksSystemDataContext : System.Data.Linq.DataContext
-	{
-		
-		private static System.Data.Linq.Mapping.MappingSource mappingSource = new AttributeMappingSource();
-		
+using System.Data.Linq;
+using System.Data.Linq.Mapping;
+using System.Data;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Linq;
+using System.Linq.Expressions;
+using System.ComponentModel;
+using System;
+
+
+[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="TaskDataBase")]
+public partial class TasksSystemDataContext : System.Data.Linq.DataContext
+{
+
+private static System.Data.Linq.Mapping.MappingSource mappingSource = new AttributeMappingSource();
+
     #region Extensibility Method Definitions
     partial void OnCreated();
     partial void InsertTaskInstance(TaskInstance instance);
@@ -37,154 +37,154 @@ namespace DataBaseDomian.Orm
     partial void UpdateTask(Task instance);
     partial void DeleteTask(Task instance);
     #endregion
-		
-		public TasksSystemDataContext() : 
-				base(global::DataBaseDomian.Properties.Settings.Default.TaskDataBaseConnectionString, mappingSource)
-		{
-			OnCreated();
-		}
-		
-		public TasksSystemDataContext(string connection) : 
-				base(connection, mappingSource)
-		{
-			OnCreated();
-		}
-		
-		public TasksSystemDataContext(System.Data.IDbConnection connection) : 
-				base(connection, mappingSource)
-		{
-			OnCreated();
-		}
-		
-		public TasksSystemDataContext(string connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
-				base(connection, mappingSource)
-		{
-			OnCreated();
-		}
-		
-		public TasksSystemDataContext(System.Data.IDbConnection connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
-				base(connection, mappingSource)
-		{
-			OnCreated();
-		}
-		
-		public System.Data.Linq.Table<TaskInstance> TaskInstances
-		{
-			get
-			{
-				return this.GetTable<TaskInstance>();
-			}
-		}
-		
-		public System.Data.Linq.Table<Task> Tasks
-		{
-			get
-			{
-				return this.GetTable<Task>();
-			}
-		}
-		
-		public System.Data.Linq.Table<TaskSelection> TaskSelections
-		{
-			get
-			{
-				return this.GetTable<TaskSelection>();
-			}
-		}
-		
-		public System.Data.Linq.Table<TaskSystemLog> TaskSystemLogs
-		{
-			get
-			{
-				return this.GetTable<TaskSystemLog>();
-			}
-		}
-		
-		public System.Data.Linq.Table<View_ActiveTask> View_ActiveTasks
-		{
-			get
-			{
-				return this.GetTable<View_ActiveTask>();
-			}
-		}
-		
-		public System.Data.Linq.Table<View_TaskSelection> View_TaskSelections
-		{
-			get
-			{
-				return this.GetTable<View_TaskSelection>();
-			}
-		}
-		
-		public System.Data.Linq.Table<View_CompletedTask> View_CompletedTasks
-		{
-			get
-			{
-				return this.GetTable<View_CompletedTask>();
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.Tasks_DeleteTaskInstances")]
-		public int Tasks_DeleteTaskInstances()
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())));
-			return ((int)(result.ReturnValue));
-		}
-		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.Tasks_SetTaskStatus")]
-		public int Tasks_SetTaskStatus([global::System.Data.Linq.Mapping.ParameterAttribute(Name="TaskStatus", DbType="Int")] System.Nullable<int> taskStatus, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="TaskInstanceID", DbType="Int")] System.Nullable<int> taskInstanceID)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), taskStatus, taskInstanceID);
-			return ((int)(result.ReturnValue));
-		}
-		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.Tasks_GetTaskInfo")]
-		public ISingleResult<Tasks_GetTaskInfoResult> Tasks_GetTaskInfo([global::System.Data.Linq.Mapping.ParameterAttribute(Name="TaskInstanceID", DbType="Int")] System.Nullable<int> taskInstanceID)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), taskInstanceID);
-			return ((ISingleResult<Tasks_GetTaskInfoResult>)(result.ReturnValue));
-		}
-		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.Tasks_SetTaskInstance")]
-		public int Tasks_SetTaskInstance([global::System.Data.Linq.Mapping.ParameterAttribute(Name="TaskID", DbType="Int")] System.Nullable<int> taskID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="InitUserID", DbType="Int")] System.Nullable<int> initUserID)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), taskID, initUserID);
-			return ((int)(result.ReturnValue));
-		}
-		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.Tasks_SetTaskSelection")]
-		public int Tasks_SetTaskSelection([global::System.Data.Linq.Mapping.ParameterAttribute(Name="TaskInstanceID", DbType="Int")] System.Nullable<int> taskInstanceID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="DocumentID", DbType="Int")] System.Nullable<int> documentID)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), taskInstanceID, documentID);
-			return ((int)(result.ReturnValue));
-		}
-		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.UpDateCutList")]
-		public int UpDateCutList([global::System.Data.Linq.Mapping.ParameterAttribute(Name="WorkpieceX", DbType="Decimal(10,2)")] System.Nullable<decimal> workpieceX, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="WorkpieceY", DbType="Decimal(10,2)")] System.Nullable<decimal> workpieceY, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Bend", DbType="Int")] System.Nullable<int> bend, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Thickness", DbType="Decimal(3,1)")] System.Nullable<decimal> thickness, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Configuration", DbType="NVarChar(255)")] string configuration, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Version", DbType="Int")] System.Nullable<int> version, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="PaintX", DbType="Decimal(10,2)")] System.Nullable<decimal> paintX, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="PaintY", DbType="Decimal(10,2)")] System.Nullable<decimal> paintY, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="PaintZ", DbType="Decimal(10,2)")] System.Nullable<decimal> paintZ, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="IDPDM", DbType="Int")] System.Nullable<int> iDPDM, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="SurfaceArea", DbType="Decimal(10,3)")] System.Nullable<decimal> surfaceArea, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="DXFByte", DbType="VarBinary(MAX)")] System.Data.Linq.Binary dXFByte)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), workpieceX, workpieceY, bend, thickness, configuration, version, paintX, paintY, paintZ, iDPDM, surfaceArea, dXFByte);
-			return ((int)(result.ReturnValue));
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TaskInstance")]
-	public partial class TaskInstance : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _TaskInstanceID;
-		
-		private System.Nullable<int> _TaskID;
-		
-		private System.Nullable<System.DateTime> _StartTime;
-		
-		private System.Nullable<System.DateTime> _EndTime;
-		
-		private int _TaskStatus;
-		
-		private int _InitUserID;
-		
+
+public TasksSystemDataContext() : 
+base(global::DataBaseDomian.Properties.Settings.Default.TaskDataBaseConnectionString, mappingSource)
+{
+OnCreated();
+}
+
+public TasksSystemDataContext(string connection) : 
+base(connection, mappingSource)
+{
+OnCreated();
+}
+
+public TasksSystemDataContext(System.Data.IDbConnection connection) : 
+base(connection, mappingSource)
+{
+OnCreated();
+}
+
+public TasksSystemDataContext(string connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
+base(connection, mappingSource)
+{
+OnCreated();
+}
+
+public TasksSystemDataContext(System.Data.IDbConnection connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
+base(connection, mappingSource)
+{
+OnCreated();
+}
+
+public System.Data.Linq.Table<TaskInstance> TaskInstances
+{
+get
+{
+return this.GetTable<TaskInstance>();
+}
+}
+
+public System.Data.Linq.Table<Task> Tasks
+{
+get
+{
+return this.GetTable<Task>();
+}
+}
+
+public System.Data.Linq.Table<TaskSelection> TaskSelections
+{
+get
+{
+return this.GetTable<TaskSelection>();
+}
+}
+
+public System.Data.Linq.Table<TaskSystemLog> TaskSystemLogs
+{
+get
+{
+return this.GetTable<TaskSystemLog>();
+}
+}
+
+public System.Data.Linq.Table<View_ActiveTask> View_ActiveTasks
+{
+get
+{
+return this.GetTable<View_ActiveTask>();
+}
+}
+
+public System.Data.Linq.Table<View_TaskSelection> View_TaskSelections
+{
+get
+{
+return this.GetTable<View_TaskSelection>();
+}
+}
+
+public System.Data.Linq.Table<View_CompletedTask> View_CompletedTasks
+{
+get
+{
+return this.GetTable<View_CompletedTask>();
+}
+}
+
+[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.Tasks_DeleteTaskInstances")]
+public int Tasks_DeleteTaskInstances()
+{
+IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())));
+return ((int)(result.ReturnValue));
+}
+
+[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.Tasks_SetTaskStatus")]
+public int Tasks_SetTaskStatus([global::System.Data.Linq.Mapping.ParameterAttribute(Name="TaskStatus", DbType="Int")] System.Nullable<int> taskStatus, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="TaskInstanceID", DbType="Int")] System.Nullable<int> taskInstanceID)
+{
+IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), taskStatus, taskInstanceID);
+return ((int)(result.ReturnValue));
+}
+
+[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.Tasks_GetTaskInfo")]
+public ISingleResult<Tasks_GetTaskInfoResult> Tasks_GetTaskInfo([global::System.Data.Linq.Mapping.ParameterAttribute(Name="TaskInstanceID", DbType="Int")] System.Nullable<int> taskInstanceID)
+{
+IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), taskInstanceID);
+return ((ISingleResult<Tasks_GetTaskInfoResult>)(result.ReturnValue));
+}
+
+[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.Tasks_SetTaskInstance")]
+public int Tasks_SetTaskInstance([global::System.Data.Linq.Mapping.ParameterAttribute(Name="TaskID", DbType="Int")] System.Nullable<int> taskID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="InitUserID", DbType="Int")] System.Nullable<int> initUserID)
+{
+IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), taskID, initUserID);
+return ((int)(result.ReturnValue));
+}
+
+[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.Tasks_SetTaskSelection")]
+public int Tasks_SetTaskSelection([global::System.Data.Linq.Mapping.ParameterAttribute(Name="TaskInstanceID", DbType="Int")] System.Nullable<int> taskInstanceID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="DocumentID", DbType="Int")] System.Nullable<int> documentID)
+{
+IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), taskInstanceID, documentID);
+return ((int)(result.ReturnValue));
+}
+
+[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.UpDateCutList")]
+public int UpDateCutList([global::System.Data.Linq.Mapping.ParameterAttribute(Name="WorkpieceX", DbType="Decimal(10,2)")] System.Nullable<decimal> workpieceX, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="WorkpieceY", DbType="Decimal(10,2)")] System.Nullable<decimal> workpieceY, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Bend", DbType="Int")] System.Nullable<int> bend, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Thickness", DbType="Decimal(3,1)")] System.Nullable<decimal> thickness, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Configuration", DbType="NVarChar(255)")] string configuration, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Version", DbType="Int")] System.Nullable<int> version, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="PaintX", DbType="Decimal(10,2)")] System.Nullable<decimal> paintX, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="PaintY", DbType="Decimal(10,2)")] System.Nullable<decimal> paintY, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="PaintZ", DbType="Decimal(10,2)")] System.Nullable<decimal> paintZ, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="IDPDM", DbType="Int")] System.Nullable<int> iDPDM, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="SurfaceArea", DbType="Decimal(10,3)")] System.Nullable<decimal> surfaceArea, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="DXFByte", DbType="VarBinary(MAX)")] System.Data.Linq.Binary dXFByte)
+{
+IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), workpieceX, workpieceY, bend, thickness, configuration, version, paintX, paintY, paintZ, iDPDM, surfaceArea, dXFByte);
+return ((int)(result.ReturnValue));
+}
+}
+
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TaskInstance")]
+public partial class TaskInstance : INotifyPropertyChanging, INotifyPropertyChanged
+{
+
+private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+
+private int _TaskInstanceID;
+
+private System.Nullable<int> _TaskID;
+
+private System.Nullable<System.DateTime> _StartTime;
+
+private System.Nullable<System.DateTime> _EndTime;
+
+private int _TaskStatus;
+
+private int _InitUserID;
+
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -202,163 +202,163 @@ namespace DataBaseDomian.Orm
     partial void OnInitUserIDChanging(int value);
     partial void OnInitUserIDChanged();
     #endregion
-		
-		public TaskInstance()
-		{
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskInstanceID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int TaskInstanceID
-		{
-			get
-			{
-				return this._TaskInstanceID;
-			}
-			set
-			{
-				if ((this._TaskInstanceID != value))
-				{
-					this.OnTaskInstanceIDChanging(value);
-					this.SendPropertyChanging();
-					this._TaskInstanceID = value;
-					this.SendPropertyChanged("TaskInstanceID");
-					this.OnTaskInstanceIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskID", DbType="Int")]
-		public System.Nullable<int> TaskID
-		{
-			get
-			{
-				return this._TaskID;
-			}
-			set
-			{
-				if ((this._TaskID != value))
-				{
-					this.OnTaskIDChanging(value);
-					this.SendPropertyChanging();
-					this._TaskID = value;
-					this.SendPropertyChanged("TaskID");
-					this.OnTaskIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartTime", DbType="SmallDateTime")]
-		public System.Nullable<System.DateTime> StartTime
-		{
-			get
-			{
-				return this._StartTime;
-			}
-			set
-			{
-				if ((this._StartTime != value))
-				{
-					this.OnStartTimeChanging(value);
-					this.SendPropertyChanging();
-					this._StartTime = value;
-					this.SendPropertyChanged("StartTime");
-					this.OnStartTimeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndTime", DbType="SmallDateTime")]
-		public System.Nullable<System.DateTime> EndTime
-		{
-			get
-			{
-				return this._EndTime;
-			}
-			set
-			{
-				if ((this._EndTime != value))
-				{
-					this.OnEndTimeChanging(value);
-					this.SendPropertyChanging();
-					this._EndTime = value;
-					this.SendPropertyChanged("EndTime");
-					this.OnEndTimeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskStatus", DbType="Int NOT NULL")]
-		public int TaskStatus
-		{
-			get
-			{
-				return this._TaskStatus;
-			}
-			set
-			{
-				if ((this._TaskStatus != value))
-				{
-					this.OnTaskStatusChanging(value);
-					this.SendPropertyChanging();
-					this._TaskStatus = value;
-					this.SendPropertyChanged("TaskStatus");
-					this.OnTaskStatusChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InitUserID", DbType="Int NOT NULL")]
-		public int InitUserID
-		{
-			get
-			{
-				return this._InitUserID;
-			}
-			set
-			{
-				if ((this._InitUserID != value))
-				{
-					this.OnInitUserIDChanging(value);
-					this.SendPropertyChanging();
-					this._InitUserID = value;
-					this.SendPropertyChanged("InitUserID");
-					this.OnInitUserIDChanged();
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Tasks")]
-	public partial class Task : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _TaskID;
-		
-		private string _TaskName;
-		
+
+public TaskInstance()
+{
+OnCreated();
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskInstanceID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+public int TaskInstanceID
+{
+get
+{
+return this._TaskInstanceID;
+}
+set
+{
+if ((this._TaskInstanceID != value))
+{
+this.OnTaskInstanceIDChanging(value);
+this.SendPropertyChanging();
+this._TaskInstanceID = value;
+this.SendPropertyChanged("TaskInstanceID");
+this.OnTaskInstanceIDChanged();
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskID", DbType="Int")]
+public System.Nullable<int> TaskID
+{
+get
+{
+return this._TaskID;
+}
+set
+{
+if ((this._TaskID != value))
+{
+this.OnTaskIDChanging(value);
+this.SendPropertyChanging();
+this._TaskID = value;
+this.SendPropertyChanged("TaskID");
+this.OnTaskIDChanged();
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartTime", DbType="SmallDateTime")]
+public System.Nullable<System.DateTime> StartTime
+{
+get
+{
+return this._StartTime;
+}
+set
+{
+if ((this._StartTime != value))
+{
+this.OnStartTimeChanging(value);
+this.SendPropertyChanging();
+this._StartTime = value;
+this.SendPropertyChanged("StartTime");
+this.OnStartTimeChanged();
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndTime", DbType="SmallDateTime")]
+public System.Nullable<System.DateTime> EndTime
+{
+get
+{
+return this._EndTime;
+}
+set
+{
+if ((this._EndTime != value))
+{
+this.OnEndTimeChanging(value);
+this.SendPropertyChanging();
+this._EndTime = value;
+this.SendPropertyChanged("EndTime");
+this.OnEndTimeChanged();
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskStatus", DbType="Int NOT NULL")]
+public int TaskStatus
+{
+get
+{
+return this._TaskStatus;
+}
+set
+{
+if ((this._TaskStatus != value))
+{
+this.OnTaskStatusChanging(value);
+this.SendPropertyChanging();
+this._TaskStatus = value;
+this.SendPropertyChanged("TaskStatus");
+this.OnTaskStatusChanged();
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InitUserID", DbType="Int NOT NULL")]
+public int InitUserID
+{
+get
+{
+return this._InitUserID;
+}
+set
+{
+if ((this._InitUserID != value))
+{
+this.OnInitUserIDChanging(value);
+this.SendPropertyChanging();
+this._InitUserID = value;
+this.SendPropertyChanged("InitUserID");
+this.OnInitUserIDChanged();
+}
+}
+}
+
+public event PropertyChangingEventHandler PropertyChanging;
+
+public event PropertyChangedEventHandler PropertyChanged;
+
+protected virtual void SendPropertyChanging()
+{
+if ((this.PropertyChanging != null))
+{
+this.PropertyChanging(this, emptyChangingEventArgs);
+}
+}
+
+protected virtual void SendPropertyChanged(String propertyName)
+{
+if ((this.PropertyChanged != null))
+{
+this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Tasks")]
+public partial class Task : INotifyPropertyChanging, INotifyPropertyChanged
+{
+
+private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+
+private int _TaskID;
+
+private string _TaskName;
+
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -368,862 +368,862 @@ namespace DataBaseDomian.Orm
     partial void OnTaskNameChanging(string value);
     partial void OnTaskNameChanged();
     #endregion
-		
-		public Task()
-		{
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int TaskID
-		{
-			get
-			{
-				return this._TaskID;
-			}
-			set
-			{
-				if ((this._TaskID != value))
-				{
-					this.OnTaskIDChanging(value);
-					this.SendPropertyChanging();
-					this._TaskID = value;
-					this.SendPropertyChanged("TaskID");
-					this.OnTaskIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskName", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
-		public string TaskName
-		{
-			get
-			{
-				return this._TaskName;
-			}
-			set
-			{
-				if ((this._TaskName != value))
-				{
-					this.OnTaskNameChanging(value);
-					this.SendPropertyChanging();
-					this._TaskName = value;
-					this.SendPropertyChanged("TaskName");
-					this.OnTaskNameChanged();
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TaskSelection")]
-	public partial class TaskSelection
-	{
-		
-		private int _TaskSelectionID;
-		
-		private int _TaskInstanceID;
-		
-		private System.Nullable<int> _DocumentID;
-		
-		private System.Nullable<int> _Version;
-		
-		private System.Nullable<int> _ConfigurationID;
-		
-		public TaskSelection()
-		{
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskSelectionID", AutoSync=AutoSync.Always, DbType="Int NOT NULL IDENTITY", IsDbGenerated=true)]
-		public int TaskSelectionID
-		{
-			get
-			{
-				return this._TaskSelectionID;
-			}
-			set
-			{
-				if ((this._TaskSelectionID != value))
-				{
-					this._TaskSelectionID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskInstanceID", DbType="Int NOT NULL")]
-		public int TaskInstanceID
-		{
-			get
-			{
-				return this._TaskInstanceID;
-			}
-			set
-			{
-				if ((this._TaskInstanceID != value))
-				{
-					this._TaskInstanceID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DocumentID", DbType="Int")]
-		public System.Nullable<int> DocumentID
-		{
-			get
-			{
-				return this._DocumentID;
-			}
-			set
-			{
-				if ((this._DocumentID != value))
-				{
-					this._DocumentID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Version", DbType="Int")]
-		public System.Nullable<int> Version
-		{
-			get
-			{
-				return this._Version;
-			}
-			set
-			{
-				if ((this._Version != value))
-				{
-					this._Version = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ConfigurationID", DbType="Int")]
-		public System.Nullable<int> ConfigurationID
-		{
-			get
-			{
-				return this._ConfigurationID;
-			}
-			set
-			{
-				if ((this._ConfigurationID != value))
-				{
-					this._ConfigurationID = value;
-				}
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TaskSystemLog")]
-	public partial class TaskSystemLog
-	{
-		
-		private int _Id;
-		
-		private int _TaskId;
-		
-		private int _Type;
-		
-		private string _Coments;
-		
-		public TaskSystemLog()
-		{
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.Always, DbType="Int NOT NULL IDENTITY", IsDbGenerated=true)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this._Id = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskId", DbType="Int NOT NULL")]
-		public int TaskId
-		{
-			get
-			{
-				return this._TaskId;
-			}
-			set
-			{
-				if ((this._TaskId != value))
-				{
-					this._TaskId = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Type", DbType="Int NOT NULL")]
-		public int Type
-		{
-			get
-			{
-				return this._Type;
-			}
-			set
-			{
-				if ((this._Type != value))
-				{
-					this._Type = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Coments", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
-		public string Coments
-		{
-			get
-			{
-				return this._Coments;
-			}
-			set
-			{
-				if ((this._Coments != value))
-				{
-					this._Coments = value;
-				}
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.View_ActiveTasks")]
-	public partial class View_ActiveTask
-	{
-		
-		private int _TaskInstanceID;
-		
-		private System.Nullable<int> _TaskID;
-		
-		private System.Nullable<System.DateTime> _StartTime;
-		
-		private System.Nullable<System.DateTime> _EndTime;
-		
-		private int _TaskStatus;
-		
-		private int _InitUserID;
-		
-		public View_ActiveTask()
-		{
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskInstanceID", AutoSync=AutoSync.Always, DbType="Int NOT NULL IDENTITY", IsDbGenerated=true)]
-		public int TaskInstanceID
-		{
-			get
-			{
-				return this._TaskInstanceID;
-			}
-			set
-			{
-				if ((this._TaskInstanceID != value))
-				{
-					this._TaskInstanceID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskID", DbType="Int")]
-		public System.Nullable<int> TaskID
-		{
-			get
-			{
-				return this._TaskID;
-			}
-			set
-			{
-				if ((this._TaskID != value))
-				{
-					this._TaskID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartTime", DbType="SmallDateTime")]
-		public System.Nullable<System.DateTime> StartTime
-		{
-			get
-			{
-				return this._StartTime;
-			}
-			set
-			{
-				if ((this._StartTime != value))
-				{
-					this._StartTime = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndTime", DbType="SmallDateTime")]
-		public System.Nullable<System.DateTime> EndTime
-		{
-			get
-			{
-				return this._EndTime;
-			}
-			set
-			{
-				if ((this._EndTime != value))
-				{
-					this._EndTime = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskStatus", DbType="Int NOT NULL")]
-		public int TaskStatus
-		{
-			get
-			{
-				return this._TaskStatus;
-			}
-			set
-			{
-				if ((this._TaskStatus != value))
-				{
-					this._TaskStatus = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InitUserID", DbType="Int NOT NULL")]
-		public int InitUserID
-		{
-			get
-			{
-				return this._InitUserID;
-			}
-			set
-			{
-				if ((this._InitUserID != value))
-				{
-					this._InitUserID = value;
-				}
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.View_TaskSelection")]
-	public partial class View_TaskSelection
-	{
-		
-		private System.Nullable<int> _TaskID;
-		
-		private System.Nullable<System.DateTime> _StartTime;
-		
-		private System.Nullable<System.DateTime> _EndTime;
-		
-		private int _TaskStatus;
-		
-		private int _InitUserID;
-		
-		private System.Nullable<int> _DocumentID;
-		
-		private System.Nullable<int> _Version;
-		
-		private System.Nullable<int> _ConfigurationID;
-		
-		private string _Filename;
-		
-		public View_TaskSelection()
-		{
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskID", DbType="Int")]
-		public System.Nullable<int> TaskID
-		{
-			get
-			{
-				return this._TaskID;
-			}
-			set
-			{
-				if ((this._TaskID != value))
-				{
-					this._TaskID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartTime", DbType="SmallDateTime")]
-		public System.Nullable<System.DateTime> StartTime
-		{
-			get
-			{
-				return this._StartTime;
-			}
-			set
-			{
-				if ((this._StartTime != value))
-				{
-					this._StartTime = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndTime", DbType="SmallDateTime")]
-		public System.Nullable<System.DateTime> EndTime
-		{
-			get
-			{
-				return this._EndTime;
-			}
-			set
-			{
-				if ((this._EndTime != value))
-				{
-					this._EndTime = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskStatus", DbType="Int NOT NULL")]
-		public int TaskStatus
-		{
-			get
-			{
-				return this._TaskStatus;
-			}
-			set
-			{
-				if ((this._TaskStatus != value))
-				{
-					this._TaskStatus = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InitUserID", DbType="Int NOT NULL")]
-		public int InitUserID
-		{
-			get
-			{
-				return this._InitUserID;
-			}
-			set
-			{
-				if ((this._InitUserID != value))
-				{
-					this._InitUserID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DocumentID", DbType="Int")]
-		public System.Nullable<int> DocumentID
-		{
-			get
-			{
-				return this._DocumentID;
-			}
-			set
-			{
-				if ((this._DocumentID != value))
-				{
-					this._DocumentID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Version", DbType="Int")]
-		public System.Nullable<int> Version
-		{
-			get
-			{
-				return this._Version;
-			}
-			set
-			{
-				if ((this._Version != value))
-				{
-					this._Version = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ConfigurationID", DbType="Int")]
-		public System.Nullable<int> ConfigurationID
-		{
-			get
-			{
-				return this._ConfigurationID;
-			}
-			set
-			{
-				if ((this._ConfigurationID != value))
-				{
-					this._ConfigurationID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Filename", DbType="NVarChar(255)")]
-		public string Filename
-		{
-			get
-			{
-				return this._Filename;
-			}
-			set
-			{
-				if ((this._Filename != value))
-				{
-					this._Filename = value;
-				}
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.View_CompletedTasks")]
-	public partial class View_CompletedTask
-	{
-		
-		private int _TaskInstanceID;
-		
-		private System.Nullable<int> _TaskID;
-		
-		private System.Nullable<System.DateTime> _StartTime;
-		
-		private System.Nullable<System.DateTime> _EndTime;
-		
-		private int _TaskStatus;
-		
-		private int _InitUserID;
-		
-		public View_CompletedTask()
-		{
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskInstanceID", AutoSync=AutoSync.Always, DbType="Int NOT NULL IDENTITY", IsDbGenerated=true)]
-		public int TaskInstanceID
-		{
-			get
-			{
-				return this._TaskInstanceID;
-			}
-			set
-			{
-				if ((this._TaskInstanceID != value))
-				{
-					this._TaskInstanceID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskID", DbType="Int")]
-		public System.Nullable<int> TaskID
-		{
-			get
-			{
-				return this._TaskID;
-			}
-			set
-			{
-				if ((this._TaskID != value))
-				{
-					this._TaskID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartTime", DbType="SmallDateTime")]
-		public System.Nullable<System.DateTime> StartTime
-		{
-			get
-			{
-				return this._StartTime;
-			}
-			set
-			{
-				if ((this._StartTime != value))
-				{
-					this._StartTime = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndTime", DbType="SmallDateTime")]
-		public System.Nullable<System.DateTime> EndTime
-		{
-			get
-			{
-				return this._EndTime;
-			}
-			set
-			{
-				if ((this._EndTime != value))
-				{
-					this._EndTime = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskStatus", DbType="Int NOT NULL")]
-		public int TaskStatus
-		{
-			get
-			{
-				return this._TaskStatus;
-			}
-			set
-			{
-				if ((this._TaskStatus != value))
-				{
-					this._TaskStatus = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InitUserID", DbType="Int NOT NULL")]
-		public int InitUserID
-		{
-			get
-			{
-				return this._InitUserID;
-			}
-			set
-			{
-				if ((this._InitUserID != value))
-				{
-					this._InitUserID = value;
-				}
-			}
-		}
-	}
-	
-	public partial class Tasks_GetTaskInfoResult
-	{
-		
-		private int _TaskInstanceID;
-		
-		private System.Nullable<int> _TaskID;
-		
-		private System.Nullable<System.DateTime> _StartTime;
-		
-		private System.Nullable<System.DateTime> _EndTime;
-		
-		private int _TaskStatus;
-		
-		private int _InitUserID;
-		
-		private int _TaskSelectionID;
-		
-		private int _TaskInstanceID1;
-		
-		private System.Nullable<int> _DocumentID;
-		
-		private System.Nullable<int> _Version;
-		
-		private System.Nullable<int> _ConfigurationID;
-		
-		public Tasks_GetTaskInfoResult()
-		{
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskInstanceID", DbType="Int NOT NULL")]
-		public int TaskInstanceID
-		{
-			get
-			{
-				return this._TaskInstanceID;
-			}
-			set
-			{
-				if ((this._TaskInstanceID != value))
-				{
-					this._TaskInstanceID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskID", DbType="Int")]
-		public System.Nullable<int> TaskID
-		{
-			get
-			{
-				return this._TaskID;
-			}
-			set
-			{
-				if ((this._TaskID != value))
-				{
-					this._TaskID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartTime", DbType="SmallDateTime")]
-		public System.Nullable<System.DateTime> StartTime
-		{
-			get
-			{
-				return this._StartTime;
-			}
-			set
-			{
-				if ((this._StartTime != value))
-				{
-					this._StartTime = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndTime", DbType="SmallDateTime")]
-		public System.Nullable<System.DateTime> EndTime
-		{
-			get
-			{
-				return this._EndTime;
-			}
-			set
-			{
-				if ((this._EndTime != value))
-				{
-					this._EndTime = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskStatus", DbType="Int NOT NULL")]
-		public int TaskStatus
-		{
-			get
-			{
-				return this._TaskStatus;
-			}
-			set
-			{
-				if ((this._TaskStatus != value))
-				{
-					this._TaskStatus = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InitUserID", DbType="Int NOT NULL")]
-		public int InitUserID
-		{
-			get
-			{
-				return this._InitUserID;
-			}
-			set
-			{
-				if ((this._InitUserID != value))
-				{
-					this._InitUserID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskSelectionID", DbType="Int NOT NULL")]
-		public int TaskSelectionID
-		{
-			get
-			{
-				return this._TaskSelectionID;
-			}
-			set
-			{
-				if ((this._TaskSelectionID != value))
-				{
-					this._TaskSelectionID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskInstanceID1", DbType="Int NOT NULL")]
-		public int TaskInstanceID1
-		{
-			get
-			{
-				return this._TaskInstanceID1;
-			}
-			set
-			{
-				if ((this._TaskInstanceID1 != value))
-				{
-					this._TaskInstanceID1 = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DocumentID", DbType="Int")]
-		public System.Nullable<int> DocumentID
-		{
-			get
-			{
-				return this._DocumentID;
-			}
-			set
-			{
-				if ((this._DocumentID != value))
-				{
-					this._DocumentID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Version", DbType="Int")]
-		public System.Nullable<int> Version
-		{
-			get
-			{
-				return this._Version;
-			}
-			set
-			{
-				if ((this._Version != value))
-				{
-					this._Version = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ConfigurationID", DbType="Int")]
-		public System.Nullable<int> ConfigurationID
-		{
-			get
-			{
-				return this._ConfigurationID;
-			}
-			set
-			{
-				if ((this._ConfigurationID != value))
-				{
-					this._ConfigurationID = value;
-				}
-			}
-		}
-	}
+
+public Task()
+{
+OnCreated();
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+public int TaskID
+{
+get
+{
+return this._TaskID;
+}
+set
+{
+if ((this._TaskID != value))
+{
+this.OnTaskIDChanging(value);
+this.SendPropertyChanging();
+this._TaskID = value;
+this.SendPropertyChanged("TaskID");
+this.OnTaskIDChanged();
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskName", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+public string TaskName
+{
+get
+{
+return this._TaskName;
+}
+set
+{
+if ((this._TaskName != value))
+{
+this.OnTaskNameChanging(value);
+this.SendPropertyChanging();
+this._TaskName = value;
+this.SendPropertyChanged("TaskName");
+this.OnTaskNameChanged();
+}
+}
+}
+
+public event PropertyChangingEventHandler PropertyChanging;
+
+public event PropertyChangedEventHandler PropertyChanged;
+
+protected virtual void SendPropertyChanging()
+{
+if ((this.PropertyChanging != null))
+{
+this.PropertyChanging(this, emptyChangingEventArgs);
+}
+}
+
+protected virtual void SendPropertyChanged(String propertyName)
+{
+if ((this.PropertyChanged != null))
+{
+this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TaskSelection")]
+public partial class TaskSelection
+{
+
+private int _TaskSelectionID;
+
+private int _TaskInstanceID;
+
+private System.Nullable<int> _DocumentID;
+
+private System.Nullable<int> _Version;
+
+private System.Nullable<int> _ConfigurationID;
+
+public TaskSelection()
+{
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskSelectionID", AutoSync=AutoSync.Always, DbType="Int NOT NULL IDENTITY", IsDbGenerated=true)]
+public int TaskSelectionID
+{
+get
+{
+return this._TaskSelectionID;
+}
+set
+{
+if ((this._TaskSelectionID != value))
+{
+this._TaskSelectionID = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskInstanceID", DbType="Int NOT NULL")]
+public int TaskInstanceID
+{
+get
+{
+return this._TaskInstanceID;
+}
+set
+{
+if ((this._TaskInstanceID != value))
+{
+this._TaskInstanceID = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DocumentID", DbType="Int")]
+public System.Nullable<int> DocumentID
+{
+get
+{
+return this._DocumentID;
+}
+set
+{
+if ((this._DocumentID != value))
+{
+this._DocumentID = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Version", DbType="Int")]
+public System.Nullable<int> Version
+{
+get
+{
+return this._Version;
+}
+set
+{
+if ((this._Version != value))
+{
+this._Version = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ConfigurationID", DbType="Int")]
+public System.Nullable<int> ConfigurationID
+{
+get
+{
+return this._ConfigurationID;
+}
+set
+{
+if ((this._ConfigurationID != value))
+{
+this._ConfigurationID = value;
+}
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TaskSystemLog")]
+public partial class TaskSystemLog
+{
+
+private int _Id;
+
+private int _TaskId;
+
+private int _Type;
+
+private string _Coments;
+
+public TaskSystemLog()
+{
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.Always, DbType="Int NOT NULL IDENTITY", IsDbGenerated=true)]
+public int Id
+{
+get
+{
+return this._Id;
+}
+set
+{
+if ((this._Id != value))
+{
+this._Id = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskId", DbType="Int NOT NULL")]
+public int TaskId
+{
+get
+{
+return this._TaskId;
+}
+set
+{
+if ((this._TaskId != value))
+{
+this._TaskId = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Type", DbType="Int NOT NULL")]
+public int Type
+{
+get
+{
+return this._Type;
+}
+set
+{
+if ((this._Type != value))
+{
+this._Type = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Coments", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+public string Coments
+{
+get
+{
+return this._Coments;
+}
+set
+{
+if ((this._Coments != value))
+{
+this._Coments = value;
+}
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.View_ActiveTasks")]
+public partial class View_ActiveTask
+{
+
+private int _TaskInstanceID;
+
+private System.Nullable<int> _TaskID;
+
+private System.Nullable<System.DateTime> _StartTime;
+
+private System.Nullable<System.DateTime> _EndTime;
+
+private int _TaskStatus;
+
+private int _InitUserID;
+
+public View_ActiveTask()
+{
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskInstanceID", AutoSync=AutoSync.Always, DbType="Int NOT NULL IDENTITY", IsDbGenerated=true)]
+public int TaskInstanceID
+{
+get
+{
+return this._TaskInstanceID;
+}
+set
+{
+if ((this._TaskInstanceID != value))
+{
+this._TaskInstanceID = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskID", DbType="Int")]
+public System.Nullable<int> TaskID
+{
+get
+{
+return this._TaskID;
+}
+set
+{
+if ((this._TaskID != value))
+{
+this._TaskID = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartTime", DbType="SmallDateTime")]
+public System.Nullable<System.DateTime> StartTime
+{
+get
+{
+return this._StartTime;
+}
+set
+{
+if ((this._StartTime != value))
+{
+this._StartTime = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndTime", DbType="SmallDateTime")]
+public System.Nullable<System.DateTime> EndTime
+{
+get
+{
+return this._EndTime;
+}
+set
+{
+if ((this._EndTime != value))
+{
+this._EndTime = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskStatus", DbType="Int NOT NULL")]
+public int TaskStatus
+{
+get
+{
+return this._TaskStatus;
+}
+set
+{
+if ((this._TaskStatus != value))
+{
+this._TaskStatus = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InitUserID", DbType="Int NOT NULL")]
+public int InitUserID
+{
+get
+{
+return this._InitUserID;
+}
+set
+{
+if ((this._InitUserID != value))
+{
+this._InitUserID = value;
+}
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.View_TaskSelection")]
+public partial class View_TaskSelection
+{
+
+private System.Nullable<int> _TaskID;
+
+private System.Nullable<System.DateTime> _StartTime;
+
+private System.Nullable<System.DateTime> _EndTime;
+
+private int _TaskStatus;
+
+private int _InitUserID;
+
+private System.Nullable<int> _DocumentID;
+
+private System.Nullable<int> _Version;
+
+private System.Nullable<int> _ConfigurationID;
+
+private string _Filename;
+
+public View_TaskSelection()
+{
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskID", DbType="Int")]
+public System.Nullable<int> TaskID
+{
+get
+{
+return this._TaskID;
+}
+set
+{
+if ((this._TaskID != value))
+{
+this._TaskID = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartTime", DbType="SmallDateTime")]
+public System.Nullable<System.DateTime> StartTime
+{
+get
+{
+return this._StartTime;
+}
+set
+{
+if ((this._StartTime != value))
+{
+this._StartTime = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndTime", DbType="SmallDateTime")]
+public System.Nullable<System.DateTime> EndTime
+{
+get
+{
+return this._EndTime;
+}
+set
+{
+if ((this._EndTime != value))
+{
+this._EndTime = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskStatus", DbType="Int NOT NULL")]
+public int TaskStatus
+{
+get
+{
+return this._TaskStatus;
+}
+set
+{
+if ((this._TaskStatus != value))
+{
+this._TaskStatus = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InitUserID", DbType="Int NOT NULL")]
+public int InitUserID
+{
+get
+{
+return this._InitUserID;
+}
+set
+{
+if ((this._InitUserID != value))
+{
+this._InitUserID = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DocumentID", DbType="Int")]
+public System.Nullable<int> DocumentID
+{
+get
+{
+return this._DocumentID;
+}
+set
+{
+if ((this._DocumentID != value))
+{
+this._DocumentID = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Version", DbType="Int")]
+public System.Nullable<int> Version
+{
+get
+{
+return this._Version;
+}
+set
+{
+if ((this._Version != value))
+{
+this._Version = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ConfigurationID", DbType="Int")]
+public System.Nullable<int> ConfigurationID
+{
+get
+{
+return this._ConfigurationID;
+}
+set
+{
+if ((this._ConfigurationID != value))
+{
+this._ConfigurationID = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Filename", DbType="NVarChar(255)")]
+public string Filename
+{
+get
+{
+return this._Filename;
+}
+set
+{
+if ((this._Filename != value))
+{
+this._Filename = value;
+}
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.View_CompletedTasks")]
+public partial class View_CompletedTask
+{
+
+private int _TaskInstanceID;
+
+private System.Nullable<int> _TaskID;
+
+private System.Nullable<System.DateTime> _StartTime;
+
+private System.Nullable<System.DateTime> _EndTime;
+
+private int _TaskStatus;
+
+private int _InitUserID;
+
+public View_CompletedTask()
+{
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskInstanceID", AutoSync=AutoSync.Always, DbType="Int NOT NULL IDENTITY", IsDbGenerated=true)]
+public int TaskInstanceID
+{
+get
+{
+return this._TaskInstanceID;
+}
+set
+{
+if ((this._TaskInstanceID != value))
+{
+this._TaskInstanceID = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskID", DbType="Int")]
+public System.Nullable<int> TaskID
+{
+get
+{
+return this._TaskID;
+}
+set
+{
+if ((this._TaskID != value))
+{
+this._TaskID = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartTime", DbType="SmallDateTime")]
+public System.Nullable<System.DateTime> StartTime
+{
+get
+{
+return this._StartTime;
+}
+set
+{
+if ((this._StartTime != value))
+{
+this._StartTime = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndTime", DbType="SmallDateTime")]
+public System.Nullable<System.DateTime> EndTime
+{
+get
+{
+return this._EndTime;
+}
+set
+{
+if ((this._EndTime != value))
+{
+this._EndTime = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskStatus", DbType="Int NOT NULL")]
+public int TaskStatus
+{
+get
+{
+return this._TaskStatus;
+}
+set
+{
+if ((this._TaskStatus != value))
+{
+this._TaskStatus = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InitUserID", DbType="Int NOT NULL")]
+public int InitUserID
+{
+get
+{
+return this._InitUserID;
+}
+set
+{
+if ((this._InitUserID != value))
+{
+this._InitUserID = value;
+}
+}
+}
+}
+
+public partial class Tasks_GetTaskInfoResult
+{
+
+private int _TaskInstanceID;
+
+private System.Nullable<int> _TaskID;
+
+private System.Nullable<System.DateTime> _StartTime;
+
+private System.Nullable<System.DateTime> _EndTime;
+
+private int _TaskStatus;
+
+private int _InitUserID;
+
+private int _TaskSelectionID;
+
+private int _TaskInstanceID1;
+
+private System.Nullable<int> _DocumentID;
+
+private System.Nullable<int> _Version;
+
+private System.Nullable<int> _ConfigurationID;
+
+public Tasks_GetTaskInfoResult()
+{
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskInstanceID", DbType="Int NOT NULL")]
+public int TaskInstanceID
+{
+get
+{
+return this._TaskInstanceID;
+}
+set
+{
+if ((this._TaskInstanceID != value))
+{
+this._TaskInstanceID = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskID", DbType="Int")]
+public System.Nullable<int> TaskID
+{
+get
+{
+return this._TaskID;
+}
+set
+{
+if ((this._TaskID != value))
+{
+this._TaskID = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartTime", DbType="SmallDateTime")]
+public System.Nullable<System.DateTime> StartTime
+{
+get
+{
+return this._StartTime;
+}
+set
+{
+if ((this._StartTime != value))
+{
+this._StartTime = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndTime", DbType="SmallDateTime")]
+public System.Nullable<System.DateTime> EndTime
+{
+get
+{
+return this._EndTime;
+}
+set
+{
+if ((this._EndTime != value))
+{
+this._EndTime = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskStatus", DbType="Int NOT NULL")]
+public int TaskStatus
+{
+get
+{
+return this._TaskStatus;
+}
+set
+{
+if ((this._TaskStatus != value))
+{
+this._TaskStatus = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InitUserID", DbType="Int NOT NULL")]
+public int InitUserID
+{
+get
+{
+return this._InitUserID;
+}
+set
+{
+if ((this._InitUserID != value))
+{
+this._InitUserID = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskSelectionID", DbType="Int NOT NULL")]
+public int TaskSelectionID
+{
+get
+{
+return this._TaskSelectionID;
+}
+set
+{
+if ((this._TaskSelectionID != value))
+{
+this._TaskSelectionID = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaskInstanceID1", DbType="Int NOT NULL")]
+public int TaskInstanceID1
+{
+get
+{
+return this._TaskInstanceID1;
+}
+set
+{
+if ((this._TaskInstanceID1 != value))
+{
+this._TaskInstanceID1 = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DocumentID", DbType="Int")]
+public System.Nullable<int> DocumentID
+{
+get
+{
+return this._DocumentID;
+}
+set
+{
+if ((this._DocumentID != value))
+{
+this._DocumentID = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Version", DbType="Int")]
+public System.Nullable<int> Version
+{
+get
+{
+return this._Version;
+}
+set
+{
+if ((this._Version != value))
+{
+this._Version = value;
+}
+}
+}
+
+[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ConfigurationID", DbType="Int")]
+public System.Nullable<int> ConfigurationID
+{
+get
+{
+return this._ConfigurationID;
+}
+set
+{
+if ((this._ConfigurationID != value))
+{
+this._ConfigurationID = value;
+}
+}
+}
+}
 }
 #pragma warning restore 1591

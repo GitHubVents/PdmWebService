@@ -3,7 +3,7 @@ using SolidWorks.Interop.swconst;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using ServiceConstants;
+using ServiceTypes.Constants;
 
 
 namespace SolidWorksLibrary.Builders.ElementsCase
@@ -35,7 +35,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
             
               base.PartName = "15-0" + type + "-" + width + "-" + lenght;
               base.NewPartPath = $@"{RootFolder}{SubjectDestinationFolder}\{base.PartName}.SLDASM"; 
-            CheckExistPart(base.PartName+".SLDASM",out  base.IsPartExist,out base.NewPartPath);   
+              CheckExistPart(NewPartPath, RootFolder, out NewPartPath);   
             var modelRoofPath = $@"{RootFolder}{SourceFolder}\{base.PartName}.SLDASM";
             SolidWorksDocument = SolidWorksAdapter.OpenDocument(modelRoofPath, swDocumentTypes_e.swDocASSEMBLY); 
 
@@ -70,7 +70,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
                 SolidWorksAdapter.SldWoksAppExemplare.IActivateDoc2("15-001", true, 0);
                 var newPartName = $"15-0{type}-01-{width}-{lenght}";
                
-                CheckExistPart(newPartName, out base.IsPartExist, out base.NewPartPath);
+                  CheckExistPart(NewPartPath, RootFolder, out NewPartPath);
                 if ( base.IsPartExist)
                 {
                     SolidWorksDocument =  SolidWorksAdapter.AcativeteDoc("15-000.SLDASM");
@@ -119,7 +119,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
                       newPartName = $"15-0{type}-02-{width}-{lenght}";
                   
 
-                    CheckExistPart(newPartName, out base.IsPartExist, out base.NewPartPath);
+                      CheckExistPart(NewPartPath, RootFolder, out NewPartPath);
                     if (base.IsPartExist)
                     {
                         SolidWorksDocument =  SolidWorksAdapter.AcativeteDoc("15-000.SLDASM");

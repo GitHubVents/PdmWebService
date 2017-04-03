@@ -2,7 +2,7 @@
 using Patterns.Observer;
 using PdmSolidWorksLibrary;
 using PDMWebService.Data.Solid.ElementsCase;
-using ServiceConstants;
+using ServiceTypes.Constants;
 using ServiceLibrary.Models;
 using ServiceLibrary.Models.DataContracts;
 using ServiceLibrary.ServiceInterface;
@@ -155,7 +155,7 @@ namespace ServiceLibrary.ConcreteService
 
         //public void CreateFlap(FlapTypes type, int height, int wight, bool isOuter, int userId)
         //{
-        //    //  taskManager.CreateFlap(type, height, wight, ServiceLibrary.TaskSystem.Constants.Meterials.Aluzinc_Az_150_07, isOuter, 0.7f, userId);
+        //    //  taskManager.CreateFlap(type, height, wight, ServiceLibrary.TaskSystem.ServiceTypes.Constants.Meterials.Aluzinc_Az_150_07, isOuter, 0.7f, userId);
         //}
 
         //public void CreateFlap(FlapTypes type, int height, int wight, Meterials material, bool isOuter, float thickness, int userId = 0)
@@ -265,10 +265,10 @@ namespace ServiceLibrary.ConcreteService
         {
             try
             {
-                taskManager = TaskSystemLibrary.TaskManager.Instance;
+             //   taskManager = TaskSystemLibrary.TaskManager.Instance;
 
                 spigotBuilder = new SpigotBuilder();
-                spigotBuilder.CheckExistPart = global_CheckExistPartEvent;
+                spigotBuilder.CheckExistPart = CheckExistPart_Handler;
                 spigotBuilder.FinishedBuild = SpigotBuilder_FinishedBuildEvent;
 
 
@@ -284,21 +284,22 @@ namespace ServiceLibrary.ConcreteService
 
         //TO DO
         public void CreateSpigot(SpigotType_e type, int width, int height)
-        {
-            MessageObserver.Instance.SetMessage("Пришел запрос на генерацию вибровставки с параметрами { тип: " + type + ", ширина: " + width + ", высота: " + height);
-            if (spigotBuilder == null) spigotBuilder = new SpigotBuilder();
-         
-            var modelName = SpigotBuilder.GetSpigotName(type,new SolidWorksLibrary.Builders.ElementsCase.Vector2(width,height), true);
-            if (!System.IO.File.Exists(@"C:\TestPDM\12 - Вибровставка\" + modelName))
+        { 
+            SpigotBuilder spigotBuilder = new SpigotBuilder( );
+            spigotBuilder.CheckExistPart = CheckExistPart_Handler;
+            try
             {
+                 spigotBuilder.Build(type, new SolidWorksLibrary.Builders.ElementsCase.Vector2(width, height));
 
-                MessageObserver.Instance.SetMessage("я ненашел сборку с подобными параметрами. начинаю генерацию");
-
-                spigotBuilder.Build(type, new SolidWorksLibrary.Builders.ElementsCase.Vector2(width, height));
+                foreach (var item in spigotBuilder.ComponentsPathList)
+                {
+                   // SolidWorksPdmAdapter.Instance.AddToPdm(item, @"D:\Test\Библиотека проектирования\DriveWorks\12 - Spigot");
+                }
+            
             }
-            else
+            catch (Exception ex)
             {
-                MessageObserver.Instance.SetMessage("я нашел сборку с подобными параметрами. генерация отменена");
+                Console.WriteLine(ex.ToString( ));
             }
 
         }
@@ -330,26 +331,18 @@ namespace ServiceLibrary.ConcreteService
         /// <param name="partName"></param>
         /// <param name="isExesitPatrt"></param>
         /// <param name="pathToPartt"></param>
-        private static void global_CheckExistPartEvent(string partName, out bool isExesitPatrt, out string pathToPartt)
+        private static void CheckExistPart_Handler(string partName, string RootFolder, out string pathToPart)
         {
-           MessageObserver.Instance.SetMessage("global_CheckExistPartEvent");
-           MessageObserver.Instance.SetMessage("partName" + partName);
-           MessageObserver.Instance.SetMessage("Проверяю наличие детали " + partName ) ;
-            if (System.IO.File.Exists(@"C:\TestPDM\15 - Крыша\" + partName))
-            {
-               MessageObserver.Instance.SetMessage("Наличие детали " + partName + " подтверждена. Путь к файлу " + @"C:\TestPDM\12 - Вибровставка\" + partName);
-                isExesitPatrt = true;
-                pathToPartt = @"C:\TestPDM\15 - Крыша\" + partName;
-            }
 
-            else
+            pathToPart = string.Empty;
+            var model = DataBaseDomian.SwPlusRepository.Instance.ByName(partName);
+            if (model != null)
             {
-               MessageObserver.Instance.SetMessage("Наличие детали " + partName + " не подтверждена."  );
-                isExesitPatrt = false;
-                pathToPartt = string.Empty;
+                pathToPart = $@"{RootFolder}{model.Path}{partName}";
+                SolidWorksPdmAdapter.Instance.DownloadFile(pathToPart);
             }
         }
 
-       
+
     }
 }

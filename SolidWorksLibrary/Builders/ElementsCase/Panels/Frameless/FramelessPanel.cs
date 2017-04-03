@@ -1,4 +1,4 @@
-﻿using ServiceConstants;
+﻿using ServiceTypes.Constants;
 using SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless.Components;
 
 namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless

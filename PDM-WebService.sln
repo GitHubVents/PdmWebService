@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceLibrary", "ServiceLibrary\ServiceLibrary.csproj", "{72339207-CA2E-4581-BA9C-8E6A6A1052A6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceTypes", "ServiceLibrary\ServiceTypes.csproj", "{72339207-CA2E-4581-BA9C-8E6A6A1052A6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Patterns", "MessageLibrary\Patterns.csproj", "{D0ABF979-D32B-453D-92D5-F9BC7BDEC44E}"
 EndProject

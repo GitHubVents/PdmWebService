@@ -77,7 +77,7 @@
     <Compile Include="Builders\Dxf\DataToExport.cs" />
     <Compile Include="Builders\Dxf\DxfBulder.cs" />
     <Compile Include="Builders\Dxf\DxfFile.cs" />
-    <Compile Include="Builders\ElementsCase\AbstractBuilder.cs" />
+    <Compile Include="Builders\ElementsCase\ProductBuilderBehavior.cs" />
     <Compile Include="Builders\ElementsCase\FlapBuilder.cs" />
     <Compile Include="Builders\ElementsCase\IFeedbackBuilder.cs" />
     <Compile Include="Builders\Case\MonoBlockBuilder.cs" />

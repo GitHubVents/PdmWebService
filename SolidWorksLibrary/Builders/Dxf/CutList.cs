@@ -6,11 +6,11 @@ using System.Globalization;
 
 namespace SolidWorksLibrary.Builders.Dxf
 {
-    public static   class CutList
+    public static class CutList
     {
 
-     private static   ModelDoc2 SwModel;
-    
+        private static ModelDoc2 solidWorksDocument;
+
 
         /// <summary>
         /// Returns sheet metal cut list  by configuration name
@@ -18,15 +18,11 @@ namespace SolidWorksLibrary.Builders.Dxf
         /// <param name="configuratuinName"></param>
         /// <param name="SwModel"></param>
         /// <returns></returns>
-        public static   DataToExport GetDataToExport(   ModelDoc2 swModel)
+        public static DataToExport GetDataToExport(ModelDoc2 swModel)
         {
-            SwModel = swModel;
+            solidWorksDocument = swModel;
             var dataToExport = new DataToExport();
-
-          //  var swCustProp = swModel.Extension.CustomPropertyManager[configuratuinName];
-            string valOut;        
-
-             
+            string valOut;            
             const string BoundingBoxLengthRu = @"Длина граничной рамки"; // rename, change number to eng/rus
             const string BoundingBoxLengthEng = @"Bounding Box Length";
             const string BoundingBoxWidthRu = @"Ширина граничной рамки";
@@ -35,8 +31,7 @@ namespace SolidWorksLibrary.Builders.Dxf
             const string SheetMetalThicknessEng = @"Sheet Metal Thickness";
             const string BendsRu = @"Сгибы";
             const string BendsEng = @"Bends";
-             
-            Feature swFeat2 = SwModel.FirstFeature();
+            Feature swFeat2 = solidWorksDocument.FirstFeature();
             while (swFeat2 != null)
             {
                 if (swFeat2.GetTypeName2() == "SolidBodyFolder")
@@ -45,7 +40,6 @@ namespace SolidWorksLibrary.Builders.Dxf
                     swFeat2.Select2(false, -1);
                     swBodyFolder.SetAutomaticCutList(true);
                     swBodyFolder.UpdateCutList();
-
                     Feature swSubFeat = swFeat2.GetFirstSubFeature();
                     while (swSubFeat != null)
                     {
@@ -58,24 +52,18 @@ namespace SolidWorksLibrary.Builders.Dxf
                             {
                                 goto m1;
                             }
-
                             swSubFeat.Select2(false, -1);
                             bodyFolder.SetAutomaticCutList(true);
                             bodyFolder.UpdateCutList();
-
                             var swCustProp = swSubFeat.CustomPropertyManager;
                             string tempOutBoundingBoxLength;
-                            swCustProp.Get4(BoundingBoxLengthRu, true, out valOut,
-                                out tempOutBoundingBoxLength);
+                            swCustProp.Get4(BoundingBoxLengthRu, true, out valOut, out tempOutBoundingBoxLength);
                             if (string.IsNullOrEmpty(tempOutBoundingBoxLength))
                             {
-                                swCustProp.Get4(BoundingBoxLengthEng, true, out valOut,
-                                    out tempOutBoundingBoxLength);
-                               
+                                swCustProp.Get4(BoundingBoxLengthEng, true, out valOut, out tempOutBoundingBoxLength);
                             }
-                          
-                         MessageObserver.Instance.SetMessage("\n line 75 cut list: " +tempOutBoundingBoxLength + "\n");
-                            dataToExport.BoundingBoxLength =  Convert.ToDecimal(tempOutBoundingBoxLength.Replace(".",","));
+
+                            dataToExport.WorkpieceX = SafeConvertToDecemal(tempOutBoundingBoxLength);//Convert.ToDecimal(tempOutBoundingBoxLength.Replace(".", ","));
 
                             string ширинаГраничнойРамки;
                             swCustProp.Get4(BoundingBoxWidthRu, true, out valOut,
@@ -85,8 +73,8 @@ namespace SolidWorksLibrary.Builders.Dxf
                                 swCustProp.Get4(BoundingBoxWidthEng, true, out valOut,
                                     out ширинаГраничнойРамки);
                             }
-                            //swCustProp.Set(BoundingBoxWidthRu, ширинаГраничнойРамки);
-                            dataToExport.BoundingBoxWidth = Convert.ToDecimal( ширинаГраничнойРамки.Replace(".", ","));
+
+                            dataToExport.WorkpieceY = SafeConvertToDecemal(ширинаГраничнойРамки);//Convert.ToDecimal(ширинаГраничнойРамки.Replace(".", ","));
 
                             string толщинаЛистовогоМеталла;
                             swCustProp.Get4(SheetMetalThicknessRu, true, out valOut,
@@ -96,8 +84,7 @@ namespace SolidWorksLibrary.Builders.Dxf
                                 swCustProp.Get4(SheetMetalThicknessEng, true, out valOut,
                                 out толщинаЛистовогоМеталла);
                             }
-                           // swCustProp.Set(SheetMetalThicknessRu, толщинаЛистовогоМеталла);
-                            dataToExport.Thickness = (float)Convert.ToDouble( толщинаЛистовогоМеталла.Replace(".", ","));
+                            dataToExport.Thickness = SafeConvertToDecemal(толщинаЛистовогоМеталла);//Convert.ToDecimal(толщинаЛистовогоМеталла.Replace(".", ","), );
 
                             string сгибы;
                             swCustProp.Get4(BendsRu, true, out valOut, out сгибы);
@@ -105,42 +92,73 @@ namespace SolidWorksLibrary.Builders.Dxf
                             {
                                 swCustProp.Get4(BendsEng, true, out valOut, out сгибы);
                             }
-                          //  swCustProp.Set(BendsRu, сгибы);
-                            dataToExport.Bend = Convert.ToInt32( сгибы );
-                         
-                            dataToExport.PaintX =  (int)GetDimentions( )[0];
-                            dataToExport.PaintY = (int)GetDimentions(  )[1];
-                            dataToExport.PaintZ = (int)GetDimentions(   )[2];
-                            dataToExport.SurfaceArea = (float)GetSurfaceArea ( );
+                            //  swCustProp.Set(BendsRu, сгибы);
+                            dataToExport.Bend = Convert.ToInt32(сгибы);
+
+                            dataToExport.PaintX = GetDimentions()[0];
+                            dataToExport.PaintY = GetDimentions()[1];
+                            dataToExport.PaintZ = GetDimentions()[2];
+                            dataToExport.SurfaceArea = GetSurfaceArea();
                         }
-                        m1:
+m1:
                         swSubFeat = swSubFeat.GetNextFeature();
                     }
                 }
                 swFeat2 = swFeat2.GetNextFeature();
             }
-            SwModel = null;
-            return dataToExport; 
+            solidWorksDocument = null;
+            return dataToExport;
         }
 
-        private  static decimal GetSurfaceArea ( )
+        private static decimal GetSurfaceArea()
         {
-            var myMassProp = SwModel.Extension.CreateMassProperty();
-            return Convert.ToDecimal (Math.Round(myMassProp.SurfaceArea * 1000) / 1000); 
+            var myMassProp = solidWorksDocument.Extension.CreateMassProperty();
+            return Convert.ToDecimal(Math.Round(myMassProp.SurfaceArea * 1000) / 1000);
         }
 
 
-        private static decimal[] GetDimentions()
+        private static int[] GetDimentions()
         {
-            decimal[] dimentions = new decimal[3];
+            int[] dimentions = new int[3];
             const long valueset = 1000;
 
-            var part = (PartDoc)SwModel;
+            var part = (PartDoc)solidWorksDocument;
             var box = part.GetPartBox(true);
-            dimentions[0] = Convert.ToDecimal(Math.Round(Convert.ToDecimal((long)(Math.Abs(box[0] - box[3]) * valueset)), 0), CultureInfo.InvariantCulture);
-            dimentions[1] = Convert.ToDecimal(Math.Round(Convert.ToDecimal((long)(Math.Abs(box[1] - box[4]) * valueset)), 0), CultureInfo.InvariantCulture);
-            dimentions[2] = Convert.ToDecimal(Math.Round(Convert.ToDecimal((long)(Math.Abs(box[2] - box[5]) * valueset)), 0), CultureInfo.InvariantCulture);
+            dimentions[0] = Convert.ToInt32(Math.Ceiling(Convert.ToDecimal((long)(Math.Abs(box[0] - box[3]) * valueset))), CultureInfo.InvariantCulture);
+            dimentions[1] = Convert.ToInt32(Math.Ceiling(Convert.ToDecimal((long)(Math.Abs(box[1] - box[4]) * valueset))), CultureInfo.InvariantCulture);
+            dimentions[2] = Convert.ToInt32(Math.Ceiling(Convert.ToDecimal((long)(Math.Abs(box[2] - box[5]) * valueset))), CultureInfo.InvariantCulture);
             return dimentions;
+        }
+
+        /// <summary>
+        /// The safe convert floating-point number from string, regardless of region and separator
+        /// </summary>
+        /// <param name="stringNumner">floating-point number as string</param>
+        /// <returns></returns>
+        static decimal SafeConvertToDecemal(string stringNumner)
+        {
+            CultureInfo[] cultures = { new CultureInfo("en-US"),
+                                 new CultureInfo("ru-RU") ,new CultureInfo("uk-UA") };
+            Exception local_exception = null;
+            for (int i = 0; i < cultures.Length - 1; i++)
+            {
+
+                CultureInfo culture = cultures[i];
+                try
+                {
+                    
+                    var result =  Convert.ToDecimal(stringNumner, culture);
+                    MessageObserver.Instance.SetMessage($"Successfully safe convert {stringNumner} to decemal by CultureInfo {culture.ToString()}.");
+                    return result;
+                }
+                catch (Exception exception)
+                {
+                    local_exception = exception;
+                    MessageObserver.Instance.SetMessage($"Failed safe convert {stringNumner} to decemal by CultureInfo {culture.ToString()}; exception message: {exception.ToString()}", MessageType.Warning);
+                }
+            }
+            throw new Exception($"Failed safe convert {stringNumner} to decemal; exception message: {local_exception.ToString()}");
         }
     }
 }
+ 

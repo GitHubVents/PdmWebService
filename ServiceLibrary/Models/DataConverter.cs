@@ -68,8 +68,6 @@ namespace ServiceLibrary.Models
             {
                 var parts = DataBaseDomian.SwPlusRepository.Instance.Parts;
                 var bomShell = SolidWorksPdmAdapter.Instance.GetBomShell(filePath, configuration);
-                //Console.WriteLine(parts.Count());
-                //Console.WriteLine(bomShell.Count());
                 var specifications = from eachBom in bomShell
                                      join eachPart in parts on new { id = (int)eachBom.IdPdm, ver = (int)eachBom.LastVesion, conf = eachBom.Configuration }
                                      equals new { id = (int)eachPart.IDPDM, ver = (int)eachPart.Version, conf = eachPart.ConfigurationName }
@@ -77,31 +75,20 @@ namespace ServiceLibrary.Models
                                      from spec in Spec_s.DefaultIfEmpty()
                                      select new TransmittableSpecification
                                      {
-                                         Description = eachBom.Description,
-                                         Count = (int) eachBom.Count  ,
-                                         Weight = eachBom.Weight,
-                                         Partition = eachBom.Partition,
-                                         PartNumber = eachBom.PartNumber,
-                                         ERPCode = eachBom.ErpCode,
-                                         SummMaterial = eachBom.SummMaterial,
-                                         Configuration = eachBom.Configuration,
-                                         IDPDM = eachBom.IdPdm.ToString(),
-                                         CodeMaterial = eachBom.CodeMaterial,
-                                         Type = eachBom.FileType,
-                                         Level = (int) eachBom.Level,
+                                         Description = eachBom.Description, Count = (int) eachBom.Count  ,
+                                         Weight = eachBom.Weight, Partition = eachBom.Partition,
+                                         PartNumber = eachBom.PartNumber, ERPCode = eachBom.ErpCode,
+                                         SummMaterial = eachBom.SummMaterial, Configuration = eachBom.Configuration,
+                                         IDPDM = eachBom.IdPdm.ToString(), CodeMaterial = eachBom.CodeMaterial,
+                                         Type = eachBom.FileType, Level = (int) eachBom.Level,                                  
+                                         FileName = eachBom.FileName,
 
-                                         Version = (spec == null ? string.Empty : spec.Version.ToString()),
-                                         Bend = spec == null ? string.Empty : spec.Bend.ToString(),
-                                         PaintX = spec == null ? string.Empty : spec.PaintX.ToString(),
-                                         PaintY = spec == null ? string.Empty : spec.PaintY.ToString(),
-                                         PaintZ = spec == null ? string.Empty : spec.PaintZ.ToString(),
-                                         WorkpieceX = spec == null ? string.Empty : spec.WorkpieceX.ToString(),
-                                         WorkpieceY = spec == null ? string.Empty : spec.WorkpieceY.ToString(),
-                                         SurfaceArea = spec == null ? string.Empty : spec.SurfaceArea.ToString(),
-                                         // isDxf = System.Convert.ToInt32(spec.DXF) == 1 ? true : false
-                                         isDxf = spec != null && spec.DXF == "1"   ? "true" : "false"
-
-                                        , FileName = eachBom.FileName
+                                         Version = (spec == null ? string.Empty : spec.Version.ToString()),  Bend = spec == null ? string.Empty : spec.Bend.ToString(),
+                                         PaintX = spec == null ? string.Empty : spec.PaintX.ToString(),  PaintY = spec == null ? string.Empty : spec.PaintY.ToString(),
+                                         PaintZ = spec == null ? string.Empty : spec.PaintZ.ToString(),  WorkpieceX = spec == null ? string.Empty : spec.WorkpieceX.ToString(),
+                                         WorkpieceY = spec == null ? string.Empty : spec.WorkpieceY.ToString(), SurfaceArea = spec == null ? string.Empty : spec.SurfaceArea.ToString(),
+                                         isDxf = spec != null && spec.DXF == "1"   ? "true" : "false", 
+                                         Thickness = spec == null?string.Empty: spec.Thickness.ToString()
 
                                      };
                 Patterns.Observer.MessageObserver.Instance.SetMessage("Got specification", Patterns.Observer.MessageType.Success);

@@ -4,7 +4,7 @@ using DataBaseDomian.Orm;
 using Patterns.Observer;
 using System.Linq;
 using System.Collections.Generic;
-using ServiceConstants;
+using ServiceTypes.Constants;
 
 namespace DataBaseDomian
 {

@@ -92,9 +92,9 @@
       <Project>{d0abf979-d32b-453d-92d5-f9bc7bdec44e}</Project>
       <Name>Patterns</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ServiceLibrary\ServiceLibrary.csproj">
+    <ProjectReference Include="..\ServiceLibrary\ServiceTypes.csproj">
       <Project>{72339207-ca2e-4581-ba9c-8e6a6a1052a6}</Project>
-      <Name>ServiceLibrary</Name>
+      <Name>ServiceTypes</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

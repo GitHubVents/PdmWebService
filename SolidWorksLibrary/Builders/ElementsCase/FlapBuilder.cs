@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using ServiceConstants; 
+using ServiceTypes.Constants; 
 using SolidWorksLibrary.Builders.ElementsCase;
 
 namespace PDMWebService.Data.Solid.ElementsCase

@@ -1,10 +1,10 @@
 ﻿using System.Runtime.Serialization;
 
-namespace ServiceConstants
+namespace  ServiceTypes.Constants
 {
     #region task reg
     /// <summary>
-    /// Describes enumeration task types { VibroInsertion,  [EnumMember] Flap,  [EnumMember] Roof,  [EnumMember] MountingFrame,  [EnumMember] Panel,  [EnumMember] HousingBlock,  [EnumMember] Monoblock,  [EnumMember] Frameless } and their numeric constants
+    /// Describes enumeration task types { VibroInsertion,  [EnumMember] Flap,  [EnumMember] Roof,  [EnumMember] MountingFrame,  [EnumMember] Panel,  [EnumMember] HousingBlock,  [EnumMember] Monoblock,  [EnumMember] Frameless } and their numeric ServiceTypes.Constants
     /// </summary>
     [DataContract(Name = "TasksType_e")]
     public enum TasksType_e
@@ -33,7 +33,7 @@ namespace ServiceConstants
 
 
     /// <summary>
-    /// Describes enumeration task statuses {completed,  [EnumMember] waiting,  [EnumMember] error,  [EnumMember] execution} and their numeric constants
+    /// Describes enumeration task statuses {completed,  [EnumMember] waiting,  [EnumMember] error,  [EnumMember] execution} and their numeric ServiceTypes.Constants
     /// </summary>
     [DataContract(Name = "TaskStatus_e")]
     public enum TaskStatus_e
@@ -169,7 +169,7 @@ namespace ServiceConstants
         ПодТорцевуюИДвериНаЗажимах = 28,
         [EnumMember]
         ПодТорцевуюИДвериНаПетлях = 29,
-        #region system constants  
+        #region system ServiceTypes.Constants  
         [EnumMember]
         Insulation = 0,
         [EnumMember]

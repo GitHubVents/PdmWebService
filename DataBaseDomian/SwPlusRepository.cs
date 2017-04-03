@@ -76,5 +76,15 @@ namespace DataBaseDomian
                 throw new Exception("Failed refresh entities { " + exception.ToString() + " }");
             }
         }
+
+        public GetPath ByName (string fileName)
+        {
+            return  DataContext.GetPaths.Where(each => each.Filename == fileName).FirstOrDefault();            
+        }
+        
+        public GetPath ById(int idPdm)
+        {
+            return DataContext.GetPaths.Where(each => each.DocumentID == idPdm).First( );
+        }
     }
 }

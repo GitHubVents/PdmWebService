@@ -11,13 +11,21 @@ namespace SolidWorksLibrary.Builders.ElementsCase
     /// </summary>
     /// <param name="partName"></param>
     /// <param name="isExesitPatrt"></param>
-    /// <param name="pathToPartt"></param>
-    public delegate void CheckExistPartHandler(string partName, out bool isExesitPatrt, out string pathToPartt);
+    /// <param name="pathToPart"></param>
+    public delegate void CheckExistPartHandler(string partName, string rootFolder, out string pathToPart);
     /// <summary>
     ///  describes the delegate signature finished build 
     /// </summary>
     /// <param name="ComponentsPathList"></param>
     public delegate void FinishedBuildHandler(List<string> ComponentsPathList);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="thickness"></param>
+    /// <param name="kFactor"></param>
+    /// <param name="bendRadius"></param>
+    public delegate void SetBendsHandler(decimal thickness, out decimal kFactor, out decimal bendRadius);
 
     public interface IFeedbackBuilder
     {
@@ -29,14 +37,16 @@ namespace SolidWorksLibrary.Builders.ElementsCase
         /// <summary>
         /// Provides notification and feedback to check for part
         /// </summary>
-        CheckExistPartHandler CheckExistPart { get; set; }
+           CheckExistPartHandler CheckExistPart { get; set; }
         // ==================================================================================================================================
 
         /// <summary>
         /// Informing subscribers the completion of building 
         /// </summary>
-        FinishedBuildHandler FinishedBuild { get; set; }
+          FinishedBuildHandler FinishedBuild{ get; set; }
 
-                                                        
+        SetBendsHandler SetBends { get; set; }
+
+
     }
 }

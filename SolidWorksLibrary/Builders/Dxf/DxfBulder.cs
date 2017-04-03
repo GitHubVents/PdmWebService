@@ -59,7 +59,7 @@ using System.Linq;
         private bool Build(string partPath, int idPdm, int version  , bool includeNonSheetParts )
         {
             // callback message code from solidWorks 
-            int error = 0, warnings = 0;
+           // int error = 0, warnings = 0;
 
             MessageObserver.Instance.SetMessage("Start build Dxf file", MessageType.System);
 
@@ -73,7 +73,7 @@ using System.Linq;
                 {
                     try
                     {
-                        string emptyConfigyration = "";
+                     //   string emptyConfigyration = "";
                         modelDoc = SolidWorksAdapter.OpenDocument(partPath, swDocumentTypes_e.swDocPART);// SolidWorksAdapter.SldWoksAppExemplare.OpenDoc6(partPath, (int)  swDocumentTypes_e.swDocPART , (int)swOpenDocOptions_e.swOpenDocOptions_Silent, emptyConfigyration, error, warnings);
                        // modelDoc = SolidWorksAdapter.SldWoksAppExemplare.IActiveDoc2;
 
@@ -135,6 +135,9 @@ using System.Linq;
                     byte[] dxfByteCode;
                     DXF dxf;
 
+                    if (!Directory.Exists(DxfFolder))
+                        Directory.CreateDirectory(DxfFolder);
+
                     if (DxfFolder != null && DxfFolder != string.Empty)
                         dxf = new DXF(DxfFolder);
                     else
@@ -150,17 +153,24 @@ using System.Linq;
                         MessageObserver.Instance.SetMessage("\t" + eachConfiguration + " succsess building. Add to result list", MessageType.Success);
 
                         // конфигурация получена при выполнении GetDataToExport 
-                        dataToExport.DXFByte = dxfByteCode;
-                        dataToExport.Configuration = eachConfiguration;
-                        dataToExport.IdPdm = idPdm;
-                        dataToExport.Version = version;
-                        if (FinishedBuilding != null)
-                            FinishedBuilding(dataToExport);
+                        try
+                        {
+                            dataToExport.DXFByte = dxfByteCode;
+                            dataToExport.Configuration = eachConfiguration;
+                            dataToExport.IdPdm = idPdm;
+                            dataToExport.Version = version;
+                            if (FinishedBuilding != null)
+                                FinishedBuilding(dataToExport);
+                        }
+                        catch(Exception exception)
+                        {
+                            MessageObserver.Instance.SetMessage("\tFailed at notification about finished; message exception {" + exception.ToString() + " }", MessageType.Error);
+                        }
 
                     }
                 }
                 SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(modelDoc.GetTitle().ToLower().Contains(".sldprt") ? modelDoc.GetTitle() : modelDoc.GetTitle() + ".sldprt"); // out in func...
-                
+                SolidWorksAdapter.SldWoksAppExemplare.ExitApp( );
             }
 
             catch (Exception exception)

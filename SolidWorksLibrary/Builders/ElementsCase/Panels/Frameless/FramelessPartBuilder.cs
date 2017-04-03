@@ -1,4 +1,4 @@
-﻿using ServiceConstants;
+﻿using ServiceTypes.Constants;
 using SolidWorks.Interop.sldworks;
 using SolidWorks.Interop.swconst;
 using SolidWorksLibrary.Builders.ElementsCase.Panels.Components;
@@ -15,8 +15,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
 
         #region fields
         protected FramelessPanel framelessPanel;
-        private List<FramelessPanel> framelessPanelList;
-        public override event SetBendsHandler SetBends;
+        private List<FramelessPanel> framelessPanelList; 
         protected double колСаморезВинтШирина { get; set; }
         protected double ScrewsByWidthInner { get; set; }
         protected string NameUpPanel { get; set; } = "02-11-01-40-";
@@ -269,7 +268,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
             }
 
             if (CheckExistPart != null)
-                CheckExistPart(base.PartName, out IsPartExist, out NewPartPath);
+                  CheckExistPart(NewPartPath, RootFolder, out NewPartPath);
 
             if (IsPartExist) {
                 DocumentExtension.SelectByID2(PartName + "@02-11-40-1", "COMPONENT", 0, 0, 0, false, 0, null, 0);
@@ -332,7 +331,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
             PartName = "02-11-02-40-";
 
             if (CheckExistPart != null)
-                CheckExistPart(base.PartName, out IsPartExist, out NewPartPath);
+                  CheckExistPart(NewPartPath, RootFolder, out NewPartPath);
             if (IsPartExist) {
                 DocumentExtension.SelectByID2(PartName + "@02-11-40-1", "COMPONENT", 0, 0, 0, false, 0, null, 0);
                 AssemblyDocument.ReplaceComponents(base.NewPartPath, "", false, true);
@@ -1951,7 +1950,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
                 //TO DO build PartName
                 NewPartPath = Path.Combine(base.RootFolder, SubjectDestinationFolder, PartName);
 
-                CheckExistPart(NewPartPath, out IsPartExist, out NewPartPath);
+                CheckExistPart(NewPartPath, RootFolder, out NewPartPath);
 
                 if (IsPartExist)
                 {
@@ -2875,7 +2874,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
 
             Console.WriteLine("got part name " + PartName);
             if (CheckExistPart != null)
-                CheckExistPart(base.PartName, out IsPartExist, out NewPartPath);
+                  CheckExistPart(NewPartPath, RootFolder, out NewPartPath);
             if (IsPartExist) {
                 DocumentExtension.SelectByID2(PartName + "@02-11-40-1", "COMPONENT", 0, 0, 0, false, 0, null, 0);
                 AssemblyDocument.ReplaceComponents(base.NewPartPath, "", false, true);
@@ -2901,7 +2900,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
 
                 Console.WriteLine("got part name " + PartName);
                 if (CheckExistPart != null)
-                    CheckExistPart(base.PartName, out IsPartExist, out NewPartPath);
+                      CheckExistPart(NewPartPath, RootFolder, out NewPartPath);
 
                 if (IsPartExist) {
                     DocumentExtension.SelectByID2(PartName + "@02-11-40-1", "COMPONENT", 0, 0, 0, false, 0, null, 0);
@@ -2925,7 +2924,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
 
             Console.WriteLine("got part name " + PartName);
             if (CheckExistPart != null)
-                CheckExistPart(base.PartName, out IsPartExist, out NewPartPath);
+                  CheckExistPart(NewPartPath, RootFolder, out NewPartPath);
             if (IsPartExist) {
                 DocumentExtension.SelectByID2(PartName + "@02-11-40-1", "COMPONENT", 0, 0, 0, false, 0, null, 0);
                 AssemblyDocument.ReplaceComponents(base.NewPartPath, "", false, true);

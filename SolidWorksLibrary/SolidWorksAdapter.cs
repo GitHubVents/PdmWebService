@@ -4,6 +4,7 @@ using SolidWorks.Interop.sldworks;
 using SolidWorks.Interop.swconst;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
 
 
@@ -34,16 +35,13 @@ namespace SolidWorksLibrary
         {
             if (sldWoksApp == null) {
                 MessageObserver.Instance.SetMessage("Initialize SolidWorks exemplare");
-                try {
-
-                    
+                try {                    
                      sldWoksApp = (SldWorks)Marshal.GetActiveObject("SldWorks.Application");
                     MessageObserver.Instance.SetMessage("\t\tTake an existing exemplar SolidWorks Application", MessageType.System);
                 }
 
                 catch (Exception ex) {
                     MessageObserver.Instance.SetMessage("\t\tFailed take an existing exemplar SolidWorks Application " + ex, MessageType.Warning);
-
                     Process[] processes = Process.GetProcessesByName("SLDWORKS");
                     int processesLength = processes.Length;
                     if (processesLength > 0) {
@@ -107,7 +105,6 @@ namespace SolidWorksLibrary
         /// </summary>
         public static void CloseAllDocumentsAndExit()
         {
-
             try
             {               
                // CloseAllDocuments();
@@ -153,29 +150,27 @@ namespace SolidWorksLibrary
 
         public static ModelDoc2 OpenDocument(string path, swDocumentTypes_e documentType, string configuration = "00")
         {
+            if (!File.Exists(path))
+            {
+                MessageObserver.Instance.SetMessage($"Error at open solid works document {path} file not exists. Maybe it is virtual document", MessageType.Error);
+                throw new Exception($"Error at open solid works document {path} file not exists. Maybe it is virtual document" );
+            }
             int errors = 0, warnings = 0;
-
             int openDocOptions = (int)swOpenDocOptions_e.swOpenDocOptions_Silent;
             if (documentType == swDocumentTypes_e.swDocASSEMBLY) {
                 openDocOptions += (int)swOpenDocOptions_e.swOpenDocOptions_LoadModel;
             }
-
             var SolidWorksDocumentument = SolidWorksAdapter.SldWoksAppExemplare.OpenDoc6(path, (int)documentType, openDocOptions, configuration, ref errors, ref warnings);
-
-
-            
-
+           
             if (errors != 0)
             {
-                MessageObserver.Instance.SetMessage("Error at open solid works document: code {" + errors + "}, description error {" + (swFileLoadError_e)errors + "}");
-                throw new Exception("Failed open document");
+                MessageObserver.Instance.SetMessage($"Error at open solid works document {path}; error code {errors }, description error { (swFileLoadError_e)errors }" ) ;
+                throw new Exception($"Failed open document {path};  error code {errors }, description error { (swFileLoadError_e)errors }");
             }
             if (warnings != 0)
             {
                 MessageObserver.Instance.SetMessage("Warning at open solid works document: code {" + warnings + "}, description warning {" + (swFileLoadWarning_e)errors + "}");
             }
-
-
             return SolidWorksDocumentument;
         }
 

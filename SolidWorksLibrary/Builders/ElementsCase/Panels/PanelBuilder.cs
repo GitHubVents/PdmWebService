@@ -1,4 +1,4 @@
-﻿using ServiceConstants;
+﻿using ServiceTypes.Constants;
 using SolidWorks.Interop.sldworks;
 using SolidWorks.Interop.swconst;
 using SolidWorksLibrary.Builders.ElementsCase.Panels.Components;
@@ -10,7 +10,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels {
     public class PanelBuilder : ProductBuilderBehavior
     {
         #region fields
-        public override event SetBendsHandler SetBends;
+     //   public override event SetBendsHandler SetBends;
         private Vector2 sizePanel { get; set; }
         private double innerHeight = 0;
         private double innerWeidht = 0;
@@ -150,7 +150,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels {
             base.PartName = "02-" + (int)panelType + "-01-" + sizePanel.X + "-" + sizePanel.Y + "-" + OuterMaterial + "-" + InnerMaterial + "-" + (int)profile;
 
             if (CheckExistPart != null)
-                CheckExistPart(base.PartName, out IsPartExist, out NewPartPath);
+                  CheckExistPart(NewPartPath, RootFolder, out NewPartPath);
 
             if (IsPartExist)
             {
@@ -182,7 +182,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels {
             }
             base.PartName = "02-" + (int)panelType + "-02-" + sizePanel.X + "-" + sizePanel.Y + "-" + OuterMaterial + "-" + InnerMaterial + "-" + (int)profile;
             if (CheckExistPart != null)
-                CheckExistPart(base.PartName, out IsPartExist, out NewPartPath);
+                  CheckExistPart(NewPartPath, RootFolder, out NewPartPath);
 
             if (IsPartExist)
             {
@@ -211,7 +211,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels {
         {
             base.PartName = "02-" + (int)panelType + "-01-" + sizePanel.X + "-" + sizePanel.Y + "-" + OuterMaterial + "-" + InnerMaterial + "-" + (int)profile;
             if (CheckExistPart != null)
-                CheckExistPart(PartName, out IsPartExist, out NewPartPath);
+                  CheckExistPart(NewPartPath, RootFolder, out NewPartPath);
             if (IsPartExist)
             {
                 SolidWorksDocument.Extension.SelectByID2("02-01-101-50-1@02-104-50", "COMPONENT", 0, 0, 0, false, 0, null, 0);
@@ -238,7 +238,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels {
             base.PartName = "02-" + (int)panelType + "-02-" + sizePanel.X + "-" + sizePanel.Y + "-" + OuterMaterial + "-" + InnerMaterial + "-" + (int)profile;
 
             if (CheckExistPart != null)
-                CheckExistPart(PartName, out IsPartExist, out NewPartPath);
+                  CheckExistPart(NewPartPath, RootFolder, out NewPartPath);
             if (IsPartExist)
             {
                 SolidWorksDocument.Extension.SelectByID2("02-01-102-50-1@02-104-50", "COMPONENT", 0, 0, 0, false, 0, null, 0);
@@ -264,7 +264,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels {
 
 
             if (CheckExistPart != null)
-                CheckExistPart(PartName, out IsPartExist, out NewPartPath);
+                  CheckExistPart(NewPartPath, RootFolder, out NewPartPath);
             if (false)
             {
 
@@ -317,7 +317,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels {
             SolidWorksDocument.Extension.CustomPropertyManager["00"].Add3("Наименование", (int)swCustomInfoType_e.swCustomInfoText, insulationMaterialName, (int)swCustomPropertyAddOption_e.swCustomPropertyReplaceValue);
 
             if (CheckExistPart != null)
-                CheckExistPart(PartName, out IsPartExist, out NewPartPath);
+                  CheckExistPart(NewPartPath, RootFolder, out NewPartPath);
             if (IsPartExist)
             {
                 SolidWorksDocument.Extension.SelectByID2("02-01-003@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
@@ -335,7 +335,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels {
 
             PartName = "02-04-" + (profile == PanelProfile_e.Profile_5_0 ? string.Empty : ((int)profile).ToString()) + sizePanel.X + "-" + sizePanel.Y;
             if (CheckExistPart != null)
-                CheckExistPart(PartName, out IsPartExist, out NewPartPath);
+                  CheckExistPart(NewPartPath, RootFolder, out NewPartPath);
             if (IsPartExist)
             {
                 SolidWorksDocument.Extension.SelectByID2("02-01-004@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);

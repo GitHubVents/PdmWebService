@@ -1,4 +1,4 @@
-﻿using ServiceConstants;
+﻿using ServiceTypes.Constants;
 using ServiceLibrary.Models.DataContracts;
 using System.ServiceModel;
 
@@ -61,8 +61,7 @@ namespace ServiceLibrary.ServiceInterface
 
         //[OperationContract]
         //void CreateRoof(int height, int wight,  RoofTypes type, int userId);
-        //[OperationContract]
-        //void CreateVibroInsertion(int height, int wight, VibroInsertionTypes type, int userId);
+ 
 
         ///// <summary>
         ///// Create a flap with the custom material and thickness.

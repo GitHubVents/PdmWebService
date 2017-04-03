@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ServiceConstants;
+using ServiceTypes.Constants;
 using ServiceLibrary.Models.DataContracts;
 using Patterns.Observer;
 
