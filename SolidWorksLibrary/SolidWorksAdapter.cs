@@ -1,5 +1,4 @@
-﻿using Patterns;
-using Patterns.Observer;
+﻿using Patterns.Observer;
 using SolidWorks.Interop.sldworks;
 using SolidWorks.Interop.swconst;
 using System;
@@ -10,7 +9,7 @@ using System.Runtime.InteropServices;
 
 namespace SolidWorksLibrary
 {
-    public abstract   class SolidWorksAdapter  
+    public static   class SolidWorksAdapter  
     { 
         /// <summary>
         /// SolidWorks exemplare
@@ -28,6 +27,7 @@ namespace SolidWorksLibrary
                 return  sldWoksApp;
             }
         }
+
         /// <summary>
         /// Initialize SolidWorks exemplare
         /// </summary>
@@ -49,11 +49,7 @@ namespace SolidWorksLibrary
                             process.Kill();
                         }
                     }
-                    sldWoksApp = new SldWorks( )  
-                    // Allow SOLIDWORKS to run in the background
-                    // and be invisible
-                    //sldWoks_app.UserControl = false;
-                    { Visible = true };
+                    sldWoksApp = new SldWorks( ) { Visible = true };
                     MessageObserver.Instance.SetMessage("\t\tCreated exemplar SolidWorks Application", MessageType.System);
                 }
             }
@@ -160,7 +156,7 @@ namespace SolidWorksLibrary
             if (documentType == swDocumentTypes_e.swDocASSEMBLY) {
                 openDocOptions += (int)swOpenDocOptions_e.swOpenDocOptions_LoadModel;
             }
-            var SolidWorksDocumentument = SolidWorksAdapter.SldWoksAppExemplare.OpenDoc6(path, (int)documentType, openDocOptions, configuration, ref errors, ref warnings);
+            var SolidWorksDocumentument = SldWoksAppExemplare.OpenDoc6(path, (int)documentType, openDocOptions, configuration, ref errors, ref warnings);
            
             if (errors != 0)
             {

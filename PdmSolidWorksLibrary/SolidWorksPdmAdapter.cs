@@ -460,7 +460,7 @@ namespace PdmSolidWorksLibrary
         /// </summary>
         /// <param name="pathToFile"></param>
         /// <param name="folder"></param>
-        public string AddToPdm(string pathToFile)
+        public string AddToPdm(string pathToFile , string testFolder = null )
         {
 
 
@@ -471,14 +471,15 @@ namespace PdmSolidWorksLibrary
                 //    File.SetAttributes(pathToFile, FileAttributes.Normal);
                 //    File.Delete(pathToFile);
                 //}
-
+                Console.WriteLine("AddToPdm: input path[" + pathToFile+ "]");
                 string folder = Path.GetDirectoryName(pathToFile);
-                var edmFolder = PdmExemplar.GetFolderFromPath(folder);
+                Console.WriteLine("AddToPdm: folder path[" + folder + "]");
 
+                var edmFolder = PdmExemplar.GetFolderFromPath(testFolder);
                 edmFolder.AddFile(0, pathToFile);
 
 
-
+                Console.WriteLine("AddToPdm завершен");
                 //    Logger.ToLog("Файлы добавлены в PDM");
 
                 return pathToFile;
