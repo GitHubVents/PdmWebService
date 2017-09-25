@@ -35,3 +35,4 @@ D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\PdmSolidWorksLibrary.dll
 D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\TaskSystemLibrary.pdb
 D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\DataBaseDomian.pdb
 D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\PdmSolidWorksLibrary.pdb
+D:\Project\Source\PdmWebService\PDMWebService\bin\Debug\PDMWebService.exe.config

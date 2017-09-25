@@ -9,13 +9,13 @@ using System.Runtime.InteropServices;
 
 namespace SolidWorksLibrary
 {
-    public static   class SolidWorksAdapter  
-    { 
+    public static class SolidWorksAdapter
+    {
         /// <summary>
         /// SolidWorks exemplare
         /// </summary>
         private static SldWorks sldWoksApp;
- 
+
         /// <summary>
         /// Get SolidWorksExemplare
         /// </summary>
@@ -24,7 +24,7 @@ namespace SolidWorksLibrary
             get
             {
                 InitSolidWorks();
-                return  sldWoksApp;
+                return sldWoksApp;
             }
         }
 
@@ -33,27 +33,29 @@ namespace SolidWorksLibrary
         /// </summary>
         private static void InitSolidWorks()
         {
-            if (sldWoksApp == null) {
-                MessageObserver.Instance.SetMessage("Initialize SolidWorks exemplare");
-                try {                    
-                     sldWoksApp = (SldWorks)Marshal.GetActiveObject("SldWorks.Application");
-                    MessageObserver.Instance.SetMessage("\t\tTake an existing exemplar SolidWorks Application", MessageType.System);
-                }
+            if (sldWoksApp == null)
+            {
+                //MessageObserver.Instance.SetMessage("Initialize SolidWorks exemplare");
+                //try {                    
+                //     sldWoksApp = (SldWorks)Marshal.GetActiveObject("SldWorks.Application");
+                //    MessageObserver.Instance.SetMessage("\t\tTake an existing exemplar SolidWorks Application", MessageType.System);
+                //}
 
-                catch (Exception ex) {
-                    MessageObserver.Instance.SetMessage("\t\tFailed take an existing exemplar SolidWorks Application " + ex, MessageType.Warning);
-                    Process[] processes = Process.GetProcessesByName("SLDWORKS");
-                    int processesLength = processes.Length;
-                    if (processesLength > 0) {
-                        foreach (var process in processes) {
-                            process.Kill();
-                        }
-                    }
-                    sldWoksApp = new SldWorks( ) { Visible = true };
-                    MessageObserver.Instance.SetMessage("\t\tCreated exemplar SolidWorks Application", MessageType.System);
-                }
+                //catch (Exception ex) {
+                //    //MessageObserver.Instance.SetMessage("\t\tFailed take an existing exemplar SolidWorks Application " + ex, MessageType.Warning);
+                //    //Process[] processes = Process.GetProcessesByName("SLDWORKS");
+                //    //int processesLength = processes.Length;
+                //    //if (processesLength > 0) {
+                //    //    foreach (var process in processes) {
+                //    //        process.Kill();
+                //    //    }
+                //    //}
+                sldWoksApp = new SldWorks() { Visible = true };
+
+                MessageObserver.Instance.SetMessage("\t\tCreated exemplar SolidWorks Application", MessageType.System);
             }
         }
+    
 
         /// <summary>
         /// Closing all opened documents
@@ -152,7 +154,7 @@ namespace SolidWorksLibrary
                 throw new Exception($"Error at open solid works document {path} file not exists. Maybe it is virtual document" );
             }
             int errors = 0, warnings = 0;
-            int openDocOptions = (int)swOpenDocOptions_e.swOpenDocOptions_Silent;
+            int openDocOptions = (int)swOpenDocOptions_e.swOpenDocOptions_ReadOnly;
             if (documentType == swDocumentTypes_e.swDocASSEMBLY) {
                 openDocOptions += (int)swOpenDocOptions_e.swOpenDocOptions_LoadModel;
             }
@@ -161,7 +163,7 @@ namespace SolidWorksLibrary
             if (errors != 0)
             {
                 MessageObserver.Instance.SetMessage($"Error at open solid works document {path}; error code {errors }, description error { (swFileLoadError_e)errors }" ) ;
-                throw new Exception($"Failed open document {path};  error code {errors }, description error { (swFileLoadError_e)errors }");
+                //throw new Exception($"Failed open document {path};  error code {errors }, description error { (swFileLoadError_e)errors }");
             }
             if (warnings != 0)
             {
