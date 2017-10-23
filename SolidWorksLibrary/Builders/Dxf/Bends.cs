@@ -3,8 +3,7 @@ using SolidWorks.Interop.sldworks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace SolidWorksLibrary.Builders.Dxf
 {
@@ -12,7 +11,7 @@ namespace SolidWorksLibrary.Builders.Dxf
     {
         ModelDoc2 modelDoc;
         public string ConfigurationName;
-       
+
         public static Bends Create(ModelDoc2 modelDoc, string configurationName)
         {
             try
@@ -30,16 +29,16 @@ namespace SolidWorksLibrary.Builders.Dxf
         }
 
 
-        public void Fix( )
+        public void Fix()
         {
-        //    MessageObserver.Instance.SetMessage("Bust features ");
+            //    MessageObserver.Instance.SetMessage("Bust features ");
             GetBendsInfo(ConfigurationName);
-        //    MessageObserver.Instance.SetMessage("FixOneBand");
-            FixOneBand(ConfigurationName);
+            //    MessageObserver.Instance.SetMessage("FixOneBand");
+            FixOneBand(ConfigurationName, true);
 
         }
-        
-                 
+
+
         private Feature _swFeat;
         private Feature _swSubFeat;
 
@@ -50,8 +49,6 @@ namespace SolidWorksLibrary.Builders.Dxf
             public string OneBend { get; set; }
             public bool IsSupressed { get; set; }
         }
-
-        public PartBendInfo partBendInfo = new PartBendInfo();
 
         bool IsSheetFeature(string name)
         {
@@ -70,44 +67,49 @@ namespace SolidWorksLibrary.Builders.Dxf
                 case "LoftedBend":
                 case "Rip":
                 case "CornerFeat":
+
+                case "MirrorSolid": 
                     return true;
                 default: return false;
             }
         }
 
+        public List<PartBendInfo> PartBendInfos = new List<PartBendInfo>();
+
         private void GetBendsInfo(string config)
         {
             var swPart = (IPartDoc)modelDoc;
-            var _swFeat = (Feature)modelDoc.FirstFeature();
-         
+            _swFeat = (Feature)modelDoc.FirstFeature();
             while ((_swFeat != null))
             {
-             //   MessageObserver.Instance.SetMessage("Got feature " + _swFeat.Name);
                 if (IsSheetFeature(_swFeat.GetTypeName()))
                 {
                     var parentFeatureName = _swFeat.Name;
                     var stateOfEdgeFlange = IsSuppressedEdgeFlange(parentFeatureName);
-                    var _swSubFeat = _swFeat.IGetFirstSubFeature();
+                    _swSubFeat = _swFeat.IGetFirstSubFeature();
 
                     while ((_swSubFeat != null))
                     {
                         if (_swSubFeat.GetTypeName() == "OneBend" || _swSubFeat.GetTypeName() == "SketchBend")
                         {
-                            partBendInfo.Config = config;
-                            partBendInfo.EdgeFlange = parentFeatureName;
-                            partBendInfo.OneBend = _swSubFeat.Name;
-                            partBendInfo.IsSupressed = stateOfEdgeFlange;
+                            PartBendInfos.Add(new PartBendInfo
+                            {
+                                Config = config,
+                                EdgeFlange = parentFeatureName,
+                                OneBend = _swSubFeat.Name,
+                                IsSupressed = stateOfEdgeFlange
+                            });
 
                             _swSubFeat.Select(false);
 
-                            if (stateOfEdgeFlange)
-                            {
-                                swPart.EditSuppress();
-                            }
-                            else
-                            {
-                                swPart.EditUnsuppress();
-                            }
+                            //if (stateOfEdgeFlange)
+                            //{
+                            //    swPart.EditSuppress();
+                            //}
+                            //else
+                            //{
+                            //    swPart.EditUnsuppress();
+                            //}
 
                             _swSubFeat.DeSelect();
 
@@ -120,17 +122,15 @@ namespace SolidWorksLibrary.Builders.Dxf
             }
         }
 
-        private void FixOneBand(string config)
+        private void FixOneBand(string config, bool makeDxf)
         {
             var swPart = (IPartDoc)modelDoc;
 
-            var _swFeat = (Feature)modelDoc.FirstFeature();
+            _swFeat = (Feature)modelDoc.FirstFeature();
             Feature flatPattern = null;
 
             while ((_swFeat != null))
             {
-           //     MessageObserver.Instance.SetMessage("got future " + _swFeat.Name);
-              
                 if (_swFeat.GetTypeName() == "FlatPattern")
                 {
                     flatPattern = _swFeat;
@@ -138,45 +138,56 @@ namespace SolidWorksLibrary.Builders.Dxf
                     swPart.EditUnsuppress();
                     flatPattern.DeSelect();
 
-                    var _swSubFeat = (Feature)flatPattern.GetFirstSubFeature();
+                    _swSubFeat = (Feature)flatPattern.GetFirstSubFeature();
 
                     while ((_swSubFeat != null))
                     {
-                        //MessageObserver.Instance.SetMessage("\t\tgot subfuture " + _swFeat.Name);
-                        System.Threading.Thread.Sleep(500);
-
                         if (_swSubFeat.GetTypeName() == "UiBend")
                         {
-                             
-                                bool isSupression = partBendInfo.IsSupressed;
+                            var supression =
+                                PartBendInfos.Where(x => x.OneBend == GetOneBandName(_swSubFeat.Name))
+                                .Single(x => x.Config == config)
+                                .IsSupressed;
+
                             _swSubFeat.Select(false);
-                          //  MessageObserver.Instance.SetMessage("isSupression "+ isSupression);
-                            if (isSupression)
+
+                            if (supression)
                             {
                                 swPart.EditSuppress();
                             }
-                            else
-                            {
-                                swPart.EditUnsuppress();
-                            }
-                          _swSubFeat.DeSelect();
-                      
+                            //else
+                            //{
+                            //    swPart.EditUnsuppress();
+                            //}
+
+                            _swSubFeat.DeSelect();
+
                         }
-                       _swSubFeat = (Feature)_swSubFeat.GetNextSubFeature();
+
+                        _swSubFeat = (Feature)_swSubFeat.GetNextSubFeature();
                     }
-                    _swFeat.DeSelect();
-                   
                 }
+
                 _swFeat = (Feature)_swFeat.GetNextFeature();
-                
             }
 
-            MessageObserver.Instance.SetMessage("end FixOneBand" );
+            if (makeDxf)
+            {
+                flatPattern?.Select(true);
+                swPart.EditUnsuppress();
+                flatPattern?.DeSelect();
+            }
+            else
+            {
+                flatPattern?.Select(true);
+                swPart.EditSuppress();
+                flatPattern?.DeSelect();
+            }
+
+            modelDoc.EditRebuild3();
         }
 
-
-
-        string GetOneBandName(string uiName)
+        static string GetOneBandName(string uiName)
         {
             if (!string.IsNullOrEmpty(uiName))
                 return uiName.Substring(
@@ -184,6 +195,7 @@ namespace SolidWorksLibrary.Builders.Dxf
                     uiName.IndexOf('>') - uiName.IndexOf('<') - 1);
             return null;
         }
+
 
         bool IsSuppressedEdgeFlange(string featureName)
         {
@@ -198,4 +210,4 @@ namespace SolidWorksLibrary.Builders.Dxf
         }
     }
 }
- 
+
