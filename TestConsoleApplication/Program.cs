@@ -1,4 +1,5 @@
-﻿using Patterns;
+﻿//using Patterns;
+using PDMWebService.Data.Solid.ElementsCase;
 //using PDMWebService.Data.Solid.PartBuilders;
 using SolidWorksLibrary.Builders.Dxf;
 using System;
@@ -17,12 +18,12 @@ namespace Test//ConsoleApplication
             //DxfBulder.Instance.FinishedBuilding += Instance_FinishedBuilding;
             //DxfBulder.Instance.Build(@"C:\Users\Antonyk\Desktop\test documents\ВНС-900.00.9001.SLDPRT", 33, 1);
 
-         //   SpigotBuilder sp = new SpigotBuilder();
-         //
-          //  sp.Build(20, 300, 666);
-///
+            SpigotBuilder sp = new SpigotBuilder();
 
-            //Console.ReadLine();
+            string s = sp.Build(ServiceTypes.Constants.SpigotType_e.Thirty_mm, new SolidWorksLibrary.Builders.ElementsCase.Vector2( 300, 666));
+
+            Console.WriteLine(s);
+            Console.ReadLine();
         }
 
         //private static void Instance_FinishedBuilding(DataToExport dataToExport)

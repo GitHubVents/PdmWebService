@@ -31,11 +31,7 @@ namespace SolidWorksLibrary.Builders.Dxf
 
         public void Fix()
         {
-            //    MessageObserver.Instance.SetMessage("Bust features ");
-            GetBendsInfo(ConfigurationName);
-            //    MessageObserver.Instance.SetMessage("FixOneBand");
             FixOneBand(ConfigurationName, true);
-
         }
 
 
@@ -50,77 +46,8 @@ namespace SolidWorksLibrary.Builders.Dxf
             public bool IsSupressed { get; set; }
         }
 
-        bool IsSheetFeature(string name)
-        {
-            switch (name)
-            {
-                case "EdgeFlange":
-                case "FlattenBends":
-                case "SMBaseFlange":
-                case "SheetMetal":
-                case "SM3dBend":
-                case "SMMiteredFlange":
-                case "ProcessBends":
-                case "FlatPattern":
-                case "Hem":
-                case "Jog":
-                case "LoftedBend":
-                case "Rip":
-                case "CornerFeat":
-
-                case "MirrorSolid": 
-                    return true;
-                default: return false;
-            }
-        }
 
         public List<PartBendInfo> PartBendInfos = new List<PartBendInfo>();
-
-        private void GetBendsInfo(string config)
-        {
-            var swPart = (IPartDoc)modelDoc;
-            _swFeat = (Feature)modelDoc.FirstFeature();
-            while ((_swFeat != null))
-            {
-                if (IsSheetFeature(_swFeat.GetTypeName()))
-                {
-                    var parentFeatureName = _swFeat.Name;
-                    var stateOfEdgeFlange = IsSuppressedEdgeFlange(parentFeatureName);
-                    _swSubFeat = _swFeat.IGetFirstSubFeature();
-
-                    while ((_swSubFeat != null))
-                    {
-                        if (_swSubFeat.GetTypeName() == "OneBend" || _swSubFeat.GetTypeName() == "SketchBend")
-                        {
-                            PartBendInfos.Add(new PartBendInfo
-                            {
-                                Config = config,
-                                EdgeFlange = parentFeatureName,
-                                OneBend = _swSubFeat.Name,
-                                IsSupressed = stateOfEdgeFlange
-                            });
-
-                            _swSubFeat.Select(false);
-
-                            //if (stateOfEdgeFlange)
-                            //{
-                            //    swPart.EditSuppress();
-                            //}
-                            //else
-                            //{
-                            //    swPart.EditUnsuppress();
-                            //}
-
-                            _swSubFeat.DeSelect();
-
-
-                        }
-                        _swSubFeat = (Feature)_swSubFeat.GetNextSubFeature();
-                    }
-                }
-                _swFeat = (Feature)_swFeat.GetNextFeature();
-            }
-        }
 
         private void FixOneBand(string config, bool makeDxf)
         {
@@ -144,69 +71,62 @@ namespace SolidWorksLibrary.Builders.Dxf
                     {
                         if (_swSubFeat.GetTypeName() == "UiBend")
                         {
-                            var supression =
-                                PartBendInfos.Where(x => x.OneBend == GetOneBandName(_swSubFeat.Name))
-                                .Single(x => x.Config == config)
-                                .IsSupressed;
+                            object[] fisrtParent = _swSubFeat.GetParents();
 
-                            _swSubFeat.Select(false);
-
-                            if (supression)
+                            if (fisrtParent != null)
                             {
-                                swPart.EditSuppress();
+                                int k = 0;
+                                foreach (var item in fisrtParent)
+                                {
+
+                                    Feature swFirstParentFeat = (Feature)item;
+                                    bool SuppressedEdgeFlange = IsSuppressedEdgeFlange(swFirstParentFeat.GetOwnerFeature().Name);
+
+                                    PartBendInfos.Add
+                                        (
+                                            new PartBendInfo
+                                            {
+                                                EdgeFlange = _swSubFeat.Name,
+                                                OneBend = swFirstParentFeat.GetOwnerFeature().Name,
+                                                IsSupressed = SuppressedEdgeFlange,
+                                                Config = config
+                                            }
+                                        );
+                                    k++;
+                                }
                             }
-                            //else
-                            //{
-                            //    swPart.EditUnsuppress();
-                            //}
-
-                            _swSubFeat.DeSelect();
-
                         }
-
                         _swSubFeat = (Feature)_swSubFeat.GetNextSubFeature();
                     }
                 }
 
                 _swFeat = (Feature)_swFeat.GetNextFeature();
-            }
 
-            if (makeDxf)
-            {
-                flatPattern?.Select(true);
-                swPart.EditUnsuppress();
-                flatPattern?.DeSelect();
-            }
-            else
-            {
-                flatPattern?.Select(true);
-                swPart.EditSuppress();
-                flatPattern?.DeSelect();
+                foreach (var item in PartBendInfos)
+                {
+
+                    if (!item.IsSupressed)
+                    {
+                        modelDoc.Extension.SelectByID2(item.EdgeFlange, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                        var swSelMgr = (SelectionMgr)modelDoc.SelectionManager;
+                        var swFeat = (Feature)swSelMgr.GetSelectedObject6(1, -1);
+                        swPart.EditUnsuppress();
+                    }
+                }
             }
 
             modelDoc.EditRebuild3();
         }
 
-        static string GetOneBandName(string uiName)
-        {
-            if (!string.IsNullOrEmpty(uiName))
-                return uiName.Substring(
-                    uiName.IndexOf('<') + 1,
-                    uiName.IndexOf('>') - uiName.IndexOf('<') - 1);
-            return null;
-        }
-
-
         bool IsSuppressedEdgeFlange(string featureName)
         {
-            var state = false;
             modelDoc.Extension.SelectByID2(featureName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
             var swSelMgr = (SelectionMgr)modelDoc.SelectionManager;
             var swFeat = (Feature)swSelMgr.GetSelectedObject6(1, -1);
-            var states = (bool[])swFeat.IsSuppressed2(1, modelDoc.GetConfigurationNames());
-            state = states[0];
+            bool[] states = swFeat.IsSuppressed2(2, modelDoc.GetConfigurationNames());
+            bool stat = states[0];
             modelDoc.ClearSelection2(true);
-            return state;
+            return stat;
         }
     }
 }

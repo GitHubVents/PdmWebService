@@ -49,11 +49,22 @@ namespace  ServiceTypes.Constants
     }
     #endregion
 
+    /// <summary>
+    /// Describes Montage Frame type and their values { from zero to three }
+    /// </summary>
+    [DataContract(Name = "MontageFrameType_e")]
+    public enum MontageFrameType_e
+    {
+        Zero = 0,
+        One = 1,
+        Two = 2,
+        Three = 3
+    }
 
     /// <summary>
     /// Describes spigon type and their values { 20mm,  [EnumMember] 30mm }
     /// </summary>
-     [DataContract(Name = "SpigotType_e")]
+    [DataContract(Name = "SpigotType_e")]
     public enum SpigotType_e
     {
         [EnumMember]      

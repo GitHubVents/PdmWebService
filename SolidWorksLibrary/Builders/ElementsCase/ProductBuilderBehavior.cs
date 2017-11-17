@@ -7,7 +7,6 @@ using System.Collections.Generic;
 namespace SolidWorksLibrary.Builders.ElementsCase
 {
 
-
     /// <summary>
     /// It abstract class describes the basic behavior of the builder
     /// </summary>
@@ -75,7 +74,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase
         protected bool IsPartExist;
         #endregion
 
-        protected string DebugRootFolder { get { return @"C:\TestPDM"; } }
+        //Папка для сохранения моделей при тестировании
+        protected string DebugRootFolder { get { return @"D:\TestPDM"; } }
 
         public ProductBuilderBehavior()
         {
@@ -122,7 +122,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
         /// <summary>
         /// Informing subscribers the completion of building 
         /// </summary>
-        public   FinishedBuildHandler FinishedBuild { get; set; }
+        public FinishedBuildHandler FinishedBuild { get; set; }
 
 
         protected virtual void DeleteComponents(int type)
@@ -141,36 +141,31 @@ namespace SolidWorksLibrary.Builders.ElementsCase
                 MessageObserver.Instance.SetMessage(exeption.ToString(), MessageType.Error);
             }
         }
-        protected int errors   = 0;
+        protected int errors = 0;
+        protected int warnings = 0;
 
-        protected int warnings   = 0;
-        protected virtual void EditPartParameters(string partName, string newPath  )
+        protected virtual void EditPartParameters(string partName, string newPath)
         {
-          
-            //Console.WriteLine(newPath);
             foreach (var eachParameter in parameters)
             {
                 try
                 {
-                    
-                         Console.WriteLine(eachParameter.Key + "@" + partName + " val: " + eachParameter.Value) ;
-                        Dimension myDimension = (SolidWorksDocument.Parameter(eachParameter.Key + "@" + partName + ".SLDPRT")) as Dimension;
-                        myDimension.SystemValue = eachParameter.Value / 1000;
-                    
-
+                    Dimension myDimension = (SolidWorksDocument.Parameter(eachParameter.Key + "@" + partName + ".SLDPRT")) as Dimension;
+                    myDimension.SystemValue = eachParameter.Value / 1000;
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(eachParameter.Key + " " + ex);
+                    //Console.WriteLine(eachParameter.Key + " " + ex);
                 }
             }
             SolidWorksDocument.ForceRebuild3(true);
-            SolidWorksDocument =  SolidWorksAdapter.AcativeteDoc(partName);
-            SolidWorksDocument.Extension.SaveAs(newPath + ".SLDPRT", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent
-            + (int )swSaveAsOptions_e.swSaveAsOptions_SaveReferenced + (int)swSaveAsOptions_e.swSaveAsOptions_UpdateInactiveViews, null, ref errors, warnings);
-            InitiatorSaveExeption(errors, warnings, newPath);
+            //SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(partName);
+            //SolidWorksDocument.Extension.SaveAs(newPath + ".SLDPRT", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent
+                                                       //  + (int )swSaveAsOptions_e.swSaveAsOptions_SaveReferenced + (int)swSaveAsOptions_e.swSaveAsOptions_UpdateInactiveViews, null, ref errors, warnings);
+            //InitiatorSaveExeption(errors, warnings, newPath);
             this.parameters.Clear();
-            SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(partName);
+
+            //SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(partName);
         }
 
         ///// <summary>

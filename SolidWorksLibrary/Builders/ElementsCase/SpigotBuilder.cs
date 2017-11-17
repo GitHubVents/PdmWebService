@@ -61,7 +61,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
                 if(NewPartPath != string.Empty && NewPartPath!= null)
                 {
-                 
+                                     
                     SolidWorksDocument.Extension.SelectByID2("12-20-001-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);                    
                     assemblyDocument.ReplaceComponents(base.NewPartPath, "", true, true);
  
@@ -130,7 +130,6 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 }
                 if(NewPartPath != string.Empty && NewPartPath!= null)
                 {
-                    
                     SolidWorksDocument.Extension.SelectByID2("12-003-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
                     assemblyDocument.ReplaceComponents(base.NewPartPath, "", true, true); 
                 }
@@ -159,7 +158,6 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 MessageObserver.Instance.SetMessage("Check exist part. " + base.PartName);
                 if (CheckExistPart != null)
                 {
-
                     CheckExistPart(base.PartName, RootFolder, out base.NewPartPath);
                 }
                 else
@@ -200,10 +198,11 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 }
 
                 if(NewPartPath != string.Empty && NewPartPath!= null)
-                {
-                    
+                {                    
                     SolidWorksDocument.Extension.SelectByID2("12-30-002-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    assemblyDocument.ReplaceComponents(base.NewPartPath, "", true, true);           
+
+                    assemblyDocument.ReplaceComponents(base.NewPartPath, "", true, true);
+
                 }
                 else
                 {
@@ -238,6 +237,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 }
                 else
                 {
+
                     base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, base.PartName);
                     SolidWorksDocument.Extension.SelectByID2("D3@Эскиз1@12-003-2@12-00", "DIMENSION", 0, 0, 0, false, 0, null, 0);
                     dimension = ((Dimension)(SolidWorksDocument.Parameter("D3@Эскиз1@12-003.Part")));
@@ -254,17 +254,19 @@ namespace PDMWebService.Data.Solid.ElementsCase
             
 
             SolidWorksDocument.ForceRebuild3(true);
-
-           
             NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, GetSpigotName(type, spigotSize)) + ".SLDASM";
-
             SolidWorksDocument.Extension.SaveAs(NewPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
             InitiatorSaveExeption(error, warning, NewPartPath);
 
+
+
             SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(base.PartName + ".SLDASM");
             ComponentsPathList.Add(NewPartPath);
+
             swDrawingSpigot.Extension.SelectByID2("DRW1", "SHEET", 0, 0, 0, false, 0, null, 0);
             var drw = (DrawingDoc)SolidWorksAdapter.AcativeteDoc(drawingName + ".SLDDRW");
+
+
             drw.ActivateSheet("DRW1");
             drw.SetupSheet5("DRW1", 12, 12, 1, GetDrawingScale(spigotSize), true, @"\\pdmsrv\SolidWorks Admin\Templates\Основные надписи\A3-A-1.slddrt", 0.42, 0.297, "По умолчанию", false);
 
@@ -273,15 +275,14 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
             ComponentsPathList.Add(NewPartPath + ".SLDDRW");
             SolidWorksAdapter.CloseAllDocumentsAndExit();
-
-            Console.WriteLine("ComponentsPathList count " + ComponentsPathList.Count);
-            FinishedBuild(ComponentsPathList);
+           
+            //FinishedBuild(ComponentsPathList);/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             return NewPartPath;
         }
 
         #region clear document
         /// <summary>
-        /// dellete equation for model, by index
+        /// delete equation for model, by index
         /// </summary>
         /// <param name="index"></param>
         /// <param name="swModel"></param>
@@ -464,7 +465,3 @@ namespace PDMWebService.Data.Solid.ElementsCase
         }
     }
 }
-
-
-
- 

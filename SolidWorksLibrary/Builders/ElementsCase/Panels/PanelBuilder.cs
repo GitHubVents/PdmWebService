@@ -10,7 +10,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels {
     public class PanelBuilder : ProductBuilderBehavior
     {
         #region fields
-     //   public override event SetBendsHandler SetBends;
+     //  public override event SetBendsHandler SetBends;
         private Vector2 sizePanel { get; set; }
         private double innerHeight = 0;
         private double innerWeidht = 0;
@@ -46,16 +46,13 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels {
                 AssemblyName = "02-01";
             }
 
-
             NewPartPath = System.IO.Path.Combine(RootFolder, SourceFolder, AssemblyName + ".SLDASM");
             SolidWorksAdapter.OpenDocument(NewPartPath, swDocumentTypes_e.swDocASSEMBLY);
             SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM"); 
         }
 
         public void Build(PanelType_e panelType, PanelProfile_e profile, Vector2 sizePanel, Materials_e OuterMaterial, Materials_e InnerMaterial, double outThickness, double innerThickness)
-        {
-
-            
+        {            
 
             this.sizePanel = sizePanel;
             this.innerThickness = innerThickness;
@@ -159,11 +156,10 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels {
             }
             else
             {
-
                 base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, base.PartName);
                 // outer panel
                 if (SetBends != null)
-                    SetBends((decimal)outThickness, out KFactor, out BendRadius);
+                    SetBends.Invoke((decimal)outThickness, out KFactor, out BendRadius);
                 base.parameters.Add("D1@Эскиз1", sizePanel.Y);
                 base.parameters.Add("D2@Эскиз1", sizePanel.X);
                 base.parameters.Add("D1@Кривая2", rivetH);
@@ -193,8 +189,11 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels {
             else
             {
                 base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, base.PartName);
+                System.Windows.Forms.MessageBox.Show("From SinglePanel : innerThickness " + innerThickness.ToString());/////////////////////////////////////////////////////////////////////
                 if (SetBends != null)
                     SetBends((decimal)innerThickness, out KFactor, out BendRadius);
+
+                System.Windows.Forms.MessageBox.Show("innerThickness  " + innerThickness.ToString() + "KFactor  " + KFactor.ToString() + "BendRadius   " + BendRadius.ToString());
                 base.parameters.Add("D1@Эскиз1", innerWeidht);
                 base.parameters.Add("D2@Эскиз1", innerHeight);
                 base.parameters.Add("D1@Кривая2", rivetW);
@@ -267,10 +266,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels {
                   CheckExistPart(NewPartPath, RootFolder, out NewPartPath);
             if (false)
             {
-
                 SolidWorksDocument.Extension.SelectByID2("02-01-103-50-1@02-104-50", "COMPONENT", 0, 0, 0, false, 0, null, 0);
                 AssemblyDocument.ReplaceComponents(base.NewPartPath, "", false, true);
-
             }
             else
             {

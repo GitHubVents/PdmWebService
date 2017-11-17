@@ -51,7 +51,7 @@ namespace SolidWorksLibrary
                 //    //    }
                 //    //}
                 sldWoksApp = new SldWorks() { Visible = true };
-
+                
                 MessageObserver.Instance.SetMessage("\t\tCreated exemplar SolidWorks Application", MessageType.System);
             }
         }
@@ -119,7 +119,6 @@ namespace SolidWorksLibrary
         /// Check is sheet metal part
         /// </summary>
         /// <param name="swPart"></param>
-        /// <returns></returns>
         public static bool IsSheetMetalPart(IPartDoc swPart)
         {
             var isSheetMetal = false;
@@ -176,7 +175,6 @@ namespace SolidWorksLibrary
         {
             int errors = 0;
             ModelDoc2 modelDoc = SolidWorksAdapter.SldWoksAppExemplare.ActivateDoc3(docTitle, true, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, errors);
-       
             if (errors != 0)
             {
                 MessageObserver.Instance.SetMessage("Exeption at activate solid works document: code {" + errors+"}, description error {" + (swActivateDocError_e) errors + "}");
@@ -189,7 +187,7 @@ namespace SolidWorksLibrary
         /// </summary>
         /// <param name="document"></param>
         /// <returns></returns>
-        public static AssemblyDoc  ToAssemblyDocument(ModelDoc2 document)
+        public static AssemblyDoc ToAssemblyDocument(ModelDoc2 document)
         {
             AssemblyDoc swAsm =  (AssemblyDoc)document;
             swAsm.ResolveAllLightWeightComponents(false);

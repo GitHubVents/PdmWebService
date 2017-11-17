@@ -53,8 +53,6 @@ namespace ServiceLibrary.ConcreteService
             return UrlToSelectModel;
         }
 
-
-
         public TransmittableFile SelectFile(TransmittableFileModel dataSolidModel)
         {
 
@@ -106,8 +104,6 @@ namespace ServiceLibrary.ConcreteService
         public TransmittableSpecification[] GetSpecifications(string filePath, string configuration)
         { 
                 return DataConverter.GetSpecification(filePath,   configuration);
-           
-
         }
 
 
@@ -293,7 +289,7 @@ namespace ServiceLibrary.ConcreteService
 
                 foreach (var item in spigotBuilder.ComponentsPathList)
                 {
-                   // SolidWorksPdmAdapter.Instance.AddToPdm(item, @"D:\Test\Библиотека проектирования\DriveWorks\12 - Spigot");
+                    SolidWorksPdmAdapter.Instance.AddToPdm(item, @"D:\Test\Библиотека проектирования\DriveWorks\12 - Spigot");///////////////////////////////////////////////////////////////
                 }
             
             }
@@ -301,7 +297,6 @@ namespace ServiceLibrary.ConcreteService
             {
                 Console.WriteLine(ex.ToString( ));
             }
-
         }
         /// <summary>
         /// test method for handle finished build

@@ -28,8 +28,22 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DataBaseDomian">
+      <HintPath>..\DataBaseDomian\bin\Release\DataBaseDomian.dll</HintPath>
+    </Reference>
+    <Reference Include="PdmSolidWorksLibrary">
+      <HintPath>..\PdmSolidWorksLibrary\bin\Release\PdmSolidWorksLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceConstants, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ServiceConstants\bin\Release\ServiceConstants.dll</HintPath>
+    </Reference>
     <Reference Include="SolidWorks.Interop.sldworks">
       <HintPath>C:\Program Files\SOLIDWORKS Corp\SOLIDWORKS\api\redist\SolidWorks.Interop.sldworks.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -47,7 +61,9 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -93,13 +109,12 @@
       <Project>{d0abf979-d32b-453d-92d5-f9bc7bdec44e}</Project>
       <Name>Patterns</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ServiceConstants\ServiceConstants.csproj">
-      <Project>{21A48C37-403D-4966-9414-6EA2327A204B}</Project>
-      <Name>ServiceConstants</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Builders\ElementsCase\MonoBlocks\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

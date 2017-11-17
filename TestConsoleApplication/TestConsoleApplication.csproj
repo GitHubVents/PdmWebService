@@ -33,6 +33,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ServiceConstants">
+      <HintPath>..\ServiceConstants\bin\Release\ServiceConstants.dll</HintPath>
+    </Reference>
+    <Reference Include="SolidWorksLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SolidWorksLibrary\bin\Release\SolidWorksLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -48,16 +55,6 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MessageLibrary\Patterns.csproj">
-      <Project>{D0ABF979-D32B-453D-92D5-F9BC7BDEC44E}</Project>
-      <Name>Patterns</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SolidWorksLibrary\SolidWorksLibrary.csproj">
-      <Project>{DECC61E0-8D25-485F-99F4-D895177C7997}</Project>
-      <Name>SolidWorksLibrary</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
