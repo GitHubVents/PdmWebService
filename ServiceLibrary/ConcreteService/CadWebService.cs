@@ -285,7 +285,7 @@ namespace ServiceLibrary.ConcreteService
             spigotBuilder.CheckExistPart = CheckExistPart_Handler;
             try
             {
-                 spigotBuilder.Build(type, new SolidWorksLibrary.Builders.ElementsCase.Vector2(width, height));
+                 spigotBuilder.Build((int)type, new SolidWorksLibrary.Builders.ElementsCase.Vector2(width, height));
 
                 foreach (var item in spigotBuilder.ComponentsPathList)
                 {
@@ -325,12 +325,13 @@ namespace ServiceLibrary.ConcreteService
         /// </summary>
         /// <param name="partName"></param>
         /// <param name="isExesitPatrt"></param>
-        /// <param name="pathToPartt"></param>
+        /// <param name="pathToPart"></param>
         private static void CheckExistPart_Handler(string partName, string RootFolder, out string pathToPart)
         {
 
             pathToPart = string.Empty;
             var model = DataBaseDomian.SwPlusRepository.Instance.ByName(partName);
+            
             if (model != null)
             {
                 pathToPart = $@"{RootFolder}{model.Path}{partName}";

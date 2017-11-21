@@ -13,16 +13,14 @@ namespace PDMWebService.Data.Solid.ElementsCase
 {
     public sealed class MountingFrameBuilder : ProductBuilderBehavior
     {
-        private SldWorks _swApp;
+        private SldWorks swObj;
         bool internalCrossbeam; // Погашение внутренней поперечной балки
         bool internalLongitudinalBeam; // Погашение внутренней продольной балки
         double tempOffset;
 
-        
 
-        ModelDoc2 swDocMontageFrame;
+        #region fields and property
 
-        //#region fields and property
         //private string newPartName;
         //private string typeOfMfs;
         //  private string frameOffset;
@@ -115,7 +113,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
         //        thikness = value;
         //    }
         //}
-        //#endregion
+        #endregion
 
         public MountingFrameBuilder() : base()
         {
@@ -189,33 +187,33 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 //Тип рамы 2
                 if (internalCrossbeam == false)
                 {
-                    swDocMontageFrame.Extension.SelectByID2("10-03-01-4-1@10-4", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    swDocMontageFrame.Extension.SelectByID2("Washer 11371_gost-39@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    swDocMontageFrame.Extension.SelectByID2("Washer 11371_gost-40@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    swDocMontageFrame.Extension.SelectByID2("Washer 6402_gost-23@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    swDocMontageFrame.Extension.SelectByID2("Hex Nut 5915_gost-19@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    swDocMontageFrame.Extension.SelectByID2("Hex Bolt 7805_gost-22@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    swDocMontageFrame.Extension.SelectByID2("Washer 11371_gost-41@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    swDocMontageFrame.Extension.SelectByID2("Washer 11371_gost-42@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    swDocMontageFrame.Extension.SelectByID2("Washer 6402_gost-24@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    swDocMontageFrame.Extension.SelectByID2("Hex Nut 5915_gost-20@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    swDocMontageFrame.Extension.SelectByID2("Hex Bolt 7805_gost-23@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    swDocMontageFrame.Extension.SelectByID2("Washer 11371_gost-43@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    swDocMontageFrame.Extension.SelectByID2("Washer 11371_gost-44@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    swDocMontageFrame.Extension.SelectByID2("Washer 6402_gost-25@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    swDocMontageFrame.Extension.SelectByID2("Hex Nut 5915_gost-21@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    swDocMontageFrame.Extension.SelectByID2("Hex Bolt 7805_gost-24@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    swDocMontageFrame.Extension.SelectByID2("Washer 11371_gost-45@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    swDocMontageFrame.Extension.SelectByID2("Washer 11371_gost-46@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    swDocMontageFrame.Extension.SelectByID2("Washer 6402_gost-26@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    swDocMontageFrame.Extension.SelectByID2("Hex Nut 5915_gost-22@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    swDocMontageFrame.Extension.SelectByID2("Hex Bolt 7805_gost-25@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    swDocMontageFrame.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("10-03-01-4-1@10-4", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.Extension.SelectByID2("Washer 11371_gost-39@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.Extension.SelectByID2("Washer 11371_gost-40@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.Extension.SelectByID2("Washer 6402_gost-23@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.Extension.SelectByID2("Hex Nut 5915_gost-19@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.Extension.SelectByID2("Hex Bolt 7805_gost-22@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.Extension.SelectByID2("Washer 11371_gost-41@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.Extension.SelectByID2("Washer 11371_gost-42@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.Extension.SelectByID2("Washer 6402_gost-24@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.Extension.SelectByID2("Hex Nut 5915_gost-20@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.Extension.SelectByID2("Hex Bolt 7805_gost-23@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.Extension.SelectByID2("Washer 11371_gost-43@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.Extension.SelectByID2("Washer 11371_gost-44@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.Extension.SelectByID2("Washer 6402_gost-25@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.Extension.SelectByID2("Hex Nut 5915_gost-21@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.Extension.SelectByID2("Hex Bolt 7805_gost-24@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.Extension.SelectByID2("Washer 11371_gost-45@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.Extension.SelectByID2("Washer 11371_gost-46@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.Extension.SelectByID2("Washer 6402_gost-26@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.Extension.SelectByID2("Hex Nut 5915_gost-22@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.Extension.SelectByID2("Hex Bolt 7805_gost-25@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
 
                     // Удаление ненужных элементов продольной балки
                     int deleteOption = (int)swDeleteSelectionOptions_e.swDelete_Absorbed + (int)swDeleteSelectionOptions_e.swDelete_Children;
-                    swDocMontageFrame.Extension.SelectByID2("Вырез-Вытянуть8@10-01-01@10-4", "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                    swDocMontageFrame.Extension.DeleteSelection2(deleteOption);
+                    SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть8@10-01-01@10-4", "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
                 }
 
                 #endregion
@@ -227,40 +225,40 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 {
                     foreach (var s in new[] { "5", "6", "7", "8"})
                     {
-                        swDocMontageFrame.Extension.SelectByID2("Hex Bolt 7805_gost-" + s + "@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                        swDocMontageFrame.EditDelete();
+                        SolidWorksDocument.Extension.SelectByID2("Hex Bolt 7805_gost-" + s + "@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                        SolidWorksDocument.EditDelete();
                     }
                     foreach (var s in new[] { "6", "7", "8", "9", "37", "38", "39", "40" })
                     {
-                        swDocMontageFrame.Extension.SelectByID2("Washer 6402_gost-" + s + "@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                        swDocMontageFrame.EditDelete();
+                        SolidWorksDocument.Extension.SelectByID2("Washer 6402_gost-" + s + "@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                        SolidWorksDocument.EditDelete();
                     }
                     foreach (var s in new[] { "17", "18", "19", "20", "21", "22", "23", "24", "57", "58", "59", "60" })
                     {
-                        swDocMontageFrame.Extension.SelectByID2("Washer 11371_gost-" + s + "@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                        swDocMontageFrame.EditDelete();
+                        SolidWorksDocument.Extension.SelectByID2("Washer 11371_gost-" + s + "@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                        SolidWorksDocument.EditDelete();
                     }
-                    swDocMontageFrame.Extension.SelectByID2("10-04-4-2@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                    swDocMontageFrame.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("10-04-4-2@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
                     // Удаление ненужных элементов поперечной балки
-                    swDocMontageFrame.Extension.SelectByID2("Регулируемая ножка-10@10-4", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    swDocMontageFrame.EditDelete();
-                    swDocMontageFrame.Extension.SelectByID2("Регулируемая ножка-11@10-4", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    swDocMontageFrame.EditDelete();
-                    swDocMontageFrame.Extension.SelectByID2("Регулируемая ножка-002@10-4", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    swDocMontageFrame.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Регулируемая ножка-10@10-4", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Регулируемая ножка-11@10-4", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Регулируемая ножка-002@10-4", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
 
                     foreach (var s in new[] { "10", "11", "12", "13", "40", "41", "42", "43" })
                     {
-                        swDocMontageFrame.Extension.SelectByID2("Hex Nut 5915_gost-" + s + "@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
-                        swDocMontageFrame.EditDelete();
+                        SolidWorksDocument.Extension.SelectByID2("Hex Nut 5915_gost-" + s + "@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                        SolidWorksDocument.EditDelete();
                     }
 
                     const int deleteOption = (int)swDeleteSelectionOptions_e.swDelete_Absorbed + (int)swDeleteSelectionOptions_e.swDelete_Children;
-                    swDocMontageFrame.Extension.SelectByID2("Вырез-Вытянуть5@10-03-01-4@10-4", "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                    swDocMontageFrame.Extension.DeleteSelection2(deleteOption);
-                    swDocMontageFrame.Extension.SelectByID2("Вырез-Вытянуть4@10-03-01-4@10-4", "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                    swDocMontageFrame.Extension.DeleteSelection2(deleteOption);
+                    SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть5@10-03-01-4@10-4", "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
+                    SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть4@10-03-01-4@10-4", "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.Extension.DeleteSelection2(deleteOption);
                 }
 
                 #endregion
@@ -269,23 +267,22 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
         public void OpenDoc()
         {
-            var modelMontageFramePath = $@"{base.RootFolder}\{base.SourceFolder}\{"10-4"}.SLDASM";
-            _swApp = new SldWorks();
-            //_swApp.Visible = true;
+            string modelMontageFramePath = $@"{base.RootFolder}\{base.SourceFolder}\{"10-4"}.SLDASM";
+            swObj = new SldWorks();
 
-            swDocMontageFrame = _swApp.OpenDoc6(modelMontageFramePath, (int)swDocumentTypes_e.swDocASSEMBLY, (int)swOpenDocOptions_e.swOpenDocOptions_LoadModel, "00", 0, 0);
-            
-            var swAsm = (AssemblyDoc)swDocMontageFrame;
+            SolidWorksDocument = swObj.OpenDoc6(modelMontageFramePath, (int)swDocumentTypes_e.swDocASSEMBLY, (int)swOpenDocOptions_e.swOpenDocOptions_LoadModel, "00", 0, 0);
+
+            AssemblyDoc swAsm = (AssemblyDoc)SolidWorksDocument;
             swAsm.ResolveAllLightWeightComponents(false);
         }
 
         public void SaveDoc()
         {
             //Сохранение
-            _swApp.IActivateDoc2("10-4.SLDASM", false, 0);
-            swDocMontageFrame = ((ModelDoc2)(_swApp.ActiveDoc));
-            swDocMontageFrame.ForceRebuild3(true);
-            swDocMontageFrame.SaveAs2(base.NewPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
+            swObj.IActivateDoc2("10-4.SLDASM", false, 0);
+            SolidWorksDocument = ((ModelDoc2)(swObj.ActiveDoc));
+            SolidWorksDocument.ForceRebuild3(true);
+            SolidWorksDocument.SaveAs2(base.NewPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
         }
 
         private void GetFrameType(MontageFrameType_e type, double length, out double offset)

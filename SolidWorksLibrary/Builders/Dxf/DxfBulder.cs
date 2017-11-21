@@ -73,7 +73,6 @@ using System.Linq;
                 {
                     try
                     {
-                     //   string emptyConfigyration = "";
                         modelDoc = SolidWorksAdapter.OpenDocument(partPath, swDocumentTypes_e.swDocPART);// SolidWorksAdapter.SldWoksAppExemplare.OpenDoc6(partPath, (int)  swDocumentTypes_e.swDocPART , (int)swOpenDocOptions_e.swOpenDocOptions_Silent, emptyConfigyration, error, warnings);
                        // modelDoc = SolidWorksAdapter.SldWoksAppExemplare.IActiveDoc2;
 
@@ -129,6 +128,7 @@ using System.Linq;
                     { 
                         Bends bends = Bends.Create(modelDoc, eachConfiguration);
                         bends.Fix();
+                    
                         MessageObserver.Instance.SetMessage("\t Fix bends " + eachConfiguration, MessageType.System);
                     }
 
@@ -180,6 +180,5 @@ using System.Linq;
             return isSave;
         }
 
-        
     }
 }

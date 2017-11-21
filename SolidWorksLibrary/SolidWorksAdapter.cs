@@ -143,8 +143,6 @@ namespace SolidWorksLibrary
             return isSheetMetal;
         }
 
-
-
         public static ModelDoc2 OpenDocument(string path, swDocumentTypes_e documentType, string configuration = "00")
         {
             if (!File.Exists(path))
@@ -192,6 +190,12 @@ namespace SolidWorksLibrary
             AssemblyDoc swAsm =  (AssemblyDoc)document;
             swAsm.ResolveAllLightWeightComponents(false);
             return swAsm;
+        }
+
+        public static DrawingDoc ToDrawingDoc(ModelDoc2 document)
+        {
+            DrawingDoc drw = (DrawingDoc)document;
+            return drw;
         }
     }
 }

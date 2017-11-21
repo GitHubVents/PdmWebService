@@ -45,6 +45,12 @@ namespace SolidWorksLibrary.Builders.ElementsCase
         /// Working SolidWork document { asm, prt }
         /// </summary>
         protected ModelDoc2 SolidWorksDocument { get; set; }
+
+        /// <summary>
+        /// Working SolidWork document { DRW }
+        /// </summary>
+        protected DrawingDoc SolidWorksDRW { get; set; }
+
         /// <summary>
         /// Working assembly document name
         /// </summary>
@@ -158,6 +164,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
                     //Console.WriteLine(eachParameter.Key + " " + ex);
                 }
             }
+            System.Windows.Forms.MessageBox.Show("I'm adding parameters");
             SolidWorksDocument.ForceRebuild3(true);
             //SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(partName);
             //SolidWorksDocument.Extension.SaveAs(newPath + ".SLDPRT", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent
