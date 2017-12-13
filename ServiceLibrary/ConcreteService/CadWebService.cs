@@ -329,7 +329,7 @@ namespace ServiceLibrary.ConcreteService
         private static void CheckExistPart_Handler(string partName, string RootFolder, out string pathToPart)
         {
 
-            pathToPart = string.Empty;
+            pathToPart = null;
             var model = DataBaseDomian.SwPlusRepository.Instance.ByName(partName);
             
             if (model != null)

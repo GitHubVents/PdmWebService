@@ -2,31 +2,23 @@
 using SolidWorks.Interop.swconst;
 using SolidWorksLibrary;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using ServiceTypes.Constants; 
 using SolidWorksLibrary.Builders.ElementsCase;
 
 namespace PDMWebService.Data.Solid.ElementsCase
 {
    public class FlapBuilder : ProductBuilderBehavior
-    { 
+    {
+        int errores = 0, warnings = 0;
         public FlapBuilder()
         { 
-            base.SetProperties("11 - Регулятор расхода воздуха", "11 - Damper" );
+            base.SetProperties(@"Проекты\11 - Регулятор расхода воздуха", @"Библиотека проектирования\DriveWorks\11 - Damper");
         }
-        /// <summary>
-        /// Dumpers the s.
-        /// </summary>
-        /// <param name="flapType">The typeOfFlange.</param>
-        /// <param name="flapSize.X">The flapSize.X.</param>
-        /// <param name="flapSize.Y">The flapSize.Y.</param>
-        /// <param name="isOutDoor"></param>
-        /// <param name="material"></param>
-        /// <returns></returns>
-        public string Build(FlapTypes_e flapType, Vector2 flapSize, bool isOutDoor, string[] material)
-        {  
+        
+
+        public void Build(FlapTypes_e flapType, Vector2 flapSize, bool isOutDoor, string[] material)
+        {
+
             switch (flapType)
             {
                 case FlapTypes_e.Twenty_mm:
@@ -39,39 +31,35 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     break;
             }
 
-            var modelType = $"{(material[3] == "AZ" ? "" : "-" + material[3])}{(material[3] == "AZ" ? "" : material[1])}";
+            string modelType = $"{(material[3] == "AZ" ? "" : "-" + material[3])}{(material[3] == "AZ" ? "" : material[1])}";
 
             string drawingName = "11-20";
-            if (PartName == "11-30")
-            { drawingName = PartName; }
-             
+            if (PartName == "11-30") { drawingName = PartName; }
+
+            string modelDRWPath = $@"{RootFolder}\{SourceFolder}\{drawingName}";
             string newDamperName = PartName + "-" + flapSize.X + "-" + flapSize.Y + modelType + (isOutDoor ? "-O" : "");
-              NewPartPath = $@"{RootFolder}{SubjectDestinationFolder}{newDamperName}.SLDDRW";
-            string newDamperAsmPath = $@"{RootFolder}{SubjectDestinationFolder}{newDamperName}.SLDASM";
-            string modelDamperDrw = $@"{RootFolder}{base.NewPartPath}{drawingName}.SLDDRW";
-            string modelLamel = $@"{RootFolder}{base.NewPartPath}{"11-100"}.SLDDRW";
-           ModelDoc2 SolidWorksDocumentDrw = SolidWorksAdapter.OpenDocument(modelDamperDrw,  swDocumentTypes_e.swDocDRAWING); 
+            string newDamperAsmPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newDamperName}.SLDASM";
+            string modelLamel = $@"{RootFolder}\{base.SourceFolder}\{"11-100"}.SLDDRW";
+            string modelPath = $@"{RootFolder}\{base.SourceFolder}\{base.AssemblyName}.SLDASM";
 
-              SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName);   // TO DO
-             
-             
-            // Габариты
-            double widthD = flapSize.X;
-            double heightD = flapSize.Y;
+            SolidWorksAdapter.OpenDocument(modelDRWPath + ".SLDDRW",  swDocumentTypes_e.swDocDRAWING);
+            SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(base.AssemblyName + ".SLDASM");
+            
+
+            #region // Габариты
             // Количество лопастей
-            double countL = (Math.Truncate(heightD / 100)) * 1000;
-
+            double countL = (Math.Truncate(flapSize.Y / 100)) * 1000;
             // Шаг заклепок
             const double step = 140;
-            double rivetW = (Math.Truncate(widthD / step) + 1) * 1000;
-            double rivetH = (Math.Truncate(heightD / step) + 1) * 1000;
+            double rivetW = (Math.Truncate(flapSize.X / step) + 1) * 1000;
+            double rivetH = (Math.Truncate(flapSize.Y / step) + 1) * 1000;
 
             // Высота уголков
-            double hC = Math.Truncate(7 + 5.02 + (heightD - countL / 10 - 10.04) / 2);
-
+            double hC = Math.Truncate(7 + 5.02 + (flapSize.Y - countL / 10 - 10.04) / 2);
+            
             // Коэффициенты и радиусы гибов   
-         var thiknessStr =/* material?[1].Replace(".", ",") ?? */ "3";
-            // //MessageBox.Show(thiknessStr);  // obs
+            var thiknessStr =/* material?[1].Replace(".", ",") ?? */ "3";
+            #endregion
 
             #region typeOfFlange = "20"
 
@@ -88,439 +76,378 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 }
 
                 string newName;
-                string newPartPath;
-                #region isOutDoor
+
                 if (isOutDoor)
                 {
-                    SolidWorksDocument.Extension.SelectByID2("Эскиз1", "SKETCH", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditSuppress2();
-
-                    SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть10@11-001-7@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Эскиз34@11-001-7@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-
-                    SolidWorksDocument.Extension.SelectByID2("ВНС-901.41.302-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-130@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-131@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-129@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-128@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-127@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-126@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-
+                    //Replace Component
+                    SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
+                    SolidWorksDocument.Extension.SelectByID2("11-003-6@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksAdapter.ToAssemblyDocument(SolidWorksDocument);
+                    AssemblyDocument.ReplaceComponents(base.NewPartPath, "", false, true);
+                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-003.SLDPRT");
 
                     // 11-005 
                     newName = "11-05-" + flapSize.Y + modelType;
-                    newPartPath = $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
+                    base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
 
-                    // TO DO change exists file...
-                    //  if (VersionsFileInfo.Replaced.ExistLatestVersion(newPartPath, VaultSystem.VentsCadFile.Type.Part, lastChangedDate, Settings.Default.PdmBaseName))
                     if (false)
                     {
-                        SolidWorksDocument =SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
+                        SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
                         SolidWorksDocument.Extension.SelectByID2("11-005-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                        AssemblyDocument.ReplaceComponents(newPartPath, "", false, true);
+                        AssemblyDocument.ReplaceComponents(base.NewPartPath + ".SLDPRT", "", false, true);
                         SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-005.SLDPRT");
                     }
                     else
                     {
+                        base.parameters.Add("D3@Эскиз1", flapSize.Y);
+                        base.parameters.Add("D1@Кривая1", rivetH);
+                        base.parameters.Add("D3@Эскиз37", Convert.ToInt32(countL / 1000) % 2 == 1 ? 0 : 50);
+                        base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
 
-                        SwPartParamsChangeWithNewName("11-005",
-                            $@"{RootFolder}{SubjectDestinationFolder}{newName}",
-                            new[,]
-                            {
-                                {"D3@Эскиз1", Convert.ToString(heightD)},
-                                {"D1@Кривая1", Convert.ToString(rivetH)},
-                                {"D3@Эскиз37", (Convert.ToInt32(countL / 1000) % 2 == 1) ? "0" : "50"},
-                                {"Толщина@Листовой металл", thiknessStr}
-                            });
-                       
-                        AddMaterial(material, newName);
-                      //  NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(newPartPath).FullName });
+                        EditPartParameters("11-005", base.NewPartPath);
                     }
+
 
                     // 11-006 
                     newName = "11-06-" + flapSize.Y + modelType;
-                    newPartPath = $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
-                    if (/*VersionsFileInfo.Replaced.ExistLatestVersion(newPartPath, VaultSystem.VentsCadFile.Type.Part, lastChangedDate, Settings.Default.PdmBaseName)*/ false)
+                    base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
+
+                    if (false)
                     {
                         SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
-                        SolidWorksDocument.Extension.SelectByID2("11-006-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                        AssemblyDocument.ReplaceComponents(newPartPath, "", false, true);
+                        SolidWorksDocument.Extension.SelectByID2("11-006-1@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                        AssemblyDocument.ReplaceComponents(base.NewPartPath + ".SLDPRT", "", false, true);
                         SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-006.SLDPRT");
                     }
                     else
                     {
-                        SwPartParamsChangeWithNewName("11-006",
-                            $@"{RootFolder}{SubjectDestinationFolder}{newName}",
-                            new[,]
-                            {
-                                {"D3@Эскиз1", Convert.ToString(heightD)},
-                                {"D1@Кривая1", Convert.ToString(rivetH)},
-                                {"Толщина@Листовой металл", thiknessStr}
-                            });
+                        base.parameters.Add("D3@Эскиз1", flapSize.Y);
+                        base.parameters.Add("D1@Кривая1", rivetH);
+                        base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
 
-                        AddMaterial(material, newName);
-                      //  NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(newPartPath).FullName });
+                        EditPartParameters("11-006", base.NewPartPath);
                     }
-                }
-                # endregion
 
+                    SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
+
+                    //Delete Components
+                    SolidWorksDocument.Extension.SelectByID2("Эскиз1", "SKETCH", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditSuppress2();
+                    SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть10@11-001-7@11 - Damper", "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Эскиз34@11-001-7@11 - Damper", "SKETCH", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("ВНС-901.41.302-1@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-130@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-131@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-129@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-128@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-127@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-126@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    ///////
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-207@11-003@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-209@11-003@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-221@11-003@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditSuppress2();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-222@11-003@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditSuppress2();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-223@11-003@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditSuppress2();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-224@11-003@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditSuppress2();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-225@11-003@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditSuppress2();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-226@11-003@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditSuppress2();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-227@11-003@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditSuppress2();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-228@11-003@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditSuppress2();
+
+
+                    SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть1@11-003@11 - Damper", "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    //SolidWorksDocument.Extension.SelectByID2("DerivedCrvPattern3", "COMPPATTERN", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditSuppress2();
+                }
                 else
-                {
-                    SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть11@11-001-7@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть12@11-001-7@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Эскиз35@11-001-7@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Эскиз36@11-001-7@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть10@11-003-6@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть11@11-003-6@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Эскиз34@11-003-6@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Эскиз35@11-003-6@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("11-005-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("11-006-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-
-
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-187@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-188@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-189@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-190@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-191@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-192@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-193@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-194@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-195@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-196@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-197@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-198@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                }
-
-                
-                // 11-001 
-                newName = "11-01-" + flapSize.Y + modelType + (isOutDoor ? "-O" : "");
-
-                newPartPath = $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
-                if (/*VersionsFileInfo.Replaced.ExistLatestVersion(newPartPath, VaultSystem.VentsCadFile.Type.Part, lastChangedDate, Settings.Default.PdmBaseName)*/ false)
                 {
                     SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
-                    SolidWorksDocument.Extension.SelectByID2("11-001-7@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    AssemblyDocument.ReplaceComponents(newPartPath, "", false, true);
-                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-001.SLDPRT");
-                }
-                else
-                {
-                    SwPartParamsChangeWithNewName("11-001", 
-                        $@"{RootFolder}{SubjectDestinationFolder}{newName}",
-                        new[,]
-                        {
-                            {"D2@Эскиз1", Convert.ToString(heightD + 7.94)}, {"D1@Эскиз27", Convert.ToString(countL/10 - 100)},
-                            {"D2@Эскиз27", Convert.ToString(100*Math.Truncate(countL/2000))}, {"D1@Кривая1", Convert.ToString(countL)},
-                            //{"D1@Кривая2", Convert.ToString(rivetH)},
-                            {"Толщина@Листовой металл", thiknessStr}
-                        });
-                    AddMaterial(material, newName);
-                  //  NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(newPartPath).FullName });
-                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName + ".SLDPRT");
-                }
 
-                #region OutDoor
+                    SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть11@11-001-7@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть12@11-001-7@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Эскиз35@11-001-7@11 - Damper", "SKETCH", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Эскиз36@11-001-7@11 - Damper", "SKETCH", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть10@11-003-6@11 - Damper", "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.DeleteSelection(true);
+                    SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть11@11-003-6@11 - Damper", "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.DeleteSelection(true);
+                    SolidWorksDocument.Extension.SelectByID2("Эскиз34@11-003-6@11 - Damper", "SKETCH", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Эскиз35@11-003-6@11 - Damper", "SKETCH", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("11-005-1@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("11-006-1@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
 
-                if (isOutDoor)
-                {
-                    try
-                    {
-                        SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM" );
-                        SolidWorksDocument.Extension.SelectByID2("11-003-6@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                        AssemblyDocument.ReplaceComponents(newPartPath, "", false, true);
-                        SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-003.SLDPRT");
-                    }
-                    catch (Exception e)
-                    {
-                        //MessageBox.Show($"{newName}\n{e.Message}\n{e.StackTrace}", "11-003"); // obs
-                    }
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-187@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-188@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-189@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-190@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-191@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-192@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-193@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-194@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-195@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-196@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-197@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-198@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.EditDelete();
                 }
-
-                #endregion
 
                 // 11-002
                 newName = "11-03-" + flapSize.X + modelType;
-                newPartPath = $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
+                base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
 
-                if (/*VersionsFileInfo.Replaced.ExistLatestVersion(newPartPath, VaultSystem.VentsCadFile.Type.Part, lastChangedDate, Settings.Default.PdmBaseName)*/false)
+                if (false)
                 {
                     SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
-                   
-                    SolidWorksDocument.Extension.SelectByID2("11-002-4@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    AssemblyDocument.ReplaceComponents(newPartPath, "", true, true);
+                    SolidWorksDocument.Extension.SelectByID2("11-002-4@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    AssemblyDocument.ReplaceComponents(base.NewPartPath + ".SLDPRT", "", true, true);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-002.SLDPRT");
                 }
                 else
                 {
-                    SwPartParamsChangeWithNewName("11-002",
-                        $@"{RootFolder}{SubjectDestinationFolder}{newName}",
-                        new[,]
-                        {
-                            {"D2@Эскиз1", Convert.ToString(widthD - 0.96)},
-                            {"D1@Кривая1", Convert.ToString(rivetW)},
-                        //    {"D1@Кривая3", Convert.ToString(rivetH)},  удален эскиз, хз
-                            {"Толщина@Листовой металл1", thiknessStr}
-                        });
+                    base.parameters.Add("D2@Эскиз1", flapSize.X - 0.96);
+                    base.parameters.Add("D1@Кривая1", rivetW);
+                    base.parameters.Add("Толщина@Листовой металл1", Convert.ToDouble(thiknessStr));
 
-                    AddMaterial(material, newName);
-                 //   NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(newPartPath).FullName });
+                    EditPartParameters("11-002", base.NewPartPath);
                 }
 
-                // todo sdgvr СПИСКИ оформить для регистрации                
-                if (!isOutDoor)
+                // 11-003
+                newName = "11-02-" + flapSize.Y + modelType + (isOutDoor ? "-O" : "");
+                base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
+
+                if (false)
                 {
-                    // 11-003 
-                    newName = "11-02-" + flapSize.Y + modelType + (isOutDoor ? "-O" : "");
-                    newPartPath = $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
+                    SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
+                    SolidWorksDocument.Extension.SelectByID2("11-003-6@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    AssemblyDocument.ReplaceComponents(base.NewPartPath + ".SLDPRT", "", false, true);
+                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-003.SLDPRT");
+                }
+                else
+                {
+                    base.parameters.Add("D2@Эскиз1", flapSize.Y + 7.94);
+                    base.parameters.Add("D1@Эскиз27", Math.Truncate(countL / 10 - 100));
+                    base.parameters.Add("D2@Эскиз27", countL/10);// *100
+                    base.parameters.Add("D1@Кривая1", countL);
+                    base.parameters.Add("D1@Кривая2", rivetH);
 
-                    if (/*VersionsFileInfo.Replaced.ExistLatestVersion(newPartPath, VaultSystem.VentsCadFile.Type.Part, lastChangedDate, Settings.Default.PdmBaseName)*/ false)
-                    {
-                        SolidWorksDocument =SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
-                        SolidWorksDocument.Extension.SelectByID2("11-003-6@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                        AssemblyDocument.ReplaceComponents(newPartPath, "", false, true);
-                        SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-003.SLDPRT");
-                    }
-                    else
-                    {
-                        SwPartParamsChangeWithNewName("11-003",
-                            $@"{RootFolder}{SubjectDestinationFolder}{newName}",
-                            new[,]
-                            {
-                                {"D2@Эскиз1", Convert.ToString(heightD + 7.94)},
-                                {"D1@Эскиз27", Convert.ToString(countL/10 - 100)},
-                                {"D1@Кривая1", Convert.ToString(countL)},
-                                //{"D1@Кривая2", Convert.ToString(rivetH)},
-                                {"Толщина@Листовой металл", thiknessStr}
-                            });
+                    base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
 
-                        AddMaterial(material, newName);
-                        //NewComponentsFull.Add(new VaultSystem.VentsCadFile
-                        //{
-                        //    LocalPartFileInfo = new FileInfo(newPartPath).FullName
-                        //});
-                    }
+                    EditPartParameters("11-003", base.NewPartPath);
                 }
 
+                // 11-001
+                newName = "11-01-" + flapSize.Y + modelType + (isOutDoor ? "-O" : "");
+                base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
+
+                if (false)
+                {
+                    SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
+                    SolidWorksDocument.Extension.SelectByID2("11-001-7@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    AssemblyDocument.ReplaceComponents(base.NewPartPath + ".SLDPRT", "", false, true);
+                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-001.SLDPRT");
+                }
+                else
+                {
+                    System.Windows.Forms.MessageBox.Show("Test");
+                    base.parameters.Add("D2@Эскиз1", flapSize.Y + 7.94);
+                    base.parameters.Add("D1@Эскиз27", (countL / 10 - 100));
+                    base.parameters.Add("D2@Эскиз27", countL);// *100
+                    base.parameters.Add("D1@Кривая1", countL);
+                    base.parameters.Add("D1@Кривая2", rivetH);
+
+                    base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
+
+                    EditPartParameters("11-001", base.NewPartPath);
+                }
+                
                 // 11-004
                 newName = "11-04-" + flapSize.X + "-" + hC + modelType;
-                newPartPath = $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
+                base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
 
-                if (/*VersionsFileInfo.Replaced.ExistLatestVersion(newPartPath, VaultSystem.VentsCadFile.Type.Part, lastChangedDate, Settings.Default.PdmBaseName)*/false)
+                if (false)
                 {
-                    SolidWorksDocument =SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
-                    SolidWorksDocument.Extension.SelectByID2("11-004-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    AssemblyDocument.ReplaceComponents(newPartPath, "", true, true);
+                    SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
+                    SolidWorksDocument.Extension.SelectByID2("11-004-1@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    AssemblyDocument.ReplaceComponents(base.NewPartPath + ".SLDPRT", "", true, true);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-004.SLDPRT");
                 }
                 else
                 {
-                    SwPartParamsChangeWithNewName("11-004",
-                        $@"{RootFolder}{SubjectDestinationFolder}{newName}",
-                        new[,]
-                        {
-                            {"D2@Эскиз1", Convert.ToString(widthD - 24)},
-                            {"D7@Ребро-кромка1", Convert.ToString(hC)},
-                            {"D1@Кривая1", Convert.ToString(rivetW)},
-                            {"D1@Эскиз8", Convert.ToString(18.5)},
-                            {"D1@Эскиз9", Convert.ToString(18.5)},
-                          //  {"D1@Кривая5", Convert.ToString(rivetH)}, удален эскиз, хз
-                            {"Толщина@Листовой металл1", thiknessStr}
-                        });
-                    AddMaterial(material, newName);
-                //    NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(newPartPath).FullName });
+                    base.parameters.Add("D2@Эскиз1", flapSize.X - 24);
+                    base.parameters.Add("D7@Ребро-кромка1", hC);
+                    base.parameters.Add("D1@Кривая1", rivetW);
+                    base.parameters.Add("D1@Эскиз8", 18.5);
+                    base.parameters.Add("D1@Эскиз9", 18.5);
+                    base.parameters.Add("Толщина@Листовой металл1", Convert.ToDouble(thiknessStr));
+
+                    EditPartParameters("11-004", base.NewPartPath);
                 }
 
-                //11-100 Сборка лопасти
-                var newNameAsm = "11-" + flapSize.X;
-                var newPartPathAsm =
-                    $@"{RootFolder}{SubjectDestinationFolder}{newNameAsm}.SLDASM";
+
+                #region 11-100 Сборка лопасти
+
+                string newNameAsm = "11-" + flapSize.X;
+                string NewAsmPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newNameAsm}";
+
+
                 if (false)
                 {
-                    SolidWorksDocument =SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
-                    SolidWorksDocument.Extension.SelectByID2("11-100-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    AssemblyDocument.ReplaceComponents(newPartPathAsm, "", true, true);
+                    SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-100.SLDASM");
+                    SolidWorksDocument.Extension.SelectByID2("11-100-1@11-100", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    AssemblyDocument.ReplaceComponents(NewAsmPath + ".SLDASM", "", true, true);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-100.SLDASM");
                 }
                 else
                 {
-                    #region  11-101  Профиль лопасти
+                    #region  11-101 Профиль лопасти
+                    
+                    newName = "11-" + (Math.Truncate(flapSize.X - 23)) + "-01" + modelType;
+                    base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
 
-                    newName = "11-" + (Math.Truncate(widthD - 23)) + "-01" + modelType;
-                    newPartPath = $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
                     if (false)
                     {
-                        SolidWorksAdapter.SldWoksAppExemplare.IActivateDoc2("10-100", false, 0);
-                        SolidWorksDocument = (ModelDoc2)((IModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActiveDoc));
+                        SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-100.SLDASM");
                         SolidWorksDocument.Extension.SelectByID2("11-101-1@11-100", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                        AssemblyDocument.ReplaceComponents(newPartPath, "", true, true);
-                        SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-100.SLDASM");
+                        AssemblyDocument.ReplaceComponents(base.AssemblyName + ".SLDASM", "", true, true);
                     }
                     else
                     {
-                        SolidWorksAdapter.SldWoksAppExemplare.IActivateDoc2("10-100", false, 0);
-                        SolidWorksDocument = (ModelDoc2)((IModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActiveDoc));
-                        SolidWorksDocument.Extension.SelectByID2("D1@Вытянуть1@11-101-1@11-100", "DIMENSION", 0, 0, 0, false, 0, null, 0);
-                        var myDimension = ((Dimension)(SolidWorksDocument.Parameter("D1@Вытянуть1@11-101.Part")));
-                        myDimension.SystemValue = (widthD - 23) / 1000;
-                        SolidWorksAdapter.AcativeteDoc("11-101" );
-                        SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActiveDoc));
-                        SolidWorksDocument.SaveAs2(newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
+                        SolidWorksAdapter.OpenDocument(modelLamel, swDocumentTypes_e.swDocDRAWING, "");
+                        SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-100.SLDASM");
 
-                        // ToDo Delete
-                        SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName + ".sldasm");
+                        base.parameters.Add("D1@Вытянуть1", flapSize.X - 23);
+                        EditPartParameters("11-101", base.NewPartPath);
 
-                      //  NewComponentsFull.Add(new VaultSystem.VentsCadFile
-                        //{
-                        //    LocalPartFileInfo = new FileInfo(
-                        //    $@"{RootFolder}{DamperDestinationFolder}{newName}.sldasm").FullName
-                        //});
+                        SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-100.SLDASM");// save Профиль лопасти
+                        SolidWorksDocument.EditRebuild3();
+                        SolidWorksDocument.Extension.SaveAs(NewAsmPath + ".SLDASM", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent
+                                                         + (int)swSaveAsOptions_e.swSaveAsOptions_SaveReferenced + (int)swSaveAsOptions_e.swSaveAsOptions_UpdateInactiveViews, null, ref errors, warnings);
+
+                        SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-100.SLDDRW");
+                        SolidWorksDocument.EditRebuild3();
+                        
+                        SolidWorksDocument.Extension.SaveAs(NewAsmPath + ".SLDDRW", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent
+                                                         + (int)swSaveAsOptions_e.swSaveAsOptions_SaveReferenced + (int)swSaveAsOptions_e.swSaveAsOptions_UpdateInactiveViews, null, ref errors, warnings);
+                        SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newNameAsm + ".SLDDRW");
                     }
-
+                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
                     #endregion
-
-                    SolidWorksAdapter.AcativeteDoc("11-100");
-                    SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActiveDoc));
-                    SolidWorksDocument.ForceRebuild3(false);
-
-                    var docDrw100 = SolidWorksAdapter.SldWoksAppExemplare.OpenDoc6(modelLamel, (int)swDocumentTypes_e.swDocDRAWING, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", 0, 0);
-                    SolidWorksDocument.SaveAs2(newPartPathAsm, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
-
-                    try
-                    {
-                        //_swApp.CloseDoc(newNameAsm);                    
-                        SolidWorksAdapter.AcativeteDoc(docDrw100?.GetTitle());
-                        docDrw100?.ForceRebuild3(true);
-
-                        docDrw100.SaveAs2(
-                            $@"{RootFolder}{SubjectDestinationFolder}{newNameAsm}.SLDDRW", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
-                        SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(Path.GetFileNameWithoutExtension(new FileInfo(
-                            $@"{RootFolder}{SubjectDestinationFolder}{newNameAsm}.SLDDRW").FullName) + " - DRW1");
-
-                      ///  NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(newPartPath).FullName });
-                      //  NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo($@"{RootFolder}{DamperDestinationFolder}{newNameAsm}.SLDDRW").FullName });
-
-                    }
-                    catch (Exception e)
-                    {
-                        //MessageBox.Show($"{newName}\n{e.Message}\n{e.StackTrace}", "11-101  Профиль лопасти");                    // obs     
-                    }
                 }
+                #endregion
             }
-
             #endregion
 
             #region typeOfFlange = "30"
 
-            if (flapType ==  FlapTypes_e.Thirty_mm)
+            if (flapType == FlapTypes_e.Thirty_mm)
             {
                 string newName;
-                string newPartPath;
 
+                #region isOutDoor
                 if (isOutDoor)
                 {
-                    SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть7@11-30-002-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Эскиз27@11-30-002-1@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть7@11-30-002-1@11-30", "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Эскиз27@11-30-002-1@11-30", "SKETCH", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
 
-                    SolidWorksDocument.Extension.SelectByID2("ВНС-902.49.283-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("ВНС-902.49.283-1@11-30", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
 
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-314@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-323@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-322@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-321@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-320@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-323@11-30", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-322@11-30", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-321@11-30", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-320@11-30", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-314@11-30", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
 
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-315@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-316@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-317@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-318@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-319@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-315@11-30", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-316@11-30", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-317@11-30", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-318@11-30", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-319@11-30", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
 
                     // 11-005 
                     newName = "11-05-" + flapSize.Y + modelType;
-                    newPartPath = $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
+                    base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
+
                     if (false)
                     {
-                        SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM" )));
+                        SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.AcativeteDoc("11-30.SLDASM")));
                         SolidWorksDocument.Extension.SelectByID2("11-005-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                        AssemblyDocument.ReplaceComponents(newPartPath, "", false, true);
+                        AssemblyDocument.ReplaceComponents(base.NewPartPath, "", false, true);
                         SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-005.SLDPRT");
                     }
                     else
                     {
-                        SwPartParamsChangeWithNewName("11-005",
-                            $@"{RootFolder}{SubjectDestinationFolder}{newName}",
-                            new[,]
-                            {
-                                {"D3@Эскиз1", Convert.ToString(heightD)},
-                                {"D1@Кривая1", Convert.ToString(rivetH)},
+                        base.parameters.Add("D3@Эскиз1", flapSize.Y);
+                        base.parameters.Add("D1@Кривая1", rivetH);
+                        base.parameters.Add("D3@Эскиз37", ((countL / 1000) % 2 == 1) ? 0 : 50);
+                        base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
 
-                                {"D1@Кривая1", Convert.ToString(rivetH)},
-                                {"D3@Эскиз37", (Convert.ToInt32(countL / 1000) % 2 == 1) ? "0" : "50"},
-
-                                {"Толщина@Листовой металл", thiknessStr}
-                            });
-                        AddMaterial(material, newName);
-
-                       // NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(newPartPath).FullName });
+                        EditPartParameters("11-005", base.NewPartPath);
                     }
 
                     // 11-006 
                     newName = "11-06-" + flapSize.Y + modelType;
-                    newPartPath = $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
+                    base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
+
                     if (false)
                     {
-                        SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM" )));
+                        SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM" );
                         SolidWorksDocument.Extension.SelectByID2("11-006-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                        AssemblyDocument.ReplaceComponents(newPartPath, "", false, true);
+                        AssemblyDocument.ReplaceComponents(base.NewPartPath, "", false, true);
                         SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-006.SLDPRT");
                     }
                     else
                     {
-                        SwPartParamsChangeWithNewName("11-006",
-                            $@"{RootFolder}{SubjectDestinationFolder}{newName}",
-                            new[,]
-                            {
-                                {"D3@Эскиз1", Convert.ToString(heightD)},
-                                {"D1@Кривая1", Convert.ToString(rivetH)},
-                                {"Толщина@Листовой металл", thiknessStr}
-                            });
-                        AddMaterial(material, newName);
-                        //NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(newPartPath).FullName });
+                        base.parameters.Add("D3@Эскиз1", flapSize.Y);
+                        base.parameters.Add("D1@Кривая1", rivetH);
+                        base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
+
+                        EditPartParameters("11-006", base.NewPartPath);
                     }
                 }
                 else
                 {
-                    SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть8@11-30-002-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть9@11-30-002-1@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Эскиз28@11-30-002-1@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Эскиз29@11-30-002-1@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть8@11-30-002-1@11-30", "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть9@11-30-002-1@11-30", "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Эскиз28@11-30-002-1@11-30", "SKETCH", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Эскиз29@11-30-002-1@11-30", "SKETCH", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
 
 
-                    SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть7@11-30-004-2@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть8@11-30-004-2@" + AssemblyName, "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Эскиз27@11-30-004-2@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Эскиз28@11-30-004-2@" + AssemblyName, "SKETCH", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть7@11-30-004-2@11-30", "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть8@11-30-004-2@11-30", "BODYFEATURE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Эскиз27@11-30-004-2@11-30", "SKETCH", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Эскиз28@11-30-004-2@11-30", "SKETCH", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
 
-                    SolidWorksDocument.Extension.SelectByID2("11-005-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("11-006-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("11-005-1@11-30", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("11-006-1@11-30", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
+                    
 
 
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-346@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-347@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-348@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-349@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-350@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-351@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-356@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-357@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-358@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-359@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-360@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-361@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-346@11-30", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-347@11-30", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-348@11-30", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-349@11-30", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-350@11-30", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-351@11-30", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-356@11-30", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-357@11-30", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-358@11-30", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-359@11-30", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-360@11-30", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-361@11-30", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
                 }
-
-
+                #endregion
+                
                 #region Кратность лопастей
 
                 if (Convert.ToInt32(countL / 1000) % 2 == 0) //четное
@@ -532,19 +459,18 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     SolidWorksDocument.Extension.SelectByID2("Совпадение5918353", "MATE", 0, 0, 0, true, 0, null, 0);
                     SolidWorksDocument.EditUnsuppress2();
                 }
-
                 #endregion
 
-                var lp = widthD - 50; // Размер профиля 640,5 при ширине двойного 1400 = 
-                var lp2 = lp - 11.6; // Длина линии под заклепки профиля
-                var lProfName = flapSize.X; //
-                var lProfNameLength = (widthD - 23) / 1000;
+                double lp = flapSize.X - 50; // Размер профиля 640,5 при ширине двойного 1400 = 
+                double lp2 = lp - 11.6; // Длина линии под заклепки профиля
+                double lProfFileName = flapSize.X;
+                double lProfNameLength = (flapSize.X - 23);//////////////////////////     /1000
 
                 #region IsDouble
 
-                var isdouble = widthD > 1000;
+                bool isDouble = flapSize.X > 1000;
 
-                if (!isdouble)
+                if (!isDouble)
                 {
                     SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActiveDoc));
                     SolidWorksDocument.Extension.SelectByID2("11-30-100-4@11-30", "COMPONENT", 0, 0, 0, false, 0, null, 0);
@@ -579,14 +505,18 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-249@11-30", "COMPONENT", 0, 0, 0, true, 0, null, 0);
                     SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-250@11-30", "COMPONENT", 0, 0, 0, true, 0, null, 0);
                     SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-251@11-30", "COMPONENT", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
+
+                    ////////////////////////
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-334@11-30", "COMPONENT", 0, 0, 0, true, 0, null, 0);
+                    SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-332@11-30", "COMPONENT", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
                 }
 
-                if (isdouble)
+                if (isDouble)
                 {
-                    lp = widthD / 2 - 59.5;
+                    lp = flapSize.X / 2 - 59.5;
                     lp2 = lp - 11.6;
-                    lProfName = (int)Math.Truncate(Convert.ToDouble(flapSize.X) / 2 - 9);
-                    lProfNameLength = (widthD / 2 - 23) / 1000;
+                    lProfFileName = (int)Math.Truncate(Convert.ToDouble(flapSize.X) / 2 - 9);
+                    lProfNameLength = (flapSize.X / 2 - 23);
                 }
 
                 #endregion
@@ -595,17 +525,17 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
                 // 11-30-001 
                 newName = "11-30-03-" + flapSize.X + modelType;
-                newPartPath = $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
+                base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
                 if (false)
                 {
-                    SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
+                    SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-30.SLDASM");
                     SolidWorksDocument.Extension.SelectByID2("11-30-001-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    AssemblyDocument.ReplaceComponents(newPartPath, "", true, true);
+                    AssemblyDocument.ReplaceComponents(base.NewPartPath, "", true, true);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-30-001.SLDPRT");
                 }
                 else
                 {
-                    if (!isdouble)
+                    if (!isDouble)
                     {
                         SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-30-001.SLDPRT");
                         SolidWorksDocument.Extension.SelectByID2("Эскиз17", "SKETCH", 0, 0, 0, false, 0, null, 0);
@@ -625,105 +555,77 @@ namespace PDMWebService.Data.Solid.ElementsCase
                         SolidWorksDocument.SketchManager.InsertSketch(true);
                     }
 
-                    SwPartParamsChangeWithNewName("11-30-001",
-                        $@"{RootFolder}{SubjectDestinationFolder}{newName}",
-                        new[,]
-                        {
-                            {"D2@Эскиз1", Convert.ToString(widthD/2 - 0.8)},
-                            {"D3@Эскиз18", Convert.ToString(lp2)},
-                            {"D1@Кривая1", Convert.ToString((Math.Truncate(lp2/step) + 1)*1000)},
-                            {"Толщина@Листовой металл", thiknessStr}
-                        });
-                    AddMaterial(material, newName);
+                    base.parameters.Add("D2@Эскиз1", flapSize.X / 2 - 0.8);
+                    base.parameters.Add("D3@Эскиз1", lp2);
+                    base.parameters.Add("D1@Кривая1", Math.Truncate(lp2 / step)*1000 + 1);//*1000
+                    base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
 
-                  //  NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(newPartPath).FullName });
+                    EditPartParameters("11-30-001", base.NewPartPath);
                 }
 
-                // 11-30-002 
+                // 11-30-002
                 newName = "11-30-01-" + flapSize.Y + modelType + (isOutDoor ? "-O" : "");
-                newPartPath = $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
+                base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
+
                 if (false)
                 {
                     SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
                     SolidWorksDocument.Extension.SelectByID2("11-30-002-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    AssemblyDocument.ReplaceComponents(newPartPath, "", false, true);
+                    AssemblyDocument.ReplaceComponents(base.NewPartPath, "", false, true);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-30-002.SLDPRT");
                 }
                 else
                 {
-                    SwPartParamsChangeWithNewName("11-30-002",
-                        $@"{RootFolder}{SubjectDestinationFolder}{newName}",
-                        new[,]
-                        {
-                            {"D2@Эскиз1", Convert.ToString(heightD + 10)},
-                            {"D3@Эскиз23", Convert.ToString(countL/10 - 100)},
-                            {"D2@Эскиз23", Convert.ToString(100*Math.Truncate(countL/2000))},
+                    base.parameters.Add("D2@Эскиз1", flapSize.Y + 10);
+                    base.parameters.Add("D3@Эскиз23", countL/10 - 100);
+                    base.parameters.Add("D2@Эскиз23", 100 * Math.Truncate(countL/2000));
+                    base.parameters.Add("D1@Кривая2", rivetH);
+                    base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
 
-                            {"D1@Кривая2", Convert.ToString(countL)},
-                           // {"D1@Кривая3", Convert.ToString(rivetH)},
-
-                            {"Толщина@Листовой металл", thiknessStr}
-                        });
-
-                    AddMaterial(material, newName);
-
-                    //NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(newPartPath).FullName });
+                    EditPartParameters("11-30-002", base.NewPartPath);
                 }
 
                 // 11-30-004 
                 newName = "11-30-02-" + flapSize.Y + modelType + (isOutDoor ? "-O" : "");
-                newPartPath = $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
+                base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
+
                 if (false)
                 {
                     SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
                     SolidWorksDocument.Extension.SelectByID2("11-30-004-2@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    AssemblyDocument.ReplaceComponents(newPartPath, "", false, true);
+                    AssemblyDocument.ReplaceComponents(base.NewPartPath, "", false, true);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-30-004.SLDPRT");
                 }
                 else
                 {
-                    SwPartParamsChangeWithNewName("11-30-004",
-                        $@"{RootFolder}{SubjectDestinationFolder}{newName}",
-                        new[,]
-                        {
-                            {"D2@Эскиз1", Convert.ToString(heightD + 10)},
-                            {"D3@Эскиз23", Convert.ToString(countL/10 - 100)},
-                            {"D2@Эскиз23", Convert.ToString(100*Math.Truncate(countL/2000))},
-                            {"D1@Кривая2", Convert.ToString(countL)},
-                            // {"D1@Кривая5", Convert.ToString(rivetH)},
-                            {"Толщина@Листовой металл", thiknessStr}
-                        });
+                    base.parameters.Add("D2@Эскиз1", flapSize.Y + 10);
+                    base.parameters.Add("D3@Эскиз23",(countL/10 - 100));
+                    base.parameters.Add("D2@Эскиз23", 100 * Math.Truncate(countL/2000));
+                    base.parameters.Add("D1@Кривая2", rivetH);
+                    base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
 
-                    AddMaterial(material, newName);
-
-                    //NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(newPartPath).FullName });
+                    EditPartParameters("11-30-004", base.NewPartPath);
                 }
 
-                // 11-30-003 
+                // 11-30-003
                 newName = "11-30-04-" + Math.Truncate(lp) + "-" + hC + modelType;
-                newPartPath = $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
+                base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
+
                 if (false)
                 {
-                    SolidWorksDocument =SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
+                    SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
                     SolidWorksDocument.Extension.SelectByID2("11-30-003-2@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    AssemblyDocument.ReplaceComponents(newPartPath, "", true, true);
+                    AssemblyDocument.ReplaceComponents(base.NewPartPath, "", true, true);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-30-003.SLDPRT");
                 }
                 else
                 {
-                    SwPartParamsChangeWithNewName("11-30-003",
-                        $@"{RootFolder}{SubjectDestinationFolder}{newName}",
-                        new[,]
-                        {
-                            {"D2@Эскиз1", Convert.ToString(lp)},
-                            {"D7@Ребро-кромка1", Convert.ToString(hC)},
-                            {"D1@Кривая1", Convert.ToString((Math.Truncate(lp2/step) + 1)*1000)},
-                            {"Толщина@Листовой металл1", thiknessStr}
-                        });
+                    base.parameters.Add("D2@Эскиз1", lp);
+                    base.parameters.Add("D7@Ребро-кромка1", hC);
+                    base.parameters.Add("D1@Кривая1", Math.Truncate(lp2/step)*1000 + 1);//*1000)
+                    base.parameters.Add("Толщина@Листовой металл1", Convert.ToDouble(thiknessStr));
 
-                    AddMaterial(material, newName);
-
-                  //  NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(newPartPath).FullName });
+                    EditPartParameters("11-30-003", base.NewPartPath);
                 }
 
                 #endregion
@@ -731,18 +633,52 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 #region Сборки
 
                 #region 11-100 Сборка лопасти
+                
+                string newNameAsm = "11-2-" + lProfFileName;
+                string NewAsmPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newNameAsm}.SLDASM";
 
-                var newNameAsm = "11-2-" + lProfName;
-                string newPartPathAsm =
-                    $@"{RootFolder}{SubjectDestinationFolder}{newNameAsm}.SLDASM";
 
-                if (isdouble)
+                if (isDouble)
                 {
                     if (false)
                     {
-                        SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
-                        SolidWorksDocument.Extension.SelectByID2("11-100-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                        AssemblyDocument.ReplaceComponents(newPartPathAsm, "", true, true);
+                        SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-100.SLDASM");
+                        SolidWorksDocument.Extension.SelectByID2("11-100-1@11-100", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                        AssemblyDocument.ReplaceComponents(NewAsmPath, "", true, true);
+                        SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-100.SLDASM");
+                    }
+                    else
+                    {
+                        #region 11-101 Профиль лопасти
+
+                        newName = "11-" + (Math.Truncate(lProfNameLength * 1000)) + "-01";
+                        base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
+                        if (false)
+                        {
+                            SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-100.SLDASM");
+                            SolidWorksDocument.Extension.SelectByID2("11-101-1@11-100", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                            AssemblyDocument.ReplaceComponents(base.NewPartPath, "", true, true);
+                            SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-100.SLDASM");
+                        }
+                        else
+                        {
+                            SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-100.SLDASM");
+                            base.parameters.Add("D1@Вытянуть1", lProfNameLength);
+                            EditPartParameters("11-101", base.NewPartPath);
+                        }
+
+                        #endregion
+                    }
+                }
+                else
+                {
+                    newNameAsm = "11-" + lProfFileName;
+                    NewAsmPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newNameAsm}.SLDASM";
+                    if (false)
+                    {
+                        SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-100.SLDASM");
+                        SolidWorksDocument.Extension.SelectByID2("11-100-1@11-100", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                        AssemblyDocument.ReplaceComponents(NewAsmPath, "", true, true);
                         SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-100.SLDASM");
                     }
                     else
@@ -750,119 +686,63 @@ namespace PDMWebService.Data.Solid.ElementsCase
                         #region  11-101  Профиль лопасти
 
                         newName = "11-" + (Math.Truncate(lProfNameLength * 1000)) + "-01";
-                        newPartPath =
-                            $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
+                        base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
+
                         if (false)
                         {
-                            SolidWorksAdapter.SldWoksAppExemplare.IActivateDoc2("10-100", false, 0);
-                            SolidWorksDocument =  SolidWorksAdapter.SldWoksAppExemplare.ActiveDoc;
+                            SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-100.SLDASM");
                             SolidWorksDocument.Extension.SelectByID2("11-101-1@11-100", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                            AssemblyDocument.ReplaceComponents(newPartPath, "", true, true);
-                            SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-100.SLDASM");
+                            AssemblyDocument.ReplaceComponents(base.NewPartPath, "", true, true);
+                            SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-101.SLDPRT");
                         }
                         else
                         {
-                            SolidWorksAdapter.SldWoksAppExemplare.IActivateDoc2("10-100", false, 0);
-                            SolidWorksDocument = (ModelDoc2)((IModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActiveDoc));
-                            SolidWorksDocument.Extension.SelectByID2("D1@Вытянуть1@11-101-1@11-100", "DIMENSION", 0, 0, 0, false, 0,
-                                null, 0);
-                            var myDimension = ((Dimension)(SolidWorksDocument.Parameter("D1@Вытянуть1@11-101.Part")));
-                            myDimension.SystemValue = lProfNameLength;
-                            SolidWorksAdapter.AcativeteDoc("11-101");
-                            SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActiveDoc));
-                            SolidWorksDocument.SaveAs2(newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
-                            SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
-                         //   NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(newPartPath).FullName });
+                            SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-100.SLDASM");
+                            SolidWorksDocument.EditRebuild3();
+                            base.parameters.Add("D1@Вытянуть1", lProfNameLength);
+                            EditPartParameters("11-101", base.NewPartPath);
                         }
 
                         #endregion
                     }
                 }
 
-                if (!isdouble)
+                SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-100.SLDASM");
+
+                if (isDouble)
                 {
-                    newNameAsm = "11-" + lProfName;
-                    newPartPathAsm =
-                        $@"{RootFolder}{SubjectDestinationFolder}{newNameAsm}.SLDASM";
-                    if (false)
-                    {
-                        SolidWorksDocument =SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
-                        SolidWorksDocument.Extension.SelectByID2("11-100-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                        AssemblyDocument.ReplaceComponents(newPartPathAsm, "", true, true);
-                        SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-100.SLDASM");
-                    }
-                    else
-                    {
-                        #region  11-101  Профиль лопасти
-
-                        newName = "11-" + (Math.Truncate(lProfNameLength * 1000)) + "-01";
-                        newPartPath =
-                            $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
-                        if (false)
-                        {
-                            SolidWorksAdapter.SldWoksAppExemplare.IActivateDoc2("10-100", false, 0);
-                            SolidWorksDocument = (ModelDoc2)((IModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActiveDoc));
-                            SolidWorksDocument.Extension.SelectByID2("11-101-1@11-100", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                            AssemblyDocument.ReplaceComponents(newPartPath, "", true, true);
-                            SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-100.SLDASM");
-                        }
-                        else
-                        {
-                            SolidWorksAdapter.SldWoksAppExemplare.IActivateDoc2("10-100", false, 0);
-                            SolidWorksDocument = (ModelDoc2)((IModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActiveDoc));
-                            SolidWorksDocument.Extension.SelectByID2("D1@Вытянуть1@11-101-1@11-100", "DIMENSION", 0, 0, 0, false, 0,
-                                null, 0);
-                            var myDimension = ((Dimension)(SolidWorksDocument.Parameter("D1@Вытянуть1@11-101.Part")));
-                            myDimension.SystemValue = lProfNameLength;
-                            SolidWorksAdapter.AcativeteDoc("11-101");
-                            SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActiveDoc));
-                            SolidWorksDocument.SaveAs2(newPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
-                            SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
-                       //     NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(newPartPath).FullName });
-                        }
-
-                        #endregion
-                    }
+                    SolidWorksDocument.Extension.SelectByID2("Совпадение76", "MATE", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditSuppress2();
+                    SolidWorksDocument.Extension.SelectByID2("Совпадение77", "MATE", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditUnsuppress2();
+                    SolidWorksDocument.Extension.SelectByID2("ВНС-47.91.101-2@11-100", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksDocument.EditDelete();
                 }
+                SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-100.SLDASM");
 
-                SolidWorksAdapter.AcativeteDoc("11-100" );
-                SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActiveDoc));
-                if (isdouble)
-                {
-                    SolidWorksDocument.Extension.SelectByID2("Совпадение76", "MATE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditSuppress2();
-                    SolidWorksDocument.Extension.SelectByID2("Совпадение77", "MATE", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditUnsuppress2();
-                    SolidWorksDocument.Extension.SelectByID2("ВНС-47.91.101-2@11-100", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
-                }
+                SolidWorksDocument.SaveAs2(NewAsmPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
+                SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-100.SLDASM");
 
-                var docDrw100 = SolidWorksAdapter.SldWoksAppExemplare.OpenDoc6($@"{RootFolder}{base.NewPartPath}{"11-100"}.SLDDRW", (int)swDocumentTypes_e.swDocDRAWING, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", 0, 0);
-
-                SolidWorksAdapter.AcativeteDoc(Path.GetFileNameWithoutExtension(newPartPathAsm) );
-                SolidWorksDocument.ForceRebuild3(false);
-                SolidWorksDocument.SaveAs2(newPartPathAsm, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
-                SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newNameAsm);
+                ModelDoc2 docDrw100 = SolidWorksAdapter.OpenDocument($@"{RootFolder}\{SourceFolder}\{"11-100"}.SLDDRW", swDocumentTypes_e.swDocDRAWING, "");
                 docDrw100.ForceRebuild3(false);
-                docDrw100.SaveAs2(
-                    $@"{RootFolder}{SubjectDestinationFolder}{newNameAsm}.SLDDRW", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
-                SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(Path.GetFileNameWithoutExtension(new FileInfo(
-                    $@"{RootFolder}{SubjectDestinationFolder}{newNameAsm}.SLDDRW").FullName) + " - DRW1");
+                docDrw100.SaveAs2( $@"{RootFolder}\{SubjectDestinationFolder}\{newNameAsm}.SLDDRW", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
+                SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newNameAsm + ".SLDDRW");
 
-               // NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(newPartPathAsm).FullName });
-             //   NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo($@"{RootFolder}{DamperDestinationFolder}{newNameAsm}.SLDDRW").FullName });
-
+                
                 #endregion
 
                 #region 11-30-100 Сборка Перемычки
 
                 newNameAsm = "11-30-100-" + flapSize.Y + modelType;
-                newPartPathAsm = $@"{RootFolder}{SubjectDestinationFolder}{newNameAsm}.SLDASM";
+                NewAsmPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newNameAsm}.SLDASM";
 
-                if (isdouble)
+                if (isDouble)
                 {
                     if (false)
                     {
-                        SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
-                        SolidWorksDocument.Extension.SelectByID2("11-30-100-4@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                        AssemblyDocument.ReplaceComponents(newPartPathAsm, "", true, true);
+                        SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-30-100.SLDASM");
+                        SolidWorksDocument.Extension.SelectByID2("11-30-100-4@11-30-100", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                        AssemblyDocument.ReplaceComponents(NewAsmPath, "", true, true);
                         SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-30-100.SLDASM");
                     }
                     else
@@ -870,237 +750,96 @@ namespace PDMWebService.Data.Solid.ElementsCase
                         #region  11-30-101  Профиль перемычки
 
                         newName = "11-30-101-" + flapSize.Y + modelType;
-                        newPartPath =
-                            $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
+                        base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
+
                         if (false)
                         {
-                            SolidWorksAdapter.SldWoksAppExemplare.IActivateDoc2("10-30-100", false, 0);
-                            SolidWorksDocument = (ModelDoc2)((IModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActiveDoc));
+                            SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-30-100.SLDASM");
                             SolidWorksDocument.Extension.SelectByID2("11-30-101-2@11-30-100", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                            AssemblyDocument.ReplaceComponents(newPartPath, "", true, true);
+                            AssemblyDocument.ReplaceComponents(base.NewPartPath, "", true, true);
                             SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-30-100.SLDASM");
                         }
                         else
                         {
-                            SwPartParamsChangeWithNewName("11-30-101",
-                                $@"{RootFolder}{SubjectDestinationFolder}{newName}",
-                                new[,]
-                                {
-                                    {"D2@Эскиз1", Convert.ToString(heightD + 10)},
-                                    {"D3@Эскиз19", Convert.ToString(countL/10 - 100)},
-                                    {"D1@Кривая1", Convert.ToString(countL)},
-                                    {"D1@Кривая2", Convert.ToString(rivetH)},
-                                    {"Толщина@Листовой металл", thiknessStr}
-                                });
-                            AddMaterial(material, newName);
+                            base.parameters.Add("D2@Эскиз1", flapSize.Y + 10);
+                            base.parameters.Add("D3@Эскиз19",countL/10 - 100);
+                            base.parameters.Add("D1@Кривая1", countL);
+                            base.parameters.Add("D1@Кривая2",rivetH);
+                            base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
 
-                            SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
-                            //NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo($@"{RootFolder}{DamperDestinationFolder}{newNameAsm}").FullName });
+                            EditPartParameters("11-30-101", base.NewPartPath);
                         }
 
                         #endregion
 
-                        SolidWorksAdapter.AcativeteDoc("11-30-100");
-                        SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActiveDoc));
-                        SolidWorksDocument.ForceRebuild3(true);
-
                         #region  11-30-102  Профиль перемычки
 
                         newName = "11-30-102-" + flapSize.Y + modelType;
-                        newPartPath =
-                            $@"{RootFolder}{SubjectDestinationFolder}{newName}.SLDPRT";
+                        base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
+
                         if (false)
                         {
                             SolidWorksAdapter.SldWoksAppExemplare.IActivateDoc2("10-30-100", false, 0);
                             SolidWorksDocument = (ModelDoc2)((IModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActiveDoc));
                             SolidWorksDocument.Extension.SelectByID2("11-30-102-2@11-30-100", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                            AssemblyDocument.ReplaceComponents(newPartPath, "", true, true);
+                            AssemblyDocument.ReplaceComponents(base.NewPartPath, "", true, true);
                             SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-30-100.SLDASM");
                         }
                         else
                         {
-                            SwPartParamsChangeWithNewName("11-30-102",                                $@"{RootFolder}{SubjectDestinationFolder}{newName}",
-                                new[,]
-                                {
-                                    {"D2@Эскиз1", Convert.ToString(heightD + 10)},
-                                    {"D2@Эскиз19", Convert.ToString(countL/10 - 100)},
-                                    {"D1@Кривая2", Convert.ToString(countL)},
-                                    {"D1@Кривая1", Convert.ToString(rivetH)},
-                                    {"Толщина@Листовой металл", thiknessStr}
-                                } );
-                            try
-                            {
-                               // VentsMatdll(material, null, newName);
-                            }
-                            catch (Exception e)
-                            {
-                                //MessageBox.Show($"{newName}\n{e.Message}\n{e.StackTrace}", "11-30-102  Профиль перемычки");                                
-                            }
+                            base.parameters.Add("D2@Эскиз1", flapSize.Y + 10);
+                            base.parameters.Add("D2@Эскиз19", countL / 10 - 100);
+                            base.parameters.Add("D1@Кривая2", countL);
+                            base.parameters.Add("D1@Кривая1", rivetH);
+                            base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
 
-                            SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
-                          //  NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo($@"{RootFolder}{DamperDestinationFolder}{newNameAsm}").FullName });
+                            EditPartParameters("11-30-102", base.NewPartPath);
                         }
 
                         #endregion
 
-                        SolidWorksAdapter.AcativeteDoc("11-30-100");
-                        SolidWorksDocument = ((ModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActiveDoc));
-                        SolidWorksDocument.ForceRebuild3(false); SolidWorksDocument.ForceRebuild3(true);
-                        SolidWorksDocument.SaveAs2(newPartPathAsm, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
-                        SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newNameAsm);
-                      //  NewComponentsFull.Add(new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo($@"{RootFolder}{DamperDestinationFolder}{newNameAsm}").FullName });
-
-                        #endregion
+                        SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-30-100.SLDASM");
+                        SolidWorksDocument.ForceRebuild3(false);
+                        SolidWorksDocument.SaveAs2(NewAsmPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
+                        SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newNameAsm + ".SLDASM");
 
                     }
                 }
+
+                #endregion
 
                 #endregion
             }
 
             #endregion
 
-            SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName);
-
-         //   GabaritsForPaintingCamera(solidWorksDocument);
+            
+            SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
             SolidWorksDocument.EditRebuild3();
-            SolidWorksDocument.ForceRebuild3(true);
-            var name = $@"{RootFolder}{SubjectDestinationFolder}{newDamperName}";
-            SolidWorksDocument.SaveAs2(name + ".SLDASM", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
-            SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(Path.GetFileNameWithoutExtension(new FileInfo(name + ".SLDASM").FullName));
-            SolidWorksDocumentDrw.Extension.SelectByID2("DRW1", "SHEET", 0, 0, 0, false, 0, null, 0);
-            var drw = (DrawingDoc)(SolidWorksAdapter.SldWoksAppExemplare.IActivateDoc3(drawingName + ".SLDDRW", true, 0));
+
+            //Сохранение главной сборки
+
+            SolidWorksDocument.Extension.SaveAs(newDamperAsmPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref errores, ref warnings);
+            SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newDamperName + ".SLDASM");
+            //////////////////////////////////////////////////////////////////////////
+
+            string nameDrw = $@"{RootFolder}\{SubjectDestinationFolder}\{newDamperName}";
+            SolidWorksDocument = SolidWorksAdapter.AcativeteDoc( drawingName + ".SLDDRW");
+            DrawingDoc drw = (DrawingDoc)SolidWorksDocument;
             drw.ActivateSheet("DRW1");
-            var m = 5;
+            
+            int m = 5;
+
             if (Convert.ToInt32(flapSize.X) > 500 || Convert.ToInt32(flapSize.Y) > 500) { m = 10; }
             if (Convert.ToInt32(flapSize.X) > 850 || Convert.ToInt32(flapSize.Y) > 850) { m = 15; }
             if (Convert.ToInt32(flapSize.X) > 1250 || Convert.ToInt32(flapSize.Y) > 1250) { m = 20; }
-
-            //drw.SetupSheet5("DRW1", 12, 12, 1, m, true, RootFolder + @"\\srvkb\SolidWorks Admin\Templates\Основные надписи\A2-A-1.slddrt", 0.42, 0.297, "По умолчанию", false);
-
-            SolidWorksDocumentDrw.SaveAs2(name + ".SLDDRW", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
-            SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(NewPartPath);
-            SolidWorksAdapter.SldWoksAppExemplare.ExitApp();
-
-            //NewComponentsFull.AddRange(new List<VaultSystem.VentsCadFile>
-            //            {
-            //                new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(name + ".SLDASM").FullName },
-            //                new VaultSystem.VentsCadFile { LocalPartFileInfo = new FileInfo(name + ".SLDDRW").FullName },
-            //             });
-
-
-
-            string message = null;
-
-            //for (int i = 0; i < NewComponentsFull.Count; i++)
-            //{
-            //    if (/*repList.Exists(x => x.FilePath.ToLower() == NewComponentsFull[i].LocalPartFileInfo.ToLower())*/ true)
-            //    {
-
-            //    //    NewComponentsFull[i].MessageForCheckOut = repList.Single(x => x.FilePath.ToLower().Contains((NewComponentsFull[i].LocalPartFileInfo.ToLower()))).MessageForCheckOut;
-            //        //if (!string.IsNullOrEmpty(NewComponentsFull[i].MessageForCheckOut))
-            //        //{
-            //        //    if (string.IsNullOrEmpty(message))
-            //        //    {
-            //        //        message = NewComponentsFull[i].MessageForCheckOut;
-            //        //    }
-            //        //}
-            //    }
-            //}
-
-            #region To Delete
-
-            //var asdfwe = "";
-            //foreach (var item in NewComponentsFull)
-            //{                
-            //    asdfwe = asdfwe + $"\nPath - {item.LocalPartFileInfo} Message - {item.MessageForCheckOut}";
-            //}
-            // //MessageBox.Show(asdfwe, $" newList {NewComponentsFull.Count()} listToCheckOut - {NewComponentsFull.Count()}");
-
-            #endregion
-
-          //  List<VaultSystem.VentsCadFile> outList;
-          //  VaultSystem.CheckInOutPdmNew(NewComponentsFull, true, out outList);
-
-            //if (!string.IsNullOrEmpty(message))
-            //{
-            //    var list = "";
-            //    foreach (var item in NewComponentsFull.Where(x => !string.IsNullOrEmpty(x.MessageForCheckOut)))
-            //    {
-
-            //        list = list + $"\nPath - {Path.GetFileName(item.LocalPartFileInfo)}";
-            //    }
-            //    //MessageBox.Show(list, message);// $" Следующие файлы были обновлены {newList.Count()} listToCheckOut - {listToCheckOut.Count()}"); // obs
-            //}
-
-            SolidWorksAdapter.CloseAllDocumentsAndExit();
-            return NewPartPath;
-        }
-
-
-        private void SwPartParamsChangeWithNewName(string partName, string newName, string[,] newParams /*, bool newFuncOfAdding, IReadOnlyList<string> copies*/)
-        {
-            ModelDoc2 SolidWorksDocument = null;
-            SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(partName + ".SLDPRT");
-            var modName = SolidWorksDocument.GetPathName();
-            for (var i = 0; i < newParams.Length / 2; i++)
-            {
-                Dimension myDimension = ((Dimension)(SolidWorksDocument.Parameter(newParams[i, 0] + "@" + partName + ".SLDPRT")));
-                var param = Convert.ToDouble(newParams[i, 1]);
-                var swParametr = param;
-                myDimension.SystemValue = swParametr/1000;
-            }
+            
+            drw.SetupSheet5("DRW1", 12, 12, 1, m, true, nameDrw, 0.42, 0.297, "По умолчанию", false);
             SolidWorksDocument.EditRebuild3();
-            SolidWorksDocument.ForceRebuild3(false);
-            //if (!newFuncOfAdding)
-            //{
-            //    //TO DO
-            //    // list for add file to pdm
-            //    NewComponents.Add(new FileInfo(newName + ".SLDPRT"));
-            //}
-
-            //if (newFuncOfAdding)
-            //{
-            //    // todo проверить
-            //    //if (!string.IsNullOrEmpty(copies)) return;
-
-            // // TO DO
-            //    //NewComponentsFull.Add(new VaultSystem.VentsCadFile
-            //    //{
-            //    //    LocalPartFileInfo = new FileInfo(newName + ".SLDPRT").FullName,
-            //    //    PartIdSql = Convert.ToInt32(newName.Substring(newName.LastIndexOf('-') + 1))
-            //    //});
-            //}
-
-            // to do
-            SolidWorksDocument.SaveAs2(new FileInfo(newName + ".SLDPRT").FullName, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
-
-            //if (copies != null)
-            //{
-            //    //MessageBox.Show("copies - " + copies + "  addingInName - " + addingInName);
-            //    SolidWorksDocument.SaveAs2(new FileInfo(copies[0] + ".SLDPRT").FullName, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, true, true);
-            //    SolidWorksDocument.SaveAs2(new FileInfo(copies[1] + ".SLDPRT").FullName, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, true, true);
-            //}
-            // _swApp.CloseDoc(newName + ".SLDPRT");
-
-            SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
-        }
-
-
-
-        private void AddMaterial(IList<string> material, string newName)
-        {
-            try
-            {
-                //VentsMatdll(material, null, newName);
-            }
-            catch (Exception e)
-            {
-                //MessageBox.Show($"{e}\n{material}\n{newName}{e.StackTrace}" , "Adding Material");
-            }
+            SolidWorksDocument.SaveAs2(nameDrw + ".SLDDRW", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
+            SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newDamperName + ".SLDDRW");
+            SolidWorksAdapter.SldWoksAppExemplare.ExitApp();
             
         }
     } 
-
 }
-

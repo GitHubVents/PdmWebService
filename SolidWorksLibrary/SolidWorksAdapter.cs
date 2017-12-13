@@ -51,7 +51,7 @@ namespace SolidWorksLibrary
                 //    //    }
                 //    //}
                 sldWoksApp = new SldWorks() { Visible = true };
-                
+                sldWoksApp.DocumentVisible(false, (int)swDocumentTypes_e.swDocPART + (int)swDocumentTypes_e.swDocASSEMBLY);
                 MessageObserver.Instance.SetMessage("\t\tCreated exemplar SolidWorks Application", MessageType.System);
             }
         }
@@ -152,9 +152,8 @@ namespace SolidWorksLibrary
             }
             int errors = 0, warnings = 0;
             int openDocOptions = (int)swOpenDocOptions_e.swOpenDocOptions_ReadOnly;
-            if (documentType == swDocumentTypes_e.swDocASSEMBLY) {
-                openDocOptions += (int)swOpenDocOptions_e.swOpenDocOptions_LoadModel;
-            }
+            if (documentType == swDocumentTypes_e.swDocASSEMBLY) {  openDocOptions += (int)swOpenDocOptions_e.swOpenDocOptions_LoadModel; }
+
             var SolidWorksDocumentument = SldWoksAppExemplare.OpenDoc6(path, (int)documentType, openDocOptions, configuration, ref errors, ref warnings);
            
             if (errors != 0)
@@ -187,7 +186,7 @@ namespace SolidWorksLibrary
         /// <returns></returns>
         public static AssemblyDoc ToAssemblyDocument(ModelDoc2 document)
         {
-            AssemblyDoc swAsm =  (AssemblyDoc)document;
+            AssemblyDoc swAsm = (AssemblyDoc)document;
             swAsm.ResolveAllLightWeightComponents(false);
             return swAsm;
         }

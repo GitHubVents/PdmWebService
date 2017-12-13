@@ -105,6 +105,24 @@ namespace  ServiceTypes.Constants
     }
 
 
+
+    [DataContract(Name = "FlapThickness_e")]
+    public enum FlapThickness_e
+    {
+        [EnumMember]
+        Thickness05 = 5,
+        [EnumMember]
+        Thickness06 = 6,
+        [EnumMember]
+        Thickness08 = 8,
+        [EnumMember]
+        Thickness10 = 10,
+        [EnumMember]
+        Thickness12 = 12,
+        [EnumMember]
+        Thickness15 = 15
+    }
+
     /// <summary>
     /// Describes Flape types ant their id [customize]
     /// </summary>
@@ -131,6 +149,7 @@ namespace  ServiceTypes.Constants
         Sheet_A_3095_2B = 9
     }
 
+    #region panels 
     /// <summary>
     /// Describes panel profiles
     /// </summary>
@@ -144,7 +163,7 @@ namespace  ServiceTypes.Constants
         [EnumMember]
         Profile_7_0 = 70
     }
-    #region panels 
+
     /// <summary>
     /// Describes panel types
     /// </summary>

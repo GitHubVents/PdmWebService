@@ -166,7 +166,9 @@ namespace PdmSolidWorksLibrary
                 id++;
             }
 
+
             return cfgStringList.ToArray();
+
         } 
 
         public void DownloadFile(string path)

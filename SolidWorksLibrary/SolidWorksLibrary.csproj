@@ -42,7 +42,7 @@
     </Reference>
     <Reference Include="ServiceConstants, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\ServiceConstants\bin\Release\ServiceConstants.dll</HintPath>
+      <HintPath>bin\Debug\ServiceConstants.dll</HintPath>
     </Reference>
     <Reference Include="SolidWorks.Interop.sldworks">
       <HintPath>C:\Program Files\SOLIDWORKS Corp\SOLIDWORKS\api\redist\SolidWorks.Interop.sldworks.dll</HintPath>

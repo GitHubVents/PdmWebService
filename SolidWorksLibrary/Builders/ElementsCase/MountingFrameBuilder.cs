@@ -1,5 +1,4 @@
 ﻿using ServiceTypes.Constants;
-using SolidWorks.Interop.sldworks;
 using SolidWorks.Interop.swconst;
 using SolidWorksLibrary.Builders.ElementsCase;
 using System;
@@ -13,7 +12,6 @@ namespace PDMWebService.Data.Solid.ElementsCase
 {
     public sealed class MountingFrameBuilder : ProductBuilderBehavior
     {
-        private SldWorks swObj;
         bool internalCrossbeam; // Погашение внутренней поперечной балки
         bool internalLongitudinalBeam; // Погашение внутренней продольной балки
         double tempOffset;
@@ -187,6 +185,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 //Тип рамы 2
                 if (internalCrossbeam == false)
                 {
+
                     SolidWorksDocument.Extension.SelectByID2("10-03-01-4-1@10-4", "COMPONENT", 0, 0, 0, false, 0, null, 0);
                     SolidWorksDocument.Extension.SelectByID2("Washer 11371_gost-39@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
                     SolidWorksDocument.Extension.SelectByID2("Washer 11371_gost-40@10-4", "COMPONENT", 0, 0, 0, true, 0, null, 0);
@@ -267,20 +266,17 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
         public void OpenDoc()
         {
-            string modelMontageFramePath = $@"{base.RootFolder}\{base.SourceFolder}\{"10-4"}.SLDASM";
-            swObj = new SldWorks();
+            string assemblyName = "10-4";
+            string modelMontageFramePath = $@"{base.RootFolder}\{base.SourceFolder}\{assemblyName}.SLDASM";
 
-            SolidWorksDocument = swObj.OpenDoc6(modelMontageFramePath, (int)swDocumentTypes_e.swDocASSEMBLY, (int)swOpenDocOptions_e.swOpenDocOptions_LoadModel, "00", 0, 0);
-
-            AssemblyDoc swAsm = (AssemblyDoc)SolidWorksDocument;
-            swAsm.ResolveAllLightWeightComponents(false);
+            SolidWorksAdapter.OpenDocument(modelMontageFramePath, swDocumentTypes_e.swDocASSEMBLY, "00");
+            SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(assemblyName + ".SLDASM");
+            SolidWorksAdapter.ToAssemblyDocument(SolidWorksDocument);
         }
 
         public void SaveDoc()
         {
             //Сохранение
-            swObj.IActivateDoc2("10-4.SLDASM", false, 0);
-            SolidWorksDocument = ((ModelDoc2)(swObj.ActiveDoc));
             SolidWorksDocument.ForceRebuild3(true);
             SolidWorksDocument.SaveAs2(base.NewPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
         }

@@ -14,84 +14,70 @@ namespace PDMWebService.Data.Solid.ElementsCase
     {
 
         private int warning = 0, error = 0;
-
+        
 
         public SpigotBuilder() : base()
         {            
             SetProperties(@"Проекты\12 - Вибровставка", @"Библиотека проектирования\DriveWorks\12 - Spigot");
+            base.AssemblyName = "12-00";
         }
 
-        public void OpenDoc()
-        {
-            //swObj = new SldWorks();
-            string AssemblyName = "12-00";
-            string modelSpigotPath = Path.Combine(RootFolder, SourceFolder, AssemblyName+".SLDASM");
-            SolidWorksAdapter.OpenDocument(modelSpigotPath, swDocumentTypes_e.swDocASSEMBLY);
-            SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
-            AssemblyDocument.ResolveAllLightWeightComponents(false);
-
-        }
-
+        
         public string Build(int type, Vector2 spigotSize)
         {            
             base.PartPrototypeName = GetPrototypeName((SpigotType_e)type);
-            base.PartName = GetSpigotName((SpigotType_e)type, spigotSize);               
-            
+            string drawingNameWithExt = "12-00.SLDDRW";               
             int addDimH = base.PartPrototypeName == "12-30" ? 10 : 1;
 
-            base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder,base.PartName);
 
-            string drawingName = base.PartPrototypeName == "12-30" ? base.PartPrototypeName : "12-00";
-
-            //var modelSpigotDrw = Path.Combine( RootFolder,SourceFolder,$"{drawingName}.SLDDRW");
-            //ModelDoc2 swDrawingSpigot = SolidWorksAdapter.OpenDocument(modelSpigotDrw, swDocumentTypes_e.swDocDRAWING);
-            //AssemblyDoc assemblyDocument = SolidWorksAdapter.ToAssemblyDocument(SolidWorksDocument);
-
+            string drawingSpigotPath = Path.Combine(RootFolder, SourceFolder, drawingNameWithExt);
+            SolidWorksAdapter.OpenDocument(drawingSpigotPath, swDocumentTypes_e.swDocDRAWING);
+            SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(base.AssemblyName + ".SLDASM");
+            SolidWorksAdapter.ToAssemblyDocument(SolidWorksDocument);
 
             DeleteEquations(base.PartPrototypeName);
+            DeleteComponents(type);
             SolidWorksDocument.ForceRebuild3(true);
-
             
             #region formuls   
 
-            //var w = (Convert.ToDouble(spigotSize.X) - 1) / 1000;   
-            //var h = Convert.ToDouble((Convert.ToDouble(spigotSize.Y) + addDimH) / 1000);   
-            //const double step = 50;
-            //var weldWidth = Convert.ToDouble((Math.Truncate(Convert.ToDouble(spigotSize.X) / step) + 1));    
-            //var weldHeight = Convert.ToDouble((Math.Truncate(Convert.ToDouble(spigotSize.Y) / step) + 1));  
-
-            double w = (spigotSize.X - 1);
-            double h = (spigotSize.Y + addDimH);
+            double w = spigotSize.X;
+            double h = spigotSize.Y - addDimH;
             const double step = 50;
-            double weldWidth = Math.Truncate(spigotSize.X / step) + 1;
-            double weldHeight = Math.Truncate(spigotSize.Y / step) + 1;  
+            double weldWidth = Math.Truncate(spigotSize.X / step)*1000 + 1;
+            double weldHeight = Math.Truncate(spigotSize.Y / step)*1000 + 1;  
 
             #endregion
 
-            DeleteComponents(type);
             if (base.PartPrototypeName == "12-20")
             {
                 #region 12-20
-                base.PartName = $"12-20-{spigotSize.Y}.SLDPRT";
-                if (CheckExistPart != null)
-                {
-                    CheckExistPart(base.PartName, RootFolder, out base.NewPartPath);
-                }
-                else
-                {
-                    MessageObserver.Instance.SetMessage("CheckExistPartEvent can not be null", MessageType.Warning);
-                }
+                base.PartName = $"12-20-{spigotSize.Y}";
+
+                
+
+                //if (CheckExistPart != null)
+                //{
+                   // System.Windows.Forms.MessageBox.Show("CheckExistPart   " + base.NewPartPath);
+                
+                  //  CheckExistPart(base.PartName, RootFolder, out base.NewPartPath);
+                //}
+                //else
+                //{
+                //    MessageObserver.Instance.SetMessage("CheckExistPartEvent can not be null", MessageType.Warning);
+               // }
 
                 if (NewPartPath != string.Empty && NewPartPath != null)
                 {
+                    System.Windows.Forms.MessageBox.Show("(NewPartPath != string.Empty  " + base.NewPartPath);
                     SolidWorksDocument.Extension.SelectByID2("12-20-001-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
                     AssemblyDocument.ReplaceComponents(base.NewPartPath, "", true, true);
-                    System.Windows.Forms.MessageBox.Show(base.NewPartPath);
                 }
+
                 else
                 {
                     base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, base.PartName);
-                    base.parameters.Add("D1@Вытянуть1", h - 0.031);
+                    base.parameters.Add("D1@Вытянуть1", h - 31);
                     base.parameters.Add("D1@Кривая1", weldHeight);
                     EditPartParameters("12-20-001", base.NewPartPath);
                     ComponentsPathList.Add(base.NewPartPath);
@@ -99,51 +85,51 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
                 //12-20-002
 
-                base.PartName = $"12-20-{spigotSize.X}.SLDPRT";
+                base.PartName = $"12-20-{spigotSize.X}";
 
                
-                if (CheckExistPart != null)
-                {
-                    CheckExistPart(base.PartName, RootFolder, out base.NewPartPath);
-                }
-                else
-                {
-                    MessageObserver.Instance.SetMessage("CheckExistPartEvent can not be null", MessageType.Warning);
-                }
+                //if (CheckExistPart != null)
+                //{
+                //    CheckExistPart(base.PartName, RootFolder, out base.NewPartPath);
+                //}
+                //else
+                //{
+                //    MessageObserver.Instance.SetMessage("CheckExistPartEvent can not be null", MessageType.Warning);
+                //}
 
-                if (NewPartPath != string.Empty && NewPartPath != null)
-                {
-                    SolidWorksDocument.Extension.SelectByID2("12-20-002-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    AssemblyDocument.ReplaceComponents(base.NewPartPath, "", true, true);
-                }
-                else
-                {
+                //if (NewPartPath != null)
+                //{
+                //    SolidWorksDocument.Extension.SelectByID2("12-20-002-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                //    AssemblyDocument.ReplaceComponents(base.NewPartPath, "", true, true);
+                //}
+                //else
+                //{
                     base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, base.PartName);
 
-                    base.parameters.Add("D1@Вытянуть1", w - 0.031);
+                    base.parameters.Add("D1@Вытянуть1", w - 31);
                     base.parameters.Add("D1@Кривая1", weldWidth);
                     EditPartParameters("12-20-002", base.NewPartPath);
                     ComponentsPathList.Add(base.NewPartPath);
-                }
+                //}
 
                 //12-003 
-                base.PartName = $"12-03-{spigotSize.X}-{spigotSize.Y}.SLDPRT";
+                base.PartName = $"12-03-{spigotSize.X}-{spigotSize.Y}";
 
-                if (CheckExistPart != null)
-                {
-                    CheckExistPart(base.PartName, RootFolder, out base.NewPartPath);
-                }
-                else
-                {
-                    MessageObserver.Instance.SetMessage("CheckExistPartEvent can not be null", MessageType.Warning);
-                }
-                if (NewPartPath != string.Empty && NewPartPath != null)
-                {
-                    SolidWorksDocument.Extension.SelectByID2("12-003-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    AssemblyDocument.ReplaceComponents(base.NewPartPath, "", true, true);
-                }
-                else
-                {
+                //if (CheckExistPart != null)
+                //{
+                //    CheckExistPart(base.PartName, RootFolder, out base.NewPartPath);
+                //}
+                //else
+                //{
+                //    MessageObserver.Instance.SetMessage("CheckExistPartEvent can not be null", MessageType.Warning);
+                //}
+                //if (NewPartPath != string.Empty && NewPartPath != null)
+                //{
+                //    SolidWorksDocument.Extension.SelectByID2("12-003-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                //    AssemblyDocument.ReplaceComponents(base.NewPartPath, "", true, true);
+                //}
+                //else
+                //{
                     base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, base.PartName);
 
                     base.parameters.Add("D3@Эскиз1", w);
@@ -151,91 +137,89 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     EditPartParameters("12-003", base.NewPartPath);
                     ComponentsPathList.Add(base.NewPartPath);
 
-                }
+                //}
                 #endregion
             }
-            if (base.PartPrototypeName == "12-30")
+            else if (base.PartPrototypeName == "12-30")
             {
                 #region 12-30
                 //12-30-001
 
-                base.PartName = $"12-30-{spigotSize.Y}.SLDPRT";
+                base.PartName = $"12-30-{spigotSize.Y}";
 
-                MessageObserver.Instance.SetMessage("Check exist part. " + base.PartName);
-                if (CheckExistPart != null)
-                {
-                    CheckExistPart(base.PartName, RootFolder, out base.NewPartPath);
-                }
-                else
-                {
-                    MessageObserver.Instance.SetMessage("CheckExistPartEvent can not be null", MessageType.Warning);
-                }
+                //if (CheckExistPart != null)
+                //{
+                //    CheckExistPart(base.PartName, RootFolder, out base.NewPartPath);
+                //}
+                //else
+                //{
+                //    MessageObserver.Instance.SetMessage("CheckExistPartEvent can not be null", MessageType.Warning);
+                //}
 
-                if (NewPartPath != string.Empty && NewPartPath != null)
-                {
-                    SolidWorksDocument.Extension.SelectByID2("12-30-001-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    AssemblyDocument.ReplaceComponents(base.NewPartPath, "", true, true);
-                }
-                else
-                {
+                //if (NewPartPath != string.Empty && NewPartPath != null)
+                //{
+                //    SolidWorksDocument.Extension.SelectByID2("12-30-001-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                //    AssemblyDocument.ReplaceComponents(base.NewPartPath, "", true, true);
+                //}
+                //else
+                //{
                     base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, base.PartName);
 
-                    base.parameters.Add("D1@Вытянуть1", h - 0.031);
+                    base.parameters.Add("D1@Вытянуть1", h - 31);
                     base.parameters.Add("D1@Кривая1", weldHeight);
                     //base.parameters.Add("D5@Эскиз1", weldHeight);
                     EditPartParameters("12-30-001", base.NewPartPath);
                     ComponentsPathList.Add(base.NewPartPath);
 
-                }
+                //}
 
                 //12-30-002           
-                base.PartName = $"12-30-{spigotSize.X}.SLDPRT";
+                base.PartName = $"12-30-{spigotSize.X}";
 
+                //if (CheckExistPart != null)
+                //{
+                //    CheckExistPart(base.PartName, RootFolder, out base.NewPartPath);
+                //}
+                //else
+                //{
+                //    MessageObserver.Instance.SetMessage("CheckExistPartEvent can not be null", MessageType.Warning);
+                //}
 
-                if (CheckExistPart != null)
-                {
-                    CheckExistPart(base.PartName, RootFolder, out base.NewPartPath);
-                }
-                else
-                {
-                    MessageObserver.Instance.SetMessage("CheckExistPartEvent can not be null", MessageType.Warning);
-                }
+                //if (NewPartPath != string.Empty && NewPartPath != null)
+                //{
+                //    SolidWorksDocument.Extension.SelectByID2("12-30-002-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                //    AssemblyDocument.ReplaceComponents(base.NewPartPath, "", true, true);
 
-                if (NewPartPath != string.Empty && NewPartPath != null)
-                {
-                    SolidWorksDocument.Extension.SelectByID2("12-30-002-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    AssemblyDocument.ReplaceComponents(base.NewPartPath, "", true, true);
-
-                }
-                else
-                {
+                //}
+                //else
+                //{
                     base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, base.PartName);
 
-                    base.parameters.Add("D1@Вытянуть1", w - 0.031);
+                    base.parameters.Add("D1@Вытянуть1", w - 31);
                     base.parameters.Add("D1@Кривая1", weldHeight);
                     EditPartParameters("12-30-002", base.NewPartPath);
                     ComponentsPathList.Add(base.NewPartPath);
-                }
+                //}
                 //12-003
 
-                base.PartName = $"12-03-{spigotSize.X}-{spigotSize.Y}.SLDPRT";
-                if (CheckExistPart != null)
-                {
-                    CheckExistPart(base.PartName, RootFolder, out base.NewPartPath);
-                }
-                else
-                {
-                    MessageObserver.Instance.SetMessage("CheckExistPartEvent can not be null", MessageType.Warning);
-                }
+                base.PartName = $"12-03-{spigotSize.X}-{spigotSize.Y}";
+                //if (CheckExistPart != null)
+                //{
+                //    CheckExistPart(base.PartName, RootFolder, out base.NewPartPath);
+                //}
+                //else
+                //{
+                //    MessageObserver.Instance.SetMessage("CheckExistPartEvent can not be null", MessageType.Warning);
+                //}
 
-                if (NewPartPath != string.Empty && NewPartPath != null)
-                {
+                //if (NewPartPath != string.Empty && NewPartPath != null)
+                //{
 
-                    SolidWorksDocument.Extension.SelectByID2("12-003-2@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    AssemblyDocument.ReplaceComponents(base.NewPartPath, "", true, true);
-                }
-                else
-                {
+                //    SolidWorksDocument.Extension.SelectByID2("12-003-2@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                //    AssemblyDocument.ReplaceComponents(base.NewPartPath, "", true, true);
+                //}
+                //else
+                //{
                     base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, base.PartName);
 
                     base.parameters.Add("D3@Эскиз1", w);
@@ -243,40 +227,35 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     EditPartParameters("12-003", base.NewPartPath);
                     ComponentsPathList.Add(base.NewPartPath); 
 
-                }
+                //}
                 #endregion
             }
 
-
+            SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(base.AssemblyName + ".SLDASM");
             SolidWorksDocument.ForceRebuild3(true);
 
-            NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, GetSpigotName((SpigotType_e)type, spigotSize)) + ".SLDASM";
-            SolidWorksDocument.Extension.SaveAs(NewPartPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
-            InitiatorSaveExeption(error, warning, NewPartPath);
-
-
-
-            SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(base.PartName + ".SLDASM");
-            ComponentsPathList.Add(NewPartPath);
-
-            SolidWorksDocument.Extension.SelectByID2("DRW1", "SHEET", 0, 0, 0, false, 0, null, 0);
-
+            NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, GetSpigotName((SpigotType_e)type, spigotSize));
+            SolidWorksDocument.Extension.SaveAs(NewPartPath + ".SLDASM", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
+            InitiatorSaveExeption(error, warning, NewPartPath + ".SLDASM");
             
-            
-            SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("12-00.SLDDRW");
+            SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(base.AssemblyName + ".SLDASM");
+            ComponentsPathList.Add(NewPartPath + ".SLDASM");
+
+            SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(drawingNameWithExt);
             SolidWorksDRW = SolidWorksAdapter.ToDrawingDoc(SolidWorksDocument);
 
+            base.SolidWorksDRW.ActivateSheet("DRW1");
+            SolidWorksDRW.SetupSheet5("DRW1", 12, 12, 1, GetDrawingScale(spigotSize), true, @"\\pdmsrv\SolidWorks Admin\Templates\Основные надписи\A3-A-1.slddrt", 0.42, 0.297, "По умолчанию", false);
 
-            // drw.ActivateSheet("DRW1");
-            // drw.SetupSheet5("DRW1", 12, 12, 1, GetDrawingScale(spigotSize), true, @"\\pdmsrv\SolidWorks Admin\Templates\Основные надписи\A3-A-1.slddrt", 0.42, 0.297, "По умолчанию", false);
+            //SolidWorksDocument.Extension.SelectByID2("DRW1", "SHEET", 0, 0, 0, false, 0, null, 0);
+            //SolidWorksDRW.ActivateSheet("DRW1");
 
-            // swDocSpigot.Extension.SaveAs(NewPartPath.Replace(".SLDASM", ".SLDDRW"), (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
+            SolidWorksDocument.Extension.SaveAs(NewPartPath + ".SLDDRW", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
             InitiatorSaveExeption(error, warning, NewPartPath + ".SLDDRW");
 
             ComponentsPathList.Add(NewPartPath + ".SLDDRW");
-            //SolidWorksAdapter.CloseAllDocumentsAndExit();
+            SolidWorksAdapter.CloseAllDocumentsAndExit();
            
-            //FinishedBuild(ComponentsPathList);/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             return NewPartPath;
         }
 
@@ -327,8 +306,6 @@ namespace PDMWebService.Data.Solid.ElementsCase
         /// <param name="type"></param>
         protected override void DeleteComponents(int type)
         {
-            //SpigotType_e e_type = (SpigotType_e)type;
-
             const int deleteOption = (int)swDeleteSelectionOptions_e.swDelete_Absorbed + (int)swDeleteSelectionOptions_e.swDelete_Children;
 
             if ( (SpigotType_e)type == SpigotType_e.Twenty_mm)
@@ -400,9 +377,8 @@ namespace PDMWebService.Data.Solid.ElementsCase
         {
             // if we need show extension for example that 
             // a check the availability in the data base
-            var spigotName = GetPrototypeName(spigotType) + "-" + size.X + "-" + size.Y;
-            if (isShowExtension)
-                spigotName += ".SLDASM";
+            string spigotName = GetPrototypeName(spigotType) + "-" + size.X + "-" + size.Y;
+            if (isShowExtension)    spigotName += ".SLDASM";
             return spigotName;
         }
 

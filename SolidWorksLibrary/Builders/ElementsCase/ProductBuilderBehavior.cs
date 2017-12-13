@@ -159,20 +159,18 @@ namespace SolidWorksLibrary.Builders.ElementsCase
                     Dimension myDimension = (SolidWorksDocument.Parameter(eachParameter.Key + "@" + partName + ".SLDPRT")) as Dimension;
                     myDimension.SystemValue = eachParameter.Value / 1000;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     //Console.WriteLine(eachParameter.Key + " " + ex);
                 }
             }
-            System.Windows.Forms.MessageBox.Show("I'm adding parameters");
             SolidWorksDocument.ForceRebuild3(true);
-            //SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(partName);
-            //SolidWorksDocument.Extension.SaveAs(newPath + ".SLDPRT", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent
-                                                       //  + (int )swSaveAsOptions_e.swSaveAsOptions_SaveReferenced + (int)swSaveAsOptions_e.swSaveAsOptions_UpdateInactiveViews, null, ref errors, warnings);
+            SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(partName);
+            SolidWorksDocument.Extension.SaveAs(newPath + ".SLDPRT", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent
+                                                         + (int )swSaveAsOptions_e.swSaveAsOptions_SaveReferenced + (int)swSaveAsOptions_e.swSaveAsOptions_UpdateInactiveViews, null, ref errors, warnings);
             //InitiatorSaveExeption(errors, warnings, newPath);
             this.parameters.Clear();
-
-            //SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(partName);
+            SolidWorksAdapter.CloseDocument(SolidWorksDocument);
         }
 
         ///// <summary>
