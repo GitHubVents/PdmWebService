@@ -32,49 +32,6 @@ namespace PDMWebService.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=pdmsrv;Initial Catalog=SWPlusDB;Persist Security Info=True;User ID=Ai" +
-            "rVentsCad;Password=123456")]
-        public string SWPlusDBConnectionString {
-            get {
-                return ((string)(this["SWPlusDBConnectionString"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=pdmsrv;Initial Catalog=Vents-PDM;Persist Security Info=True;User ID=A" +
-            "irVentsCad;Password=123456")]
-        public string Vents_PDMConnectionString {
-            get {
-                return ((string)(this["Vents_PDMConnectionString"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\TaskDb.mdf;In" +
-            "tegrated Security=True;Connect Timeout=30")]
-        public string TaskDbConnectionString {
-            get {
-                return ((string)(this["TaskDbConnectionString"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=TENOMO-PC;Initial Catalog=TaskDataBase;Integrated Security=True")]
-        public string TaskDataBaseConnectionString {
-            get {
-                return ((string)(this["TaskDataBaseConnectionString"]));
-            }
-        }
-        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
@@ -252,17 +209,6 @@ namespace PDMWebService.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=pdmsrv;Initial Catalog=TaskDataBase;Persist Security Info=True;User I" +
-            "D=AirVentsCad;Password=1")]
-        public string TaskDataBaseConnectionString1 {
-            get {
-                return ((string)(this["TaskDataBaseConnectionString1"]));
-            }
-        }
-        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("D:\\TEMP\\DXF\\")]
@@ -296,6 +242,60 @@ namespace PDMWebService.Properties {
             }
             set {
                 this["TempPdfFolder"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=pdmsrv;Initial Catalog=SWPlusDB;Persist Security Info=True;User ID=Ai" +
+            "rVentsCad;Password=123456")]
+        public string SWPlusDBConnectionString {
+            get {
+                return ((string)(this["SWPlusDBConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=pdmsrv;Initial Catalog=Vents-PDM;Persist Security Info=True;User ID=A" +
+            "irVentsCad;Password=123456")]
+        public string Vents_PDMConnectionString {
+            get {
+                return ((string)(this["Vents_PDMConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\TaskDb.mdf;In" +
+            "tegrated Security=True;Connect Timeout=30")]
+        public string TaskDbConnectionString {
+            get {
+                return ((string)(this["TaskDbConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=TENOMO-PC;Initial Catalog=TaskDataBase;Integrated Security=True")]
+        public string TaskDataBaseConnectionString {
+            get {
+                return ((string)(this["TaskDataBaseConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=pdmsrv;Initial Catalog=TaskDataBase;Persist Security Info=True;User I" +
+            "D=AirVentsCad;Password=1")]
+        public string TaskDataBaseConnectionString1 {
+            get {
+                return ((string)(this["TaskDataBaseConnectionString1"]));
             }
         }
     }

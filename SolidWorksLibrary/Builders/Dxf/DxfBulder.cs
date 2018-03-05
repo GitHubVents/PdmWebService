@@ -6,8 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
- namespace SolidWorksLibrary.Builders.Dxf
+namespace SolidWorksLibrary.Builders.Dxf
 {
     /// <summary>
     /// DxfBuilder allows builds dxf views on based SolidWorks parts. 
@@ -64,7 +65,6 @@ using System.Linq;
             MessageObserver.Instance.SetMessage("Start build Dxf file", MessageType.System);
 
             bool isSave = false;
-           
 
             try
             {
@@ -74,7 +74,7 @@ using System.Linq;
                     try
                     {
                         modelDoc = SolidWorksAdapter.OpenDocument(partPath, swDocumentTypes_e.swDocPART);// SolidWorksAdapter.SldWoksAppExemplare.OpenDoc6(partPath, (int)  swDocumentTypes_e.swDocPART , (int)swOpenDocOptions_e.swOpenDocOptions_Silent, emptyConfigyration, error, warnings);
-                       // modelDoc = SolidWorksAdapter.SldWoksAppExemplare.IActiveDoc2;
+                        //modelDoc = SolidWorksAdapter.SldWoksAppExemplare.IActiveDoc2;
 
                         MessageObserver.Instance.SetMessage("\tOpened document " + Path.GetFileName(partPath), MessageType.System);
                         // Проверяет наличие дерева постоения в моделе.
@@ -92,16 +92,18 @@ using System.Linq;
 
                 bool isSheetmetal = true;
 
-                
+                modelDoc.ForceRebuild3(false);
                 if (!SolidWorksAdapter.IsSheetMetalPart((IPartDoc)modelDoc))
                 {
+
                     isSheetmetal = false;
                     if (!includeNonSheetParts) // disable build  no sheet metal parts if IsSheetMetalPart = false, and return  
                     {
                         try
                         {
-                       SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(modelDoc.GetTitle().ToLower().Contains(".sldprt") ? modelDoc.GetTitle() : modelDoc.GetTitle() + ".sldprt");
-                           
+                            //SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(modelDoc.GetTitle().ToLower().Contains(".sldprt") ? modelDoc.GetTitle() : modelDoc.GetTitle() + ".sldprt");
+                            if (modelDoc != null) SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(modelDoc.GetTitle());
+                            SolidWorksAdapter.SldWoksAppExemplare.ExitApp();
                         }
                         catch (Exception ex)
                         {
@@ -110,6 +112,7 @@ using System.Linq;
                         return isSave;
                     }
                 }
+
                 string[] swModelConfNames2 = (string[])modelDoc.GetConfigurationNames();
 
 
@@ -144,9 +147,8 @@ using System.Linq;
                         dxf = new DXF( );
 
                     isSave  = dxf.ConvertToDXF(eachConfiguration,  modelDoc, out dxfByteCode, isSheetmetal);
-                    // dataToExport is method parameter
-                  var  dataToExport = CutList.GetDataToExport(  modelDoc);
-                   
+                                                                 // dataToExport is method parameter
+                    var  dataToExport = CutList.GetDataToExport(  modelDoc);
 
                     if (isSave)
                     {

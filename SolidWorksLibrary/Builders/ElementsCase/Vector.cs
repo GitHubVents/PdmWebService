@@ -118,7 +118,7 @@
         }
     }
 
-        public class Vector3 : Vector2 
+    public class Vector3 : Vector2 
         {
             public double Z { get; set; }
 

@@ -3,6 +3,8 @@ using SolidWorks.Interop.sldworks;
 using SolidWorks.Interop.swconst;
 using System;
 using System.Collections.Generic;
+using AddFeatureContextMenu;
+using System.IO;
 
 namespace SolidWorksLibrary.Builders.ElementsCase
 {
@@ -159,18 +161,25 @@ namespace SolidWorksLibrary.Builders.ElementsCase
                     Dimension myDimension = (SolidWorksDocument.Parameter(eachParameter.Key + "@" + partName + ".SLDPRT")) as Dimension;
                     myDimension.SystemValue = eachParameter.Value / 1000;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    //Console.WriteLine(eachParameter.Key + " " + ex);
+                    System.Windows.Forms.MessageBox.Show(eachParameter.Key + "@" + partName);
+                    MessageObserver.Instance.SetMessage(ex.ToString(), MessageType.Error);
                 }
             }
             SolidWorksDocument.ForceRebuild3(true);
-            SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(partName);
+            //SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(partName);///////////////////
+
+            /////////
+            //SolidWorksDocument.Visible = false;
+
             SolidWorksDocument.Extension.SaveAs(newPath + ".SLDPRT", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent
-                                                         + (int )swSaveAsOptions_e.swSaveAsOptions_SaveReferenced + (int)swSaveAsOptions_e.swSaveAsOptions_UpdateInactiveViews, null, ref errors, warnings);
+                                                          + (int)swSaveAsOptions_e.swSaveAsOptions_SaveReferenced + (int)swSaveAsOptions_e.swSaveAsOptions_UpdateInactiveViews, null, ref errors, warnings);
             //InitiatorSaveExeption(errors, warnings, newPath);
+
+
             this.parameters.Clear();
-            SolidWorksAdapter.CloseDocument(SolidWorksDocument);
+            //SolidWorksAdapter.CloseDocument(SolidWorksDocument);
         }
 
         ///// <summary>

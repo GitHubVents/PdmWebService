@@ -2,7 +2,6 @@
 using SolidWorks.Interop.sldworks;
 using SolidWorks.Interop.swconst;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 
@@ -33,27 +32,51 @@ namespace SolidWorksLibrary
         /// </summary>
         private static void InitSolidWorks()
         {
+            try
+            {
+                sldWoksApp = (SldWorks)Marshal.GetActiveObject("SldWorks.Application");
+            }
+            catch (Exception)
+            {
+                sldWoksApp = new SldWorks { Visible = true };
+            }
             if (sldWoksApp == null)
             {
-                //MessageObserver.Instance.SetMessage("Initialize SolidWorks exemplare");
-                //try {                    
-                //     sldWoksApp = (SldWorks)Marshal.GetActiveObject("SldWorks.Application");
-                //    MessageObserver.Instance.SetMessage("\t\tTake an existing exemplar SolidWorks Application", MessageType.System);
-                //}
-
-                //catch (Exception ex) {
-                //    //MessageObserver.Instance.SetMessage("\t\tFailed take an existing exemplar SolidWorks Application " + ex, MessageType.Warning);
-                //    //Process[] processes = Process.GetProcessesByName("SLDWORKS");
-                //    //int processesLength = processes.Length;
-                //    //if (processesLength > 0) {
-                //    //    foreach (var process in processes) {
-                //    //        process.Kill();
-                //    //    }
-                //    //}
-                sldWoksApp = new SldWorks() { Visible = true };
-                sldWoksApp.DocumentVisible(false, (int)swDocumentTypes_e.swDocPART + (int)swDocumentTypes_e.swDocASSEMBLY);
-                MessageObserver.Instance.SetMessage("\t\tCreated exemplar SolidWorks Application", MessageType.System);
+                return;
             }
+        
+
+            //if (sldWoksApp == null)
+            //{
+            //    try
+            //    {
+            //        //System.Windows.Forms.MessageBox.Show("sldWoksApp == null");
+            //        //MessageObserver.Instance.SetMessage("Initialize SolidWorks exemplare");
+            //        //try {                    
+            //        sldWoksApp = (SldWorks)Marshal.GetActiveObject("SldWorks.Application");
+            //        //    MessageObserver.Instance.SetMessage("\t\tTake an existing exemplar SolidWorks Application", MessageType.System);
+            //        //}
+
+            //        //catch (Exception ex) {
+            //        //    //MessageObserver.Instance.SetMessage("\t\tFailed take an existing exemplar SolidWorks Application " + ex, MessageType.Warning);
+            //        //    //Process[] processes = Process.GetProcessesByName("SLDWORKS");
+            //        //    //int processesLength = processes.Length;
+            //        //    //if (processesLength > 0) {
+            //        //    //    foreach (var process in processes) {
+            //        //    //        process.Kill();
+            //        //    //    }
+            //        //    //}
+            //        //sldWoksApp = new SldWorks() { Visible = true };
+            //        //sldWoksApp.DocumentVisible(false, (int)swDocumentTypes_e.swDocPART + (int)swDocumentTypes_e.swDocASSEMBLY);
+            //        //MessageObserver.Instance.SetMessage("\t\tCreated exemplar SolidWorks Application", MessageType.System);
+
+            //    }
+            //    catch (Exception EX)
+            //    {
+            //        System.Windows.Forms.MessageBox.Show("Необходимо запустить SolidWorks!");
+            //        throw EX;
+            //    }
+        //}
         }
     
 
@@ -133,7 +156,7 @@ namespace SolidWorksLibrary
                         MessageObserver.Instance.SetMessage("Check is sheet metal part; returned " + isSheetMetal, MessageType.Success);
                         return true;
                     }
-                }               
+                }
             }
             catch (Exception)
             {
@@ -143,7 +166,7 @@ namespace SolidWorksLibrary
             return isSheetMetal;
         }
 
-        public static ModelDoc2 OpenDocument(string path, swDocumentTypes_e documentType, string configuration = "00")
+        public static ModelDoc2 OpenDocument(string path, swDocumentTypes_e documentType, string configuration = "")
         {
             if (!File.Exists(path))
             {
@@ -159,7 +182,6 @@ namespace SolidWorksLibrary
             if (errors != 0)
             {
                 MessageObserver.Instance.SetMessage($"Error at open solid works document {path}; error code {errors }, description error { (swFileLoadError_e)errors }" ) ;
-                //throw new Exception($"Failed open document {path};  error code {errors }, description error { (swFileLoadError_e)errors }");
             }
             if (warnings != 0)
             {

@@ -36,3 +36,5 @@ D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\TaskSystemLibrary.pdb
 D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\DataBaseDomian.pdb
 D:\Vlad\PDM-WebService\PDMWebService\bin\Debug\PdmSolidWorksLibrary.pdb
 D:\Project\Source\PdmWebService\PDMWebService\bin\Debug\PDMWebService.exe.config
+D:\Visual Studio Projects\To_REMAKE\PdmWebService\PDMWebService\bin\Debug\PDMWebService.exe.config
+D:\Visual Studio Projects\To_REMAKE\PdmWebService\PDMWebService\obj\Debug\PDMWebService.csprojResolveAssemblyReference.cache

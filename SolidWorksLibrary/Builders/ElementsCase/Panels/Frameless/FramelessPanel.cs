@@ -10,7 +10,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
             public Vector2 SizePanel { get; set; }
             public Vector2 WindowSize { get; set; }
             public Vector2 WindowsOffset { get; set; }
-          public bool усиление { get; set; }
+            public bool усиление { get; set; }
             public double innerHeight = 0;
             public double innerWeidht = 0;
             public double lenght = 0;
@@ -29,17 +29,13 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
         private bool IsMirror { get; set; }  // Determines whether it is a mirror for dual panels
 
         public FramelessPanel(PanelType_e panelType, Vector2 sizePanel, Vector2 windowSize, Vector2 windowsOffset, ThermoStrip_e thermoStrip, Screws screws)
-            {
-                this.PanelType = panelType;
-                this.SizePanel = sizePanel;
-                this.WindowSize = windowSize;
-                this.WindowsOffset = windowsOffset;
-                this.Screws = screws;
-                ThermoStrip = thermoStrip;
-
-            }
- 
-
-
+        {
+            this.PanelType = panelType;
+            this.SizePanel = sizePanel;
+            this.WindowSize = windowSize;
+            this.WindowsOffset = windowsOffset;
+            this.Screws = screws;
+            ThermoStrip = thermoStrip;
+        }
     }
 }

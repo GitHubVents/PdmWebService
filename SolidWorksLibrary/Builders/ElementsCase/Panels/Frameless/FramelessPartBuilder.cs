@@ -10,7 +10,6 @@ using System.IO;
 namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
 {
 
-
     public partial class FramelessPanelBuilder : ProductBuilderBehavior {
 
         #region fields

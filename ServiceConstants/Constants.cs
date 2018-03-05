@@ -50,15 +50,21 @@ namespace  ServiceTypes.Constants
     #endregion
 
     /// <summary>
-    /// Describes Montage Frame type and their values { from zero to three }
+    /// Describes Montage Frame type and their values
     /// </summary>
     [DataContract(Name = "MontageFrameType_e")]
     public enum MontageFrameType_e
     {
+        [EnumMember]
         Zero = 0,
+        [EnumMember]
         One = 1,
+        [EnumMember]
         Two = 2,
-        Three = 3
+        [EnumMember]
+        Three = 3,
+        [EnumMember]
+        Four = 3
     }
 
     /// <summary>
@@ -78,6 +84,8 @@ namespace  ServiceTypes.Constants
     [DataContract(Name = "RoofType_e")]
     public enum RoofType_e
     {
+        [EnumMember]
+        Zero = 0,
         [EnumMember]
         One = 1,  
         [EnumMember]
@@ -104,8 +112,9 @@ namespace  ServiceTypes.Constants
         Thirty_mm = 30
     }
 
-
-
+    /// <summary>
+    /// WTF????
+    /// </summary>
     [DataContract(Name = "FlapThickness_e")]
     public enum FlapThickness_e
     {
@@ -162,6 +171,32 @@ namespace  ServiceTypes.Constants
         Profile_5_0 = 50,
         [EnumMember]
         Profile_7_0 = 70
+    }
+
+
+    /// <summary>
+    /// Describes panel thickness
+    /// </summary>
+    [DataContract(Name = "PanelThickness_e")]
+    public enum PanelThickness_e
+    {
+        [EnumMember]
+        thickness_3_0 = 30,
+        [EnumMember]
+        thickness_4_0 = 40,
+        [EnumMember]
+        thickness_5_0 = 50,
+        [EnumMember]
+        thickness_7_0 = 70
+    }
+
+    /// <summary>
+    /// Шумоизоляция
+    /// </summary>
+    [DataContract(Name = "Insulation_e")]
+    public enum Insulation_e
+    {
+        Insulation = 0
     }
 
     /// <summary>
@@ -276,5 +311,54 @@ namespace  ServiceTypes.Constants
         SolidWorksPdm = 1,
         [EnumMember]
         IPS = 2
+    }
+
+
+    [DataContract(Name = "IMBASE_TablesID")]
+    public enum IMBASE_TablesID : long
+    {
+        [EnumMember]
+        Spigot = 1746785,
+        [EnumMember]
+        Roof = 1746878
+    }
+
+
+
+
+
+
+
+
+    [DataContract(Name = "OffsetType")]
+    public enum OffsetType_
+    {
+        [EnumMember]
+        Center = 0,
+        [EnumMember]
+        Left = 1,
+        [EnumMember]
+        Right = 2
+    }
+
+
+    [DataContract(Name = "OffsetType")]
+    public enum SMTH
+    {
+        [EnumMember]
+        Standart = 0,
+        [EnumMember]
+        Stiched = 1
+      
+    }
+
+    [DataContract(Name = "ServiceSide")]
+    public enum ServiceSide
+    {
+        [EnumMember]
+        Left = 0,
+        [EnumMember]
+        Right = 1
+
     }
 }

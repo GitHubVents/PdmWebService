@@ -34,15 +34,23 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AddFeatureContextMenu, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\AddFeatureContextMenu\AddFeatureContextMenu\bin\Debug\AddFeatureContextMenu.dll</HintPath>
+    </Reference>
     <Reference Include="DataBaseDomian">
       <HintPath>..\DataBaseDomian\bin\Release\DataBaseDomian.dll</HintPath>
+    </Reference>
+    <Reference Include="MessageLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\MessageLibrary\bin\Debug\MessageLibrary.dll</HintPath>
     </Reference>
     <Reference Include="PdmSolidWorksLibrary">
       <HintPath>..\PdmSolidWorksLibrary\bin\Release\PdmSolidWorksLibrary.dll</HintPath>
     </Reference>
     <Reference Include="ServiceConstants, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\ServiceConstants.dll</HintPath>
+      <HintPath>..\ServiceConstants\bin\Debug\ServiceConstants.dll</HintPath>
     </Reference>
     <Reference Include="SolidWorks.Interop.sldworks">
       <HintPath>C:\Program Files\SOLIDWORKS Corp\SOLIDWORKS\api\redist\SolidWorks.Interop.sldworks.dll</HintPath>
@@ -73,6 +81,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Builders\Case\FramelessBlock.cs" />
     <Compile Include="Builders\Case\OneUnit.cs" />
     <Compile Include="Builders\Dxf\Bends.cs" />
     <Compile Include="Builders\Dxf\DXF.cs" />
@@ -103,12 +112,6 @@
     <Compile Include="Builders\ElementsCase\SpigotBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SolidWorksAdapter.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MessageLibrary\Patterns.csproj">
-      <Project>{d0abf979-d32b-453d-92d5-f9bc7bdec44e}</Project>
-      <Name>Patterns</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Builders\ElementsCase\MonoBlocks\" />
