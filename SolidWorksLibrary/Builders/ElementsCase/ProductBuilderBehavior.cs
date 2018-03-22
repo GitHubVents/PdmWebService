@@ -3,8 +3,7 @@ using SolidWorks.Interop.sldworks;
 using SolidWorks.Interop.swconst;
 using System;
 using System.Collections.Generic;
-using AddFeatureContextMenu;
-using System.IO;
+using VentsMaterials;
 
 namespace SolidWorksLibrary.Builders.ElementsCase
 {
@@ -14,6 +13,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase
     /// </summary>
     public abstract partial class ProductBuilderBehavior : IFeedbackBuilder
     {
+        ToSQL toSQL = new ToSQL();
+        SetMaterials setMat;
         protected Dictionary<string, double> parameters { get; set; }
 
         protected string NewPartPath;
@@ -83,7 +84,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
         #endregion
 
         //Папка для сохранения моделей при тестировании
-        protected string DebugRootFolder { get { return @"D:\TestPDM"; } }
+        protected string DebugRootFolder { get { return @"D:\Vents-PDM"; } }
 
         public ProductBuilderBehavior()
         {
@@ -100,6 +101,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
         /// <param name="sourceFolder">Sorce folder where there is the prototypes for the build</param>
         protected void SetProperties(string subjectDestinationFolder, string sourceFolder)
         {
+            //this.RootFolder = @"D:\Vents-PDM"; // test default value
             this.RootFolder = @"D:\Test"; // test default value
             this.SubjectDestinationFolder = subjectDestinationFolder;
             this.SourceFolder = sourceFolder;
@@ -152,7 +154,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
         protected int errors = 0;
         protected int warnings = 0;
 
-        protected virtual void EditPartParameters(string partName, string newPath)
+        protected virtual void EditPartParameters(string partName, string newPath, int materialID)
         {
             foreach (var eachParameter in parameters)
             {
@@ -163,23 +165,31 @@ namespace SolidWorksLibrary.Builders.ElementsCase
                 }
                 catch (Exception ex)
                 {
-                    System.Windows.Forms.MessageBox.Show(eachParameter.Key + "@" + partName);
+                    //System.Windows.Forms.MessageBox.Show(eachParameter.Key + "@" + partName);
                     MessageObserver.Instance.SetMessage(ex.ToString(), MessageType.Error);
                 }
             }
-            SolidWorksDocument.ForceRebuild3(true);
-            //SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(partName);///////////////////
-
-            /////////
-            //SolidWorksDocument.Visible = false;
-
-            SolidWorksDocument.Extension.SaveAs(newPath + ".SLDPRT", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent
-                                                          + (int)swSaveAsOptions_e.swSaveAsOptions_SaveReferenced + (int)swSaveAsOptions_e.swSaveAsOptions_UpdateInactiveViews, null, ref errors, warnings);
-            //InitiatorSaveExeption(errors, warnings, newPath);
-
-
             this.parameters.Clear();
-            //SolidWorksAdapter.CloseDocument(SolidWorksDocument);
+
+            SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(partName);
+            if (SolidWorksDocument != null)
+            {
+                SolidWorksDocument.ForceRebuild3(true);
+
+                toSQL.AddCustomProperty("", materialID, SolidWorksAdapter.SldWoksAppExemplare);
+                SolidWorksDocument.Extension.SaveAs(newPath + ".SLDPRT", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent
+                                                              + (int)swSaveAsOptions_e.swSaveAsOptions_SaveReferenced + (int)swSaveAsOptions_e.swSaveAsOptions_UpdateInactiveViews, null, ref errors, warnings);
+
+                InitiatorSaveExeption(errors, warnings, newPath);
+                SolidWorksAdapter.CloseDocument(SolidWorksDocument);
+            }
+            else
+            {
+                System.Windows.Forms.MessageBox.Show("Не удалось преобразовать деталь " + partName);
+            }
+
+            SolidWorksAdapter.SldWoksAppExemplare.DocumentVisible(false, 2);
+            SolidWorksAdapter.SldWoksAppExemplare.DocumentVisible(false, 1);
         }
 
         ///// <summary>

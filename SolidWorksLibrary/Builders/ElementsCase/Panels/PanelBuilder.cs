@@ -173,7 +173,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels {
                 {
                     base.parameters.Add("D4@Эскиз30", widthHandle);
                 }
-                EditPartParameters("02-01-001", base.NewPartPath);
+                EditPartParameters("02-01-001", base.NewPartPath, 0);
 
             }
             base.PartName = "02-" + (int)panelType + "-02-" + sizePanel.X + "-" + sizePanel.Y + "-" + OuterMaterial + "-" + InnerMaterial + "-" + (int)profile;
@@ -201,7 +201,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels {
                 base.parameters.Add("Толщина@Листовой металл", innerThickness);
                 base.parameters.Add("D1@Листовой металл", (double)BendRadius);
                 base.parameters.Add("D2@Листовой металл", (double)KFactor * 1000);
-                EditPartParameters("02-01-002", base.NewPartPath);
+                EditPartParameters("02-01-002", base.NewPartPath, 0);
             }
         }
 
@@ -231,7 +231,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels {
                 base.parameters.Add("Толщина@Листовой металл", outThickness);
                 base.parameters.Add("D1@Листовой металл", (double)BendRadius);
                 base.parameters.Add("D2@Листовой металл", (double)KFactor * 1000);
-                EditPartParameters("02-01-101-50", base.NewPartPath);
+                EditPartParameters("02-01-101-50", base.NewPartPath, 0);
             }
 
             base.PartName = "02-" + (int)panelType + "-02-" + sizePanel.X + "-" + sizePanel.Y + "-" + OuterMaterial + "-" + InnerMaterial + "-" + (int)profile;
@@ -256,7 +256,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels {
                 base.parameters.Add("Толщина@Листовой металл", outThickness);
                 base.parameters.Add("D1@Листовой металл", (double)BendRadius);
                 base.parameters.Add("D2@Листовой металл", (double)KFactor * 1000);
-                EditPartParameters("02-01-102-50", base.NewPartPath);
+                EditPartParameters("02-01-102-50", base.NewPartPath, 0);
             }
 
             base.PartName = "02-" + (int)panelType + "-03-" + sizePanel.X + "-" + sizePanel.Y + "-" + OuterMaterial + "-" + InnerMaterial + "-" + (int)profile;
@@ -281,7 +281,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels {
                 base.parameters.Add("Толщина@Листовой металл", outThickness);
                 base.parameters.Add("D1@Листовой металл", (double)BendRadius);
                 base.parameters.Add("D2@Листовой металл", (double)KFactor * 1000);
-                EditPartParameters("02-01-103-50", base.NewPartPath);
+                EditPartParameters("02-01-103-50", base.NewPartPath, 0);
             }
         }
 
@@ -327,7 +327,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels {
                 base.parameters.Add("D2@Эскиз1", innerHeight);
                 base.parameters.Add("D1@Бобышка-Вытянуть1", deepInsulation);
                 // TO DO change lenght by profile, propertis
-                EditPartParameters("02-01-003", base.NewPartPath);
+                EditPartParameters("02-01-003", base.NewPartPath, 0);
             }
 
             PartName = "02-04-" + (profile == PanelProfile_e.Profile_5_0 ? string.Empty : ((int)profile).ToString()) + sizePanel.X + "-" + sizePanel.Y;
@@ -343,7 +343,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels {
                 base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, MaterialsFolder, PartName);
                 base.parameters.Add("D6@Эскиз1", innerWeidht);
                 base.parameters.Add("D3@Эскиз1", innerHeight);
-                EditPartParameters("02-01-004", base.NewPartPath);
+                EditPartParameters("02-01-004", base.NewPartPath, 0);
             }
         }
 

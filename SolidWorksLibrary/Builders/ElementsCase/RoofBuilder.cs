@@ -18,7 +18,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
             SetProperties(@"Проекты\15 - Крыша", @"Библиотека проектирования\DriveWorks\15 - Roof");
         }
 
-        public string Build(int type, double width, double lenght, bool onlyPath)
+        public string Build(int type, double width, double lenght, bool onlyPath, int materialID)
         {
             SolidWorksDocument = null;
             base.PartName = "15-000";
@@ -81,8 +81,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase
                 base.parameters.Add("D1@Кривая2", weldW2 * 1000);
                 base.parameters.Add("D1@Кривая1", weldW * 1000);
 
-                EditPartParameters("15-001", NewPartPath);
-               
+                EditPartParameters("15-001", NewPartPath, materialID);
+
             }
             #endregion
 
@@ -116,8 +116,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase
                     base.parameters.Add("D1@Кривая2", weldW2 * 1000);
                     base.parameters.Add("D1@Кривая1", weldW * 1000);
 
-                    EditPartParameters("15-002", NewPartPath);
-                    
+                    EditPartParameters("15-002", NewPartPath, materialID);
+
                 }
                 SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("15-000.SLDASM");
                 SolidWorksDocument.Extension.SelectByID2("15-001-3@15-000", "COMPONENT", 0, 0, 0, false, 0, null, 0);

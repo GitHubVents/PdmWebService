@@ -3,6 +3,8 @@ using SolidWorks.Interop.swconst;
 using System;
 using System.IO;
 using Patterns.Observer;
+using System.Threading;
+
 namespace SolidWorksLibrary.Builders.Dxf
 {
     public   class DXF
@@ -20,7 +22,6 @@ namespace SolidWorksLibrary.Builders.Dxf
         public DXF(string folderToSaveDxf)
         {
             FolderToSaveDxf = folderToSaveDxf;
-
         }
         /// <summary>
         /// Convert to dxf input configuration of document 
@@ -33,16 +34,15 @@ namespace SolidWorksLibrary.Builders.Dxf
         public bool ConvertToDXF(string configuration,  IModelDoc2 swModel, out byte[] dxfByteCode,   bool isSheetmetal)
         {
             dxfByteCode = null;
-           string dxfFilePath = string.Empty;
+            string dxfFilePath = string.Empty;
             try
             {            
-              
-                var sDxfName = DxfNameBuild(swModel.GetTitle(), configuration) + ".dxf";
+                string sDxfName = DxfNameBuild(swModel.GetTitle(), configuration) + ".dxf";
                 dxfFilePath = Path.Combine(FolderToSaveDxf, sDxfName);
                 if (!Directory.Exists(FolderToSaveDxf))
                     Directory.CreateDirectory(FolderToSaveDxf);
 
-                var dataAlignment = new double[12];
+                double[] dataAlignment = new double[12];
 
                 dataAlignment[0] = 0.0;
                 dataAlignment[1] = 0.0;
@@ -58,23 +58,24 @@ namespace SolidWorksLibrary.Builders.Dxf
                 dataAlignment[11] = 1.0;
                 object varAlignment = dataAlignment;
 
-                var swPart = (IPartDoc)swModel;
-                int sheetmetalOptions = SheetMetalOptions(true, false, false, false, false, true, false);
+                IPartDoc swPart = (IPartDoc)swModel;
 
-                bool isExportToDWG2 = swPart.ExportToDWG2(dxfFilePath, swModel.GetPathName(), isSheetmetal ? (int)swExportToDWG_e.swExportToDWG_ExportSheetMetal : (int)swExportToDWG_e.swExportToDWG_ExportSelectedFacesOrLoops, true, varAlignment, false, false, sheetmetalOptions,
-                    isSheetmetal ? 0 : (int)swExportToDWG_e.swExportToDWG_ExportAnnotationViews);
-                MessageObserver.Instance.SetMessage("\tCompleted building " + swModel.GetTitle() + " with configuration \"" + configuration + "\"", MessageType.System);
+                int sheetmetalOptions = SheetMetalOptions(true, false, false, false, false, true, false);
+                bool isExportToDWG2 = swPart.ExportToDWG2(dxfFilePath, swModel.GetPathName(), isSheetmetal ? (int)swExportToDWG_e.swExportToDWG_ExportSheetMetal : (int)swExportToDWG_e.swExportToDWG_ExportSelectedFacesOrLoops,
+                    true, varAlignment, false, false, sheetmetalOptions, isSheetmetal ? 0 : (int)swExportToDWG_e.swExportToDWG_ExportAnnotationViews);
+
+                MessageObserver.Instance.SetMessage("\tCompleted building " + " with configuration \"" + configuration + "\"", MessageType.System);
 
                 if (isExportToDWG2)
                 {
                     dxfByteCode = DxfToByteCode(dxfFilePath);
                 }
-
+                             
                 return isExportToDWG2;
             }
             catch (Exception exception)
             {
-                string message = "\tFailed build dxf  " + swModel.GetTitle() + " with configuration \"" + configuration + "\"" + exception.ToString();
+                string message = "\tFailed build dxf  " + swModel?.GetTitle() + " with configuration \"" + configuration + "\"" + exception.ToString();
                 MessageObserver.Instance.SetMessage(message, MessageType.Error);
                 return false;
             }
@@ -96,13 +97,14 @@ namespace SolidWorksLibrary.Builders.Dxf
         {
             byte[] dxfByteCode = null;
              
-            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
+            using (FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read))
             {
                 using (var reader = new BinaryReader(stream))
                 {
                     dxfByteCode = reader.ReadBytes((int)stream.Length);
                 }
             }
+            
             return dxfByteCode;
         }
 

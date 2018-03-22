@@ -6,7 +6,6 @@ using SolidWorksLibrary;
 using SolidWorksLibrary.Builders.ElementsCase;
 using System;
 using System.IO;
-using AddFeatureContextMenu;
 using System.Collections.Generic;
 using System.Data;
 
@@ -15,7 +14,6 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
     public sealed class SpigotBuilder : ProductBuilderBehavior
     {
-        Operations_with_IPS ipsModuleObject = new Operations_with_IPS();
 
         private int warning = 0, error = 0;
         public SpigotBuilder() : base()
@@ -27,10 +25,9 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
         
 
-        public string Build(int type, Vector2 spigotSize) // должен возвращать лист с путями к файлам 
+        public string Build(int type, Vector2 spigotSize, int materialID) // должен возвращать лист с путями к файлам 
         {
             
-            Operations_with_IPS op = new Operations_with_IPS();
             Dictionary<string, string> dictionary = new Dictionary<string, string>();
             long tempId = 0;
 
@@ -81,7 +78,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, base.PartName);
                     base.parameters.Add("D1@Вытянуть1", h - 31);
                     base.parameters.Add("D1@Кривая1", weldHeight);
-                    EditPartParameters("12-20-001", base.NewPartPath);
+                    EditPartParameters("12-20-001", base.NewPartPath, materialID);
                     //tempId = op.WriteIntoIMBASE_Spigot_Table(dt, base.NewPartPath + ".SLDPRT", "Обозначениеttt", base.PartName, spigotSize.X.ToString(), spigotSize.Y.ToString(), type.ToString(), 1);
                     //ComponentsPathList.Add(base.NewPartPath);
                     idObjWithNewPath.Add(tempId);
@@ -101,12 +98,12 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
                     base.parameters.Add("D1@Вытянуть1", w - 31);
                     base.parameters.Add("D1@Кривая1", weldWidth);
-                    EditPartParameters("12-20-002", base.NewPartPath);
-                   // tempId = op.WriteIntoIMBASE_Spigot_Table(dt, base.NewPartPath + ".SLDPRT", "Обозначениеttt", base.PartName, spigotSize.X.ToString(), spigotSize.Y.ToString(), type.ToString(), 1);
-                    //ComponentsPathList.Add(base.NewPartPath);
-                    //Part=1296
-                    //Изделие=1052
-                    idObjWithNewPath.Add(tempId);
+                    EditPartParameters("12-20-002", base.NewPartPath, materialID);
+                // tempId = op.WriteIntoIMBASE_Spigot_Table(dt, base.NewPartPath + ".SLDPRT", "Обозначениеttt", base.PartName, spigotSize.X.ToString(), spigotSize.Y.ToString(), type.ToString(), 1);
+                //ComponentsPathList.Add(base.NewPartPath);
+                //Part=1296
+                //Изделие=1052
+                idObjWithNewPath.Add(tempId);
                 //}
 
                 //12-003 
@@ -121,11 +118,11 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
                     base.parameters.Add("D3@Эскиз1", w);
                     base.parameters.Add("D2@Эскиз1", h);
-                    EditPartParameters("12-003", base.NewPartPath);
-                   // tempId = op.WriteIntoIMBASE_Spigot_Table(dt, base.NewPartPath + ".SLDPRT", "Обозначениеttt", base.PartName, spigotSize.X.ToString(), spigotSize.Y.ToString(), type.ToString(), 1);
-                    
-                    //ComponentsPathList.Add(base.NewPartPath);
-                    idObjWithNewPath.Add(tempId);
+                    EditPartParameters("12-003", base.NewPartPath, materialID);
+                // tempId = op.WriteIntoIMBASE_Spigot_Table(dt, base.NewPartPath + ".SLDPRT", "Обозначениеttt", base.PartName, spigotSize.X.ToString(), spigotSize.Y.ToString(), type.ToString(), 1);
+
+                //ComponentsPathList.Add(base.NewPartPath);
+                idObjWithNewPath.Add(tempId);
                 //}
                 #endregion
             }
@@ -157,8 +154,8 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     base.parameters.Add("D1@Вытянуть1", h - 31);
                     base.parameters.Add("D1@Кривая1", weldHeight);
                     //base.parameters.Add("D5@Эскиз1", weldHeight);
-                    EditPartParameters("12-30-001", base.NewPartPath);
-                    ComponentsPathList.Add(base.NewPartPath);
+                    EditPartParameters("12-30-001", base.NewPartPath, materialID);
+                ComponentsPathList.Add(base.NewPartPath);
 
                 //}
 
@@ -186,8 +183,8 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
                     base.parameters.Add("D1@Вытянуть1", w - 31);
                     base.parameters.Add("D1@Кривая1", weldHeight);
-                    EditPartParameters("12-30-002", base.NewPartPath);
-                    ComponentsPathList.Add(base.NewPartPath);
+                    EditPartParameters("12-30-002", base.NewPartPath, materialID);
+                ComponentsPathList.Add(base.NewPartPath);
                 //}
                 //12-003
 
@@ -213,8 +210,8 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
                     base.parameters.Add("D3@Эскиз1", w);
                     base.parameters.Add("D2@Эскиз1", h);
-                    EditPartParameters("12-003", base.NewPartPath);
-                    ComponentsPathList.Add(base.NewPartPath); 
+                    EditPartParameters("12-003", base.NewPartPath, materialID);
+                ComponentsPathList.Add(base.NewPartPath); 
 
                 //}
                 #endregion

@@ -51,7 +51,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
                 rivetL = (Math.Truncate((frameSize.Z - 170) / step) + 1) * 1000;
                 parameters.Add("D1@Вытянуть1", frameSize.Z - 140);
                 parameters.Add("D1@Кривая1", rivetL);
-                EditPartParameters("01-P150-45-1640", newPartPath);
+                EditPartParameters("01-P150-45-1640", newPartPath, 0);
 
                 //frameSize.X
 
@@ -69,7 +69,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
                     rivetL = (Math.Truncate((frameSize.X - 170) / step) + 1) * 1000;
                     parameters.Add("D1@Вытянуть1", frameSize.X - 140);
                     parameters.Add("D1@Кривая1", rivetL);
-                    EditPartParameters("01-P150-45-1640", newPartPath);
+                    EditPartParameters("01-P150-45-1640", newPartPath, 0);
                 }
 
                 //01-P252-45-770
@@ -85,7 +85,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
                 else
                 {
                     parameters.Add("D1@Вытянуть1", frameSize.X - 100);
-                    EditPartParameters("01-P150-45-1640", newPartPath);
+                    EditPartParameters("01-P150-45-1640", newPartPath, 0);
                 }
 
                 //frameSize.Y
@@ -105,7 +105,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
 
                     parameters.Add("D1@Вытянуть1", (frameSize.Y - 140));
                     parameters.Add("D1@Кривая1", rivetL);
-                    EditPartParameters("01-P150-45-1640", newPartPath);
+                    EditPartParameters("01-P150-45-1640", newPartPath, 0);
                 }
 
                 //  01-P252-45-550
@@ -121,7 +121,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels
                 else
                 {
                     parameters.Add("D1@Вытянуть1", frameSize.Y - 100);
-                    EditPartParameters("01-P252-45-550", newPartPath);
+                    EditPartParameters("01-P252-45-550", newPartPath, 0);
                 }
 
                 SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(modelName);

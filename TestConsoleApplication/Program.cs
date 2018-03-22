@@ -2,6 +2,8 @@
 using PDMWebService.Data.Solid.ElementsCase;
 //using PDMWebService.Data.Solid.PartBuilders;
 using SolidWorksLibrary.Builders.Dxf;
+using SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless;
+using SolidWorksLibrary.Builders.ElementsCase;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,26 +16,11 @@ namespace Test//ConsoleApplication
     {
         static void Main(string[] args)
         {
-            //Patterns.Observer.MessageObserver.Instance.ReceivedMessage += Instance_ReceivedMessage;
-            //DxfBulder.Instance.FinishedBuilding += Instance_FinishedBuilding;
-            //DxfBulder.Instance.Build(@"C:\Users\Antonyk\Desktop\test documents\ВНС-900.00.9001.SLDPRT", 33, 1);
-
-            SpigotBuilder sp = new SpigotBuilder();
-
-            string s = sp.Build(ServiceTypes.Constants.SpigotType_e.Thirty_mm, new SolidWorksLibrary.Builders.ElementsCase.Vector2( 300, 666));
-
-            Console.WriteLine(s);
-            Console.ReadLine();
+            FramelessPanel panel = new FramelessPanel(ServiceTypes.Constants.PanelType_e.BlankPanel, new Vector2(600, 600), new Vector2(0, 0), new Vector2(0, 0), ServiceTypes.Constants.ThermoStrip_e.Rivet, null);
+            FramelessPanelBuilder builder = new FramelessPanelBuilder(panel, new List<FramelessPanel>(), "00" );
+            builder.Build();
+                
         }
 
-        //private static void Instance_FinishedBuilding(DataToExport dataToExport)
-        //{
-        //    //Console.WriteLine("good");
-        //}
-
-        //private static void Instance_ReceivedMessage(Patterns.Observer.MessageEventArgs massage)
-        //{
-        //    //Console.WriteLine(massage.Message);
-        //}
     }
 }

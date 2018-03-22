@@ -65,7 +65,7 @@ namespace TaskSystemLibrary
             {
                 MessageObserver.Instance.SetMessage("Неудалось добавить кат лист в базу детальнее см. исключение " + ex + " \n" );
             }
-            }
+        }
 
         public static void ExecutePdf (TaskInstance taskInstance)
         {

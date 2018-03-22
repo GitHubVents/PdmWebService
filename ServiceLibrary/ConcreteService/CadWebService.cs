@@ -285,7 +285,7 @@ namespace ServiceLibrary.ConcreteService
             spigotBuilder.CheckExistPart = CheckExistPart_Handler;
             try
             {
-                spigotBuilder.Build((int)type, new SolidWorksLibrary.Builders.ElementsCase.Vector2(width, height));
+                spigotBuilder.Build((int)type, new SolidWorksLibrary.Builders.ElementsCase.Vector2(width, height), 0);
 
                 foreach (var item in spigotBuilder.ComponentsPathList)
                 {

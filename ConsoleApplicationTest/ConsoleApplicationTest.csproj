@@ -4,14 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6A9FCC9D-F46C-45F5-8AC7-387C6562E4CD}</ProjectGuid>
+    <ProjectGuid>{7E2EEFD9-057B-4AE3-8DF1-01D55D3D5A02}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TestConsoleApplication</RootNamespace>
-    <AssemblyName>TestConsoleApplication</AssemblyName>
+    <RootNamespace>ConsoleApplicationTest</RootNamespace>
+    <AssemblyName>ConsoleApplicationTest</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,26 +34,31 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ServiceConstants">
-      <HintPath>..\ServiceConstants\bin\Release\ServiceConstants.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ServiceConstants\ServiceConstants.csproj">
+      <Project>{21a48c37-403d-4966-9414-6ea2327a204b}</Project>
+      <Name>ServiceConstants</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ServiceLibrary\ServiceTypes.csproj">
+      <Project>{72339207-ca2e-4581-ba9c-8e6a6a1052a6}</Project>
+      <Name>ServiceTypes</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SolidWorksLibrary\SolidWorksLibrary.csproj">
       <Project>{decc61e0-8d25-485f-99f4-d895177c7997}</Project>
       <Name>SolidWorksLibrary</Name>

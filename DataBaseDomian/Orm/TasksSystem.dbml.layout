@@ -8,16 +8,16 @@
         <elementListCompartment Id="0715fba4-b720-4991-94fe-a64d2a95257a" absoluteBounds="0.64, 2.335, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="92bfa5e8-90eb-4043-971a-3dfe48e3302e" absoluteBounds="4.125, 2, 2, 1.1939925130208333">
+    <classShape Id="92bfa5e8-90eb-4043-971a-3dfe48e3302e" absoluteBounds="4.25, 2.375, 2, 1.1939925130208333">
       <DataClassMoniker Name="/TasksSystemDataContext/Task" />
       <nestedChildShapes>
-        <elementListCompartment Id="f832f84b-d902-4869-aee7-463a793d0195" absoluteBounds="4.14, 2.46, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="f832f84b-d902-4869-aee7-463a793d0195" absoluteBounds="4.265, 2.835, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="498a6b31-b713-4765-a124-eade03480022" absoluteBounds="2.5, 0.875, 2, 1.7708968098958331">
+    <classShape Id="498a6b31-b713-4765-a124-eade03480022" absoluteBounds="2.25, 0.5, 2, 1.7708968098958331">
       <DataClassMoniker Name="/TasksSystemDataContext/TaskSelection" />
       <nestedChildShapes>
-        <elementListCompartment Id="3a692efd-88cd-402c-bb4b-448727ee7d8d" absoluteBounds="2.515, 1.335, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="3a692efd-88cd-402c-bb4b-448727ee7d8d" absoluteBounds="2.265, 0.96, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
     <classShape Id="2bbfb1fb-fe74-4197-a68e-1d7c80d505d3" absoluteBounds="6.5, 1.375, 2, 1.5785953776041666">

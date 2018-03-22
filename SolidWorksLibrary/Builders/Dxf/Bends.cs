@@ -1,8 +1,6 @@
-﻿using Patterns.Observer;
-using SolidWorks.Interop.sldworks;
+﻿using SolidWorks.Interop.sldworks;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 
 namespace SolidWorksLibrary.Builders.Dxf
@@ -31,7 +29,7 @@ namespace SolidWorksLibrary.Builders.Dxf
 
         public void Fix()
         {
-            FixOneBand(ConfigurationName, true);
+            FixOneBand(ConfigurationName);
         }
 
 
@@ -49,40 +47,40 @@ namespace SolidWorksLibrary.Builders.Dxf
 
         public List<PartBendInfo> PartBendInfos = new List<PartBendInfo>();
 
-        private void FixOneBand(string config, bool makeDxf)
+        private void FixOneBand(string config)
         {
-            var swPart = (IPartDoc)modelDoc;
-
-            _swFeat = (Feature)modelDoc.FirstFeature();
-            Feature flatPattern = null;
-
-            while ((_swFeat != null))
+            try
             {
-                if (_swFeat.GetTypeName() == "FlatPattern")
+                IPartDoc swPart = (IPartDoc)modelDoc;
+
+                _swFeat = (Feature)modelDoc.FirstFeature();
+                Feature flatPattern = null;
+
+                while ((_swFeat != null))
                 {
-                    flatPattern = _swFeat;
-                    flatPattern.Select(true);
-                    swPart.EditUnsuppress();
-                    flatPattern.DeSelect();
 
-                    _swSubFeat = (Feature)flatPattern.GetFirstSubFeature();
-
-                    while ((_swSubFeat != null))
+                    if (_swFeat.GetTypeName() == "FlatPattern")
                     {
-                        if (_swSubFeat.GetTypeName() == "UiBend")
+                        flatPattern = _swFeat;
+                        flatPattern.Select(true);
+                        swPart.EditUnsuppress();
+                        flatPattern.DeSelect();
+
+                        _swSubFeat = (Feature)flatPattern.GetFirstSubFeature();
+
+                        while ((_swSubFeat != null))
                         {
-                            object[] fisrtParent = _swSubFeat.GetParents();
-
-                            if (fisrtParent != null)
+                            if (_swSubFeat.GetTypeName() == "UiBend")
                             {
-                                int k = 0;
-                                foreach (var item in fisrtParent)
+                                object[] fisrtParent = _swSubFeat.GetParents();
+                                if (fisrtParent != null)
                                 {
+                                    foreach (var item in fisrtParent)
+                                    {
+                                        Feature swFirstParentFeat = (Feature)item;
+                                        bool SuppressedEdgeFlange = IsSuppressedEdgeFlange(swFirstParentFeat.GetOwnerFeature().Name);
 
-                                    Feature swFirstParentFeat = (Feature)item;
-                                    bool SuppressedEdgeFlange = IsSuppressedEdgeFlange(swFirstParentFeat.GetOwnerFeature().Name);
-
-                                    PartBendInfos.Add
+                                        PartBendInfos.Add
                                         (
                                             new PartBendInfo
                                             {
@@ -92,30 +90,33 @@ namespace SolidWorksLibrary.Builders.Dxf
                                                 Config = config
                                             }
                                         );
-                                    k++;
+                                    }
                                 }
                             }
+                            _swSubFeat = (Feature)_swSubFeat.GetNextSubFeature();
                         }
-                        _swSubFeat = (Feature)_swSubFeat.GetNextSubFeature();
                     }
-                }
 
-                _swFeat = (Feature)_swFeat.GetNextFeature();
+                    _swFeat = (Feature)_swFeat.GetNextFeature();
 
-                foreach (var item in PartBendInfos)
-                {
-
-                    if (!item.IsSupressed)
+                    foreach (var item in PartBendInfos)
                     {
-                        modelDoc.Extension.SelectByID2(item.EdgeFlange, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
-                        var swSelMgr = (SelectionMgr)modelDoc.SelectionManager;
-                        var swFeat = (Feature)swSelMgr.GetSelectedObject6(1, -1);
-                        swPart.EditUnsuppress();
+                        
+                        if (!item.IsSupressed)
+                        {
+                            modelDoc.Extension.SelectByID2(item.EdgeFlange, "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
+                            SelectionMgr swSelMgr = (SelectionMgr)modelDoc.SelectionManager;
+                            Feature swFeat = (Feature)swSelMgr.GetSelectedObject6(1, -1);
+                            swPart.EditUnsuppress();
+                        }
                     }
                 }
+                //modelDoc.EditRebuild3();
             }
-
-            modelDoc.EditRebuild3();
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show(ex.Message + "\t StackTrace " + ex.StackTrace);
+            }
         }
 
         bool IsSuppressedEdgeFlange(string featureName)
@@ -130,4 +131,3 @@ namespace SolidWorksLibrary.Builders.Dxf
         }
     }
 }
-

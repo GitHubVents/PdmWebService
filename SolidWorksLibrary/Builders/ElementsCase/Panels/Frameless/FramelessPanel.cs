@@ -22,11 +22,10 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless
             public bool isOneHandle = false;
             public Screws Screws { get; set; } 
             public ThermoStrip_e ThermoStrip { get; set; }
-
-        /// <summary>
-        /// Is assembly mirror
-        /// </summary>
+            
+       
         private bool IsMirror { get; set; }  // Determines whether it is a mirror for dual panels
+
 
         public FramelessPanel(PanelType_e panelType, Vector2 sizePanel, Vector2 windowSize, Vector2 windowsOffset, ThermoStrip_e thermoStrip, Screws screws)
         {

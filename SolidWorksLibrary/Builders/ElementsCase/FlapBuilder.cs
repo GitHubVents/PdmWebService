@@ -16,7 +16,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
         }
         
 
-        public void Build(FlapTypes_e flapType, Vector2 flapSize, bool isOutDoor, string[] material)
+        public void Build(FlapTypes_e flapType, Vector2 flapSize, bool isOutDoor, int materialID)
         {
 
             switch (flapType)
@@ -31,7 +31,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     break;
             }
 
-            string modelType = $"{(material[3] == "AZ" ? "" : "-" + material[3])}{(material[3] == "AZ" ? "" : material[1])}";
+            string modelType =  string.Empty;// = $"{(material[3] == "AZ" ? "" : "-" + material[3])}{(material[3] == "AZ" ? "" : material[1])}";
 
             string drawingName = "11-20";
             if (PartName == "11-30") { drawingName = PartName; }
@@ -104,7 +104,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                         base.parameters.Add("D3@Эскиз37", Convert.ToInt32(countL / 1000) % 2 == 1 ? 0 : 50);
                         base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
 
-                        EditPartParameters("11-005", base.NewPartPath);
+                        EditPartParameters("11-005", base.NewPartPath, materialID);
                     }
 
 
@@ -125,7 +125,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                         base.parameters.Add("D1@Кривая1", rivetH);
                         base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
 
-                        EditPartParameters("11-006", base.NewPartPath);
+                        EditPartParameters("11-006", base.NewPartPath, materialID);
                     }
 
                     SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
@@ -216,7 +216,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     base.parameters.Add("D1@Кривая1", rivetW);
                     base.parameters.Add("Толщина@Листовой металл1", Convert.ToDouble(thiknessStr));
 
-                    EditPartParameters("11-002", base.NewPartPath);
+                    EditPartParameters("11-002", base.NewPartPath, materialID);
                 }
 
                 // 11-003
@@ -240,7 +240,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
                     base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
 
-                    EditPartParameters("11-003", base.NewPartPath);
+                    EditPartParameters("11-003", base.NewPartPath, materialID);
                 }
 
                 // 11-001
@@ -265,7 +265,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
                     base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
 
-                    EditPartParameters("11-001", base.NewPartPath);
+                    EditPartParameters("11-001", base.NewPartPath, materialID);
                 }
                 
                 // 11-004
@@ -288,7 +288,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     base.parameters.Add("D1@Эскиз9", 18.5);
                     base.parameters.Add("Толщина@Листовой металл1", Convert.ToDouble(thiknessStr));
 
-                    EditPartParameters("11-004", base.NewPartPath);
+                    EditPartParameters("11-004", base.NewPartPath, materialID);
                 }
 
 
@@ -324,7 +324,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                         SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-100.SLDASM");
 
                         base.parameters.Add("D1@Вытянуть1", flapSize.X - 23);
-                        EditPartParameters("11-101", base.NewPartPath);
+                        EditPartParameters("11-101", base.NewPartPath, materialID);
 
                         SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-100.SLDASM");// save Профиль лопасти
                         SolidWorksDocument.EditRebuild3();
@@ -390,7 +390,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                         base.parameters.Add("D3@Эскиз37", ((countL / 1000) % 2 == 1) ? 0 : 50);
                         base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
 
-                        EditPartParameters("11-005", base.NewPartPath);
+                        EditPartParameters("11-005", base.NewPartPath, materialID);
                     }
 
                     // 11-006 
@@ -410,7 +410,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                         base.parameters.Add("D1@Кривая1", rivetH);
                         base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
 
-                        EditPartParameters("11-006", base.NewPartPath);
+                        EditPartParameters("11-006", base.NewPartPath, materialID);
                     }
                 }
                 else
@@ -560,7 +560,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     base.parameters.Add("D1@Кривая1", Math.Truncate(lp2 / step)*1000 + 1);//*1000
                     base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
 
-                    EditPartParameters("11-30-001", base.NewPartPath);
+                    EditPartParameters("11-30-001", base.NewPartPath, materialID);
                 }
 
                 // 11-30-002
@@ -582,7 +582,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     base.parameters.Add("D1@Кривая2", rivetH);
                     base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
 
-                    EditPartParameters("11-30-002", base.NewPartPath);
+                    EditPartParameters("11-30-002", base.NewPartPath, materialID);
                 }
 
                 // 11-30-004 
@@ -604,7 +604,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     base.parameters.Add("D1@Кривая2", rivetH);
                     base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
 
-                    EditPartParameters("11-30-004", base.NewPartPath);
+                    EditPartParameters("11-30-004", base.NewPartPath, materialID);
                 }
 
                 // 11-30-003
@@ -625,7 +625,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     base.parameters.Add("D1@Кривая1", Math.Truncate(lp2/step)*1000 + 1);//*1000)
                     base.parameters.Add("Толщина@Листовой металл1", Convert.ToDouble(thiknessStr));
 
-                    EditPartParameters("11-30-003", base.NewPartPath);
+                    EditPartParameters("11-30-003", base.NewPartPath, materialID);
                 }
 
                 #endregion
@@ -664,7 +664,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                         {
                             SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-100.SLDASM");
                             base.parameters.Add("D1@Вытянуть1", lProfNameLength);
-                            EditPartParameters("11-101", base.NewPartPath);
+                            EditPartParameters("11-101", base.NewPartPath, materialID);
                         }
 
                         #endregion
@@ -700,7 +700,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                             SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-100.SLDASM");
                             SolidWorksDocument.EditRebuild3();
                             base.parameters.Add("D1@Вытянуть1", lProfNameLength);
-                            EditPartParameters("11-101", base.NewPartPath);
+                            EditPartParameters("11-101", base.NewPartPath, materialID);
                         }
 
                         #endregion
@@ -767,7 +767,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                             base.parameters.Add("D1@Кривая2",rivetH);
                             base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
 
-                            EditPartParameters("11-30-101", base.NewPartPath);
+                            EditPartParameters("11-30-101", base.NewPartPath, materialID);
                         }
 
                         #endregion
@@ -793,7 +793,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                             base.parameters.Add("D1@Кривая1", rivetH);
                             base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
 
-                            EditPartParameters("11-30-102", base.NewPartPath);
+                            EditPartParameters("11-30-102", base.NewPartPath, materialID);
                         }
 
                         #endregion

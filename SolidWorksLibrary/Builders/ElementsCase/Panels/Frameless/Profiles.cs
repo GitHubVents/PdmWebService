@@ -45,7 +45,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
             parameters.Add("D1@Кривая1", rivetStep == 1000 ? 2000 : rivetStep);
             parameters.Add("D2@Эскиз23", (!flange30) ? 10.0 : 15.0);
             parameters.Add("D3@Эскиз23", (!flange30) ? 10.0 : 15.0);
-            EditPartParameters("02-11-11-40-", NewPartPath);
+            EditPartParameters("02-11-11-40-", NewPartPath, 0);
         }
 
 
@@ -88,7 +88,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                 parameters.Add("Толщина@Листовой металл", thiknessF);
                 parameters.Add("D1@Листовой металл", (double)BendRadius);
                 parameters.Add("D2@Листовой металл", (double)KFactor * 1000);
-                EditPartParameters("02-11-06-40-", "");
+                EditPartParameters("02-11-06-40-", "", 0);
                 //    $@"{Settings.Default.DestinationFolder}\{_destinationFolder}\{newName}",
             }
 
@@ -133,8 +133,8 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                     parameters.Add("Толщина@Листовой металл", thiknessF);
                     parameters.Add("D1@Листовой металл", (double)base.BendRadius);
                     parameters.Add("D2@Листовой металл", (double)base.KFactor * 1000);
-                    EditPartParameters("02-11-06_2-40-", NewPartPath);
-                    }
+                    EditPartParameters("02-11-06_2-40-", NewPartPath, 0);
+                }
                 }
 
                 #endregion
@@ -163,7 +163,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase.Panels.Frameless {
                 parameters.Add("D1@Листовой металл", (double)base.BendRadius);
                 parameters.Add("D2@Листовой металл", (double) base.KFactor  * 1000);
 
-                EditPartParameters("02-11-07-40-", NewPartPath);
+                EditPartParameters("02-11-07-40-", NewPartPath, 0);
                 #endregion
             }
 

@@ -21,7 +21,7 @@ namespace SolidWorksLibrary.Builders.Dxf
         public static DataToExport GetDataToExport(ModelDoc2 swModel)
         {
             solidWorksDocument = swModel;
-            var dataToExport = new DataToExport();
+            DataToExport dataToExport = new DataToExport();
             string valOut;            
             const string BoundingBoxLengthRu = @"Длина граничной рамки"; // rename, change number to eng/rus
             const string BoundingBoxLengthEng = @"Bounding Box Length";
@@ -45,7 +45,7 @@ namespace SolidWorksLibrary.Builders.Dxf
                     {
                         if (swSubFeat.GetTypeName2() == "CutListFolder")
                         {
-                            MessageObserver.Instance.SetMessage("GetTypeName2: " + swSubFeat.GetTypeName2() + "; swSubFeat.Name " + swSubFeat.Name);
+                            //MessageObserver.Instance.SetMessage("GetTypeName2: " + swSubFeat.GetTypeName2() + "; swSubFeat.Name " + swSubFeat.Name);
                             BodyFolder bodyFolder = swSubFeat.GetSpecificFeature2();
 
                             if (bodyFolder.GetCutListType() != (int)swCutListType_e.swSheetmetalCutlist)
@@ -148,7 +148,7 @@ m1:
                 {
                     
                     var result =  Convert.ToDecimal(stringNumner, culture);
-                    MessageObserver.Instance.SetMessage($"Successfully safe convert {stringNumner} to decemal by CultureInfo {culture.ToString()}.");
+                    //MessageObserver.Instance.SetMessage($"Successfully safe convert {stringNumner} to decemal by CultureInfo {culture.ToString()}.");
                     return result;
                 }
                 catch (Exception exception)

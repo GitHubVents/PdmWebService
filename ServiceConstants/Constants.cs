@@ -349,16 +349,41 @@ namespace  ServiceTypes.Constants
         Standart = 0,
         [EnumMember]
         Stiched = 1
-      
     }
 
     [DataContract(Name = "ServiceSide")]
-    public enum ServiceSide
+    public enum ServiceSide_e
     {
         [EnumMember]
         Left = 0,
         [EnumMember]
         Right = 1
-
     }
+
+    [DataContract(Name = "Установка")]
+    public enum Ustanovka_e
+    {
+        OnePanel = 1,
+        TwoPanels = 2,
+        ThreePanels = 3
+    }
+
+    [DataContract(Name = "Усиливающие панели")]
+    public enum AmplificationPanels_e
+    {
+        WithoutPannels = 0,
+        FirstAmplificationPanel = 1,
+        SecondAmplificationPanel = 2,
+        TwoAmplificatePannels = 3
+    }
+
+    [DataContract(Name = "Торцевые панели")]
+    public enum TortseviePaneli_e
+    {
+        WithouTortsevih = 0,
+        OnInput = 1,
+        OnOutput = 3,
+        TwoTortsevihPanels = 2
+    }
+
 }
