@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 
 namespace VentsMaterials
 {
@@ -13,7 +9,6 @@ namespace VentsMaterials
         {
             get
             {
-                
                 return Path.Combine(PathToSwComplexFolder,"vents-materials.sldmat");
             }
         }
@@ -22,8 +17,9 @@ namespace VentsMaterials
         {
             get
             {
-                
-                return Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData), "sw-complex");
+                //Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"Local\Temp");
+                //return Path.GetTempPath();
+                return System.IO.Path.GetTempPath();
             }
         }
     }

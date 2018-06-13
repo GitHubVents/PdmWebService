@@ -3,12 +3,13 @@
   <Table Name="dbo.AssemblyFrame" Member="AssemblyFrames">
     <Type Name="AssemblyFrame">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Checked" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="FrameType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Width" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Height" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Thick" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Offset" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Element" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Material" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
   <Function Name="dbo.AirVents_AddAssemblyFrame" Method="AirVents_AddAssemblyFrame">
@@ -18,6 +19,7 @@
     <Parameter Name="Thick" Parameter="thick" Type="System.Decimal" DbType="Decimal(3,1)" />
     <Parameter Name="Offset" Parameter="offset" Type="System.Int32" DbType="Int" />
     <Parameter Name="Element" Parameter="element" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Material" Parameter="material" Type="System.Int32" DbType="Int" />
     <Parameter Name="ID" Parameter="iD" Type="System.Int32" DbType="Int" Direction="InOut" />
     <Return Type="System.Int32" />
   </Function>

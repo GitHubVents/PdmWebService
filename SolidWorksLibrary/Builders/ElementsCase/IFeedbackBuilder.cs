@@ -27,6 +27,7 @@ namespace SolidWorksLibrary.Builders.ElementsCase
     /// <param name="bendRadius"></param>
     public delegate void SetBendsHandler(decimal thickness, out decimal kFactor, out decimal bendRadius);
 
+
     public interface IFeedbackBuilder
     {
 

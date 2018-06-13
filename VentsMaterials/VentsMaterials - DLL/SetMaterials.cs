@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using SolidWorks.Interop.sldworks;
 using SolidWorks.Interop.swconst;
 using System.Drawing;
+using Patterns.Observer;
 
 namespace VentsMaterials
 {
@@ -36,8 +37,9 @@ namespace VentsMaterials
             tablecoatin.Columns.Add("Code", typeof(string));
 
             // Here we add five DataRows.
-            tablecoatin.Rows.Add("Шаргень", "WR");
+            tablecoatin.Rows.Add("Шагрень", "WR");
             tablecoatin.Rows.Add("Глянец", "GL");
+            tablecoatin.Rows.Add("E/P-PARLAK (Муар)", "E/P-PARLAK");
 
             return tablecoatin;
         }
@@ -273,7 +275,7 @@ namespace VentsMaterials
         #endregion
 
 
-        //
+        
         public List<MatName> GetCustomProperty(string confname, SldWorks swApp)
         {
             try
@@ -318,6 +320,7 @@ namespace VentsMaterials
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
+                MessageObserver.Instance.SetMessage(ex.Message + System.Environment.NewLine + _swmodel?.GetTitle());
                 throw;
             }
         }
@@ -630,7 +633,6 @@ namespace VentsMaterials
             {
                 _swmodel.DeleteCustomInfo2(configName, "Материал");
             }
-
         }
 
         // Set Materials
@@ -638,6 +640,8 @@ namespace VentsMaterials
         {
             _swmodel = swapp.ActiveDoc;
             swapp.SetUserPreferenceStringValue((int)swUserPreferenceStringValue_e.swFileLocationsMaterialDatabases, GlobalPaths.PathToSwComplexFolder); // задаем базы данных материалов
+            MessageObserver.Instance.SetMessage("6)  Path to vents-materials.sldmat: " + GlobalPaths.PathToSwComplexFolder);
+            MessageObserver.Instance.SetMessage("MessageObserver.Instance when ApplyMaterial " + MessageObserver.Instance.GetHashCode().ToString());//////////////////////////////////////////////////
 
             _swPartDoc = ((PartDoc)(_swmodel));
 
@@ -650,11 +654,16 @@ namespace VentsMaterials
                 Component2 comp = _swmodel.ISelectionManager.GetSelectedObject3(1);
                 PartDoc swPartAssem = comp.GetModelDoc();
 
-                //// удаляем материал
-                //swPartAssem.SetMaterialPropertyName("", "");
-
-                // применяем материал
-                swPartAssem.SetMaterialPropertyName2(confName, dbMatName, addMatXml.AddMaterialtoXml(materialID));
+                try
+                {
+                    swPartAssem.SetMaterialPropertyName2(confName, dbMatName, addMatXml.AddMaterialtoXml(materialID));
+                }
+                catch (Exception)
+                {
+                    swapp.SendMsgToUser("Материал не применен, не найден файл vents-materials.sldmat");
+                    MessageObserver.Instance.SetMessage("Material wasn't applied,  file vents-materials.sldmat wasn't found!");
+                }
+                
                 _swmodel.ClearSelection2(true);
             }
             else if (_swmodel.GetType() == (int)swDocumentTypes_e.swDocPART)
@@ -662,37 +671,31 @@ namespace VentsMaterials
                 // Если имя не пустое
                 if (partPath != "")
                 {
-                    //// удаляем материал
-                    //swPartDoc.SetMaterialPropertyName("", "");
-
                     // применяем материал
-                    _swPartDoc.SetMaterialPropertyName2(confName, dbMatName, addMatXml.AddMaterialtoXml(materialID));
-                    
-
-                    //_swmodel.ForceRebuild3(false);
-                    //_swmodel.Save3((int)swSaveAsOptions_e.swSaveAsOptions_Silent, 0, 0);
-                    //swapp.CloseDoc(partPath);
-                    //swapp.ExitApp();
-                    //swapp = null;
+                    try
+                    {
+                        _swPartDoc.SetMaterialPropertyName2(confName, dbMatName, addMatXml.AddMaterialtoXml(materialID));
+                    }
+                    catch (Exception)
+                    {
+                        swapp.SendMsgToUser("Материал не применен, не найден файл vents-materials.sldmat");
+                        MessageObserver.Instance.SetMessage("Material wasn't applied,  file vents-materials.sldmat wasn't found!");
+                    }
                 }
                 else
                 {
-                    //// удаляем материал
-                    //swPartDoc.SetMaterialPropertyName(confName, "");
-
                     // применяем материал
-                    _swPartDoc.SetMaterialPropertyName2(confName, dbMatName, addMatXml.AddMaterialtoXml(materialID));
+                    try
+                    {
+                        _swPartDoc.SetMaterialPropertyName2(confName, dbMatName, addMatXml.AddMaterialtoXml(materialID));
+                    }
+                    catch (Exception)
+                    {
+                        swapp.SendMsgToUser("Материал не применен, не найден файл vents-materials.sldmat");
+                        MessageObserver.Instance.SetMessage("Material wasn't applied,  file vents-materials.sldmat wasn't found!");
+                    }
                 }
-
             }
-        
-        
-            //catch (Exception ex)
-            //{
-            //    //swapp.SendMsgToUser(ex.ToString());
-            //    MessageBox.Show(ex.Message);
-            //    Error = ex.ToString();
-            //}
         }
 
         #region COLOR
@@ -710,77 +713,77 @@ namespace VentsMaterials
             else
             {
 
-            if (swapp == null)
-            {
-                swapp = (SldWorks)Marshal.GetActiveObject("SldWorks.Application");
-            }
+                if (swapp == null)
+                {
+                    swapp = (SldWorks)Marshal.GetActiveObject("SldWorks.Application");
+                }
 
-            _swmodel = swapp.ActiveDoc;
+                _swmodel = swapp.ActiveDoc;
 
-            ModelDocExtension swModelDocExt = null;
-  
-            DisplayStateSetting swDisplayStateSetting = null;
-            var swComponents = new Component2[1];
-            object[] displayStateNames = null;
-            object appearances = null;
-            object[] appearancesArray = null;
-            var swAppearanceSetting = default(AppearanceSetting);
-            var newAppearanceSetting = new AppearanceSetting[1];
-            ConfigurationManager swConfigMgr = default(ConfigurationManager);
-            Configuration swConfig = default(Configuration);
+                ModelDocExtension swModelDocExt = null;
 
-            CheckedDisplayStatesToConfig(swapp);
+                DisplayStateSetting swDisplayStateSetting = null;
+                var swComponents = new Component2[1];
+                object[] displayStateNames = null;
+                object appearances = null;
+                object[] appearancesArray = null;
+                var swAppearanceSetting = default(AppearanceSetting);
+                var newAppearanceSetting = new AppearanceSetting[1];
+                ConfigurationManager swConfigMgr = default(ConfigurationManager);
+                Configuration swConfig = default(Configuration);
 
-            int nbrDisplayStates = 0;
+                CheckedDisplayStatesToConfig(swapp);
 
-            swModelDocExt = (ModelDocExtension)_swmodel.Extension;
-            swConfigMgr = (ConfigurationManager)_swmodel.ConfigurationManager;
-            swConfig = (Configuration)swConfigMgr.ActiveConfiguration;
+                int nbrDisplayStates = 0;
 
-            swComponents[0] = null;
-            swComponents[0] = swConfig.GetRootComponent3(true);
+                swModelDocExt = (ModelDocExtension)_swmodel.Extension;
+                swConfigMgr = (ConfigurationManager)_swmodel.ConfigurationManager;
+                swConfig = (Configuration)swConfigMgr.ActiveConfiguration;
 
-            _swmodel.ClearSelection2(true);
-           
-            //Get display state
-            swDisplayStateSetting = (DisplayStateSetting)swModelDocExt.GetDisplayStateSetting((int)swDisplayStateOpts_e.swAllDisplayState);
-            swDisplayStateSetting.Entities = swComponents;
-            swDisplayStateSetting.Option = (int)swDisplayStateOpts_e.swSpecifyDisplayState;
-            // Get the names of display states 
-            displayStateNames = (object[])swConfig.GetDisplayStates();
+                swComponents[0] = null;
+                swComponents[0] = swConfig.GetRootComponent3(true);
 
-            nbrDisplayStates = swConfig.GetDisplayStatesCount();
+                _swmodel.ClearSelection2(true);
 
-            for (var i = 0; i <= (nbrDisplayStates - 1); i++)
-            {
-                var displayStateName = (string)displayStateNames[i];
+                //Get display state
+                swDisplayStateSetting = (DisplayStateSetting)swModelDocExt.GetDisplayStateSetting((int)swDisplayStateOpts_e.swAllDisplayState);
+                swDisplayStateSetting.Entities = swComponents;
+                swDisplayStateSetting.Option = (int)swDisplayStateOpts_e.swSpecifyDisplayState;
+                // Get the names of display states 
+                displayStateNames = (object[])swConfig.GetDisplayStates();
 
-                displayStateNames[0] = displayStateName; //"<Default>_Состояние отображения 1";
-                swDisplayStateSetting.Names = displayStateNames;
-            }
+                nbrDisplayStates = swConfig.GetDisplayStatesCount();
 
-            //Change color of selected component in specified display state
-            //from default red to green; this is the overriding color
-            appearances = swModelDocExt.DisplayStateSpecMaterialPropertyValues[swDisplayStateSetting];
-            appearancesArray = (object[])appearances;
-            swAppearanceSetting = (AppearanceSetting)appearancesArray[0];
+                for (var i = 0; i <= (nbrDisplayStates - 1); i++)
+                {
+                    var displayStateName = (string)displayStateNames[i];
 
-            //Color myColor = Color.FromArgb(0xBEBD7F);
-            var myColor =  ColorTranslator.FromHtml("#" + hex);
+                    displayStateNames[0] = displayStateName; //"<Default>_Состояние отображения 1";
+                    swDisplayStateSetting.Names = displayStateNames;
+                }
 
-            int redRgb = myColor.R;
-            int greenRgb = myColor.G;
-            int blueRgb = myColor.B;
-   
-            int newColor = Math.Max(Math.Min(redRgb, 255), 0) + Math.Max(Math.Min(greenRgb, 255), 0) * 16 * 16 + Math.Max(Math.Min(blueRgb, 255), 0) * 16 * 16 * 16 * 16;
+                //Change color of selected component in specified display state
+                //from default red to green; this is the overriding color
+                appearances = swModelDocExt.DisplayStateSpecMaterialPropertyValues[swDisplayStateSetting];
+                appearancesArray = (object[])appearances;
+                swAppearanceSetting = (AppearanceSetting)appearancesArray[0];
 
-            swAppearanceSetting.Color = newColor;
-            newAppearanceSetting[0] = swAppearanceSetting;
-            _swmodel.ClearSelection2(true);
-            swModelDocExt.DisplayStateSpecMaterialPropertyValues[swDisplayStateSetting] = newAppearanceSetting;
+                //Color myColor = Color.FromArgb(0xBEBD7F);
+                var myColor = ColorTranslator.FromHtml("#" + hex);
 
-            colorsql.SetRalSql(configname, hex, coatingtype, coatingclass, true, swapp);
-    
+                int redRgb = myColor.R;
+                int greenRgb = myColor.G;
+                int blueRgb = myColor.B;
+
+                int newColor = Math.Max(Math.Min(redRgb, 255), 0) + Math.Max(Math.Min(greenRgb, 255), 0) * 16 * 16 + Math.Max(Math.Min(blueRgb, 255), 0) * 16 * 16 * 16 * 16;
+
+                swAppearanceSetting.Color = newColor;
+                newAppearanceSetting[0] = swAppearanceSetting;
+                _swmodel.ClearSelection2(true);
+                swModelDocExt.DisplayStateSpecMaterialPropertyValues[swDisplayStateSetting] = newAppearanceSetting;
+
+                colorsql.SetRalSql(configname, hex, coatingtype, coatingclass, true, swapp);
+
             }
 
         }

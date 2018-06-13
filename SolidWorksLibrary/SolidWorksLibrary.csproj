@@ -35,8 +35,9 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DataBaseDomian">
-      <HintPath>..\DataBaseDomian\bin\Release\DataBaseDomian.dll</HintPath>
+    <Reference Include="DataBaseDomian, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\AddFeatureContextMenu\ControlsLibrary\bin\Debug\DataBaseDomian.dll</HintPath>
     </Reference>
     <Reference Include="MessageLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -80,23 +81,23 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="VentsMaterials">
-      <HintPath>..\VentsMaterials\VentsMaterials - DLL\bin\Debug\VentsMaterials.dll</HintPath>
+    <Reference Include="VentsMaterials2, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\VentsMaterials\VentsMaterials - DLL\bin\Debug\VentsMaterials2.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Builders\Case\FramelessBlock.cs" />
-    <Compile Include="Builders\Case\OneUnit.cs" />
     <Compile Include="Builders\Dxf\Bends.cs" />
     <Compile Include="Builders\Dxf\DXF.cs" />
     <Compile Include="Builders\Dxf\CutList.cs" />
     <Compile Include="Builders\Dxf\DataToExport.cs" />
     <Compile Include="Builders\Dxf\DxfBulder.cs" />
     <Compile Include="Builders\Dxf\DxfFile.cs" />
+    <Compile Include="Builders\ElementsCase\Panels\Frameless\ServiceSide.cs" />
     <Compile Include="Builders\ElementsCase\ProductBuilderBehavior.cs" />
     <Compile Include="Builders\ElementsCase\FlapBuilder.cs" />
     <Compile Include="Builders\ElementsCase\IFeedbackBuilder.cs" />
-    <Compile Include="Builders\Case\MonoBlockBuilder.cs" />
     <Compile Include="Builders\ElementsCase\MountingFrameBuilder.cs" />
     <Compile Include="Builders\ElementsCase\Panels\Frameless\Components\DeterminateCut.cs" />
     <Compile Include="Builders\ElementsCase\Panels\FrameCaseBuilder.cs" />
@@ -121,14 +122,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="SolidWorksAdapter.cs" />
-    <Compile Include="tbAssemblyName.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>tbAssemblyName.dbml</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Builders\ElementsCase\MonoBlocks\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -136,19 +129,9 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="tbAssemblyName.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>tbAssemblyName.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="tbAssemblyName.dbml.layout">
-      <DependentUpon>tbAssemblyName.dbml</DependentUpon>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

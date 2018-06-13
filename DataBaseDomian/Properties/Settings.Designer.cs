@@ -27,10 +27,10 @@ namespace DataBaseDomian.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=pdmsrv;Initial Catalog=TaskDataBase;Persist Security Info=True;User I" +
-            "D=AirVentsCad;Password=1")]
-        public string TaskDataBaseConnectionString {
+            "D=AirVentsCad")]
+        public string TaskDataBaseConnectionString1 {
             get {
-                return ((string)(this["TaskDataBaseConnectionString"]));
+                return ((string)(this["TaskDataBaseConnectionString1"]));
             }
         }
         
@@ -38,10 +38,10 @@ namespace DataBaseDomian.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=pdmsrv;Initial Catalog=TaskDataBase;Persist Security Info=True;User I" +
-            "D=AirVentsCad")]
-        public string TaskDataBaseConnectionString1 {
+            "D=AirVentsCad;Password=1")]
+        public string TaskDataBaseConnectionString {
             get {
-                return ((string)(this["TaskDataBaseConnectionString1"]));
+                return ((string)(this["TaskDataBaseConnectionString"]));
             }
         }
         
@@ -53,6 +53,17 @@ namespace DataBaseDomian.Properties {
         public string SWPlusDBConnectionString {
             get {
                 return ((string)(this["SWPlusDBConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=pdmsrv;Initial Catalog=SWPlusDB;User ID=airventscad;Password=1;TrustS" +
+            "erverCertificate=True")]
+        public string SWPlusDBConnectionString1 {
+            get {
+                return ((string)(this["SWPlusDBConnectionString1"]));
             }
         }
     }

@@ -2,67 +2,74 @@
 using SolidWorks.Interop.swconst;
 using SolidWorksLibrary;
 using System;
-using ServiceTypes.Constants; 
+using ServiceTypes.Constants;
 using SolidWorksLibrary.Builders.ElementsCase;
+using System.IO;
+using DataBaseDomian;
 
 namespace PDMWebService.Data.Solid.ElementsCase
 {
    public class FlapBuilder : ProductBuilderBehavior
-    {
+   {
         int errores = 0, warnings = 0;
-        public FlapBuilder()
+        public FlapBuilder() : base()
         { 
             base.SetProperties(@"Проекты\11 - Регулятор расхода воздуха", @"Библиотека проектирования\DriveWorks\11 - Damper");
+            base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, @"11-");
         }
         
 
-        public void Build(FlapTypes_e flapType, Vector2 flapSize, bool isOutDoor, int materialID)
+        public void Build(FlapTypes_e flapType, Vector2 flapSize, bool isOutDoor, int materialID, double thickness)
         {
-
+            double addH = 0;
             switch (flapType)
             {
                 case FlapTypes_e.Twenty_mm:
                     PartName = "11-20";
                     AssemblyName = "11 - Damper";
+                    addH = 0;
                     break;
                 case FlapTypes_e.Thirty_mm:
                     PartName = "11-30";
                     AssemblyName = "11-30";
+                    addH = -8;
                     break;
             }
 
-            string modelType =  string.Empty;// = $"{(material[3] == "AZ" ? "" : "-" + material[3])}{(material[3] == "AZ" ? "" : material[1])}";
+            string modelType = string.Empty;
 
             string drawingName = "11-20";
             if (PartName == "11-30") { drawingName = PartName; }
 
             string modelDRWPath = $@"{RootFolder}\{SourceFolder}\{drawingName}";
-            string newDamperName = PartName + "-" + flapSize.X + "-" + flapSize.Y + modelType + (isOutDoor ? "-O" : "");
-            string newDamperAsmPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newDamperName}.SLDASM";
             string modelLamel = $@"{RootFolder}\{base.SourceFolder}\{"11-100"}.SLDDRW";
             string modelPath = $@"{RootFolder}\{base.SourceFolder}\{base.AssemblyName}.SLDASM";
 
             SolidWorksAdapter.OpenDocument(modelDRWPath + ".SLDDRW",  swDocumentTypes_e.swDocDRAWING);
             SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(base.AssemblyName + ".SLDASM");
-            
+
+
+            int? ID = 0;
+            SwPlusRepository.Instance.AirVents_AddAssemblyFlap((int)flapType, flapSize.X.ToInt(), flapSize.Y.ToInt(), isOutDoor, materialID, (decimal)thickness, 0, ref ID);
+            string newDamperName = ID.ToString();
+
+
 
             #region // Габариты
+            SetBends?.Invoke((decimal)thickness, out base.KFactor, out base.BendRadius);
             // Количество лопастей
             double countL = (Math.Truncate(flapSize.Y / 100)) * 1000;
             // Шаг заклепок
             const double step = 140;
-            double rivetW = (Math.Truncate(flapSize.X / step) + 1) * 1000;
-            double rivetH = (Math.Truncate(flapSize.Y / step) + 1) * 1000;
-
+            double rivetW = (Math.Truncate(flapSize.X / step)+ 1) * 1000;
+            double rivetH = (Math.Truncate((flapSize.Y + addH) / step) + 1) * 1000;
             // Высота уголков
             double hC = Math.Truncate(7 + 5.02 + (flapSize.Y - countL / 10 - 10.04) / 2);
-            
-            // Коэффициенты и радиусы гибов   
-            var thiknessStr =/* material?[1].Replace(".", ",") ?? */ "3";
             #endregion
 
-            #region typeOfFlange = "20"
 
+
+            #region typeOfFlange = "20"
             if (flapType == FlapTypes_e.Twenty_mm)
             {
                 if ((countL / 1000) % 2 == 1) //нечетное
@@ -75,61 +82,9 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     SolidWorksDocument.EditUnsuppress2();
                 }
 
-                string newName;
 
                 if (isOutDoor)
                 {
-                    //Replace Component
-                    SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
-                    SolidWorksDocument.Extension.SelectByID2("11-003-6@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    SolidWorksAdapter.ToAssemblyDocument(SolidWorksDocument);
-                    AssemblyDocument.ReplaceComponents(base.NewPartPath, "", false, true);
-                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-003.SLDPRT");
-
-                    // 11-005 
-                    newName = "11-05-" + flapSize.Y + modelType;
-                    base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
-
-                    if (false)
-                    {
-                        SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
-                        SolidWorksDocument.Extension.SelectByID2("11-005-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                        AssemblyDocument.ReplaceComponents(base.NewPartPath + ".SLDPRT", "", false, true);
-                        SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-005.SLDPRT");
-                    }
-                    else
-                    {
-                        base.parameters.Add("D3@Эскиз1", flapSize.Y);
-                        base.parameters.Add("D1@Кривая1", rivetH);
-                        base.parameters.Add("D3@Эскиз37", Convert.ToInt32(countL / 1000) % 2 == 1 ? 0 : 50);
-                        base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
-
-                        EditPartParameters("11-005", base.NewPartPath, materialID);
-                    }
-
-
-                    // 11-006 
-                    newName = "11-06-" + flapSize.Y + modelType;
-                    base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
-
-                    if (false)
-                    {
-                        SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
-                        SolidWorksDocument.Extension.SelectByID2("11-006-1@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                        AssemblyDocument.ReplaceComponents(base.NewPartPath + ".SLDPRT", "", false, true);
-                        SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-006.SLDPRT");
-                    }
-                    else
-                    {
-                        base.parameters.Add("D3@Эскиз1", flapSize.Y);
-                        base.parameters.Add("D1@Кривая1", rivetH);
-                        base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
-
-                        EditPartParameters("11-006", base.NewPartPath, materialID);
-                    }
-
-                    SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
-
                     //Delete Components
                     SolidWorksDocument.Extension.SelectByID2("Эскиз1", "SKETCH", 0, 0, 0, false, 0, null, 0);
                     SolidWorksDocument.EditSuppress2();
@@ -167,7 +122,59 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
                     SolidWorksDocument.Extension.SelectByID2("Вырез-Вытянуть1@11-003@11 - Damper", "BODYFEATURE", 0, 0, 0, false, 0, null, 0);
                     SolidWorksDocument.EditDelete();
-                    //SolidWorksDocument.Extension.SelectByID2("DerivedCrvPattern3", "COMPPATTERN", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditSuppress2();
+                    SolidWorksDocument.Extension.SelectByID2("DerivedCrvPattern3", "COMPPATTERN", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditSuppress2();
+
+
+                    SwPlusRepository.Instance.AirVents_AddAssemblyFlap((int)flapType, 0, flapSize.Y.ToInt(), isOutDoor, materialID, (decimal)thickness, 5, ref ID);
+                    //Replace Component
+                    SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
+                    SolidWorksDocument.Extension.SelectByID2("11-003-6@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                    SolidWorksAdapter.ToAssemblyDocument(SolidWorksDocument);
+                    AssemblyDocument.ReplaceComponents(base.NewPartPath + ID.ToString(), "", false, true);
+                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-003.SLDPRT");
+
+                    // 11-005 
+                    if (false)
+                    {
+                        SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
+                        SolidWorksDocument.Extension.SelectByID2("11-005-1@" + AssemblyName, "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                        AssemblyDocument.ReplaceComponents(base.NewPartPath + ID.ToString() + ".SLDPRT", "", false, true);
+                        SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-005.SLDPRT");
+                    }
+                    else
+                    {
+                        base.parameters.Add("D3@Эскиз1", flapSize.Y);
+                        base.parameters.Add("D1@Кривая1", rivetH);
+                        base.parameters.Add("D3@Эскиз37", Convert.ToInt32(countL / 1000) % 2 == 1 ? 0 : 50);
+
+                        base.parameters.Add("D1@Листовой металл", (double)BendRadius);
+                        base.parameters.Add("D2@Листовой металл", (double)KFactor * 1000);
+                        base.parameters.Add("Толщина@Листовой металл", thickness);
+
+                        EditPartParameters("11-005", base.NewPartPath + ID.ToString(), materialID);
+                    }
+
+
+                    // 11-006 
+                    SwPlusRepository.Instance.AirVents_AddAssemblyFlap((int)flapType, 0, flapSize.Y.ToInt(), isOutDoor, materialID, (decimal)thickness, 6, ref ID);
+
+                    if (false)
+                    {
+                        SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
+                        SolidWorksDocument.Extension.SelectByID2("11-006-1@11 - Damper", "COMPONENT", 0, 0, 0, false, 0, null, 0);
+                        AssemblyDocument.ReplaceComponents(base.NewPartPath + ".SLDPRT", "", false, true);
+                        SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-006.SLDPRT");
+                    }
+                    else
+                    {
+                        base.parameters.Add("D3@Эскиз1", flapSize.Y);
+                        base.parameters.Add("D1@Кривая1", rivetH);
+                        base.parameters.Add("D1@Листовой металл", (double)BendRadius);
+                        base.parameters.Add("D2@Листовой металл", (double)KFactor * 1000);
+                        base.parameters.Add("Толщина@Листовой металл", thickness);
+
+                        EditPartParameters("11-006", base.NewPartPath + ID.ToString(), materialID);
+                    }
                 }
                 else
                 {
@@ -200,9 +207,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 }
 
                 // 11-002
-                newName = "11-03-" + flapSize.X + modelType;
-                base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
-
+                SwPlusRepository.Instance.AirVents_AddAssemblyFlap((int)flapType, (flapSize.X - 0.96).ToInt(), 0, isOutDoor, materialID, (decimal)thickness, 2, ref ID);
                 if (false)
                 {
                     SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
@@ -214,15 +219,16 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 {
                     base.parameters.Add("D2@Эскиз1", flapSize.X - 0.96);
                     base.parameters.Add("D1@Кривая1", rivetW);
-                    base.parameters.Add("Толщина@Листовой металл1", Convert.ToDouble(thiknessStr));
 
-                    EditPartParameters("11-002", base.NewPartPath, materialID);
+                    base.parameters.Add("D1@Листовой металл1", (double)BendRadius);
+                    base.parameters.Add("D2@Листовой металл1", (double)KFactor * 1000);
+                    base.parameters.Add("Толщина@Листовой металл1", thickness);
+
+                    EditPartParameters("11-002", base.NewPartPath + ID.ToString(), materialID);
                 }
 
                 // 11-003
-                newName = "11-02-" + flapSize.Y + modelType + (isOutDoor ? "-O" : "");
-                base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
-
+                SwPlusRepository.Instance.AirVents_AddAssemblyFlap((int)flapType, 0, (flapSize.Y + 7.94 + addH ).ToInt(), isOutDoor, materialID, (decimal)thickness, 3, ref ID);
                 if (false)
                 {
                     SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
@@ -234,19 +240,18 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 {
                     base.parameters.Add("D2@Эскиз1", flapSize.Y + 7.94);
                     base.parameters.Add("D1@Эскиз27", Math.Truncate(countL / 10 - 100));
-                    base.parameters.Add("D2@Эскиз27", countL/10);// *100
                     base.parameters.Add("D1@Кривая1", countL);
-                    base.parameters.Add("D1@Кривая2", rivetH);
+                    if (isOutDoor){ base.parameters.Add("D1@Кривая2", rivetH);}
 
-                    base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
+                    base.parameters.Add("D1@Листовой металл", (double)BendRadius);
+                    base.parameters.Add("D2@Листовой металл", (double)KFactor * 1000);
+                    base.parameters.Add("Толщина@Листовой металл", thickness);
 
-                    EditPartParameters("11-003", base.NewPartPath, materialID);
+                    EditPartParameters("11-003", base.NewPartPath + ID.ToString(), materialID);
                 }
 
                 // 11-001
-                newName = "11-01-" + flapSize.Y + modelType + (isOutDoor ? "-O" : "");
-                base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
-
+                SwPlusRepository.Instance.AirVents_AddAssemblyFlap((int)flapType, 0, (flapSize.Y + 7.94 + addH ).ToInt(), isOutDoor, materialID, (decimal)thickness, 1, ref ID);
                 if (false)
                 {
                     SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
@@ -256,22 +261,20 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 }
                 else
                 {
-                    System.Windows.Forms.MessageBox.Show("Test");
                     base.parameters.Add("D2@Эскиз1", flapSize.Y + 7.94);
                     base.parameters.Add("D1@Эскиз27", (countL / 10 - 100));
-                    base.parameters.Add("D2@Эскиз27", countL);// *100
                     base.parameters.Add("D1@Кривая1", countL);
-                    base.parameters.Add("D1@Кривая2", rivetH);
+                    if (isOutDoor) { base.parameters.Add("D1@Кривая2", rivetH); }
 
-                    base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
+                    base.parameters.Add("D1@Листовой металл", (double)BendRadius);
+                    base.parameters.Add("D2@Листовой металл", (double)KFactor * 1000);
+                    base.parameters.Add("Толщина@Листовой металл", thickness);
 
-                    EditPartParameters("11-001", base.NewPartPath, materialID);
+                    EditPartParameters("11-001", base.NewPartPath + ID.ToString(), materialID);
                 }
-                
-                // 11-004
-                newName = "11-04-" + flapSize.X + "-" + hC + modelType;
-                base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
 
+                // 11-004
+                SwPlusRepository.Instance.AirVents_AddAssemblyFlap((int)flapType, (flapSize.X - 24).ToInt(), hC.ToInt(), isOutDoor, materialID, (decimal)thickness, 4, ref ID);
                 if (false)
                 {
                     SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
@@ -286,32 +289,31 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     base.parameters.Add("D1@Кривая1", rivetW);
                     base.parameters.Add("D1@Эскиз8", 18.5);
                     base.parameters.Add("D1@Эскиз9", 18.5);
-                    base.parameters.Add("Толщина@Листовой металл1", Convert.ToDouble(thiknessStr));
+                    base.parameters.Add("D1@Листовой металл1", (double)BendRadius);
+                    base.parameters.Add("D2@Листовой металл1", (double)KFactor * 1000);
+                    base.parameters.Add("Толщина@Листовой металл1", thickness);
 
-                    EditPartParameters("11-004", base.NewPartPath, materialID);
+                    EditPartParameters("11-004", base.NewPartPath + ID.ToString(), materialID);
                 }
 
 
                 #region 11-100 Сборка лопасти
 
-                string newNameAsm = "11-" + flapSize.X;
-                string NewAsmPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newNameAsm}";
-
+                SwPlusRepository.Instance.AirVents_AddAssemblyFlap((int)flapType, (flapSize.X - 23).ToInt(), 0, isOutDoor, materialID, (decimal)thickness, 12, ref ID);
+                string newNameAsm = ID.ToString(); //имя сборки лопасти
 
                 if (false)
                 {
                     SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-100.SLDASM");
                     SolidWorksDocument.Extension.SelectByID2("11-100-1@11-100", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                    AssemblyDocument.ReplaceComponents(NewAsmPath + ".SLDASM", "", true, true);
+                    AssemblyDocument.ReplaceComponents(NewPartPath + ID.ToString() + ".SLDASM", "", true, true);
                     SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-100.SLDASM");
                 }
                 else
                 {
                     #region  11-101 Профиль лопасти
-                    
-                    newName = "11-" + (Math.Truncate(flapSize.X - 23)) + "-01" + modelType;
-                    base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
 
+                    SwPlusRepository.Instance.AirVents_AddAssemblyFlap((int)flapType, (flapSize.X - 23).ToInt(), 0, isOutDoor, materialID, (decimal)thickness, 11, ref ID);
                     if (false)
                     {
                         SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-100.SLDASM");
@@ -320,25 +322,23 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     }
                     else
                     {
-                        SolidWorksAdapter.OpenDocument(modelLamel, swDocumentTypes_e.swDocDRAWING, "");
+                        SolidWorksDocument = SolidWorksAdapter.OpenDocument(modelLamel, swDocumentTypes_e.swDocDRAWING, "");
                         SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-100.SLDASM");
 
                         base.parameters.Add("D1@Вытянуть1", flapSize.X - 23);
-                        EditPartParameters("11-101", base.NewPartPath, materialID);
+                        EditPartParameters("11-101", base.NewPartPath + ID.ToString(), 0);
 
                         SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-100.SLDASM");// save Профиль лопасти
-                        SolidWorksDocument.EditRebuild3();
-                        SolidWorksDocument.Extension.SaveAs(NewAsmPath + ".SLDASM", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent
+                        SolidWorksDocument.ForceRebuild3(false);
+                        SolidWorksDocument.Extension.SaveAs(NewPartPath + newNameAsm + ".SLDASM", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent
                                                          + (int)swSaveAsOptions_e.swSaveAsOptions_SaveReferenced + (int)swSaveAsOptions_e.swSaveAsOptions_UpdateInactiveViews, null, ref errors, warnings);
-
+                        SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(NewPartPath + newNameAsm + ".SLDASM");
                         SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-100.SLDDRW");
-                        SolidWorksDocument.EditRebuild3();
                         
-                        SolidWorksDocument.Extension.SaveAs(NewAsmPath + ".SLDDRW", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent
+                        SolidWorksDocument.Extension.SaveAs(NewPartPath + newNameAsm + ".SLDDRW", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent
                                                          + (int)swSaveAsOptions_e.swSaveAsOptions_SaveReferenced + (int)swSaveAsOptions_e.swSaveAsOptions_UpdateInactiveViews, null, ref errors, warnings);
-                        SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newNameAsm + ".SLDDRW");
+                        SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(NewPartPath + newNameAsm + ".SLDDRW");
                     }
-                    SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newName);
                     #endregion
                 }
                 #endregion
@@ -349,7 +349,6 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
             if (flapType == FlapTypes_e.Thirty_mm)
             {
-                string newName;
 
                 #region isOutDoor
                 if (isOutDoor)
@@ -373,8 +372,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-319@11-30", "COMPONENT", 0, 0, 0, false, 0, null, 0); SolidWorksDocument.EditDelete();
 
                     // 11-005 
-                    newName = "11-05-" + flapSize.Y + modelType;
-                    base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
+                    SwPlusRepository.Instance.AirVents_AddAssemblyFlap((int)flapType, 0, flapSize.Y.ToInt(), isOutDoor, materialID, (decimal)thickness, 5, ref ID);
 
                     if (false)
                     {
@@ -388,14 +386,15 @@ namespace PDMWebService.Data.Solid.ElementsCase
                         base.parameters.Add("D3@Эскиз1", flapSize.Y);
                         base.parameters.Add("D1@Кривая1", rivetH);
                         base.parameters.Add("D3@Эскиз37", ((countL / 1000) % 2 == 1) ? 0 : 50);
-                        base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
+                        base.parameters.Add("D1@Листовой металл", (double)BendRadius);
+                        base.parameters.Add("D2@Листовой металл", (double)KFactor * 1000);
+                        base.parameters.Add("Толщина@Листовой металл", thickness);
 
-                        EditPartParameters("11-005", base.NewPartPath, materialID);
+                        EditPartParameters("11-005", base.NewPartPath + ID.ToString(), materialID);
                     }
 
                     // 11-006 
-                    newName = "11-06-" + flapSize.Y + modelType;
-                    base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
+                    SwPlusRepository.Instance.AirVents_AddAssemblyFlap((int)flapType, 0, flapSize.Y.ToInt(), isOutDoor, materialID, (decimal)thickness, 6, ref ID);
 
                     if (false)
                     {
@@ -408,9 +407,11 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     {
                         base.parameters.Add("D3@Эскиз1", flapSize.Y);
                         base.parameters.Add("D1@Кривая1", rivetH);
-                        base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
+                        base.parameters.Add("D1@Листовой металл", (double)BendRadius);
+                        base.parameters.Add("D2@Листовой металл", (double)KFactor * 1000);
+                        base.parameters.Add("Толщина@Листовой металл", thickness);
 
-                        EditPartParameters("11-006", base.NewPartPath, materialID);
+                        EditPartParameters("11-006", base.NewPartPath + ID.ToString(), materialID);
                     }
                 }
                 else
@@ -510,8 +511,7 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-334@11-30", "COMPONENT", 0, 0, 0, true, 0, null, 0);
                     SolidWorksDocument.Extension.SelectByID2("Rivet Bralo-332@11-30", "COMPONENT", 0, 0, 0, true, 0, null, 0); SolidWorksDocument.EditDelete();
                 }
-
-                if (isDouble)
+                else
                 {
                     lp = flapSize.X / 2 - 59.5;
                     lp2 = lp - 11.6;
@@ -523,9 +523,8 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
                 #region Детали
 
-                // 11-30-001 
-                newName = "11-30-03-" + flapSize.X + modelType;
-                base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
+                // 11-30-001 - верхняя/нижняя
+                SwPlusRepository.Instance.AirVents_AddAssemblyFlap((int)flapType, (flapSize.X / 2 - 0.8).ToInt(), lp2.ToInt(), isOutDoor, materialID, (decimal)thickness, 7, ref ID);
                 if (false)
                 {
                     SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-30.SLDASM");
@@ -554,18 +553,19 @@ namespace PDMWebService.Data.Solid.ElementsCase
                         SolidWorksDocument.EditDelete();
                         SolidWorksDocument.SketchManager.InsertSketch(true);
                     }
-
+                    
                     base.parameters.Add("D2@Эскиз1", flapSize.X / 2 - 0.8);
-                    base.parameters.Add("D3@Эскиз1", lp2);
-                    base.parameters.Add("D1@Кривая1", Math.Truncate(lp2 / step)*1000 + 1);//*1000
-                    base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
+                    base.parameters.Add("D3@Эскиз18", lp2);//длина линии по которой разместяться заклепки
+                    base.parameters.Add("D1@Кривая1", (Math.Truncate(lp2 / step) + 1)*1000);
 
-                    EditPartParameters("11-30-001", base.NewPartPath, materialID);
+                    base.parameters.Add("D1@Листовой металл", (double)BendRadius);
+                    base.parameters.Add("D2@Листовой металл", (double)KFactor * 1000);
+                    base.parameters.Add("Толщина@Листовой металл", thickness);
+
+                    EditPartParameters("11-30-001", base.NewPartPath + ID.ToString(), materialID);
                 }
-
                 // 11-30-002
-                newName = "11-30-01-" + flapSize.Y + modelType + (isOutDoor ? "-O" : "");
-                base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
+                SwPlusRepository.Instance.AirVents_AddAssemblyFlap((int)flapType, 0, (flapSize.Y + 2).ToInt(), isOutDoor, materialID, (decimal)thickness, 8, ref ID);
 
                 if (false)
                 {
@@ -576,18 +576,20 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 }
                 else
                 {
-                    base.parameters.Add("D2@Эскиз1", flapSize.Y + 10);
+                    base.parameters.Add("D2@Эскиз1", flapSize.Y + 10);//10
                     base.parameters.Add("D3@Эскиз23", countL/10 - 100);
-                    base.parameters.Add("D2@Эскиз23", 100 * Math.Truncate(countL/2000));
-                    base.parameters.Add("D1@Кривая2", rivetH);
-                    base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
+                    // base.parameters.Add("D2@Эскиз23", 100 * Math.Truncate(countL/2000));
+                    base.parameters.Add("D1@Кривая2", countL);
+                    base.parameters.Add("D1@Кривая3", rivetH);
 
-                    EditPartParameters("11-30-002", base.NewPartPath, materialID);
+                    base.parameters.Add("D1@Листовой металл", (double)BendRadius);
+                    base.parameters.Add("D2@Листовой металл", (double)KFactor * 1000);
+                    base.parameters.Add("Толщина@Листовой металл", thickness);
+
+                    EditPartParameters("11-30-002", base.NewPartPath + ID.ToString(), materialID);
                 }
-
                 // 11-30-004 
-                newName = "11-30-02-" + flapSize.Y + modelType + (isOutDoor ? "-O" : "");
-                base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
+                SwPlusRepository.Instance.AirVents_AddAssemblyFlap((int)flapType, 0, (flapSize.Y + 2).ToInt(), isOutDoor, materialID, (decimal)thickness, 10, ref ID);
 
                 if (false)
                 {
@@ -598,19 +600,20 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 }
                 else
                 {
-                    base.parameters.Add("D2@Эскиз1", flapSize.Y + 10);
+                    base.parameters.Add("D2@Эскиз1", flapSize.Y + 10);//10
                     base.parameters.Add("D3@Эскиз23",(countL/10 - 100));
                     base.parameters.Add("D2@Эскиз23", 100 * Math.Truncate(countL/2000));
-                    base.parameters.Add("D1@Кривая2", rivetH);
-                    base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
+                    base.parameters.Add("D1@Кривая2", countL);
+                    base.parameters.Add("D1@Кривая5", rivetH);
 
-                    EditPartParameters("11-30-004", base.NewPartPath, materialID);
+                    base.parameters.Add("D1@Листовой металл", (double)BendRadius);
+                    base.parameters.Add("D2@Листовой металл", (double)KFactor * 1000);
+                    base.parameters.Add("Толщина@Листовой металл", thickness);
+
+                    EditPartParameters("11-30-004", base.NewPartPath + ID.ToString(), materialID);
                 }
-
                 // 11-30-003
-                newName = "11-30-04-" + Math.Truncate(lp) + "-" + hC + modelType;
-                base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
-
+                SwPlusRepository.Instance.AirVents_AddAssemblyFlap((int)flapType, 0, lp.ToInt(), isOutDoor, materialID, (decimal)thickness, 9, ref ID);
                 if (false)
                 {
                     SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
@@ -622,20 +625,24 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 {
                     base.parameters.Add("D2@Эскиз1", lp);
                     base.parameters.Add("D7@Ребро-кромка1", hC);
-                    base.parameters.Add("D1@Кривая1", Math.Truncate(lp2/step)*1000 + 1);//*1000)
-                    base.parameters.Add("Толщина@Листовой металл1", Convert.ToDouble(thiknessStr));
+                    base.parameters.Add("D1@Кривая1", (Math.Truncate(lp2/step) + 1)*1000);
 
-                    EditPartParameters("11-30-003", base.NewPartPath, materialID);
+                    base.parameters.Add("D1@Листовой металл1", (double)BendRadius);
+                    base.parameters.Add("D2@Листовой металл1", (double)KFactor * 1000);
+                    base.parameters.Add("Толщина@Листовой металл1", thickness);
+
+                    EditPartParameters("11-30-003", base.NewPartPath + ID.ToString(), materialID);
                 }
-
                 #endregion
 
                 #region Сборки
 
                 #region 11-100 Сборка лопасти
-                
-                string newNameAsm = "11-2-" + lProfFileName;
-                string NewAsmPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newNameAsm}.SLDASM";
+
+                SwPlusRepository.Instance.AirVents_AddAssemblyFlap((int)flapType, flapSize.X.ToInt(), flapSize.Y.ToInt(), isOutDoor, materialID, (decimal)thickness, 12, ref ID);
+
+                string newNameAsm = ID.ToString();
+                string NewAsmPath = NewPartPath + newNameAsm + ".SLDASM";
 
 
                 if (isDouble)
@@ -650,30 +657,26 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     else
                     {
                         #region 11-101 Профиль лопасти
-
-                        newName = "11-" + (Math.Truncate(lProfNameLength * 1000)) + "-01";
-                        base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
+                        SwPlusRepository.Instance.AirVents_AddAssemblyFlap((int)flapType, 0, lProfNameLength.ToInt(), isOutDoor, materialID, (decimal)thickness, 11, ref ID);
+                        
                         if (false)
                         {
                             SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-100.SLDASM");
                             SolidWorksDocument.Extension.SelectByID2("11-101-1@11-100", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                            AssemblyDocument.ReplaceComponents(base.NewPartPath, "", true, true);
+                            AssemblyDocument.ReplaceComponents(base.NewPartPath + ID.ToString(), "", true, true);
                             SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-100.SLDASM");
                         }
                         else
                         {
                             SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-100.SLDASM");
                             base.parameters.Add("D1@Вытянуть1", lProfNameLength);
-                            EditPartParameters("11-101", base.NewPartPath, materialID);
+                            EditPartParameters("11-101", base.NewPartPath + ID.ToString(), 0);
                         }
-
                         #endregion
                     }
                 }
                 else
                 {
-                    newNameAsm = "11-" + lProfFileName;
-                    NewAsmPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newNameAsm}.SLDASM";
                     if (false)
                     {
                         SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-100.SLDASM");
@@ -684,25 +687,21 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     else
                     {
                         #region  11-101  Профиль лопасти
-
-                        newName = "11-" + (Math.Truncate(lProfNameLength * 1000)) + "-01";
-                        base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
-
+                        
+                        SwPlusRepository.Instance.AirVents_AddAssemblyFlap((int)flapType, 0, lProfNameLength.ToInt(), isOutDoor, materialID, (decimal)thickness, 11, ref ID);
                         if (false)
                         {
                             SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-100.SLDASM");
                             SolidWorksDocument.Extension.SelectByID2("11-101-1@11-100", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                            AssemblyDocument.ReplaceComponents(base.NewPartPath, "", true, true);
+                            AssemblyDocument.ReplaceComponents(base.NewPartPath + ID.ToString(), "", true, true);
                             SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-101.SLDPRT");
                         }
                         else
                         {
                             SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-100.SLDASM");
-                            SolidWorksDocument.EditRebuild3();
                             base.parameters.Add("D1@Вытянуть1", lProfNameLength);
-                            EditPartParameters("11-101", base.NewPartPath, materialID);
+                            EditPartParameters("11-101", base.NewPartPath + ID.ToString(), 0);
                         }
-
                         #endregion
                     }
                 }
@@ -721,23 +720,24 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-100.SLDASM");
 
                 SolidWorksDocument.SaveAs2(NewAsmPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
-                SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-100.SLDASM");
+                SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(NewAsmPath);
 
                 ModelDoc2 docDrw100 = SolidWorksAdapter.OpenDocument($@"{RootFolder}\{SourceFolder}\{"11-100"}.SLDDRW", swDocumentTypes_e.swDocDRAWING, "");
                 docDrw100.ForceRebuild3(false);
-                docDrw100.SaveAs2( $@"{RootFolder}\{SubjectDestinationFolder}\{newNameAsm}.SLDDRW", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
-                SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newNameAsm + ".SLDDRW");
+                docDrw100.SaveAs2(NewPartPath + newNameAsm +".SLDDRW", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
+                SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(NewPartPath + newNameAsm + ".SLDDRW");
 
-                
+
                 #endregion
 
                 #region 11-30-100 Сборка Перемычки
-
-                newNameAsm = "11-30-100-" + flapSize.Y + modelType;
-                NewAsmPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newNameAsm}.SLDASM";
-
+                
                 if (isDouble)
                 {
+                    SwPlusRepository.Instance.AirVents_AddAssemblyFlap((int)flapType, flapSize.X.ToInt(), flapSize.Y.ToInt(), isOutDoor, materialID, (decimal)thickness, 15, ref ID);
+                    newNameAsm = ID.ToString();
+                    NewAsmPath = NewPartPath + newNameAsm + ".SLDASM";
+
                     if (false)
                     {
                         SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-30-100.SLDASM");
@@ -749,14 +749,12 @@ namespace PDMWebService.Data.Solid.ElementsCase
                     {
                         #region  11-30-101  Профиль перемычки
 
-                        newName = "11-30-101-" + flapSize.Y + modelType;
-                        base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
-
+                        SwPlusRepository.Instance.AirVents_AddAssemblyFlap((int)flapType, 0, (flapSize.Y + 2).ToInt(), isOutDoor, materialID, (decimal)thickness, 16, ref ID);
                         if (false)
                         {
                             SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-30-100.SLDASM");
                             SolidWorksDocument.Extension.SelectByID2("11-30-101-2@11-30-100", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                            AssemblyDocument.ReplaceComponents(base.NewPartPath, "", true, true);
+                            AssemblyDocument.ReplaceComponents(base.NewPartPath + ID.ToString(), "", true, true);
                             SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-30-100.SLDASM");
                         }
                         else
@@ -764,25 +762,24 @@ namespace PDMWebService.Data.Solid.ElementsCase
                             base.parameters.Add("D2@Эскиз1", flapSize.Y + 10);
                             base.parameters.Add("D3@Эскиз19",countL/10 - 100);
                             base.parameters.Add("D1@Кривая1", countL);
-                            base.parameters.Add("D1@Кривая2",rivetH);
-                            base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
+                            base.parameters.Add("D1@Кривая2", rivetH);
 
-                            EditPartParameters("11-30-101", base.NewPartPath, materialID);
+                            base.parameters.Add("D1@Листовой металл", (double)BendRadius);
+                            base.parameters.Add("D2@Листовой металл", (double)KFactor * 1000);
+                            base.parameters.Add("Толщина@Листовой металл", thickness);
+
+                            EditPartParameters("11-30-101", base.NewPartPath + ID.ToString(), materialID);
                         }
-
                         #endregion
 
                         #region  11-30-102  Профиль перемычки
 
-                        newName = "11-30-102-" + flapSize.Y + modelType;
-                        base.NewPartPath = $@"{RootFolder}\{SubjectDestinationFolder}\{newName}";
-
+                        SwPlusRepository.Instance.AirVents_AddAssemblyFlap((int)flapType, 0, (flapSize.Y + 10).ToInt(), isOutDoor, materialID, (decimal)thickness, 17, ref ID);
                         if (false)
                         {
-                            SolidWorksAdapter.SldWoksAppExemplare.IActivateDoc2("10-30-100", false, 0);
-                            SolidWorksDocument = (ModelDoc2)((IModelDoc2)(SolidWorksAdapter.SldWoksAppExemplare.ActiveDoc));
+                            SolidWorksAdapter.SldWoksAppExemplare.IActivateDoc2("11-30-100", false, 0);
                             SolidWorksDocument.Extension.SelectByID2("11-30-102-2@11-30-100", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                            AssemblyDocument.ReplaceComponents(base.NewPartPath, "", true, true);
+                            AssemblyDocument.ReplaceComponents(base.NewPartPath + ID.ToString(), "", true, true);
                             SolidWorksAdapter.SldWoksAppExemplare.CloseDoc("11-30-100.SLDASM");
                         }
                         else
@@ -791,17 +788,19 @@ namespace PDMWebService.Data.Solid.ElementsCase
                             base.parameters.Add("D2@Эскиз19", countL / 10 - 100);
                             base.parameters.Add("D1@Кривая2", countL);
                             base.parameters.Add("D1@Кривая1", rivetH);
-                            base.parameters.Add("Толщина@Листовой металл", Convert.ToDouble(thiknessStr));
 
-                            EditPartParameters("11-30-102", base.NewPartPath, materialID);
+                            base.parameters.Add("D1@Листовой металл", (double)BendRadius);
+                            base.parameters.Add("D2@Листовой металл", (double)KFactor * 1000);
+                            base.parameters.Add("Толщина@Листовой металл", thickness);
+
+                            EditPartParameters("11-30-102", base.NewPartPath + ID.ToString(), materialID);
                         }
-
                         #endregion
 
                         SolidWorksDocument = SolidWorksAdapter.AcativeteDoc("11-30-100.SLDASM");
-                        SolidWorksDocument.ForceRebuild3(false);
+                        //SolidWorksDocument.ForceRebuild3(false);
                         SolidWorksDocument.SaveAs2(NewAsmPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
-                        SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newNameAsm + ".SLDASM");
+                        SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(NewAsmPath);
 
                     }
                 }
@@ -815,13 +814,11 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
             
             SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(AssemblyName + ".SLDASM");
-            SolidWorksDocument.EditRebuild3();
+            SolidWorksDocument.ForceRebuild3(false);
 
             //Сохранение главной сборки
-
-            SolidWorksDocument.Extension.SaveAs(newDamperAsmPath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref errores, ref warnings);
-            SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newDamperName + ".SLDASM");
-            //////////////////////////////////////////////////////////////////////////
+            SolidWorksDocument.Extension.SaveAs(NewPartPath + newDamperName + ".SLDASM", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref errores, ref warnings);
+            //SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newDamperName + ".SLDASM");
 
             string nameDrw = $@"{RootFolder}\{SubjectDestinationFolder}\{newDamperName}";
             SolidWorksDocument = SolidWorksAdapter.AcativeteDoc( drawingName + ".SLDDRW");
@@ -835,11 +832,10 @@ namespace PDMWebService.Data.Solid.ElementsCase
             if (Convert.ToInt32(flapSize.X) > 1250 || Convert.ToInt32(flapSize.Y) > 1250) { m = 20; }
             
             drw.SetupSheet5("DRW1", 12, 12, 1, m, true, nameDrw, 0.42, 0.297, "По умолчанию", false);
-            SolidWorksDocument.EditRebuild3();
-            SolidWorksDocument.SaveAs2(nameDrw + ".SLDDRW", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
-            SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(newDamperName + ".SLDDRW");
-            SolidWorksAdapter.SldWoksAppExemplare.ExitApp();
-            
+            //SolidWorksDocument.EditRebuild3();
+            SolidWorksDocument.SaveAs2(NewPartPath + newDamperName + ".SLDDRW", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, false, true);
+            SolidWorksAdapter.CloseDocument(SolidWorksDocument);
+                //.CloseDoc("11-" + newDamperName + ".SLDDRW");
         }
     } 
 }

@@ -33,6 +33,24 @@ namespace DataBaseDomian.Orm
     partial void InsertBendTable(BendTable instance);
     partial void UpdateBendTable(BendTable instance);
     partial void DeleteBendTable(BendTable instance);
+    partial void InsertAssemblySpigot(AssemblySpigot instance);
+    partial void UpdateAssemblySpigot(AssemblySpigot instance);
+    partial void DeleteAssemblySpigot(AssemblySpigot instance);
+    partial void InsertMaterialsProp(MaterialsProp instance);
+    partial void UpdateMaterialsProp(MaterialsProp instance);
+    partial void DeleteMaterialsProp(MaterialsProp instance);
+    partial void InsertAssemblyRoof(AssemblyRoof instance);
+    partial void UpdateAssemblyRoof(AssemblyRoof instance);
+    partial void DeleteAssemblyRoof(AssemblyRoof instance);
+    partial void InsertRAL(RAL instance);
+    partial void UpdateRAL(RAL instance);
+    partial void DeleteRAL(RAL instance);
+    partial void InsertAssemblyFrame(AssemblyFrame instance);
+    partial void UpdateAssemblyFrame(AssemblyFrame instance);
+    partial void DeleteAssemblyFrame(AssemblyFrame instance);
+    partial void InsertAssemblyFlap(AssemblyFlap instance);
+    partial void UpdateAssemblyFlap(AssemblyFlap instance);
+    partial void DeleteAssemblyFlap(AssemblyFlap instance);
     #endregion
 		
 		public SwPlusDataContext() : 
@@ -89,6 +107,54 @@ namespace DataBaseDomian.Orm
 			}
 		}
 		
+		public System.Data.Linq.Table<AssemblySpigot> AssemblySpigots
+		{
+			get
+			{
+				return this.GetTable<AssemblySpigot>();
+			}
+		}
+		
+		public System.Data.Linq.Table<MaterialsProp> MaterialsProps
+		{
+			get
+			{
+				return this.GetTable<MaterialsProp>();
+			}
+		}
+		
+		public System.Data.Linq.Table<AssemblyRoof> AssemblyRoofs
+		{
+			get
+			{
+				return this.GetTable<AssemblyRoof>();
+			}
+		}
+		
+		public System.Data.Linq.Table<RAL> RALs
+		{
+			get
+			{
+				return this.GetTable<RAL>();
+			}
+		}
+		
+		public System.Data.Linq.Table<AssemblyFrame> AssemblyFrames
+		{
+			get
+			{
+				return this.GetTable<AssemblyFrame>();
+			}
+		}
+		
+		public System.Data.Linq.Table<AssemblyFlap> AssemblyFlaps
+		{
+			get
+			{
+				return this.GetTable<AssemblyFlap>();
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.DXFCheck")]
 		public int DXFCheck([global::System.Data.Linq.Mapping.ParameterAttribute(Name="IDPDM", DbType="Int")] System.Nullable<int> iDPDM, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Configuration", DbType="NVarChar(255)")] string configuration, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Version", DbType="Int")] System.Nullable<int> version)
 		{
@@ -101,6 +167,38 @@ namespace DataBaseDomian.Orm
 		{
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), panelTypeID, elementType, width, height, partThick, partMat, partMatThick, mirror, stickyTape, step, stepInsertion, reinforcing, airHole, pARTID);
 			pARTID = ((System.Nullable<int>)(result.GetParameterValue(13)));
+			return ((int)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.AirVents_AddAssemblySpigot")]
+		public int AirVents_AddAssemblySpigot([global::System.Data.Linq.Mapping.ParameterAttribute(Name="SpigotType", DbType="Int")] System.Nullable<int> spigotType, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Width", DbType="Int")] System.Nullable<int> width, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Height", DbType="Int")] System.Nullable<int> height, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="ElementType", DbType="Int")] System.Nullable<int> elementType, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="ID", DbType="Int")] ref System.Nullable<int> iD)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), spigotType, width, height, elementType, iD);
+			iD = ((System.Nullable<int>)(result.GetParameterValue(4)));
+			return ((int)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.AirVents_AddAssemblyRoof")]
+		public int AirVents_AddAssemblyRoof([global::System.Data.Linq.Mapping.ParameterAttribute(Name="RoofType", DbType="Int")] System.Nullable<int> roofType, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Width", DbType="Int")] System.Nullable<int> width, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Height", DbType="Int")] System.Nullable<int> height, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="ElementType", DbType="Int")] System.Nullable<int> elementType, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Thickness", DbType="Decimal(2,2)")] System.Nullable<decimal> thickness, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="RalID", DbType="Int")] System.Nullable<int> ralID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="CoatingType", DbType="NVarChar(10)")] string coatingType, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="CoatingClass", DbType="Int")] System.Nullable<int> coatingClass, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="MaterialID", DbType="Int")] System.Nullable<int> materialID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="ID", DbType="Int")] ref System.Nullable<int> iD)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), roofType, width, height, elementType, thickness, ralID, coatingType, coatingClass, materialID, iD);
+			iD = ((System.Nullable<int>)(result.GetParameterValue(9)));
+			return ((int)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.AirVents_AddAssemblyFrame")]
+		public int AirVents_AddAssemblyFrame([global::System.Data.Linq.Mapping.ParameterAttribute(Name="FrameType", DbType="Int")] System.Nullable<int> frameType, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Width", DbType="Int")] System.Nullable<int> width, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Height", DbType="Int")] System.Nullable<int> height, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Thickness", DbType="Decimal(3,1)")] System.Nullable<decimal> thickness, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Offset", DbType="Int")] System.Nullable<int> offset, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Element", DbType="Int")] System.Nullable<int> element, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="RalID", DbType="Int")] System.Nullable<int> ralID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="CoatingType", DbType="NVarChar(10)")] string coatingType, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="CoatingClass", DbType="Int")] System.Nullable<int> coatingClass, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="MaterialID", DbType="Int")] System.Nullable<int> materialID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="ID", DbType="Int")] ref System.Nullable<int> iD)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), frameType, width, height, thickness, offset, element, ralID, coatingType, coatingClass, materialID, iD);
+			iD = ((System.Nullable<int>)(result.GetParameterValue(10)));
+			return ((int)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.AirVents_AddAssemblyFlap")]
+		public int AirVents_AddAssemblyFlap([global::System.Data.Linq.Mapping.ParameterAttribute(Name="FlapType", DbType="Int")] System.Nullable<int> flapType, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Width", DbType="Int")] System.Nullable<int> width, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Height", DbType="Int")] System.Nullable<int> height, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="MaterialID", DbType="Int")] System.Nullable<int> materialID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Thickness", DbType="Decimal(18,0)")] System.Nullable<decimal> thickness, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Outer", DbType="Bit")] System.Nullable<bool> outer, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="ElementType", DbType="Int")] System.Nullable<int> elementType, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="ID", DbType="Int")] ref System.Nullable<int> iD)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), flapType, width, height, materialID, thickness, outer, elementType, iD);
+			iD = ((System.Nullable<int>)(result.GetParameterValue(7)));
 			return ((int)(result.ReturnValue));
 		}
 	}
@@ -119,6 +217,12 @@ namespace DataBaseDomian.Orm
 		
 		private decimal _BendRadius;
 		
+		private EntitySet<AssemblyRoof> _AssemblyRoofs;
+		
+		private EntitySet<AssemblyFrame> _AssemblyFrames;
+		
+		private EntitySet<AssemblyFlap> _AssemblyFlaps;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -135,6 +239,9 @@ namespace DataBaseDomian.Orm
 		
 		public BendTable()
 		{
+			this._AssemblyRoofs = new EntitySet<AssemblyRoof>(new Action<AssemblyRoof>(this.attach_AssemblyRoofs), new Action<AssemblyRoof>(this.detach_AssemblyRoofs));
+			this._AssemblyFrames = new EntitySet<AssemblyFrame>(new Action<AssemblyFrame>(this.attach_AssemblyFrames), new Action<AssemblyFrame>(this.detach_AssemblyFrames));
+			this._AssemblyFlaps = new EntitySet<AssemblyFlap>(new Action<AssemblyFlap>(this.attach_AssemblyFlaps), new Action<AssemblyFlap>(this.detach_AssemblyFlaps));
 			OnCreated();
 		}
 		
@@ -218,6 +325,45 @@ namespace DataBaseDomian.Orm
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BendTable_AssemblyRoof", Storage="_AssemblyRoofs", ThisKey="BendID", OtherKey="BendID")]
+		public EntitySet<AssemblyRoof> AssemblyRoofs
+		{
+			get
+			{
+				return this._AssemblyRoofs;
+			}
+			set
+			{
+				this._AssemblyRoofs.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BendTable_AssemblyFrame", Storage="_AssemblyFrames", ThisKey="BendID", OtherKey="BendID")]
+		public EntitySet<AssemblyFrame> AssemblyFrames
+		{
+			get
+			{
+				return this._AssemblyFrames;
+			}
+			set
+			{
+				this._AssemblyFrames.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BendTable_AssemblyFlap", Storage="_AssemblyFlaps", ThisKey="BendID", OtherKey="BandID")]
+		public EntitySet<AssemblyFlap> AssemblyFlaps
+		{
+			get
+			{
+				return this._AssemblyFlaps;
+			}
+			set
+			{
+				this._AssemblyFlaps.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -236,6 +382,42 @@ namespace DataBaseDomian.Orm
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+		
+		private void attach_AssemblyRoofs(AssemblyRoof entity)
+		{
+			this.SendPropertyChanging();
+			entity.BendTable = this;
+		}
+		
+		private void detach_AssemblyRoofs(AssemblyRoof entity)
+		{
+			this.SendPropertyChanging();
+			entity.BendTable = null;
+		}
+		
+		private void attach_AssemblyFrames(AssemblyFrame entity)
+		{
+			this.SendPropertyChanging();
+			entity.BendTable = this;
+		}
+		
+		private void detach_AssemblyFrames(AssemblyFrame entity)
+		{
+			this.SendPropertyChanging();
+			entity.BendTable = null;
+		}
+		
+		private void attach_AssemblyFlaps(AssemblyFlap entity)
+		{
+			this.SendPropertyChanging();
+			entity.BendTable = this;
+		}
+		
+		private void detach_AssemblyFlaps(AssemblyFlap entity)
+		{
+			this.SendPropertyChanging();
+			entity.BendTable = null;
 		}
 	}
 	
@@ -523,6 +705,2235 @@ namespace DataBaseDomian.Orm
 				{
 					this._Path = value;
 				}
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.AssemblySpigot")]
+	public partial class AssemblySpigot : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private int _SpigotType;
+		
+		private int _Width;
+		
+		private int _Height;
+		
+		private int _ElementType;
+		
+		private int _MaterialID;
+		
+		private EntityRef<MaterialsProp> _MaterialsProp;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnSpigotTypeChanging(int value);
+    partial void OnSpigotTypeChanged();
+    partial void OnWidthChanging(int value);
+    partial void OnWidthChanged();
+    partial void OnHeightChanging(int value);
+    partial void OnHeightChanged();
+    partial void OnElementTypeChanging(int value);
+    partial void OnElementTypeChanged();
+    partial void OnMaterialIDChanging(int value);
+    partial void OnMaterialIDChanged();
+    #endregion
+		
+		public AssemblySpigot()
+		{
+			this._MaterialsProp = default(EntityRef<MaterialsProp>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SpigotType", DbType="Int NOT NULL")]
+		public int SpigotType
+		{
+			get
+			{
+				return this._SpigotType;
+			}
+			set
+			{
+				if ((this._SpigotType != value))
+				{
+					this.OnSpigotTypeChanging(value);
+					this.SendPropertyChanging();
+					this._SpigotType = value;
+					this.SendPropertyChanged("SpigotType");
+					this.OnSpigotTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Width", DbType="Int NOT NULL")]
+		public int Width
+		{
+			get
+			{
+				return this._Width;
+			}
+			set
+			{
+				if ((this._Width != value))
+				{
+					this.OnWidthChanging(value);
+					this.SendPropertyChanging();
+					this._Width = value;
+					this.SendPropertyChanged("Width");
+					this.OnWidthChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Height", DbType="Int NOT NULL")]
+		public int Height
+		{
+			get
+			{
+				return this._Height;
+			}
+			set
+			{
+				if ((this._Height != value))
+				{
+					this.OnHeightChanging(value);
+					this.SendPropertyChanging();
+					this._Height = value;
+					this.SendPropertyChanged("Height");
+					this.OnHeightChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ElementType", DbType="Int NOT NULL")]
+		public int ElementType
+		{
+			get
+			{
+				return this._ElementType;
+			}
+			set
+			{
+				if ((this._ElementType != value))
+				{
+					this.OnElementTypeChanging(value);
+					this.SendPropertyChanging();
+					this._ElementType = value;
+					this.SendPropertyChanged("ElementType");
+					this.OnElementTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MaterialID", DbType="Int NOT NULL")]
+		public int MaterialID
+		{
+			get
+			{
+				return this._MaterialID;
+			}
+			set
+			{
+				if ((this._MaterialID != value))
+				{
+					if (this._MaterialsProp.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnMaterialIDChanging(value);
+					this.SendPropertyChanging();
+					this._MaterialID = value;
+					this.SendPropertyChanged("MaterialID");
+					this.OnMaterialIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MaterialsProp_AssemblySpigot", Storage="_MaterialsProp", ThisKey="MaterialID", OtherKey="LevelID", IsForeignKey=true)]
+		public MaterialsProp MaterialsProp
+		{
+			get
+			{
+				return this._MaterialsProp.Entity;
+			}
+			set
+			{
+				MaterialsProp previousValue = this._MaterialsProp.Entity;
+				if (((previousValue != value) 
+							|| (this._MaterialsProp.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MaterialsProp.Entity = null;
+						previousValue.AssemblySpigots.Remove(this);
+					}
+					this._MaterialsProp.Entity = value;
+					if ((value != null))
+					{
+						value.AssemblySpigots.Add(this);
+						this._MaterialID = value.LevelID;
+					}
+					else
+					{
+						this._MaterialID = default(int);
+					}
+					this.SendPropertyChanged("MaterialsProp");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.MaterialsProp")]
+	public partial class MaterialsProp : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _LevelID;
+		
+		private int _GroupID;
+		
+		private string _MaterialsName;
+		
+		private string _MaterialsNameEng;
+		
+		private string _ERP;
+		
+		private System.Nullable<decimal> _Density;
+		
+		private string _SWProperty;
+		
+		private string _Description;
+		
+		private string _CodeMaterial;
+		
+		private string _xhatch;
+		
+		private string _angle;
+		
+		private string _scale;
+		
+		private string _pwshader2;
+		
+		private string _path;
+		
+		private string _RGB;
+		
+		private string _DescriptionCode;
+		
+		private bool _Thickness;
+		
+		private EntitySet<AssemblySpigot> _AssemblySpigots;
+		
+		private EntitySet<AssemblyRoof> _AssemblyRoofs;
+		
+		private EntitySet<AssemblyFrame> _AssemblyFrames;
+		
+		private EntitySet<AssemblyFlap> _AssemblyFlaps;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnLevelIDChanging(int value);
+    partial void OnLevelIDChanged();
+    partial void OnGroupIDChanging(int value);
+    partial void OnGroupIDChanged();
+    partial void OnMaterialsNameChanging(string value);
+    partial void OnMaterialsNameChanged();
+    partial void OnMaterialsNameEngChanging(string value);
+    partial void OnMaterialsNameEngChanged();
+    partial void OnERPChanging(string value);
+    partial void OnERPChanged();
+    partial void OnDensityChanging(System.Nullable<decimal> value);
+    partial void OnDensityChanged();
+    partial void OnSWPropertyChanging(string value);
+    partial void OnSWPropertyChanged();
+    partial void OnDescriptionChanging(string value);
+    partial void OnDescriptionChanged();
+    partial void OnCodeMaterialChanging(string value);
+    partial void OnCodeMaterialChanged();
+    partial void OnxhatchChanging(string value);
+    partial void OnxhatchChanged();
+    partial void OnangleChanging(string value);
+    partial void OnangleChanged();
+    partial void OnscaleChanging(string value);
+    partial void OnscaleChanged();
+    partial void Onpwshader2Changing(string value);
+    partial void Onpwshader2Changed();
+    partial void OnpathChanging(string value);
+    partial void OnpathChanged();
+    partial void OnRGBChanging(string value);
+    partial void OnRGBChanged();
+    partial void OnDescriptionCodeChanging(string value);
+    partial void OnDescriptionCodeChanged();
+    partial void OnThicknessChanging(bool value);
+    partial void OnThicknessChanged();
+    #endregion
+		
+		public MaterialsProp()
+		{
+			this._AssemblySpigots = new EntitySet<AssemblySpigot>(new Action<AssemblySpigot>(this.attach_AssemblySpigots), new Action<AssemblySpigot>(this.detach_AssemblySpigots));
+			this._AssemblyRoofs = new EntitySet<AssemblyRoof>(new Action<AssemblyRoof>(this.attach_AssemblyRoofs), new Action<AssemblyRoof>(this.detach_AssemblyRoofs));
+			this._AssemblyFrames = new EntitySet<AssemblyFrame>(new Action<AssemblyFrame>(this.attach_AssemblyFrames), new Action<AssemblyFrame>(this.detach_AssemblyFrames));
+			this._AssemblyFlaps = new EntitySet<AssemblyFlap>(new Action<AssemblyFlap>(this.attach_AssemblyFlaps), new Action<AssemblyFlap>(this.detach_AssemblyFlaps));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LevelID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int LevelID
+		{
+			get
+			{
+				return this._LevelID;
+			}
+			set
+			{
+				if ((this._LevelID != value))
+				{
+					this.OnLevelIDChanging(value);
+					this.SendPropertyChanging();
+					this._LevelID = value;
+					this.SendPropertyChanged("LevelID");
+					this.OnLevelIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GroupID", DbType="Int NOT NULL")]
+		public int GroupID
+		{
+			get
+			{
+				return this._GroupID;
+			}
+			set
+			{
+				if ((this._GroupID != value))
+				{
+					this.OnGroupIDChanging(value);
+					this.SendPropertyChanging();
+					this._GroupID = value;
+					this.SendPropertyChanged("GroupID");
+					this.OnGroupIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MaterialsName", DbType="NVarChar(MAX)")]
+		public string MaterialsName
+		{
+			get
+			{
+				return this._MaterialsName;
+			}
+			set
+			{
+				if ((this._MaterialsName != value))
+				{
+					this.OnMaterialsNameChanging(value);
+					this.SendPropertyChanging();
+					this._MaterialsName = value;
+					this.SendPropertyChanged("MaterialsName");
+					this.OnMaterialsNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MaterialsNameEng", DbType="NVarChar(50)")]
+		public string MaterialsNameEng
+		{
+			get
+			{
+				return this._MaterialsNameEng;
+			}
+			set
+			{
+				if ((this._MaterialsNameEng != value))
+				{
+					this.OnMaterialsNameEngChanging(value);
+					this.SendPropertyChanging();
+					this._MaterialsNameEng = value;
+					this.SendPropertyChanged("MaterialsNameEng");
+					this.OnMaterialsNameEngChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ERP", DbType="NVarChar(50)")]
+		public string ERP
+		{
+			get
+			{
+				return this._ERP;
+			}
+			set
+			{
+				if ((this._ERP != value))
+				{
+					this.OnERPChanging(value);
+					this.SendPropertyChanging();
+					this._ERP = value;
+					this.SendPropertyChanged("ERP");
+					this.OnERPChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Density", DbType="Decimal(6,0)")]
+		public System.Nullable<decimal> Density
+		{
+			get
+			{
+				return this._Density;
+			}
+			set
+			{
+				if ((this._Density != value))
+				{
+					this.OnDensityChanging(value);
+					this.SendPropertyChanging();
+					this._Density = value;
+					this.SendPropertyChanged("Density");
+					this.OnDensityChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SWProperty", DbType="NVarChar(MAX)")]
+		public string SWProperty
+		{
+			get
+			{
+				return this._SWProperty;
+			}
+			set
+			{
+				if ((this._SWProperty != value))
+				{
+					this.OnSWPropertyChanging(value);
+					this.SendPropertyChanging();
+					this._SWProperty = value;
+					this.SendPropertyChanged("SWProperty");
+					this.OnSWPropertyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(50)")]
+		public string Description
+		{
+			get
+			{
+				return this._Description;
+			}
+			set
+			{
+				if ((this._Description != value))
+				{
+					this.OnDescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._Description = value;
+					this.SendPropertyChanged("Description");
+					this.OnDescriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CodeMaterial", DbType="NVarChar(50)")]
+		public string CodeMaterial
+		{
+			get
+			{
+				return this._CodeMaterial;
+			}
+			set
+			{
+				if ((this._CodeMaterial != value))
+				{
+					this.OnCodeMaterialChanging(value);
+					this.SendPropertyChanging();
+					this._CodeMaterial = value;
+					this.SendPropertyChanged("CodeMaterial");
+					this.OnCodeMaterialChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_xhatch", DbType="NVarChar(MAX)")]
+		public string xhatch
+		{
+			get
+			{
+				return this._xhatch;
+			}
+			set
+			{
+				if ((this._xhatch != value))
+				{
+					this.OnxhatchChanging(value);
+					this.SendPropertyChanging();
+					this._xhatch = value;
+					this.SendPropertyChanged("xhatch");
+					this.OnxhatchChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_angle", DbType="NVarChar(MAX)")]
+		public string angle
+		{
+			get
+			{
+				return this._angle;
+			}
+			set
+			{
+				if ((this._angle != value))
+				{
+					this.OnangleChanging(value);
+					this.SendPropertyChanging();
+					this._angle = value;
+					this.SendPropertyChanged("angle");
+					this.OnangleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_scale", DbType="NVarChar(MAX)")]
+		public string scale
+		{
+			get
+			{
+				return this._scale;
+			}
+			set
+			{
+				if ((this._scale != value))
+				{
+					this.OnscaleChanging(value);
+					this.SendPropertyChanging();
+					this._scale = value;
+					this.SendPropertyChanged("scale");
+					this.OnscaleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_pwshader2", DbType="NVarChar(MAX)")]
+		public string pwshader2
+		{
+			get
+			{
+				return this._pwshader2;
+			}
+			set
+			{
+				if ((this._pwshader2 != value))
+				{
+					this.Onpwshader2Changing(value);
+					this.SendPropertyChanging();
+					this._pwshader2 = value;
+					this.SendPropertyChanged("pwshader2");
+					this.Onpwshader2Changed();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_path", DbType="NVarChar(MAX)")]
+		public string path
+		{
+			get
+			{
+				return this._path;
+			}
+			set
+			{
+				if ((this._path != value))
+				{
+					this.OnpathChanging(value);
+					this.SendPropertyChanging();
+					this._path = value;
+					this.SendPropertyChanged("path");
+					this.OnpathChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RGB", DbType="NVarChar(MAX)")]
+		public string RGB
+		{
+			get
+			{
+				return this._RGB;
+			}
+			set
+			{
+				if ((this._RGB != value))
+				{
+					this.OnRGBChanging(value);
+					this.SendPropertyChanging();
+					this._RGB = value;
+					this.SendPropertyChanged("RGB");
+					this.OnRGBChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DescriptionCode", DbType="NVarChar(50)")]
+		public string DescriptionCode
+		{
+			get
+			{
+				return this._DescriptionCode;
+			}
+			set
+			{
+				if ((this._DescriptionCode != value))
+				{
+					this.OnDescriptionCodeChanging(value);
+					this.SendPropertyChanging();
+					this._DescriptionCode = value;
+					this.SendPropertyChanged("DescriptionCode");
+					this.OnDescriptionCodeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Thickness", DbType="Bit NOT NULL")]
+		public bool Thickness
+		{
+			get
+			{
+				return this._Thickness;
+			}
+			set
+			{
+				if ((this._Thickness != value))
+				{
+					this.OnThicknessChanging(value);
+					this.SendPropertyChanging();
+					this._Thickness = value;
+					this.SendPropertyChanged("Thickness");
+					this.OnThicknessChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MaterialsProp_AssemblySpigot", Storage="_AssemblySpigots", ThisKey="LevelID", OtherKey="MaterialID")]
+		public EntitySet<AssemblySpigot> AssemblySpigots
+		{
+			get
+			{
+				return this._AssemblySpigots;
+			}
+			set
+			{
+				this._AssemblySpigots.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MaterialsProp_AssemblyRoof", Storage="_AssemblyRoofs", ThisKey="LevelID", OtherKey="MaterialID")]
+		public EntitySet<AssemblyRoof> AssemblyRoofs
+		{
+			get
+			{
+				return this._AssemblyRoofs;
+			}
+			set
+			{
+				this._AssemblyRoofs.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MaterialsProp_AssemblyFrame", Storage="_AssemblyFrames", ThisKey="LevelID", OtherKey="Material")]
+		public EntitySet<AssemblyFrame> AssemblyFrames
+		{
+			get
+			{
+				return this._AssemblyFrames;
+			}
+			set
+			{
+				this._AssemblyFrames.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MaterialsProp_AssemblyFlap", Storage="_AssemblyFlaps", ThisKey="LevelID", OtherKey="MaterialID")]
+		public EntitySet<AssemblyFlap> AssemblyFlaps
+		{
+			get
+			{
+				return this._AssemblyFlaps;
+			}
+			set
+			{
+				this._AssemblyFlaps.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_AssemblySpigots(AssemblySpigot entity)
+		{
+			this.SendPropertyChanging();
+			entity.MaterialsProp = this;
+		}
+		
+		private void detach_AssemblySpigots(AssemblySpigot entity)
+		{
+			this.SendPropertyChanging();
+			entity.MaterialsProp = null;
+		}
+		
+		private void attach_AssemblyRoofs(AssemblyRoof entity)
+		{
+			this.SendPropertyChanging();
+			entity.MaterialsProp = this;
+		}
+		
+		private void detach_AssemblyRoofs(AssemblyRoof entity)
+		{
+			this.SendPropertyChanging();
+			entity.MaterialsProp = null;
+		}
+		
+		private void attach_AssemblyFrames(AssemblyFrame entity)
+		{
+			this.SendPropertyChanging();
+			entity.MaterialsProp = this;
+		}
+		
+		private void detach_AssemblyFrames(AssemblyFrame entity)
+		{
+			this.SendPropertyChanging();
+			entity.MaterialsProp = null;
+		}
+		
+		private void attach_AssemblyFlaps(AssemblyFlap entity)
+		{
+			this.SendPropertyChanging();
+			entity.MaterialsProp = this;
+		}
+		
+		private void detach_AssemblyFlaps(AssemblyFlap entity)
+		{
+			this.SendPropertyChanging();
+			entity.MaterialsProp = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.AssemblyRoof")]
+	public partial class AssemblyRoof : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private int _RoofType;
+		
+		private int _Width;
+		
+		private int _Height;
+		
+		private int _ElementType;
+		
+		private int _MaterialID;
+		
+		private decimal _Thickness;
+		
+		private System.Nullable<int> _BendID;
+		
+		private System.Nullable<int> _RALID;
+		
+		private string _CoatingType;
+		
+		private System.Nullable<int> _CoatingClass;
+		
+		private EntityRef<BendTable> _BendTable;
+		
+		private EntityRef<MaterialsProp> _MaterialsProp;
+		
+		private EntityRef<RAL> _RAL;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnRoofTypeChanging(int value);
+    partial void OnRoofTypeChanged();
+    partial void OnWidthChanging(int value);
+    partial void OnWidthChanged();
+    partial void OnHeightChanging(int value);
+    partial void OnHeightChanged();
+    partial void OnElementTypeChanging(int value);
+    partial void OnElementTypeChanged();
+    partial void OnMaterialIDChanging(int value);
+    partial void OnMaterialIDChanged();
+    partial void OnThicknessChanging(decimal value);
+    partial void OnThicknessChanged();
+    partial void OnBendIDChanging(System.Nullable<int> value);
+    partial void OnBendIDChanged();
+    partial void OnRALIDChanging(System.Nullable<int> value);
+    partial void OnRALIDChanged();
+    partial void OnCoatingTypeChanging(string value);
+    partial void OnCoatingTypeChanged();
+    partial void OnCoatingClassChanging(System.Nullable<int> value);
+    partial void OnCoatingClassChanged();
+    #endregion
+		
+		public AssemblyRoof()
+		{
+			this._BendTable = default(EntityRef<BendTable>);
+			this._MaterialsProp = default(EntityRef<MaterialsProp>);
+			this._RAL = default(EntityRef<RAL>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RoofType", DbType="Int NOT NULL")]
+		public int RoofType
+		{
+			get
+			{
+				return this._RoofType;
+			}
+			set
+			{
+				if ((this._RoofType != value))
+				{
+					this.OnRoofTypeChanging(value);
+					this.SendPropertyChanging();
+					this._RoofType = value;
+					this.SendPropertyChanged("RoofType");
+					this.OnRoofTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Width", DbType="Int NOT NULL")]
+		public int Width
+		{
+			get
+			{
+				return this._Width;
+			}
+			set
+			{
+				if ((this._Width != value))
+				{
+					this.OnWidthChanging(value);
+					this.SendPropertyChanging();
+					this._Width = value;
+					this.SendPropertyChanged("Width");
+					this.OnWidthChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Height", DbType="Int NOT NULL")]
+		public int Height
+		{
+			get
+			{
+				return this._Height;
+			}
+			set
+			{
+				if ((this._Height != value))
+				{
+					this.OnHeightChanging(value);
+					this.SendPropertyChanging();
+					this._Height = value;
+					this.SendPropertyChanged("Height");
+					this.OnHeightChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ElementType", DbType="Int NOT NULL")]
+		public int ElementType
+		{
+			get
+			{
+				return this._ElementType;
+			}
+			set
+			{
+				if ((this._ElementType != value))
+				{
+					this.OnElementTypeChanging(value);
+					this.SendPropertyChanging();
+					this._ElementType = value;
+					this.SendPropertyChanged("ElementType");
+					this.OnElementTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MaterialID", DbType="Int NOT NULL")]
+		public int MaterialID
+		{
+			get
+			{
+				return this._MaterialID;
+			}
+			set
+			{
+				if ((this._MaterialID != value))
+				{
+					if (this._MaterialsProp.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnMaterialIDChanging(value);
+					this.SendPropertyChanging();
+					this._MaterialID = value;
+					this.SendPropertyChanged("MaterialID");
+					this.OnMaterialIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Thickness", DbType="Decimal(2,1) NOT NULL")]
+		public decimal Thickness
+		{
+			get
+			{
+				return this._Thickness;
+			}
+			set
+			{
+				if ((this._Thickness != value))
+				{
+					this.OnThicknessChanging(value);
+					this.SendPropertyChanging();
+					this._Thickness = value;
+					this.SendPropertyChanged("Thickness");
+					this.OnThicknessChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BendID", DbType="Int")]
+		public System.Nullable<int> BendID
+		{
+			get
+			{
+				return this._BendID;
+			}
+			set
+			{
+				if ((this._BendID != value))
+				{
+					if (this._BendTable.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnBendIDChanging(value);
+					this.SendPropertyChanging();
+					this._BendID = value;
+					this.SendPropertyChanged("BendID");
+					this.OnBendIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RALID", DbType="Int")]
+		public System.Nullable<int> RALID
+		{
+			get
+			{
+				return this._RALID;
+			}
+			set
+			{
+				if ((this._RALID != value))
+				{
+					if (this._RAL.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnRALIDChanging(value);
+					this.SendPropertyChanging();
+					this._RALID = value;
+					this.SendPropertyChanged("RALID");
+					this.OnRALIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CoatingType", DbType="NVarChar(10)")]
+		public string CoatingType
+		{
+			get
+			{
+				return this._CoatingType;
+			}
+			set
+			{
+				if ((this._CoatingType != value))
+				{
+					this.OnCoatingTypeChanging(value);
+					this.SendPropertyChanging();
+					this._CoatingType = value;
+					this.SendPropertyChanged("CoatingType");
+					this.OnCoatingTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CoatingClass", DbType="Int")]
+		public System.Nullable<int> CoatingClass
+		{
+			get
+			{
+				return this._CoatingClass;
+			}
+			set
+			{
+				if ((this._CoatingClass != value))
+				{
+					this.OnCoatingClassChanging(value);
+					this.SendPropertyChanging();
+					this._CoatingClass = value;
+					this.SendPropertyChanged("CoatingClass");
+					this.OnCoatingClassChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BendTable_AssemblyRoof", Storage="_BendTable", ThisKey="BendID", OtherKey="BendID", IsForeignKey=true)]
+		public BendTable BendTable
+		{
+			get
+			{
+				return this._BendTable.Entity;
+			}
+			set
+			{
+				BendTable previousValue = this._BendTable.Entity;
+				if (((previousValue != value) 
+							|| (this._BendTable.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._BendTable.Entity = null;
+						previousValue.AssemblyRoofs.Remove(this);
+					}
+					this._BendTable.Entity = value;
+					if ((value != null))
+					{
+						value.AssemblyRoofs.Add(this);
+						this._BendID = value.BendID;
+					}
+					else
+					{
+						this._BendID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("BendTable");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MaterialsProp_AssemblyRoof", Storage="_MaterialsProp", ThisKey="MaterialID", OtherKey="LevelID", IsForeignKey=true)]
+		public MaterialsProp MaterialsProp
+		{
+			get
+			{
+				return this._MaterialsProp.Entity;
+			}
+			set
+			{
+				MaterialsProp previousValue = this._MaterialsProp.Entity;
+				if (((previousValue != value) 
+							|| (this._MaterialsProp.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MaterialsProp.Entity = null;
+						previousValue.AssemblyRoofs.Remove(this);
+					}
+					this._MaterialsProp.Entity = value;
+					if ((value != null))
+					{
+						value.AssemblyRoofs.Add(this);
+						this._MaterialID = value.LevelID;
+					}
+					else
+					{
+						this._MaterialID = default(int);
+					}
+					this.SendPropertyChanged("MaterialsProp");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="RAL_AssemblyRoof", Storage="_RAL", ThisKey="RALID", OtherKey="RALID", IsForeignKey=true)]
+		public RAL RAL
+		{
+			get
+			{
+				return this._RAL.Entity;
+			}
+			set
+			{
+				RAL previousValue = this._RAL.Entity;
+				if (((previousValue != value) 
+							|| (this._RAL.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._RAL.Entity = null;
+						previousValue.AssemblyRoofs.Remove(this);
+					}
+					this._RAL.Entity = value;
+					if ((value != null))
+					{
+						value.AssemblyRoofs.Add(this);
+						this._RALID = value.RALID;
+					}
+					else
+					{
+						this._RALID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("RAL");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.RAL")]
+	public partial class RAL : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _RALID;
+		
+		private string _RALName;
+		
+		private string _HEX;
+		
+		private string _English;
+		
+		private string _Rus;
+		
+		private bool _Applicability;
+		
+		private string _ERPCode;
+		
+		private EntitySet<AssemblyRoof> _AssemblyRoofs;
+		
+		private EntitySet<AssemblyFrame> _AssemblyFrames;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnRALIDChanging(int value);
+    partial void OnRALIDChanged();
+    partial void OnRALNameChanging(string value);
+    partial void OnRALNameChanged();
+    partial void OnHEXChanging(string value);
+    partial void OnHEXChanged();
+    partial void OnEnglishChanging(string value);
+    partial void OnEnglishChanged();
+    partial void OnRusChanging(string value);
+    partial void OnRusChanged();
+    partial void OnApplicabilityChanging(bool value);
+    partial void OnApplicabilityChanged();
+    partial void OnERPCodeChanging(string value);
+    partial void OnERPCodeChanged();
+    #endregion
+		
+		public RAL()
+		{
+			this._AssemblyRoofs = new EntitySet<AssemblyRoof>(new Action<AssemblyRoof>(this.attach_AssemblyRoofs), new Action<AssemblyRoof>(this.detach_AssemblyRoofs));
+			this._AssemblyFrames = new EntitySet<AssemblyFrame>(new Action<AssemblyFrame>(this.attach_AssemblyFrames), new Action<AssemblyFrame>(this.detach_AssemblyFrames));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RALID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int RALID
+		{
+			get
+			{
+				return this._RALID;
+			}
+			set
+			{
+				if ((this._RALID != value))
+				{
+					this.OnRALIDChanging(value);
+					this.SendPropertyChanging();
+					this._RALID = value;
+					this.SendPropertyChanged("RALID");
+					this.OnRALIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="RAL", Storage="_RALName", DbType="NVarChar(12) NOT NULL", CanBeNull=false)]
+		public string RALName
+		{
+			get
+			{
+				return this._RALName;
+			}
+			set
+			{
+				if ((this._RALName != value))
+				{
+					this.OnRALNameChanging(value);
+					this.SendPropertyChanging();
+					this._RALName = value;
+					this.SendPropertyChanged("RALName");
+					this.OnRALNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HEX", DbType="VarChar(6)")]
+		public string HEX
+		{
+			get
+			{
+				return this._HEX;
+			}
+			set
+			{
+				if ((this._HEX != value))
+				{
+					this.OnHEXChanging(value);
+					this.SendPropertyChanging();
+					this._HEX = value;
+					this.SendPropertyChanged("HEX");
+					this.OnHEXChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_English", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string English
+		{
+			get
+			{
+				return this._English;
+			}
+			set
+			{
+				if ((this._English != value))
+				{
+					this.OnEnglishChanging(value);
+					this.SendPropertyChanging();
+					this._English = value;
+					this.SendPropertyChanged("English");
+					this.OnEnglishChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Rus", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string Rus
+		{
+			get
+			{
+				return this._Rus;
+			}
+			set
+			{
+				if ((this._Rus != value))
+				{
+					this.OnRusChanging(value);
+					this.SendPropertyChanging();
+					this._Rus = value;
+					this.SendPropertyChanged("Rus");
+					this.OnRusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Applicability", DbType="Bit NOT NULL")]
+		public bool Applicability
+		{
+			get
+			{
+				return this._Applicability;
+			}
+			set
+			{
+				if ((this._Applicability != value))
+				{
+					this.OnApplicabilityChanging(value);
+					this.SendPropertyChanging();
+					this._Applicability = value;
+					this.SendPropertyChanged("Applicability");
+					this.OnApplicabilityChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ERPCode", DbType="VarChar(20)")]
+		public string ERPCode
+		{
+			get
+			{
+				return this._ERPCode;
+			}
+			set
+			{
+				if ((this._ERPCode != value))
+				{
+					this.OnERPCodeChanging(value);
+					this.SendPropertyChanging();
+					this._ERPCode = value;
+					this.SendPropertyChanged("ERPCode");
+					this.OnERPCodeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="RAL_AssemblyRoof", Storage="_AssemblyRoofs", ThisKey="RALID", OtherKey="RALID")]
+		public EntitySet<AssemblyRoof> AssemblyRoofs
+		{
+			get
+			{
+				return this._AssemblyRoofs;
+			}
+			set
+			{
+				this._AssemblyRoofs.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="RAL_AssemblyFrame", Storage="_AssemblyFrames", ThisKey="RALID", OtherKey="RALID")]
+		public EntitySet<AssemblyFrame> AssemblyFrames
+		{
+			get
+			{
+				return this._AssemblyFrames;
+			}
+			set
+			{
+				this._AssemblyFrames.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_AssemblyRoofs(AssemblyRoof entity)
+		{
+			this.SendPropertyChanging();
+			entity.RAL = this;
+		}
+		
+		private void detach_AssemblyRoofs(AssemblyRoof entity)
+		{
+			this.SendPropertyChanging();
+			entity.RAL = null;
+		}
+		
+		private void attach_AssemblyFrames(AssemblyFrame entity)
+		{
+			this.SendPropertyChanging();
+			entity.RAL = this;
+		}
+		
+		private void detach_AssemblyFrames(AssemblyFrame entity)
+		{
+			this.SendPropertyChanging();
+			entity.RAL = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.AssemblyFrame")]
+	public partial class AssemblyFrame : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private int _FrameType;
+		
+		private int _Width;
+		
+		private int _Height;
+		
+		private int _Thick;
+		
+		private int _Offset;
+		
+		private int _Element;
+		
+		private int _Material;
+		
+		private int _BendID;
+		
+		private int _RALID;
+		
+		private string _CoatingType;
+		
+		private System.Nullable<int> _CoatingClass;
+		
+		private EntityRef<BendTable> _BendTable;
+		
+		private EntityRef<MaterialsProp> _MaterialsProp;
+		
+		private EntityRef<RAL> _RAL;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnFrameTypeChanging(int value);
+    partial void OnFrameTypeChanged();
+    partial void OnWidthChanging(int value);
+    partial void OnWidthChanged();
+    partial void OnHeightChanging(int value);
+    partial void OnHeightChanged();
+    partial void OnThickChanging(int value);
+    partial void OnThickChanged();
+    partial void OnOffsetChanging(int value);
+    partial void OnOffsetChanged();
+    partial void OnElementChanging(int value);
+    partial void OnElementChanged();
+    partial void OnMaterialChanging(int value);
+    partial void OnMaterialChanged();
+    partial void OnBendIDChanging(int value);
+    partial void OnBendIDChanged();
+    partial void OnRALIDChanging(int value);
+    partial void OnRALIDChanged();
+    partial void OnCoatingTypeChanging(string value);
+    partial void OnCoatingTypeChanged();
+    partial void OnCoatingClassChanging(System.Nullable<int> value);
+    partial void OnCoatingClassChanged();
+    #endregion
+		
+		public AssemblyFrame()
+		{
+			this._BendTable = default(EntityRef<BendTable>);
+			this._MaterialsProp = default(EntityRef<MaterialsProp>);
+			this._RAL = default(EntityRef<RAL>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FrameType", DbType="Int NOT NULL")]
+		public int FrameType
+		{
+			get
+			{
+				return this._FrameType;
+			}
+			set
+			{
+				if ((this._FrameType != value))
+				{
+					this.OnFrameTypeChanging(value);
+					this.SendPropertyChanging();
+					this._FrameType = value;
+					this.SendPropertyChanged("FrameType");
+					this.OnFrameTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Width", DbType="Int NOT NULL")]
+		public int Width
+		{
+			get
+			{
+				return this._Width;
+			}
+			set
+			{
+				if ((this._Width != value))
+				{
+					this.OnWidthChanging(value);
+					this.SendPropertyChanging();
+					this._Width = value;
+					this.SendPropertyChanged("Width");
+					this.OnWidthChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Height", DbType="Int NOT NULL")]
+		public int Height
+		{
+			get
+			{
+				return this._Height;
+			}
+			set
+			{
+				if ((this._Height != value))
+				{
+					this.OnHeightChanging(value);
+					this.SendPropertyChanging();
+					this._Height = value;
+					this.SendPropertyChanged("Height");
+					this.OnHeightChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Thick", DbType="Int NOT NULL")]
+		public int Thick
+		{
+			get
+			{
+				return this._Thick;
+			}
+			set
+			{
+				if ((this._Thick != value))
+				{
+					this.OnThickChanging(value);
+					this.SendPropertyChanging();
+					this._Thick = value;
+					this.SendPropertyChanged("Thick");
+					this.OnThickChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Offset", DbType="Int NOT NULL")]
+		public int Offset
+		{
+			get
+			{
+				return this._Offset;
+			}
+			set
+			{
+				if ((this._Offset != value))
+				{
+					this.OnOffsetChanging(value);
+					this.SendPropertyChanging();
+					this._Offset = value;
+					this.SendPropertyChanged("Offset");
+					this.OnOffsetChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Element", DbType="Int NOT NULL")]
+		public int Element
+		{
+			get
+			{
+				return this._Element;
+			}
+			set
+			{
+				if ((this._Element != value))
+				{
+					this.OnElementChanging(value);
+					this.SendPropertyChanging();
+					this._Element = value;
+					this.SendPropertyChanged("Element");
+					this.OnElementChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Material", DbType="Int NOT NULL")]
+		public int Material
+		{
+			get
+			{
+				return this._Material;
+			}
+			set
+			{
+				if ((this._Material != value))
+				{
+					if (this._MaterialsProp.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnMaterialChanging(value);
+					this.SendPropertyChanging();
+					this._Material = value;
+					this.SendPropertyChanged("Material");
+					this.OnMaterialChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BendID", DbType="Int NOT NULL")]
+		public int BendID
+		{
+			get
+			{
+				return this._BendID;
+			}
+			set
+			{
+				if ((this._BendID != value))
+				{
+					if (this._BendTable.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnBendIDChanging(value);
+					this.SendPropertyChanging();
+					this._BendID = value;
+					this.SendPropertyChanged("BendID");
+					this.OnBendIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RALID", DbType="Int NOT NULL")]
+		public int RALID
+		{
+			get
+			{
+				return this._RALID;
+			}
+			set
+			{
+				if ((this._RALID != value))
+				{
+					if (this._RAL.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnRALIDChanging(value);
+					this.SendPropertyChanging();
+					this._RALID = value;
+					this.SendPropertyChanged("RALID");
+					this.OnRALIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CoatingType", DbType="NVarChar(10)")]
+		public string CoatingType
+		{
+			get
+			{
+				return this._CoatingType;
+			}
+			set
+			{
+				if ((this._CoatingType != value))
+				{
+					this.OnCoatingTypeChanging(value);
+					this.SendPropertyChanging();
+					this._CoatingType = value;
+					this.SendPropertyChanged("CoatingType");
+					this.OnCoatingTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CoatingClass", DbType="Int")]
+		public System.Nullable<int> CoatingClass
+		{
+			get
+			{
+				return this._CoatingClass;
+			}
+			set
+			{
+				if ((this._CoatingClass != value))
+				{
+					this.OnCoatingClassChanging(value);
+					this.SendPropertyChanging();
+					this._CoatingClass = value;
+					this.SendPropertyChanged("CoatingClass");
+					this.OnCoatingClassChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BendTable_AssemblyFrame", Storage="_BendTable", ThisKey="BendID", OtherKey="BendID", IsForeignKey=true)]
+		public BendTable BendTable
+		{
+			get
+			{
+				return this._BendTable.Entity;
+			}
+			set
+			{
+				BendTable previousValue = this._BendTable.Entity;
+				if (((previousValue != value) 
+							|| (this._BendTable.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._BendTable.Entity = null;
+						previousValue.AssemblyFrames.Remove(this);
+					}
+					this._BendTable.Entity = value;
+					if ((value != null))
+					{
+						value.AssemblyFrames.Add(this);
+						this._BendID = value.BendID;
+					}
+					else
+					{
+						this._BendID = default(int);
+					}
+					this.SendPropertyChanged("BendTable");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MaterialsProp_AssemblyFrame", Storage="_MaterialsProp", ThisKey="Material", OtherKey="LevelID", IsForeignKey=true)]
+		public MaterialsProp MaterialsProp
+		{
+			get
+			{
+				return this._MaterialsProp.Entity;
+			}
+			set
+			{
+				MaterialsProp previousValue = this._MaterialsProp.Entity;
+				if (((previousValue != value) 
+							|| (this._MaterialsProp.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MaterialsProp.Entity = null;
+						previousValue.AssemblyFrames.Remove(this);
+					}
+					this._MaterialsProp.Entity = value;
+					if ((value != null))
+					{
+						value.AssemblyFrames.Add(this);
+						this._Material = value.LevelID;
+					}
+					else
+					{
+						this._Material = default(int);
+					}
+					this.SendPropertyChanged("MaterialsProp");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="RAL_AssemblyFrame", Storage="_RAL", ThisKey="RALID", OtherKey="RALID", IsForeignKey=true)]
+		public RAL RAL
+		{
+			get
+			{
+				return this._RAL.Entity;
+			}
+			set
+			{
+				RAL previousValue = this._RAL.Entity;
+				if (((previousValue != value) 
+							|| (this._RAL.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._RAL.Entity = null;
+						previousValue.AssemblyFrames.Remove(this);
+					}
+					this._RAL.Entity = value;
+					if ((value != null))
+					{
+						value.AssemblyFrames.Add(this);
+						this._RALID = value.RALID;
+					}
+					else
+					{
+						this._RALID = default(int);
+					}
+					this.SendPropertyChanged("RAL");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.AssemblyFlap")]
+	public partial class AssemblyFlap : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private int _FlapType;
+		
+		private int _Width;
+		
+		private int _Height;
+		
+		private int _ElementType;
+		
+		private int _MaterialID;
+		
+		private int _BandID;
+		
+		private bool _OuterFlap;
+		
+		private EntityRef<MaterialsProp> _MaterialsProp;
+		
+		private EntityRef<BendTable> _BendTable;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnFlapTypeChanging(int value);
+    partial void OnFlapTypeChanged();
+    partial void OnWidthChanging(int value);
+    partial void OnWidthChanged();
+    partial void OnHeightChanging(int value);
+    partial void OnHeightChanged();
+    partial void OnElementTypeChanging(int value);
+    partial void OnElementTypeChanged();
+    partial void OnMaterialIDChanging(int value);
+    partial void OnMaterialIDChanged();
+    partial void OnBandIDChanging(int value);
+    partial void OnBandIDChanged();
+    partial void OnOuterFlapChanging(bool value);
+    partial void OnOuterFlapChanged();
+    #endregion
+		
+		public AssemblyFlap()
+		{
+			this._MaterialsProp = default(EntityRef<MaterialsProp>);
+			this._BendTable = default(EntityRef<BendTable>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FlapType", DbType="Int NOT NULL")]
+		public int FlapType
+		{
+			get
+			{
+				return this._FlapType;
+			}
+			set
+			{
+				if ((this._FlapType != value))
+				{
+					this.OnFlapTypeChanging(value);
+					this.SendPropertyChanging();
+					this._FlapType = value;
+					this.SendPropertyChanged("FlapType");
+					this.OnFlapTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Width", DbType="Int NOT NULL")]
+		public int Width
+		{
+			get
+			{
+				return this._Width;
+			}
+			set
+			{
+				if ((this._Width != value))
+				{
+					this.OnWidthChanging(value);
+					this.SendPropertyChanging();
+					this._Width = value;
+					this.SendPropertyChanged("Width");
+					this.OnWidthChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Height", DbType="Int NOT NULL")]
+		public int Height
+		{
+			get
+			{
+				return this._Height;
+			}
+			set
+			{
+				if ((this._Height != value))
+				{
+					this.OnHeightChanging(value);
+					this.SendPropertyChanging();
+					this._Height = value;
+					this.SendPropertyChanged("Height");
+					this.OnHeightChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ElementType", DbType="Int NOT NULL")]
+		public int ElementType
+		{
+			get
+			{
+				return this._ElementType;
+			}
+			set
+			{
+				if ((this._ElementType != value))
+				{
+					this.OnElementTypeChanging(value);
+					this.SendPropertyChanging();
+					this._ElementType = value;
+					this.SendPropertyChanged("ElementType");
+					this.OnElementTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MaterialID", DbType="Int NOT NULL")]
+		public int MaterialID
+		{
+			get
+			{
+				return this._MaterialID;
+			}
+			set
+			{
+				if ((this._MaterialID != value))
+				{
+					if (this._MaterialsProp.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnMaterialIDChanging(value);
+					this.SendPropertyChanging();
+					this._MaterialID = value;
+					this.SendPropertyChanged("MaterialID");
+					this.OnMaterialIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BandID", DbType="Int NOT NULL")]
+		public int BandID
+		{
+			get
+			{
+				return this._BandID;
+			}
+			set
+			{
+				if ((this._BandID != value))
+				{
+					if (this._BendTable.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnBandIDChanging(value);
+					this.SendPropertyChanging();
+					this._BandID = value;
+					this.SendPropertyChanged("BandID");
+					this.OnBandIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OuterFlap", DbType="Bit NOT NULL")]
+		public bool OuterFlap
+		{
+			get
+			{
+				return this._OuterFlap;
+			}
+			set
+			{
+				if ((this._OuterFlap != value))
+				{
+					this.OnOuterFlapChanging(value);
+					this.SendPropertyChanging();
+					this._OuterFlap = value;
+					this.SendPropertyChanged("OuterFlap");
+					this.OnOuterFlapChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MaterialsProp_AssemblyFlap", Storage="_MaterialsProp", ThisKey="MaterialID", OtherKey="LevelID", IsForeignKey=true)]
+		public MaterialsProp MaterialsProp
+		{
+			get
+			{
+				return this._MaterialsProp.Entity;
+			}
+			set
+			{
+				MaterialsProp previousValue = this._MaterialsProp.Entity;
+				if (((previousValue != value) 
+							|| (this._MaterialsProp.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MaterialsProp.Entity = null;
+						previousValue.AssemblyFlaps.Remove(this);
+					}
+					this._MaterialsProp.Entity = value;
+					if ((value != null))
+					{
+						value.AssemblyFlaps.Add(this);
+						this._MaterialID = value.LevelID;
+					}
+					else
+					{
+						this._MaterialID = default(int);
+					}
+					this.SendPropertyChanged("MaterialsProp");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BendTable_AssemblyFlap", Storage="_BendTable", ThisKey="BandID", OtherKey="BendID", IsForeignKey=true)]
+		public BendTable BendTable
+		{
+			get
+			{
+				return this._BendTable.Entity;
+			}
+			set
+			{
+				BendTable previousValue = this._BendTable.Entity;
+				if (((previousValue != value) 
+							|| (this._BendTable.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._BendTable.Entity = null;
+						previousValue.AssemblyFlaps.Remove(this);
+					}
+					this._BendTable.Entity = value;
+					if ((value != null))
+					{
+						value.AssemblyFlaps.Add(this);
+						this._BandID = value.BendID;
+					}
+					else
+					{
+						this._BandID = default(int);
+					}
+					this.SendPropertyChanged("BendTable");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
 		}
 	}

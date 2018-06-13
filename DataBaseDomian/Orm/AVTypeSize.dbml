@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="SWPlusDB" Class="AVTypeSizeDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=pdmsrv;Initial Catalog=SWPlusDB;User ID=airventscad;TrustServerCertificate=True" SettingsObjectName="DataBaseDomian.Properties.Settings" SettingsPropertyName="SWPlusDBConnectionString1" Provider="System.Data.SqlClient" />
+  <Table Name="AirVents.StandardSize" Member="StandardSizes">
+    <Type Name="StandardSize">
+      <Column Name="SizeID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Type" Type="System.String" DbType="NVarChar(6) NOT NULL" CanBeNull="false" />
+      <Association Name="StandardSize_DimensionType" Member="DimensionTypes" ThisKey="SizeID" OtherKey="SizeID" Type="DimensionType" />
+    </Type>
+  </Table>
+  <Table Name="AirVents.DimensionType" Member="DimensionTypes">
+    <Type Name="DimensionType">
+      <Column Name="DimensionTypeID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SizeID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ProfilID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DimensionID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SEID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="StandardSize_DimensionType" Member="StandardSize" ThisKey="SizeID" OtherKey="SizeID" Type="StandardSize" IsForeignKey="true" />
+      <Association Name="Dimension_DimensionType" Member="Dimension" ThisKey="DimensionID" OtherKey="DimensionID" Type="Dimension" IsForeignKey="true" />
+      <Association Name="Profil_DimensionType" Member="Profil" ThisKey="ProfilID" OtherKey="ProfilID" Type="Profil" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="AirVents.Dimension" Member="Dimensions">
+    <Type Name="Dimension">
+      <Column Name="DimensionID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Wight" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Hight" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Dimension_DimensionType" Member="DimensionTypes" ThisKey="DimensionID" OtherKey="DimensionID" Type="DimensionType" />
+    </Type>
+  </Table>
+  <Table Name="AirVents.Profil" Member="Profils">
+    <Type Name="Profil">
+      <Column Name="ProfilID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(15) NOT NULL" CanBeNull="false" />
+      <Column Name="Code" Type="System.String" DbType="NVarChar(5) NOT NULL" CanBeNull="false" />
+      <Association Name="Profil_DimensionType" Member="DimensionTypes" ThisKey="ProfilID" OtherKey="ProfilID" Type="DimensionType" />
+    </Type>
+  </Table>
+  <Function Name="dbo.GetAV_TypeSize" Method="GetAV_TypeSize">
+    <Parameter Name="sizeId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Width" Parameter="width" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="Height" Parameter="height" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+</Database>

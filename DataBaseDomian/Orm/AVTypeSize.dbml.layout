@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="AVTypeSize">
+  <DataContextMoniker Name="/AVTypeSizeDataContext" />
+  <nestedChildShapes>
+    <classShape Id="ae230fec-d205-45c8-a6c0-f2d17b0e48b1" absoluteBounds="1.875, 1.25, 2, 1.1939925130208333">
+      <DataClassMoniker Name="/AVTypeSizeDataContext/StandardSize" />
+      <nestedChildShapes>
+        <elementListCompartment Id="8d2f4e88-0a08-4a75-8a5a-141c7e65544a" absoluteBounds="1.8900000000000001, 1.71, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="953440de-4db3-44cb-b5da-e7cc084093c8" absoluteBounds="1.875, 3.375, 2, 1.7708968098958331">
+      <DataClassMoniker Name="/AVTypeSizeDataContext/DimensionType" />
+      <nestedChildShapes>
+        <elementListCompartment Id="f4d240f1-dcb5-42d8-9b2f-ef1cb6a2ac87" absoluteBounds="1.8900000000000001, 3.835, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(2.875 : 2.44399251302083); (2.875 : 3.375)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/AVTypeSizeDataContext/StandardSize/StandardSize_DimensionType" />
+      <nodes>
+        <classShapeMoniker Id="ae230fec-d205-45c8-a6c0-f2d17b0e48b1" />
+        <classShapeMoniker Id="953440de-4db3-44cb-b5da-e7cc084093c8" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="73b67f2a-437b-4d49-9e13-8aea8ce4b9b9" absoluteBounds="0.625, 5.875, 2, 1.3862939453125">
+      <DataClassMoniker Name="/AVTypeSizeDataContext/Dimension" />
+      <nestedChildShapes>
+        <elementListCompartment Id="58f4840f-2aa9-44d7-b621-24594c766e5d" absoluteBounds="0.64000000000000012, 6.335, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(2.25 : 5.875); (2.25 : 5.14589680989583)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/AVTypeSizeDataContext/Dimension/Dimension_DimensionType" />
+      <nodes>
+        <classShapeMoniker Id="73b67f2a-437b-4d49-9e13-8aea8ce4b9b9" />
+        <classShapeMoniker Id="953440de-4db3-44cb-b5da-e7cc084093c8" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="fcc639c7-eb2f-493b-b162-7c7884fe11e8" absoluteBounds="3.375, 5.875, 2, 1.3862939453125">
+      <DataClassMoniker Name="/AVTypeSizeDataContext/Profil" />
+      <nestedChildShapes>
+        <elementListCompartment Id="0cc23234-26d9-4a55-97a9-39035dc028a1" absoluteBounds="3.39, 6.335, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(3.625 : 5.875); (3.625 : 5.14589680989583)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/AVTypeSizeDataContext/Profil/Profil_DimensionType" />
+      <nodes>
+        <classShapeMoniker Id="fcc639c7-eb2f-493b-b162-7c7884fe11e8" />
+        <classShapeMoniker Id="953440de-4db3-44cb-b5da-e7cc084093c8" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

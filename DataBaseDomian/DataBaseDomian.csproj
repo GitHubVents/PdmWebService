@@ -30,6 +30,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MessageLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\MessageLibrary\bin\Debug\MessageLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceConstants, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ServiceConstants\bin\Debug\ServiceConstants.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Linq" />
@@ -41,7 +49,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AVTypeSizeRepository.cs" />
     <Compile Include="IUpdater.cs" />
+    <Compile Include="Orm\AVTypeSize.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AVTypeSize.dbml</DependentUpon>
+    </Compile>
     <Compile Include="Orm\SwPlus.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -68,6 +82,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Orm\AVTypeSize.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>AVTypeSize.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Orm\SwPlus.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>SwPlus.designer.cs</LastGenOutput>
@@ -92,18 +111,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MessageLibrary\Patterns.csproj">
-      <Project>{D0ABF979-D32B-453D-92D5-F9BC7BDEC44E}</Project>
-      <Name>Patterns</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ServiceConstants\ServiceConstants.csproj">
-      <Project>{21A48C37-403D-4966-9414-6EA2327A204B}</Project>
-      <Name>ServiceConstants</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Orm\SwPlus.dbml.layout">
       <DependentUpon>SwPlus.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Orm\AVTypeSize.dbml.layout">
+      <DependentUpon>AVTypeSize.dbml</DependentUpon>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

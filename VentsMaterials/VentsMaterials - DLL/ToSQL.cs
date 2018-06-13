@@ -250,13 +250,13 @@ namespace VentsMaterials
             string descriptCode;
 
             DataTable materialDataTable = MaterialsTable();
+
             SetMaterials setMat = new SetMaterials(swApp);
             foreach (DataRow dataRow in materialDataTable.Rows)
             {
                 if ((int)dataRow["LevelID"] == materialID)
                 {
                     string Thickness = dataRow["Thickness"].ToString();
-
 
 
                     if (Convert.ToBoolean(Thickness))
@@ -564,7 +564,7 @@ namespace VentsMaterials
         }
 
         #endregion
- 
+        
         public void PopulateTreeView(string id, string matname, TreeNode n, TreeView tree)
         {
             try

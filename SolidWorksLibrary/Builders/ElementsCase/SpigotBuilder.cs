@@ -6,8 +6,7 @@ using SolidWorksLibrary;
 using SolidWorksLibrary.Builders.ElementsCase;
 using System;
 using System.IO;
-using System.Collections.Generic;
-using System.Data;
+using DataBaseDomian;
 
 namespace PDMWebService.Data.Solid.ElementsCase
 {
@@ -19,23 +18,18 @@ namespace PDMWebService.Data.Solid.ElementsCase
         public SpigotBuilder() : base()
         {
             SetProperties(@"Проекты\12 - Вибровставка", @"Библиотека проектирования\DriveWorks\12 - Spigot");
-            //SetProperties(ipsModuleObject.SessionID.ToString() + @"\Workspace\Проекты\AirVents\12", ipsModuleObject.SessionID.ToString() + @"\Workspace\SW Library");
             base.AssemblyName = "12-00";
+            NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder);
         }
 
         
 
-        public string Build(int type, Vector2 spigotSize, int materialID) // должен возвращать лист с путями к файлам 
+        public string Build(int type, int width, int lenght) // должен возвращать лист с путями к файлам 
         {
-            
-            Dictionary<string, string> dictionary = new Dictionary<string, string>();
-            long tempId = 0;
+            int? ID = 0;
+            SwPlusRepository.Instance.AirVents_AddAssemblySpigot(type, width, lenght, 0, ref ID);
 
-            List<long> idObjWithNewPath = new List<long>();
-
-            DataSet ds = null;
-            
-            //DataTable dt = ipsModuleObject.GetIMBASETable((long)IMBASE_TablesID.Spigot, out ds, out dictionary);
+            string newASMName = ID.ToString();
 
             base.PartPrototypeName = GetPrototypeName((SpigotType_e)type);
             string drawingNameWithExt = "12-00.SLDDRW";               
@@ -49,15 +43,14 @@ namespace PDMWebService.Data.Solid.ElementsCase
 
             DeleteEquations(base.PartPrototypeName);
             DeleteComponents(type);
-            SolidWorksDocument.ForceRebuild3(true);
             
             #region formuls   
 
-            double w = spigotSize.X;
-            double h = spigotSize.Y - addDimH;
+            double w = width;
+            double h = lenght - addDimH;
             const double step = 50;
-            double weldWidth = Math.Truncate(spigotSize.X / step)*1000 + 1;
-            double weldHeight = Math.Truncate(spigotSize.Y / step)*1000 + 1;  
+            double weldWidth = Math.Truncate(width / step)*1000 + 1;
+            double weldHeight = Math.Truncate(lenght / step)*1000 + 1;  
 
             #endregion
 
@@ -65,65 +58,35 @@ namespace PDMWebService.Data.Solid.ElementsCase
             {
                 #region 12-20
 
-                base.PartName = $"12-20-{spigotSize.Y}";
-                    
-                //if (ipsModuleObject.CheckForSimilarRows(base.PartName, dt, dictionary))// добавить out filePath
-                //{
-                //    // открывать детальку 
-                //    SolidWorksDocument.Extension.SelectByID2("12-20-001-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                //    AssemblyDocument.ReplaceComponents(base.NewPartPath, "", true, true);
-                //}
-                //else
-                //{
-                    base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, base.PartName);
-                    base.parameters.Add("D1@Вытянуть1", h - 31);
-                    base.parameters.Add("D1@Кривая1", weldHeight);
-                    EditPartParameters("12-20-001", base.NewPartPath, materialID);
-                    //tempId = op.WriteIntoIMBASE_Spigot_Table(dt, base.NewPartPath + ".SLDPRT", "Обозначениеttt", base.PartName, spigotSize.X.ToString(), spigotSize.Y.ToString(), type.ToString(), 1);
-                    //ComponentsPathList.Add(base.NewPartPath);
-                    idObjWithNewPath.Add(tempId);
-                //}
+
+                //base.PartName = $"12-20-{lenght}";
+                //base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, base.PartName);
+                SwPlusRepository.Instance.AirVents_AddAssemblySpigot(type, (h - 31).ToInt(), 0, 21, ref ID);
+
+                base.parameters.Add("D1@Вытянуть1", h - 31);
+                base.parameters.Add("D1@Кривая1", weldHeight);
+                EditPartParameters("12-20-001", base.NewPartPath + @"\12-" + ID.ToString(), 0);
+
 
                 //12-20-002
 
-                base.PartName = $"12-20-{spigotSize.X}";
+                //base.PartName = $"12-20-{width}";
+                //base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, base.PartName);
+                SwPlusRepository.Instance.AirVents_AddAssemblySpigot(type, (w - 31).ToInt(), 0, 22, ref ID);
 
-                //if (ipsModuleObject.CheckForSimilarRows(base.PartName, dt, dictionary))
-                //{
-                //    //открывать детальку 
-                //}
-                //else
-                //{
-                    base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, base.PartName);
+                base.parameters.Add("D1@Вытянуть1", w - 31);
+                base.parameters.Add("D1@Кривая1", weldWidth);
+                EditPartParameters("12-20-002", base.NewPartPath + @"\12-" + ID.ToString(), 0);
 
-                    base.parameters.Add("D1@Вытянуть1", w - 31);
-                    base.parameters.Add("D1@Кривая1", weldWidth);
-                    EditPartParameters("12-20-002", base.NewPartPath, materialID);
-                // tempId = op.WriteIntoIMBASE_Spigot_Table(dt, base.NewPartPath + ".SLDPRT", "Обозначениеttt", base.PartName, spigotSize.X.ToString(), spigotSize.Y.ToString(), type.ToString(), 1);
-                //ComponentsPathList.Add(base.NewPartPath);
-                //Part=1296
-                //Изделие=1052
-                idObjWithNewPath.Add(tempId);
-                //}
 
                 //12-003 
-                base.PartName = $"12-03-{spigotSize.X}-{spigotSize.Y}";
-                //if (ipsModuleObject.CheckForSimilarRows(base.PartName, dt, dictionary))
-                //{
-                //    //открывать детальку
-                //}
-                //else
-                //{
-                    base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, base.PartName);
+                //base.PartName = $"12-03-{width}-{lenght}";
+                //base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, base.PartName);
+                SwPlusRepository.Instance.AirVents_AddAssemblySpigot(type, w.ToInt(), h.ToInt(), 1, ref ID);
 
-                    base.parameters.Add("D3@Эскиз1", w);
-                    base.parameters.Add("D2@Эскиз1", h);
-                    EditPartParameters("12-003", base.NewPartPath, materialID);
-                // tempId = op.WriteIntoIMBASE_Spigot_Table(dt, base.NewPartPath + ".SLDPRT", "Обозначениеttt", base.PartName, spigotSize.X.ToString(), spigotSize.Y.ToString(), type.ToString(), 1);
-
-                //ComponentsPathList.Add(base.NewPartPath);
-                idObjWithNewPath.Add(tempId);
-                //}
+                base.parameters.Add("D3@Эскиз1", w);
+                base.parameters.Add("D2@Эскиз1", h);
+                EditPartParameters("12-003", base.NewPartPath + @"\12-" + ID.ToString(), 0);
                 #endregion
             }
             else if (base.PartPrototypeName == "12-30")
@@ -131,121 +94,58 @@ namespace PDMWebService.Data.Solid.ElementsCase
                 #region 12-30
                 //12-30-001
 
-                base.PartName = $"12-30-{spigotSize.Y}";
+                //base.PartName = $"12-30-{lenght}";
+                //base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, base.PartName);
+                SwPlusRepository.Instance.AirVents_AddAssemblySpigot(type, (h - 31).ToInt(), 0, 31, ref ID);
 
-                //if (CheckExistPart != null)
-                //{
-                //    CheckExistPart(base.PartName, RootFolder, out base.NewPartPath);
-                //}
-                //else
-                //{
-                //    MessageObserver.Instance.SetMessage("CheckExistPartEvent can not be null", MessageType.Warning);
-                //}
+                base.parameters.Add("D1@Вытянуть1", h - 31);
+                base.parameters.Add("D1@Кривая1", weldHeight);
+                EditPartParameters("12-30-001", base.NewPartPath + @"\12-" + ID.ToString(), 0);
 
-                //if (NewPartPath != string.Empty && NewPartPath != null)
-                //{
-                //    SolidWorksDocument.Extension.SelectByID2("12-30-001-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                //    AssemblyDocument.ReplaceComponents(base.NewPartPath, "", true, true);
-                //}
-                //else
-                //{
-                    base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, base.PartName);
-
-                    base.parameters.Add("D1@Вытянуть1", h - 31);
-                    base.parameters.Add("D1@Кривая1", weldHeight);
-                    //base.parameters.Add("D5@Эскиз1", weldHeight);
-                    EditPartParameters("12-30-001", base.NewPartPath, materialID);
-                ComponentsPathList.Add(base.NewPartPath);
-
-                //}
 
                 //12-30-002           
-                base.PartName = $"12-30-{spigotSize.X}";
 
-                //if (CheckExistPart != null)
-                //{
-                //    CheckExistPart(base.PartName, RootFolder, out base.NewPartPath);
-                //}
-                //else
-                //{
-                //    MessageObserver.Instance.SetMessage("CheckExistPartEvent can not be null", MessageType.Warning);
-                //}
+                //base.PartName = $"12-30-{width}";
+                //base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, base.PartName);
+                SwPlusRepository.Instance.AirVents_AddAssemblySpigot(type, (w - 31).ToInt(), 0, 32, ref ID);
 
-                //if (NewPartPath != string.Empty && NewPartPath != null)
-                //{
-                //    SolidWorksDocument.Extension.SelectByID2("12-30-002-1@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                //    AssemblyDocument.ReplaceComponents(base.NewPartPath, "", true, true);
+                base.parameters.Add("D1@Вытянуть1", w - 31);
+                base.parameters.Add("D1@Кривая1", weldHeight);
+                EditPartParameters("12-30-002", base.NewPartPath + @"\12-" + ID, 0);
 
-                //}
-                //else
-                //{
-                    base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, base.PartName);
 
-                    base.parameters.Add("D1@Вытянуть1", w - 31);
-                    base.parameters.Add("D1@Кривая1", weldHeight);
-                    EditPartParameters("12-30-002", base.NewPartPath, materialID);
-                ComponentsPathList.Add(base.NewPartPath);
-                //}
                 //12-003
+                //base.PartName = $"12-03-{width}-{lenght}";
+                //base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, base.PartName);
+                SwPlusRepository.Instance.AirVents_AddAssemblySpigot(type, w.ToInt(), h.ToInt(), 1, ref ID);
 
-                base.PartName = $"12-03-{spigotSize.X}-{spigotSize.Y}";
-                //if (CheckExistPart != null)
-                //{
-                //    CheckExistPart(base.PartName, RootFolder, out base.NewPartPath);
-                //}
-                //else
-                //{
-                //    MessageObserver.Instance.SetMessage("CheckExistPartEvent can not be null", MessageType.Warning);
-                //}
-
-                //if (NewPartPath != string.Empty && NewPartPath != null)
-                //{
-
-                //    SolidWorksDocument.Extension.SelectByID2("12-003-2@12-00", "COMPONENT", 0, 0, 0, false, 0, null, 0);
-                //    AssemblyDocument.ReplaceComponents(base.NewPartPath, "", true, true);
-                //}
-                //else
-                //{
-                    base.NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, base.PartName);
-
-                    base.parameters.Add("D3@Эскиз1", w);
-                    base.parameters.Add("D2@Эскиз1", h);
-                    EditPartParameters("12-003", base.NewPartPath, materialID);
-                ComponentsPathList.Add(base.NewPartPath); 
-
-                //}
+                base.parameters.Add("D3@Эскиз1", w);
+                base.parameters.Add("D2@Эскиз1", h);
+                EditPartParameters("12-003", base.NewPartPath + @"\12-" + ID.ToString(), 0);
                 #endregion
             }
 
             SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(base.AssemblyName + ".SLDASM");
-            SolidWorksDocument.ForceRebuild3(true);
+            SolidWorksDocument.ForceRebuild3(false);
 
-            NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, GetSpigotName((SpigotType_e)type, spigotSize));
+            NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, @"12-" + newASMName);
             SolidWorksDocument.Extension.SaveAs(NewPartPath + ".SLDASM", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
             InitiatorSaveExeption(error, warning, NewPartPath + ".SLDASM");
-            SolidWorksAdapter.SldWoksAppExemplare.CloseDoc(base.NewPartPath + ".SLDASM");
-
-
-            //tempId = op.WriteIntoIMBASE_Spigot_Table(dt, base.AssemblyName + ".SLDASM", "ОбозначениеСборка", base.PartName, spigotSize.X.ToString(), spigotSize.Y.ToString(), type.ToString(), 1);
+            //SolidWorksAdapter.CloseDocument(SolidWorksDocument);
 
 
             SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(drawingNameWithExt);
             SolidWorksDRW = SolidWorksAdapter.ToDrawingDoc(SolidWorksDocument);
 
             base.SolidWorksDRW.ActivateSheet("DRW1");
-            SolidWorksDRW.SetupSheet5("DRW1", 12, 12, 1, GetDrawingScale(spigotSize), true, @"\\pdmsrv\SolidWorks Admin\Templates\Основные надписи\A3-A-1.slddrt", 0.42, 0.297, "По умолчанию", false);
+            SolidWorksDRW.SetupSheet5("DRW1", 12, 12, 1, GetDrawingScale(new Vector2(width, lenght)), true, @"\\pdmsrv\SolidWorks Admin\Templates\Основные надписи\A3-A-1.slddrt", 0.42, 0.297, "По умолчанию", false);
 
             SolidWorksDocument.Extension.SaveAs(NewPartPath + ".SLDDRW", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, null, ref error, ref warning);
             InitiatorSaveExeption(error, warning, NewPartPath + ".SLDDRW");
-            
+            SolidWorksAdapter.CloseDocument(SolidWorksDocument);
+            //SolidWorksAdapter.CloseAllDocumentsAndExit();
 
-            // create relations between docs
-            //ipsModuleObject.MakeRelationsBtwnDocs(idObjWithNewPath, tempId);
-
-            SolidWorksAdapter.CloseAllDocumentsAndExit();
-           
             return NewPartPath;
-            
         }
 
         #region clear document
