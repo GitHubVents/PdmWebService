@@ -34,18 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SolidWorks.Interop.sldworks">
-      <HintPath>C:\Program Files\SOLIDWORKS Corp\SOLIDWORKS\api\redist\SolidWorks.Interop.sldworks.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="SolidWorks.Interop.swconst">
-      <HintPath>C:\Program Files\SOLIDWORKS Corp\SOLIDWORKS\api\redist\SolidWorks.Interop.swconst.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="SolidWorksLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SolidWorksLibrary\bin\Debug\SolidWorksLibrary.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -56,7 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Logger.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -64,10 +51,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MessageLibrary\Patterns.csproj">
-      <Project>{D0ABF979-D32B-453D-92D5-F9BC7BDEC44E}</Project>
-      <Name>Patterns</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ServiceConstants\ServiceConstants.csproj">
       <Project>{21a48c37-403d-4966-9414-6ea2327a204b}</Project>
       <Name>ServiceConstants</Name>
@@ -75,6 +58,10 @@
     <ProjectReference Include="..\ServiceLibrary\ServiceTypes.csproj">
       <Project>{72339207-ca2e-4581-ba9c-8e6a6a1052a6}</Project>
       <Name>ServiceTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SolidWorksLibrary\SolidWorksLibrary.csproj">
+      <Project>{decc61e0-8d25-485f-99f4-d895177c7997}</Project>
+      <Name>SolidWorksLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

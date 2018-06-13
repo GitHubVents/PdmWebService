@@ -71,10 +71,10 @@ namespace SolidWorksLibrary
 		}
 		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.AirVents_AddAssemblyFrame")]
-		public int AirVents_AddAssemblyFrame([global::System.Data.Linq.Mapping.ParameterAttribute(Name="FrameType", DbType="Int")] System.Nullable<int> frameType, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Width", DbType="Int")] System.Nullable<int> width, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Height", DbType="Int")] System.Nullable<int> height, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Thick", DbType="Decimal(3,1)")] System.Nullable<decimal> thick, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Offset", DbType="Int")] System.Nullable<int> offset, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Element", DbType="Int")] System.Nullable<int> element, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Material", DbType="Int")] System.Nullable<int> material, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="ID", DbType="Int")] ref System.Nullable<int> iD)
+		public int AirVents_AddAssemblyFrame([global::System.Data.Linq.Mapping.ParameterAttribute(Name="FrameType", DbType="Int")] System.Nullable<int> frameType, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Width", DbType="Int")] System.Nullable<int> width, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Height", DbType="Int")] System.Nullable<int> height, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Thick", DbType="Decimal(3,1)")] System.Nullable<decimal> thick, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Offset", DbType="Int")] System.Nullable<int> offset, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Element", DbType="Int")] System.Nullable<int> element, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="ID", DbType="Int")] ref System.Nullable<int> iD)
 		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), frameType, width, height, thick, offset, element, material, iD);
-			iD = ((System.Nullable<int>)(result.GetParameterValue(7)));
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), frameType, width, height, thick, offset, element, iD);
+			iD = ((System.Nullable<int>)(result.GetParameterValue(6)));
 			return ((int)(result.ReturnValue));
 		}
 	}
@@ -85,7 +85,9 @@ namespace SolidWorksLibrary
 		
 		private int _ID;
 		
-		private int _FrameType;
+		private int _Type;
+		
+		private System.Nullable<bool> _Checked;
 		
 		private int _Width;
 		
@@ -94,10 +96,6 @@ namespace SolidWorksLibrary
 		private int _Thick;
 		
 		private int _Offset;
-		
-		private int _Element;
-		
-		private int _Material;
 		
 		public AssemblyFrame()
 		{
@@ -119,18 +117,34 @@ namespace SolidWorksLibrary
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FrameType", DbType="Int NOT NULL")]
-		public int FrameType
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Type", DbType="Int NOT NULL")]
+		public int Type
 		{
 			get
 			{
-				return this._FrameType;
+				return this._Type;
 			}
 			set
 			{
-				if ((this._FrameType != value))
+				if ((this._Type != value))
 				{
-					this._FrameType = value;
+					this._Type = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Checked", DbType="Bit")]
+		public System.Nullable<bool> Checked
+		{
+			get
+			{
+				return this._Checked;
+			}
+			set
+			{
+				if ((this._Checked != value))
+				{
+					this._Checked = value;
 				}
 			}
 		}
@@ -195,38 +209,6 @@ namespace SolidWorksLibrary
 				if ((this._Offset != value))
 				{
 					this._Offset = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Element", DbType="Int NOT NULL")]
-		public int Element
-		{
-			get
-			{
-				return this._Element;
-			}
-			set
-			{
-				if ((this._Element != value))
-				{
-					this._Element = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Material", DbType="Int NOT NULL")]
-		public int Material
-		{
-			get
-			{
-				return this._Material;
-			}
-			set
-			{
-				if ((this._Material != value))
-				{
-					this._Material = value;
 				}
 			}
 		}

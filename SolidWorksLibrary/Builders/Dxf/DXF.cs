@@ -3,10 +3,11 @@ using SolidWorks.Interop.swconst;
 using System;
 using System.IO;
 using Patterns.Observer;
+using System.Threading;
 
 namespace SolidWorksLibrary.Builders.Dxf
 {
-    public class DXF
+    public   class DXF
     {
         /// <summary>
         /// The path to the folder in which to save the built by Dxf file
@@ -37,7 +38,6 @@ namespace SolidWorksLibrary.Builders.Dxf
             try
             {            
                 string sDxfName = DxfNameBuild(swModel.GetTitle(), configuration) + ".dxf";
-
                 dxfFilePath = Path.Combine(FolderToSaveDxf, sDxfName);
                 if (!Directory.Exists(FolderToSaveDxf))
                     Directory.CreateDirectory(FolderToSaveDxf);
@@ -87,35 +87,9 @@ namespace SolidWorksLibrary.Builders.Dxf
         /// <param name="fileName"></param>
         /// <param name="config"></param>
         /// <returns></returns>
-        public static string DxfNameBuild(string fileName, string config)
+        private string DxfNameBuild(string fileName, string config)
         {
-            string tempConf = config;
-
-            string[] restricted = new string[] { ">", "<", "\"", "|"};
-
-
-            if (tempConf.Contains("<") && tempConf.Contains(">"))
-            {
-
-                int firstBraket = tempConf.IndexOf("<") + 1;
-                int secondBraket = tempConf.IndexOf(">");
-
-                string subSTR = tempConf.Substring(firstBraket - 1, secondBraket - firstBraket + 2);
-                tempConf = tempConf.Replace(subSTR, "");
-            }
-
-
-           
-
-            foreach (string symbol in restricted)
-            {
-                if (tempConf.Contains(symbol))
-                {
-                    tempConf = tempConf.Replace(symbol, "");
-                }
-            }
-
-            return $"{fileName.Replace("ВНС-", "").ToLower().Replace(".sldprt", "")}-{tempConf}";
+            return $"{fileName.Replace("ВНС-", "").ToLower().Replace(".sldprt", "")}-{config}";
         }
 
 

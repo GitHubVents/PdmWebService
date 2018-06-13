@@ -33,6 +33,7 @@ namespace Patterns.Observer
             if (this.ReceivedMessage != null)
                 this.ReceivedMessage(new MessageEventArgs { Message = message , Type = messageType, time = DateTime.Now /* new DateTime(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second)*/ });
         }        
+              
     }
 
     public class MessageEventArgs

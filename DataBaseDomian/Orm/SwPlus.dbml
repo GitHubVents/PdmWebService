@@ -6,9 +6,6 @@
       <Column Name="Thickness" Type="System.Decimal" DbType="Decimal(2,1) NOT NULL" CanBeNull="false" />
       <Column Name="[K-Factor]" Member="K_Factor" Type="System.Decimal" DbType="Decimal(5,3) NOT NULL" CanBeNull="false" />
       <Column Name="BendRadius" Type="System.Decimal" DbType="Decimal(4,2) NOT NULL" CanBeNull="false" />
-      <Association Name="BendTable_AssemblyRoof" Member="AssemblyRoofs" ThisKey="BendID" OtherKey="BendID" Type="AssemblyRoof" />
-      <Association Name="BendTable_AssemblyFrame" Member="AssemblyFrames" ThisKey="BendID" OtherKey="BendID" Type="AssemblyFrame" />
-      <Association Name="BendTable_AssemblyFlap" Member="AssemblyFlaps" ThisKey="BendID" OtherKey="BandID" Type="AssemblyFlap" />
     </Type>
   </Table>
   <Table Name="dbo.View_Parts" Member="View_Parts">
@@ -34,106 +31,6 @@
       <Column Name="Path" Type="System.String" DbType="NVarChar(260)" CanBeNull="true" />
     </Type>
   </Table>
-  <Table Name="dbo.AssemblySpigot" Member="AssemblySpigots">
-    <Type Name="AssemblySpigot">
-      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="SpigotType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Width" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Height" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="ElementType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="MaterialID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="MaterialsProp_AssemblySpigot" Member="MaterialsProp" ThisKey="MaterialID" OtherKey="LevelID" Type="MaterialsProp" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.MaterialsProp" Member="MaterialsProps">
-    <Type Name="MaterialsProp">
-      <Column Name="LevelID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="GroupID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="MaterialsName" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="MaterialsNameEng" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="ERP" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="Density" Type="System.Decimal" DbType="Decimal(6,0)" CanBeNull="true" />
-      <Column Name="SWProperty" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="Description" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="CodeMaterial" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="xhatch" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="angle" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="scale" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="pwshader2" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="path" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="RGB" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="DescriptionCode" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="Thickness" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Association Name="MaterialsProp_AssemblySpigot" Member="AssemblySpigots" ThisKey="LevelID" OtherKey="MaterialID" Type="AssemblySpigot" />
-      <Association Name="MaterialsProp_AssemblyRoof" Member="AssemblyRoofs" ThisKey="LevelID" OtherKey="MaterialID" Type="AssemblyRoof" />
-      <Association Name="MaterialsProp_AssemblyFrame" Member="AssemblyFrames" ThisKey="LevelID" OtherKey="Material" Type="AssemblyFrame" />
-      <Association Name="MaterialsProp_AssemblyFlap" Member="AssemblyFlaps" ThisKey="LevelID" OtherKey="MaterialID" Type="AssemblyFlap" />
-    </Type>
-  </Table>
-  <Table Name="dbo.AssemblyRoof" Member="AssemblyRoofs">
-    <Type Name="AssemblyRoof">
-      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="RoofType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Width" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Height" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="ElementType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="MaterialID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Thickness" Type="System.Decimal" DbType="Decimal(2,1) NOT NULL" CanBeNull="false" />
-      <Column Name="BendID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="RALID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="CoatingType" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
-      <Column Name="CoatingClass" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="BendTable_AssemblyRoof" Member="BendTable" ThisKey="BendID" OtherKey="BendID" Type="BendTable" IsForeignKey="true" />
-      <Association Name="MaterialsProp_AssemblyRoof" Member="MaterialsProp" ThisKey="MaterialID" OtherKey="LevelID" Type="MaterialsProp" IsForeignKey="true" />
-      <Association Name="RAL_AssemblyRoof" Member="RAL" ThisKey="RALID" OtherKey="RALID" Type="RAL" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.RAL" Member="RALs">
-    <Type Name="RAL">
-      <Column Name="RALID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="RAL" Member="RALName" Type="System.String" DbType="NVarChar(12) NOT NULL" CanBeNull="false" />
-      <Column Name="HEX" Type="System.String" DbType="VarChar(6)" CanBeNull="true" />
-      <Column Name="English" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="Rus" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="Applicability" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="ERPCode" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
-      <Association Name="RAL_AssemblyRoof" Member="AssemblyRoofs" ThisKey="RALID" OtherKey="RALID" Type="AssemblyRoof" />
-      <Association Name="RAL_AssemblyFrame" Member="AssemblyFrames" ThisKey="RALID" OtherKey="RALID" Type="AssemblyFrame" />
-    </Type>
-  </Table>
-  <Table Name="dbo.AssemblyFrame" Member="AssemblyFrames">
-    <Type Name="AssemblyFrame">
-      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="FrameType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Width" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Height" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Thick" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Offset" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Element" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Material" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="BendID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="RALID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="CoatingType" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
-      <Column Name="CoatingClass" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="BendTable_AssemblyFrame" Member="BendTable" ThisKey="BendID" OtherKey="BendID" Type="BendTable" IsForeignKey="true" />
-      <Association Name="MaterialsProp_AssemblyFrame" Member="MaterialsProp" ThisKey="Material" OtherKey="LevelID" Type="MaterialsProp" IsForeignKey="true" />
-      <Association Name="RAL_AssemblyFrame" Member="RAL" ThisKey="RALID" OtherKey="RALID" Type="RAL" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.AssemblyFlap" Member="AssemblyFlaps">
-    <Type Name="AssemblyFlap">
-      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="FlapType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Width" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Height" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="ElementType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="MaterialID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="BandID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="OuterFlap" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Association Name="MaterialsProp_AssemblyFlap" Member="MaterialsProp" ThisKey="MaterialID" OtherKey="LevelID" Type="MaterialsProp" IsForeignKey="true" />
-      <Association Name="BendTable_AssemblyFlap" Member="BendTable" ThisKey="BandID" OtherKey="BendID" Type="BendTable" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Function Name="dbo.DXFCheck" Method="DXFCheck">
     <Parameter Name="IDPDM" Parameter="iDPDM" Type="System.Int32" DbType="Int" />
     <Parameter Name="Configuration" Parameter="configuration" Type="System.String" DbType="NVarChar(255)" />
@@ -155,52 +52,6 @@
     <Parameter Name="Reinforcing" Parameter="reinforcing" Type="System.Boolean" DbType="Bit" />
     <Parameter Name="AirHole" Parameter="airHole" Type="System.String" DbType="NVarChar(255)" />
     <Parameter Name="PARTID" Parameter="pARTID" Type="System.Int32" DbType="Int" Direction="InOut" />
-    <Return Type="System.Int32" />
-  </Function>
-  <Function Name="dbo.AirVents_AddAssemblySpigot" Method="AirVents_AddAssemblySpigot">
-    <Parameter Name="SpigotType" Parameter="spigotType" Type="System.Int32" DbType="Int" />
-    <Parameter Name="Width" Parameter="width" Type="System.Int32" DbType="Int" />
-    <Parameter Name="Height" Parameter="height" Type="System.Int32" DbType="Int" />
-    <Parameter Name="ElementType" Parameter="elementType" Type="System.Int32" DbType="Int" />
-    <Parameter Name="ID" Parameter="iD" Type="System.Int32" DbType="Int" Direction="InOut" />
-    <Return Type="System.Int32" />
-  </Function>
-  <Function Name="dbo.AirVents_AddAssemblyRoof" Method="AirVents_AddAssemblyRoof">
-    <Parameter Name="RoofType" Parameter="roofType" Type="System.Int32" DbType="Int" />
-    <Parameter Name="Width" Parameter="width" Type="System.Int32" DbType="Int" />
-    <Parameter Name="Height" Parameter="height" Type="System.Int32" DbType="Int" />
-    <Parameter Name="ElementType" Parameter="elementType" Type="System.Int32" DbType="Int" />
-    <Parameter Name="Thickness" Parameter="thickness" Type="System.Decimal" DbType="Decimal(2,2)" />
-    <Parameter Name="RalID" Parameter="ralID" Type="System.Int32" DbType="Int" />
-    <Parameter Name="CoatingType" Parameter="coatingType" Type="System.String" DbType="NVarChar(10)" />
-    <Parameter Name="CoatingClass" Parameter="coatingClass" Type="System.Int32" DbType="Int" />
-    <Parameter Name="MaterialID" Parameter="materialID" Type="System.Int32" DbType="Int" />
-    <Parameter Name="ID" Parameter="iD" Type="System.Int32" DbType="Int" Direction="InOut" />
-    <Return Type="System.Int32" />
-  </Function>
-  <Function Name="dbo.AirVents_AddAssemblyFrame" Method="AirVents_AddAssemblyFrame">
-    <Parameter Name="FrameType" Parameter="frameType" Type="System.Int32" DbType="Int" />
-    <Parameter Name="Width" Parameter="width" Type="System.Int32" DbType="Int" />
-    <Parameter Name="Height" Parameter="height" Type="System.Int32" DbType="Int" />
-    <Parameter Name="Thickness" Parameter="thickness" Type="System.Decimal" DbType="Decimal(3,1)" />
-    <Parameter Name="Offset" Parameter="offset" Type="System.Int32" DbType="Int" />
-    <Parameter Name="Element" Parameter="element" Type="System.Int32" DbType="Int" />
-    <Parameter Name="RalID" Parameter="ralID" Type="System.Int32" DbType="Int" />
-    <Parameter Name="CoatingType" Parameter="coatingType" Type="System.String" DbType="NVarChar(10)" />
-    <Parameter Name="CoatingClass" Parameter="coatingClass" Type="System.Int32" DbType="Int" />
-    <Parameter Name="MaterialID" Parameter="materialID" Type="System.Int32" DbType="Int" />
-    <Parameter Name="ID" Parameter="iD" Type="System.Int32" DbType="Int" Direction="InOut" />
-    <Return Type="System.Int32" />
-  </Function>
-  <Function Name="dbo.AirVents_AddAssemblyFlap" Method="AirVents_AddAssemblyFlap">
-    <Parameter Name="FlapType" Parameter="flapType" Type="System.Int32" DbType="Int" />
-    <Parameter Name="Width" Parameter="width" Type="System.Int32" DbType="Int" />
-    <Parameter Name="Height" Parameter="height" Type="System.Int32" DbType="Int" />
-    <Parameter Name="MaterialID" Parameter="materialID" Type="System.Int32" DbType="Int" />
-    <Parameter Name="Thickness" Parameter="thickness" Type="System.Decimal" DbType="Decimal(18,0)" />
-    <Parameter Name="Outer" Parameter="outer" Type="System.Boolean" DbType="Bit" />
-    <Parameter Name="ElementType" Parameter="elementType" Type="System.Int32" DbType="Int" />
-    <Parameter Name="ID" Parameter="iD" Type="System.Int32" DbType="Int" Direction="InOut" />
     <Return Type="System.Int32" />
   </Function>
 </Database>

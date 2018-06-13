@@ -2,10 +2,8 @@
 using SolidWorks.Interop.sldworks;
 using SolidWorks.Interop.swconst;
 using System;
-using System.IO;
 using System.Collections.Generic;
 using VentsMaterials;
-using DataBaseDomian;
 
 namespace SolidWorksLibrary.Builders.ElementsCase
 {
@@ -21,31 +19,34 @@ namespace SolidWorksLibrary.Builders.ElementsCase
 
         protected string NewPartPath;
         #region properties
-
         /// <summary>
         /// Path list to built files
         /// </summary>
         public List<string> ComponentsPathList { get; protected set; }
-
         /// <summary>
         /// Sorce folder where there is the prototypes for the build
         /// </summary>
         protected string SourceFolder { get; set; }
-
         /// <summary>
         /// The folder containing files after they are built and save. 
         /// </summary>
         protected string SubjectDestinationFolder { get; set; }
-
+        /// <summary>
+        /// Root folder file system
+        /// </summary>
         public string RootFolder { get; set; }
-
+        /// <summary>
+        /// Working assembly document
+        /// </summary>
         protected AssemblyDoc AssemblyDocument {
             get {
                 //SolidWorksAdapter.AcativeteDoc(AssemblyName);
                 return SolidWorksAdapter.ToAssemblyDocument(SolidWorksDocument);
             }
         }
-
+        /// <summary>
+        /// Working SolidWork document { asm, prt }
+        /// </summary>
         protected ModelDoc2 SolidWorksDocument { get; set; }
 
         /// <summary>
@@ -53,29 +54,31 @@ namespace SolidWorksLibrary.Builders.ElementsCase
         /// </summary>
         protected DrawingDoc SolidWorksDRW { get; set; }
 
+        /// <summary>
+        /// Working assembly document name
+        /// </summary>
         protected string AssemblyName { get; set; }
-
+        /// <summary>
+        /// Working part document name
+        /// </summary>
         protected string PartName { get; set; }
-
+        /// <summary>
+        /// Part prototype name with which working
+        /// </summary>
         protected string PartPrototypeName { get; set; }
 
         /// <summary>
         /// Sheetmetal bend radius 
         /// </summary>
         protected decimal BendRadius   = 5; // default value
-
         /// <summary>
         /// Gets or sets the K-factor
         /// </summary>
         protected decimal KFactor  = 5; // default value
-
         /// <summary>
         /// Provides notification and feedback to set bends for part
         /// </summary>
         public virtual SetBendsHandler SetBends { get; set; }
-
-
-
 
         protected bool IsPartExist;
         #endregion
@@ -87,7 +90,6 @@ namespace SolidWorksLibrary.Builders.ElementsCase
         {
             this.ComponentsPathList = new List<string>();
             parameters = new Dictionary<string, double>();
-            SetBends += GetSetBends;
         }
 
         #region SetProperties
@@ -99,24 +101,11 @@ namespace SolidWorksLibrary.Builders.ElementsCase
         /// <param name="sourceFolder">Sorce folder where there is the prototypes for the build</param>
         protected void SetProperties(string subjectDestinationFolder, string sourceFolder)
         {
+            //this.RootFolder = @"D:\Vents-PDM"; // test default value
             this.RootFolder = @"D:\Test"; // test default value
             this.SubjectDestinationFolder = subjectDestinationFolder;
             this.SourceFolder = sourceFolder;
-            CheckDestinationFolder(this.RootFolder, this.SubjectDestinationFolder);
         }
-        protected void CheckDestinationFolder(string rootPath, string subjectDestinationFolder)
-        {
-            string pathDestination = Path.Combine(rootPath, subjectDestinationFolder);
-
-            bool exist = Directory.Exists(pathDestination);
-
-            if (!exist)
-            {
-                System.Windows.Forms.MessageBox.Show("Going to create " + pathDestination + " derictory");
-                Directory.CreateDirectory(pathDestination);
-            }
-        }
-
         /// <summary>
         /// Assigns necessary paths for build
         /// </summary>
@@ -156,10 +145,10 @@ namespace SolidWorksLibrary.Builders.ElementsCase
             if (error != 0 || warning != 0)
             {
                 var exeption = new Exception
-                    ("Failed save file with path" + path + "\n error code {" + error + "}, error description: " +
+                    ("Failed save file " + " error code {" + error + "}, error description: " +
                     (swFileSaveError_e)error + ", warning code {" + warning +
                     "}, warning description: " + (swFileSaveWarning_e)warning);
-                MessageObserver.Instance.SetMessage(exeption.ToString() + "\n" + exeption.Message, MessageType.Error);
+                MessageObserver.Instance.SetMessage(exeption.ToString(), MessageType.Error);
             }
         }
         protected int errors = 0;
@@ -167,20 +156,17 @@ namespace SolidWorksLibrary.Builders.ElementsCase
 
         protected virtual void EditPartParameters(string partName, string newPath, int materialID)
         {
-            
-            MessageObserver.Instance.SetMessage("4)  SolidWorksDocument when start EditParams: " + SolidWorksDocument?.GetTitle());
-
             foreach (var eachParameter in parameters)
             {
                 try
                 {
-                    Dimension myDimension = (SolidWorksDocument?.Parameter(eachParameter.Key + "@" + partName + ".SLDPRT")) as Dimension;
+                    Dimension myDimension = (SolidWorksDocument.Parameter(eachParameter.Key + "@" + partName + ".SLDPRT")) as Dimension;
                     myDimension.SystemValue = eachParameter.Value / 1000;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    SolidWorksAdapter.SldWoksAppExemplare.SendMsgToUser(eachParameter.Key + "@" + partName);
-                    MessageObserver.Instance.SetMessage("Failed to set value to: " + eachParameter.Key + "@" + partName);
+                    //System.Windows.Forms.MessageBox.Show(eachParameter.Key + "@" + partName);
+                    MessageObserver.Instance.SetMessage(ex.ToString(), MessageType.Error);
                 }
             }
             this.parameters.Clear();
@@ -188,129 +174,64 @@ namespace SolidWorksLibrary.Builders.ElementsCase
             SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(partName);
             if (SolidWorksDocument != null)
             {
-                //применение материала
-                if (materialID != 0)
-                {
-                    toSQL.AddCustomProperty("", materialID, SolidWorksAdapter.SldWoksAppExemplare);
-                }
+                SolidWorksDocument.ForceRebuild3(true);
 
-                bool res = SolidWorksDocument.Extension.SaveAs(newPath + ".SLDPRT", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent
-                                          + (int)swSaveAsOptions_e.swSaveAsOptions_SaveReferenced + (int)swSaveAsOptions_e.swSaveAsOptions_UpdateInactiveViews +
-                                          (int)swSaveAsOptions_e.swSaveAsOptions_OverrideSaveEmodel, null, ref errors, warnings);
+                toSQL.AddCustomProperty("", materialID, SolidWorksAdapter.SldWoksAppExemplare);
+                SolidWorksDocument.Extension.SaveAs(newPath + ".SLDPRT", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent
+                                                              + (int)swSaveAsOptions_e.swSaveAsOptions_SaveReferenced + (int)swSaveAsOptions_e.swSaveAsOptions_UpdateInactiveViews, null, ref errors, warnings);
 
-                MessageObserver.Instance.SetMessage("Trying to save file with path " + newPath + "\n error code {" + errors + "}, error description: " +
-                                                   (swFileSaveError_e)errors + ", warning code {" + warnings + "}, warning description: " + (swFileSaveWarning_e)warnings);
-
-                if (!res)
-                {
-                    SolidWorksAdapter.SldWoksAppExemplare.SendMsgToUser("Документ не был сохранен по пути " + newPath + ".SLDPRT");
-                }
-
-                //InitiatorSaveExeption(errors, warnings, newPath);
+                InitiatorSaveExeption(errors, warnings, newPath);
                 SolidWorksAdapter.CloseDocument(SolidWorksDocument);
-                MessageObserver.Instance.SetMessage("7)   After editing detail the SolidWorksDocument is: " + SolidWorksDocument?.GetTitle());
             }
             else
             {
-                MessageObserver.Instance.SetMessage("SolidWorksDocument is NULL");
-                SolidWorksAdapter.SldWoksAppExemplare.SendMsgToUser("Не удалось преобразовать деталь " + partName);
+                System.Windows.Forms.MessageBox.Show("Не удалось преобразовать деталь " + partName);
             }
 
-            //SolidWorksAdapter.SldWoksAppExemplare.DocumentVisible(false, 2);
-            //SolidWorksAdapter.SldWoksAppExemplare.DocumentVisible(false, 1);
-        }
-        protected virtual void EditPartParameters(string partName, string newPath, int materialID, string hex, string CoatingType, string CoatingClass)
-        {
-            MessageObserver.Instance.SetMessage("4)  SolidWorksDocument when start EditParams: " + SolidWorksDocument?.GetTitle());
-
-            foreach (var eachParameter in parameters)
-            {
-                try
-                {
-                    Dimension myDimension = (SolidWorksDocument?.Parameter(eachParameter.Key + "@" + partName + ".SLDPRT")) as Dimension;
-                    myDimension.SystemValue = eachParameter.Value / 1000;
-                }
-                catch (Exception)
-                {
-                    SolidWorksAdapter.SldWoksAppExemplare.SendMsgToUser(eachParameter.Key + "@" + partName);
-                    MessageObserver.Instance.SetMessage("Failed to set value to: " + eachParameter.Key + "@" + partName);
-                }
-            }
-            this.parameters.Clear();
-
-            SolidWorksDocument = SolidWorksAdapter.AcativeteDoc(partName);
-            if (SolidWorksDocument != null)
-            { 
-                //SolidWorksDocument.ForceRebuild3(true);
-
-                //применение материала
-                if (materialID != 0)
-                {
-                    toSQL.AddCustomProperty("", materialID, SolidWorksAdapter.SldWoksAppExemplare);
-                }
-                //применение цвета
-                if (hex!=string.Empty)
-                {
-                    try
-                    {
-                        setMat = new SetMaterials(SolidWorksAdapter.SldWoksAppExemplare);
-                        setMat.SetColor(SolidWorksDocument.GetActiveConfiguration().Name, hex, CoatingType, CoatingClass.ToString(), SolidWorksAdapter.SldWoksAppExemplare);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageObserver.Instance.SetMessage("Failed to set color: \n\t" + ex.Message);
-                        throw ex;
-                    }
-                }
-
-                bool res = SolidWorksDocument.Extension.SaveAs(newPath + ".SLDPRT", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent
-                                          + (int)swSaveAsOptions_e.swSaveAsOptions_SaveReferenced + (int)swSaveAsOptions_e.swSaveAsOptions_UpdateInactiveViews + 
-                                          (int)swSaveAsOptions_e.swSaveAsOptions_OverrideSaveEmodel, null, ref errors, warnings);
-                
-                MessageObserver.Instance.SetMessage("Trying to save file with path " + newPath + "\n error code {" + errors + "}, error description: " +
-                                                   (swFileSaveError_e)errors + ", warning code {" + warnings + "}, warning description: " + (swFileSaveWarning_e)warnings);
-
-                if (!res)
-                {
-                    SolidWorksAdapter.SldWoksAppExemplare.SendMsgToUser("Документ не был сохранен по пути " + newPath + ".SLDPRT");
-                }
-
-                //InitiatorSaveExeption(errors, warnings, newPath);
-                SolidWorksAdapter.CloseDocument(SolidWorksDocument);
-                MessageObserver.Instance.SetMessage("7)   After editing detail the SolidWorksDocument is: " + SolidWorksDocument?.GetTitle());
-            }
-            else
-            {
-                MessageObserver.Instance.SetMessage("SolidWorksDocument is NULL");
-                SolidWorksAdapter.SldWoksAppExemplare.SendMsgToUser("Не удалось преобразовать деталь " + partName);
-            }
-
-            //SolidWorksAdapter.SldWoksAppExemplare.DocumentVisible(false, 2);
-            //SolidWorksAdapter.SldWoksAppExemplare.DocumentVisible(false, 1);
+            SolidWorksAdapter.SldWoksAppExemplare.DocumentVisible(false, 2);
+            SolidWorksAdapter.SldWoksAppExemplare.DocumentVisible(false, 1);
         }
 
+        ///// <summary>
+        /////  Assigns the NewPartPath for assembly combineted path of [RootFolder, SourceFolder, AssemblyName]
+        ///// </summary>
+        ///// <param name="isExpansion">if isExpansion is equal to true, adds expansion .SLDASM</param>
+        //protected void CreatePathToAssembly(bool isExpansion)
+        //{
+        //    NewPartPath = Path.Combine(RootFolder, SourceFolder, AssemblyName + (isExpansion==true?  ".SLDASM":string.Empty));
+        //}
 
-        private void GetSetBends(decimal thikness, out decimal KFactor, out decimal BendRadius)
-        {
-            KFactor = this.KFactor;
-            BendRadius = this.BendRadius;
+        ///// <summary>
+        /////  Assigns the NewPartPath combineted path of [RootFolder, SourceFolder, PartName]
+        ///// </summary>
+        ///// <param name="isExpansion">if isExpansion is equal to true, adds expansion .SLDPRT</param>
+        //protected void CreateNewPartPath(bool isExpansion)
+        //{
+        //    NewPartPath = Path.Combine(RootFolder, SubjectDestinationFolder, PartName + (isExpansion == true ? ".SLDPRT" : string.Empty));
+        //}
 
-            try
-            {
-                foreach (var item in SwPlusRepository.Instance.Bends)
-                {
-                    if (item.Thickness == thikness)
-                    {
-                        this.KFactor = item.K_Factor;
-                        this.BendRadius = item.BendRadius;
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                MessageObserver.Instance.SetMessage("Faild to GetSetBends");//////////////////////////////////////////////////
-            }
-        }
+        ///// <summary>
+        /////  Assigns the NewPartPath combineted path of [RootFolder, directories, PartName]
+        ///// </summary>
+        ///// <param name="isExpansion">if isExpansion is equal to true, adds expansion .SLDPRT</param>
+        //protected void CreateNewPartPath(string [] directories,bool isExpansion)
+        //{
+        //    System.Text.StringBuilder pathStringBuilder = new System.Text.StringBuilder( );
+        //    pathStringBuilder.Append(RootFolder);
+        //    pathStringBuilder.Append(@"\");
+        //    foreach (var dir in directories)
+        //    {
+        //        pathStringBuilder.Append(dir);
+        //        pathStringBuilder.Append(@"\");
+        //    }
+        //    pathStringBuilder.Append(PartName);
+        //    NewPartPath = pathStringBuilder.ToString( );
+        //}
 
+        // if u will be use abstract build method, u must override constructor in all product_builder[s]
+        // /// <summary>
+        //   /// Build prduct
+        //   /// </summary>
+        //public abstract Build();  
     }
 }

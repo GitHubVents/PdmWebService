@@ -20,7 +20,7 @@ namespace TaskSystemLibrary
                 foreach (var eachTaskSelections in taskSelections)
                 {
                     var fileModel = SolidWorksPdmAdapter.Instance.GetFileById((int)eachTaskSelections.DocumentID, true);
-                    DxfBulder.Instance.Build(fileModel.Path, fileModel.IDPdm, fileModel.CurrentVersion, "");
+                    DxfBulder.Instance.Build(fileModel.Path, fileModel.IDPdm, fileModel.CurrentVersion);
                     DxfBulder.Instance.FinishedBuilding += Instance_FinishedBuilding;
                 }
                 TaskSystemDataRepository.Instance.ApplyCompleted(taskInstance.TaskInstanceID);

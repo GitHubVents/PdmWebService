@@ -16,12 +16,6 @@ namespace SolidWorksLibrary
         /// </summary>
         private static SldWorks swApp;
 
-
-        public static void DisposeSOLID()
-        {
-            swApp = null;
-        }
-
         /// <summary>
         /// Get SolidWorksExemplare
         /// </summary>
@@ -31,7 +25,6 @@ namespace SolidWorksLibrary
             {
                 if (swApp == null)
                 {
-                    //swApp = (SldWorks)Marshal.GetActiveObject("SldWorks.Application");
                     InitializeSolidWorks();
                 }
                 return swApp;
@@ -60,23 +53,23 @@ namespace SolidWorksLibrary
 
         //    previous
 
-            //    if (sldWoksApp == null)
-            //    {
-            //        sldWoksApp = (SldWorks)Marshal.GetActiveObject("SldWorks.Application");
-            //        //    MessageObserver.Instance.SetMessage("\t\tTake an existing exemplar SolidWorks Application", MessageType.System);
+        //    if (sldWoksApp == null)
+        //    {
+        //        sldWoksApp = (SldWorks)Marshal.GetActiveObject("SldWorks.Application");
+        //        //    MessageObserver.Instance.SetMessage("\t\tTake an existing exemplar SolidWorks Application", MessageType.System);
 
-            //        //    //MessageObserver.Instance.SetMessage("\t\tFailed take an existing exemplar SolidWorks Application " + ex, MessageType.Warning);
-            //        //    //Process[] processes = Process.GetProcessesByName("SLDWORKS");
-            //        //    //int processesLength = processes.Length;
-            //        //    //if (processesLength > 0) {
-            //        //    //    foreach (var process in processes) {
-            //        //    //        process.Kill();
-            //        //    //    }
+        //        //    //MessageObserver.Instance.SetMessage("\t\tFailed take an existing exemplar SolidWorks Application " + ex, MessageType.Warning);
+        //        //    //Process[] processes = Process.GetProcessesByName("SLDWORKS");
+        //        //    //int processesLength = processes.Length;
+        //        //    //if (processesLength > 0) {
+        //        //    //    foreach (var process in processes) {
+        //        //    //        process.Kill();
+        //        //    //    }
 
-            //        //sldWoksApp = new SldWorks() { Visible = true };
-            //        //sldWoksApp.DocumentVisible(false, (int)swDocumentTypes_e.swDocPART + (int)swDocumentTypes_e.swDocASSEMBLY);
-            //    }
-            //}
+        //        //sldWoksApp = new SldWorks() { Visible = true };
+        //        //sldWoksApp.DocumentVisible(false, (int)swDocumentTypes_e.swDocPART + (int)swDocumentTypes_e.swDocASSEMBLY);
+        //    }
+        //}
 
         [DllImport("ole32.dll")]
         static extern int CreateBindCtx(uint reserved, out IBindCtx ppbc);
@@ -122,6 +115,8 @@ namespace SolidWorksLibrary
                         rot.GetObject(curMoniker, out app);
                         swApp = (SldWorks)app;
                         swApp.Visible = true;
+                        swApp.DocumentVisible(false, 2);
+                        swApp.DocumentVisible(false, 1);
                         return;
                     }
                 }
@@ -131,6 +126,8 @@ namespace SolidWorksLibrary
                 app = Activator.CreateInstance(progType) as SldWorks;
                 swApp = (SldWorks)app;
                 swApp.Visible = true;
+                //swApp.DocumentVisible(false, 2);
+                //swApp.DocumentVisible(false, 1);
                 return;
             }
             finally
@@ -181,7 +178,7 @@ namespace SolidWorksLibrary
             try
             {
                 SldWoksAppExemplare.CloseDoc(swModel.GetTitle().ToLower().Contains(".sldprt") ? swModel.GetTitle() : swModel.GetTitle() + ".sldprt");
-                //MessageObserver.Instance.SetMessage("Closed opened document " + swModel.GetTitle(), MessageType.Success);
+                MessageObserver.Instance.SetMessage("Closed opened document " + swModel.GetTitle(), MessageType.Success);
             }
             catch (Exception ex)
             {
@@ -197,7 +194,7 @@ namespace SolidWorksLibrary
         {
             try
             {               
-                CloseAllDocuments();
+               // CloseAllDocuments();
                 SldWoksAppExemplare.ExitApp();
                 MessageObserver.Instance.SetMessage("Exit from  SolidWorks Application", MessageType.System);
             }
@@ -213,18 +210,16 @@ namespace SolidWorksLibrary
         /// <param name="swPart"></param>
         public static bool IsSheetMetalPart(IPartDoc swPart)
         {
-            bool isSheetMetal = false;
+            var isSheetMetal = false;
             try
             {
                 var bodies = swPart.GetBodies2((int)swBodyType_e.swSolidBody, false);
                 foreach (Body2 body in bodies)
                 {
                     isSheetMetal = body.IsSheetMetal();
-
-                    MessageObserver.Instance.SetMessage("Check is sheet metal part; returned " + isSheetMetal, MessageType.Success);
-
                     if (isSheetMetal)
                     {
+                        MessageObserver.Instance.SetMessage("Check is sheet metal part; returned " + isSheetMetal, MessageType.Success);
                         return true;
                     }
                 }
@@ -237,69 +232,27 @@ namespace SolidWorksLibrary
             return isSheetMetal;
         }
 
-        //public static ModelDoc2 OpenDocument(string path, swDocumentTypes_e documentType, string configuration = "")
-        //{
-        //    if (!File.Exists(path))
-        //    {
-        //        MessageObserver.Instance.SetMessage($"Error at open solid works document {path} file not exists. Maybe it is virtual document", MessageType.Error);
-        //        throw new Exception($"Error at open solid works document {path} file not exists. Maybe it is virtual document" );
-        //    }
-        //    int errors = 0, warnings = 0;
-        //    int openDocOptions = (int)swOpenDocOptions_e.swOpenDocOptions_ReadOnly;
-        //    if (documentType == swDocumentTypes_e.swDocASSEMBLY) {  openDocOptions += (int)swOpenDocOptions_e.swOpenDocOptions_LoadModel; }
-
-        //    var SolidWorksDocumentument = SldWoksAppExemplare.OpenDoc6(path, (int)documentType, openDocOptions, configuration, ref errors, ref warnings);
-
-        //    if (errors != 0)
-        //    {
-        //        MessageObserver.Instance.SetMessage($"Error at open solid works document {path}; error code {errors }, description error { (swFileLoadError_e)errors }" ) ;
-        //    }
-        //    if (warnings != 0)
-        //    {
-        //        MessageObserver.Instance.SetMessage("Warning at open solid works document: code {" + warnings + "}, description warning {" + (swFileLoadWarning_e)errors + "}");
-        //    }
-        //    return SolidWorksDocumentument;
-        //}
-
         public static ModelDoc2 OpenDocument(string path, swDocumentTypes_e documentType, string configuration = "")
         {
             if (!File.Exists(path))
             {
                 MessageObserver.Instance.SetMessage($"Error at open solid works document {path} file not exists. Maybe it is virtual document", MessageType.Error);
-                throw new Exception($"Error at open solid works document {path} file not exists. Maybe it is virtual document");
+                throw new Exception($"Error at open solid works document {path} file not exists. Maybe it is virtual document" );
             }
-            
-            DocumentSpecification swDocSpecification;
+            int errors = 0, warnings = 0;
+            int openDocOptions = (int)swOpenDocOptions_e.swOpenDocOptions_ReadOnly;
+            if (documentType == swDocumentTypes_e.swDocASSEMBLY) {  openDocOptions += (int)swOpenDocOptions_e.swOpenDocOptions_LoadModel; }
 
-            swDocSpecification = SolidWorksAdapter.SldWoksAppExemplare.GetOpenDocSpec(path);
-            swDocSpecification.ReadOnly = false;
-            swDocSpecification.DocumentType = (int)documentType;
-            swDocSpecification.UseLightWeightDefault = false;
-            swDocSpecification.LightWeight = false;
-            swDocSpecification.Silent = true;
-            swDocSpecification.IgnoreHiddenComponents = false;
-            swDocSpecification.ViewOnly = false;
-            swDocSpecification.InteractiveAdvancedOpen = false;
-            swDocSpecification.ConfigurationName = configuration;
-
-            ModelDoc2 SolidWorksDocumentument = null;
-
-            if (swDocSpecification != null)
+            var SolidWorksDocumentument = SldWoksAppExemplare.OpenDoc6(path, (int)documentType, openDocOptions, configuration, ref errors, ref warnings);
+           
+            if (errors != 0)
             {
-                SolidWorksDocumentument = SldWoksAppExemplare.OpenDoc7(swDocSpecification);
-                if (SolidWorksDocumentument == null)
-                {
-                    System.Windows.Forms.MessageBox.Show("Не удалось открыть документ " + path);
-                    MessageObserver.Instance.SetMessage("Failed to open document " + path + System.Environment.NewLine + "Error : " + (swFileLoadError_e)swDocSpecification.Error + System.Environment.NewLine +
-                                                    " Warning: " + (swFileLoadWarning_e)swDocSpecification.Warning);
-                }
+                MessageObserver.Instance.SetMessage($"Error at open solid works document {path}; error code {errors }, description error { (swFileLoadError_e)errors }" ) ;
             }
-            else
+            if (warnings != 0)
             {
-                MessageObserver.Instance.SetMessage("Failed to get specification on " + path + System.Environment.NewLine + "Error : " + (swFileLoadError_e)swDocSpecification.Error + System.Environment.NewLine +
-                                                   " Warning: " + (swFileLoadWarning_e)swDocSpecification.Warning);
+                MessageObserver.Instance.SetMessage("Warning at open solid works document: code {" + warnings + "}, description warning {" + (swFileLoadWarning_e)errors + "}");
             }
-
             return SolidWorksDocumentument;
         }
 
@@ -322,13 +275,19 @@ namespace SolidWorksLibrary
         /// <returns></returns>
         public static AssemblyDoc ToAssemblyDocument(ModelDoc2 document)
         {
-            swComponentResolveStatus_e res = swComponentResolveStatus_e.swResolveOk;
             AssemblyDoc swAsm = null;
-            if ((int)swDocumentTypes_e.swDocASSEMBLY == document.GetType())
+            try
             {
-                swAsm = (AssemblyDoc)document;
-                //res = (swComponentResolveStatus_e)swAsm.ResolveAllLightWeightComponents(false);
-                //MessageObserver.Instance.SetMessage("Resolve All LightWeight Components: code {" + res + "}");
+                if ((int)swDocumentTypes_e.swDocASSEMBLY == document.GetType())
+                {
+                    swAsm = (AssemblyDoc)document;
+                    swAsm.ResolveAllLightWeightComponents(false);
+                }
+            }
+            catch (Exception  ex)
+            {
+                System.Windows.Forms.MessageBox.Show(ex.Message);
+                throw;
             }
             return swAsm;
         }
@@ -337,11 +296,6 @@ namespace SolidWorksLibrary
         {
             DrawingDoc drw = (DrawingDoc)document;
             return drw;
-        }
-
-        public static int ToInt(this double value)
-        {
-            return Convert.ToInt32(value);
         }
     }
 }
